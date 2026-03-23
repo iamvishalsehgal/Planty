@@ -1,0 +1,2836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Planty">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="Smart plant care - tracks watering, learns your patterns">
+    
+    <title>Planty - Smart Plant Care</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --water-blue: #3b82f6;
+            --water-dark: #2563eb;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-800: #1f2937;
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            padding-bottom: calc(100px + var(--safe-bottom));
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+            padding: 24px 20px;
+            padding-top: calc(24px + env(safe-area-inset-top, 20px));
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -80%;
+            right: -30%;
+            width: 280px;
+            height: 280px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -60%;
+            left: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
+        }
+        
+        .header h1 span {
+            display: inline-block;
+            animation: wave 2s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        
+        .header-sub {
+            font-size: 15px;
+            opacity: 0.95;
+            margin-top: 6px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .header-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-stat-icon {
+            font-size: 16px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Add Plant Section */
+        .add-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .add-section h2 {
+            font-size: 18px;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+        
+        .input-group input, .input-group select {
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        }
+        
+        .input-group input::placeholder {
+            color: var(--gray-400);
+        }
+        
+        .input-hint {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 4px;
+        }
+        
+        .interval-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .interval-btn {
+            padding: 10px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .interval-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .interval-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .add-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            transition: all 0.2s;
+        }
+        
+        .add-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .add-btn:disabled {
+            background: var(--gray-300);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        
+        /* Plant Card */
+        .plant-card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 16px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .plant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--water-blue) 100%);
+        }
+        
+        .plant-card.protected::before {
+            background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%);
+        }
+        
+        .plant-card.needs-water {
+            animation: needsWater 2s infinite;
+        }
+        
+        @keyframes needsWater {
+            0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+            50% { box-shadow: 0 4px 25px rgba(59, 130, 246, 0.3); }
+        }
+        
+        .plant-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .plant-emoji {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.2);
+        }
+        
+        .plant-info {
+            flex: 1;
+        }
+        
+        .plant-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .plant-nickname {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+        
+        .plant-type {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+        
+        .plant-location {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+        
+        .badge {
+            font-size: 14px;
+        }
+        
+        .plant-stats {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-pill {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: var(--gray-50);
+            border-radius: 12px;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+        }
+        
+        /* Water Countdown */
+        .water-countdown {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .water-countdown.urgent {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        .water-countdown.overdue {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        }
+        
+        .water-countdown.today {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        
+        .countdown-label {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        
+        .countdown-value {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--water-blue);
+            line-height: 1;
+        }
+        
+        .water-countdown.urgent .countdown-value {
+            color: var(--warning);
+        }
+        
+        .water-countdown.overdue .countdown-value {
+            color: var(--danger);
+        }
+        
+        .countdown-subtext {
+            font-size: 14px;
+            color: var(--gray-600);
+            margin-top: 6px;
+        }
+        
+        /* Water Button */
+        .water-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .water-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+        
+        .water-btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .water-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .water-btn-disabled {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        
+        .water-btn-disabled:active {
+            transform: none;
+        }
+        
+        .water-btn-disabled::after {
+            display: none;
+        }
+        
+        .cooldown-warning {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-100);
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .progress-label {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+        
+        .progress-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-100);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Actions */
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-100);
+        }
+        
+        .last-watered {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+        
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn.danger {
+            color: var(--danger);
+        }
+        
+        .action-btn:active {
+            background: var(--gray-200);
+            transform: scale(0.95);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .empty-state h2 {
+            font-size: 22px;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+        }
+        
+        .empty-state p {
+            color: var(--gray-500);
+            font-size: 15px;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            padding: 8px 20px;
+            padding-bottom: calc(8px + var(--safe-bottom));
+            z-index: 100;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-item .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 24px 24px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            padding-bottom: calc(24px + var(--safe-bottom));
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        .modal-handle {
+            width: 40px;
+            height: 5px;
+            background: var(--gray-300);
+            border-radius: 3px;
+            margin: 0 auto 20px;
+        }
+        
+        .modal h3 {
+            font-size: 22px;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .modal p {
+            color: var(--gray-600);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Option Cards */
+        .option-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option-card:active {
+            transform: scale(0.98);
+        }
+        
+        .option-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .option-card .icon {
+            font-size: 28px;
+        }
+        
+        .option-card .text {
+            flex: 1;
+        }
+        
+        .option-card .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .option-card .subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+        
+        .modal-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .modal-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .modal-btn.danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        
+        /* Revival Warning */
+        .revival-warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .revival-warning .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .revival-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .revival-stat {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .revival-stat .value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .revival-stat .label {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+        
+        .revival-stat.old .value {
+            color: var(--danger);
+            text-decoration: line-through;
+        }
+        
+        .revival-stat.new .value {
+            color: var(--primary);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 120px;
+            left: 20px;
+            right: 20px;
+            background: var(--gray-800);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            display: none;
+            z-index: 300;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .toast.active {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .toast .icon {
+            font-size: 32px;
+        }
+        
+        .toast-text h4 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .toast-text p {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
+        /* Schedule Tab */
+        .schedule-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .schedule-card h2 {
+            font-size: 18px;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .weekly-schedule {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+        }
+        
+        .week-day {
+            text-align: center;
+            padding: 10px 4px;
+            border-radius: 12px;
+            background: var(--gray-50);
+            transition: all 0.2s;
+        }
+        
+        .week-day.today {
+            background: var(--primary-light);
+            border: 2px solid var(--primary);
+        }
+        
+        .week-day.has-task {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+        
+        .week-day-name {
+            font-size: 10px;
+            color: var(--gray-500);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .week-day-num {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin: 4px 0;
+        }
+        
+        .week-day-plants {
+            font-size: 14px;
+        }
+        
+        .upcoming-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .upcoming-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: var(--gray-50);
+            border-radius: 14px;
+            transition: all 0.2s;
+        }
+        
+        .upcoming-item.today {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        
+        .upcoming-date {
+            text-align: center;
+            min-width: 50px;
+        }
+        
+        .upcoming-date-day {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        
+        .upcoming-date-month {
+            font-size: 11px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+        }
+        
+        .upcoming-info {
+            flex: 1;
+        }
+        
+        .upcoming-plant {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .upcoming-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .upcoming-badge.today {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .upcoming-badge.soon {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .stat-card-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        
+        .stat-card-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        
+        /* Analytics Section */
+        .analytics-section {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .analytics-section h2 {
+            font-size: 18px;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .analytics-item {
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .analytics-item.highlight {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #a7f3d0 100%);
+        }
+        
+        .analytics-item.water {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        }
+        
+        .analytics-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-800);
+        }
+        
+        .analytics-label {
+            font-size: 11px;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        .analytics-sub {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+        
+        .chart-bar-container {
+            margin-top: 16px;
+        }
+        
+        .chart-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+        }
+        
+        .chart-bar {
+            height: 24px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .chart-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.5s ease;
+        }
+        
+        .chart-bar-fill.green {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+        }
+        
+        .chart-bar-fill.blue {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+        }
+        
+        .chart-bar-fill.amber {
+            background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+        }
+        
+        .watering-history {
+            margin-top: 16px;
+        }
+        
+        .history-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+        
+        .history-day {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .history-day:last-child {
+            border-bottom: none;
+        }
+        
+        .history-day-name {
+            width: 80px;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+        
+        .history-day-bar {
+            flex: 1;
+            display: flex;
+            gap: 4px;
+        }
+        
+        .history-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .history-dot.watered {
+            background: var(--water-blue);
+            color: white;
+        }
+        
+        .history-dot.empty {
+            background: var(--gray-100);
+        }
+        
+        /* Memorial Card */
+        .memorial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            opacity: 0.9;
+            border-left: 4px solid var(--gray-400);
+        }
+        
+        .memorial-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        
+        .memorial-emoji {
+            width: 50px;
+            height: 50px;
+            background: var(--gray-200);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            filter: grayscale(0.5);
+        }
+        
+        .memorial-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+        
+        .memorial-dates {
+            font-size: 12px;
+            color: var(--gray-400);
+        }
+        
+        .memorial-details {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 14px;
+        }
+        
+        .memorial-details p {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            text-align: left;
+        }
+        
+        /* Settings */
+        .settings-section {
+            margin-bottom: 24px;
+        }
+        
+        .settings-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .settings-list {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-item:active {
+            background: var(--gray-50);
+        }
+        
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .settings-text {
+            flex: 1;
+        }
+        
+        .settings-title {
+            font-size: 16px;
+            color: var(--gray-800);
+        }
+        
+        .settings-subtitle {
+            font-size: 13px;
+            color: var(--gray-400);
+        }
+        
+        .settings-arrow {
+            color: var(--gray-300);
+            font-size: 20px;
+        }
+        
+        /* Tips */
+        .tip-card {
+            background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .tip-card h4 {
+            font-size: 15px;
+            color: #7c3aed;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tip-card p {
+            font-size: 14px;
+            color: #5b21b6;
+            line-height: 1.5;
+            text-align: left;
+        }
+        
+        /* Apple Help */
+        .apple-help-box {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+        
+        .apple-help-box strong {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--gray-800);
+        }
+        
+        .apple-help-box ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .apple-help-box li {
+            margin-bottom: 6px;
+        }
+        
+        .apple-help-box a {
+            color: var(--primary);
+        }
+        
+        .modal .input-group {
+            margin-bottom: 14px;
+        }
+        
+        .modal .input-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .modal .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .modal .input-group input:focus {
+            border-color: var(--primary);
+        }
+        
+        /* About */
+        .about-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .about-logo {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+        
+        .about-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+        
+        .about-version {
+            font-size: 13px;
+            color: var(--gray-400);
+            margin-bottom: 16px;
+        }
+        
+        .about-desc {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1><span>🌱</span> Planty</h1>
+            <p class="header-sub">Smart plant care for indoor plants</p>
+        </div>
+    </header>
+
+    <!-- Tab: Home -->
+    <div id="tab-home" class="tab-content active">
+        <div class="content">
+            <!-- Bottom Watering Info - Collapsible -->
+            <div class="tip-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); margin-bottom: 20px; padding: 0; overflow: hidden;">
+                <button onclick="toggleBottomWaterInfo()" style="width: 100%; padding: 16px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="color: #1e40af; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        💧 About Bottom Watering for Indoor Plants
+                    </span>
+                    <span id="bottomWaterArrow" style="color: #1e40af; font-size: 18px; transition: transform 0.3s;">▼</span>
+                </button>
+                <div id="bottomWaterContent" style="display: none; padding: 0 16px 16px 16px;">
+                    
+                    <div style="background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+                        <p style="color: #1e40af; font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">🪴 How it works</p>
+                        <p style="color: #374151; font-size: 13px; line-height: 1.5; margin: 0;">
+                            Place your pot (with drainage holes) in a tray or container filled with 1-2 inches of water. The soil will absorb moisture from below through capillary action.
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+                        <p style="color: #1e40af; font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">⏱️ Takes 15-30 minutes</p>
+                        <p style="color: #374151; font-size: 13px; line-height: 1.5; margin: 0;">
+                            Let your plant sit in the water for 15-30 minutes until the top of the soil feels damp. Then remove from water and let it drain.
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+                        <p style="color: #1e40af; font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">🚫 Don't water again until</p>
+                        <p style="color: #374151; font-size: 13px; line-height: 1.5; margin: 0;">
+                            The top 1-2 inches of soil feels completely dry. Stick your finger in to check! This usually takes several days depending on the plant.
+                        </p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 12px; padding: 14px; margin-bottom: 12px;">
+                        <p style="color: #1e40af; font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">✨ Benefits</p>
+                        <ul style="color: #374151; font-size: 13px; margin: 0; padding-left: 18px; line-height: 1.8;">
+                            <li>Encourages deeper, stronger root growth</li>
+                            <li>Prevents overwatering & root rot</li>
+                            <li>Plants absorb only what they need</li>
+                            <li>Keeps leaves dry (prevents fungal disease)</li>
+                            <li>More even moisture distribution</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #fef3c7; border-radius: 12px; padding: 14px; border-left: 4px solid #f59e0b;">
+                        <p style="color: #92400e; font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">⚠️ This App Blocks Watering for 24 Hours</p>
+                        <p style="color: #78350f; font-size: 13px; line-height: 1.5; margin: 0;">
+                            To prevent overwatering, Planty won't let you record another watering within 24 hours. This gives soil time to absorb water properly.
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Add Plant Section -->
+            <div class="add-section">
+                <h2>🪴 Add a New Plant</h2>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Plant Name *</label>
+                        <input type="text" id="plantName" placeholder="e.g., Monstera, Snake Plant, Pothos">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Location (Optional)</label>
+                        <input type="text" id="plantLocation" placeholder="e.g., Living Room, Bedroom Window">
+                        <p class="input-hint">Helps if you have multiple of the same plant</p>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>How often do you water it?</label>
+                        <div class="interval-buttons" id="intervalButtons">
+                            <button type="button" class="interval-btn" data-days="3">Every 3 days</button>
+                            <button type="button" class="interval-btn" data-days="5">Every 5 days</button>
+                            <button type="button" class="interval-btn selected" data-days="7">Every 7 days</button>
+                            <button type="button" class="interval-btn" data-days="10">Every 10 days</button>
+                            <button type="button" class="interval-btn" data-days="14">Every 14 days</button>
+                        </div>
+                        <p class="input-hint">Don't worry - the app learns your actual pattern!</p>
+                    </div>
+                </div>
+                
+                <button class="add-btn" onclick="addPlant()">
+                    <span>🌱</span> Add Plant
+                </button>
+            </div>
+            
+            <!-- Plant List -->
+            <div id="plantList"></div>
+        </div>
+    </div>
+
+    <!-- Tab: Schedule -->
+    <div id="tab-schedule" class="tab-content">
+        <div class="content">
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon">🌱</div>
+                    <div class="stat-card-value" id="statTotalPlants">0</div>
+                    <div class="stat-card-label">Total Plants</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">💧</div>
+                    <div class="stat-card-value" id="statTotalWaterings">0</div>
+                    <div class="stat-card-label">Total Waterings</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">📈</div>
+                    <div class="stat-card-value" id="statAvgInterval">-</div>
+                    <div class="stat-card-label">Avg Interval</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">🎯</div>
+                    <div class="stat-card-value" id="statAvgConfidence">-</div>
+                    <div class="stat-card-label">AI Accuracy</div>
+                </div>
+            </div>
+            
+            <!-- Analytics Section -->
+            <div class="analytics-section">
+                <h2>📊 Analytics</h2>
+                <div id="analyticsContent"></div>
+            </div>
+            
+            <!-- This Week -->
+            <div class="schedule-card">
+                <h2>📅 This Week</h2>
+                <div id="weeklySchedule" class="weekly-schedule"></div>
+            </div>
+            
+            <!-- Upcoming Waterings -->
+            <div class="schedule-card">
+                <h2>🔮 Upcoming Waterings</h2>
+                <div id="upcomingList" class="upcoming-list"></div>
+            </div>
+            
+
+        </div>
+    </div>
+
+    <!-- Tab: Memorial -->
+    <div id="tab-memorial" class="tab-content">
+        <div class="content">
+            <div class="tip-card">
+                <h4>🪦 Plant Memorial</h4>
+                <p>Plants that didn't make it are remembered here. Their learning data is preserved forever.</p>
+            </div>
+            
+            <div class="tip-card" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); margin-top: 12px;">
+                <h4 style="color: #92400e;">🧠 How Learning Works</h4>
+                <div style="color: #78350f; font-size: 13px;">
+                    <p style="margin-bottom: 12px;">When plants die, Planty learns and adjusts the watering schedule for future plants of the same type:</p>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px;">
+                        <p style="margin: 0; font-weight: 600;">💧 Overwatering Death</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px;">Interval increases by 25-30% (water less often)</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px;">
+                        <p style="margin: 0; font-weight: 600;">🏜️ Underwatering Death</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px;">Interval decreases by 20-25% (water more often)</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px; margin-bottom: 8px;">
+                        <p style="margin: 0; font-weight: 600;">🔄 Multiple Deaths (Same Plant)</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px;">Each death adds more adjustment - the more data, the smarter the schedule</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 12px;">
+                        <p style="margin: 0; font-weight: 600;">⚖️ Mixed Causes</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px;">If deaths have different causes, Planty finds a balanced middle ground</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="memorialList" style="margin-top: 16px;"></div>
+        </div>
+    </div>
+
+    <!-- Tab: Settings -->
+    <div id="tab-settings" class="tab-content">
+        <div class="content">
+            <div class="tip-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
+                <h4 style="color: #059669;">📱 Install on Your Phone</h4>
+                <p style="color: #047857;">
+                    <strong>iPhone:</strong> Tap Share → "Add to Home Screen"<br>
+                    <strong>Android:</strong> Tap Menu → "Add to Home Screen"
+                </p>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="settings-section-title">📅 Calendar Subscription</h3>
+                <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">
+                    Subscribe to your watering schedule - events auto-update!
+                </p>
+                
+                <div class="settings-list">
+                    <div class="settings-item" onclick="showCalendarSubscribeModal('apple')">
+                        <div class="settings-icon" style="background: #f5f5f7; color: #1d1d1f;">🍎</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Apple Calendar</div>
+                            <div class="settings-subtitle">Subscribe on iPhone/iPad/Mac</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="showCalendarSubscribeModal('google')">
+                        <div class="settings-icon" style="background: #e8f0fe; color: #4285f4;">📅</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Google Calendar</div>
+                            <div class="settings-subtitle">Subscribe on any device</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+
+
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3 class="settings-section-title">💾 Data</h3>
+                
+                <div class="settings-list">
+                    <div class="settings-item" onclick="exportData()">
+                        <div class="settings-icon" style="background: #ede9fe; color: #7c3aed;">📤</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Export Backup</div>
+                            <div class="settings-subtitle">Download your plant data</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="document.getElementById('importFile').click()">
+                        <div class="settings-icon" style="background: #d1fae5; color: #059669;">📥</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Import Backup</div>
+                            <div class="settings-subtitle">Restore from file</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+                    <div class="settings-item" onclick="clearAllData()">
+                        <div class="settings-icon" style="background: #fee2e2; color: #dc2626;">🗑️</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Clear All Data</div>
+                            <div class="settings-subtitle">Start fresh</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-card">
+                <div class="about-logo">🌱</div>
+                <div class="about-name">Planty</div>
+                <div class="about-version">Version 1.0</div>
+                <div class="about-desc">
+                    Smart plant care that learns your patterns.<br>
+                    Made with 💚 for indoor plant lovers.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Subscribe Modal -->
+    <div class="modal-overlay" id="calendarSubscribeModal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <h3 id="subscribeModalTitle">📅 Subscribe to Calendar</h3>
+            <p id="subscribeModalDesc">Add your watering schedule to your calendar</p>
+            
+            <div id="subscribeInstructions"></div>
+            
+            <div class="calendar-url-box" style="background:var(--gray-50);border-radius:12px;padding:14px;margin:16px 0;">
+                <label style="font-size:12px;color:var(--gray-500);display:block;margin-bottom:6px;">Your Calendar URL:</label>
+                <div style="display:flex;gap:8px;">
+                    <input type="text" id="calendarUrlInput" readonly 
+                        style="flex:1;padding:10px;border:2px solid var(--gray-200);border-radius:8px;font-size:13px;background:white;">
+                    <button onclick="copyCalendarUrl()" 
+                        style="padding:10px 16px;background:var(--primary);color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;">
+                        Copy
+                    </button>
+                </div>
+            </div>
+            
+            <button class="modal-btn primary" id="subscribeActionBtn" onclick="openCalendarSubscription()">Open Calendar App</button>
+            <button class="modal-btn secondary" onclick="closeModal('calendarSubscribeModal')">Done</button>
+        </div>
+    </div>
+
+    <!-- Death Modal -->
+    <div class="modal-overlay" id="deathModal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <h3>😢 What happened?</h3>
+            <p>This helps protect future plants.</p>
+            
+            <div class="option-cards" id="deathCauses">
+                <div class="option-card" onclick="selectCause('overwatering')" data-cause="overwatering">
+                    <span class="icon">💧</span>
+                    <div class="text">
+                        <div class="title">Too much water</div>
+                        <div class="subtitle">Yellow leaves, root rot</div>
+                    </div>
+                </div>
+                <div class="option-card" onclick="selectCause('underwatering')" data-cause="underwatering">
+                    <span class="icon">🏜️</span>
+                    <div class="text">
+                        <div class="title">Not enough water</div>
+                        <div class="subtitle">Dry, crispy leaves</div>
+                    </div>
+                </div>
+                <div class="option-card selected" onclick="selectCause('unknown')" data-cause="unknown">
+                    <span class="icon">❓</span>
+                    <div class="text">
+                        <div class="title">Not sure</div>
+                        <div class="subtitle">Unknown cause</div>
+                    </div>
+                </div>
+            </div>
+            
+            <input type="hidden" id="deathPlantId">
+            <button class="modal-btn danger" onclick="confirmDeath()">Move to Memorial</button>
+            <button class="modal-btn secondary" onclick="closeModal('deathModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Revival Modal -->
+    <div class="modal-overlay" id="revivalModal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            
+            <div class="revival-warning">
+                <div class="icon">⚠️</div>
+                <h4>We remember this plant!</h4>
+                <p id="revivalMessage"></p>
+                
+                <div class="revival-stats">
+                    <div class="revival-stat old">
+                        <div class="value" id="oldInterval">7d</div>
+                        <div class="label">Old interval</div>
+                    </div>
+                    <div class="revival-stat new">
+                        <div class="value" id="newInterval">10d</div>
+                        <div class="label">New interval</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="deathHistoryList"></div>
+            
+            <div class="option-cards">
+                <div class="option-card" onclick="confirmRevival(true)">
+                    <span class="icon">🛡️</span>
+                    <div class="text">
+                        <div class="title">Yes, it's a replacement</div>
+                        <div class="subtitle">Use improved schedule</div>
+                    </div>
+                </div>
+                <div class="option-card" onclick="confirmRevival(false)">
+                    <span class="icon">🌱</span>
+                    <div class="text">
+                        <div class="title">No, different plant</div>
+                        <div class="subtitle">Start fresh</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="modal-btn secondary" onclick="closeModal('revivalModal')">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Duplicate Modal -->
+    <div class="modal-overlay" id="duplicateModal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <h3>🌿 You already have this plant!</h3>
+            <p id="duplicateMessage"></p>
+            
+            <div class="option-cards">
+                <div class="option-card" onclick="addAsSecond()">
+                    <span class="icon">➕</span>
+                    <div class="text">
+                        <div class="title">Add as another plant</div>
+                        <div class="subtitle">I have multiple of this type</div>
+                    </div>
+                </div>
+                <div class="option-card" onclick="closeModal('duplicateModal')">
+                    <span class="icon">✏️</span>
+                    <div class="text">
+                        <div class="title">Go back and rename</div>
+                        <div class="subtitle">Give it a different name</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cooldown Modal -->
+    <div class="modal-overlay" id="cooldownModal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <div id="cooldownMessage"></div>
+            <button class="modal-btn secondary" onclick="closeModal('cooldownModal')">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showTab('home')" data-tab="home">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" onclick="showTab('schedule')" data-tab="schedule">
+            <span class="nav-icon">📋</span>
+            <span>Schedule</span>
+        </button>
+        <button class="nav-item" onclick="showTab('memorial')" data-tab="memorial">
+            <span class="nav-icon">🪦</span>
+            <span>Memorial</span>
+        </button>
+        <button class="nav-item" onclick="showTab('settings')" data-tab="settings">
+            <span class="nav-icon">⚙️</span>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="icon" id="toastIcon">💧</span>
+        <div class="toast-text">
+            <h4 id="toastTitle"></h4>
+            <p id="toastSubtitle"></p>
+        </div>
+    </div>
+
+    <script>
+        // ========== STATE ==========
+        const COOLDOWN_HOURS = 24;
+        
+        const state = {
+            plants: JSON.parse(localStorage.getItem('planty_plants') || '[]'),
+            deadPlants: JSON.parse(localStorage.getItem('planty_dead') || '[]'),
+            history: JSON.parse(localStorage.getItem('planty_history') || '[]'),
+            googleConnected: localStorage.getItem('planty_google') === 'true',
+            appleConnected: localStorage.getItem('planty_apple') === 'true',
+            pendingPlant: null,
+            pendingRevival: null,
+            selectedCause: 'unknown'
+        };
+
+        function save() {
+            localStorage.setItem('planty_plants', JSON.stringify(state.plants));
+            localStorage.setItem('planty_dead', JSON.stringify(state.deadPlants));
+            localStorage.setItem('planty_history', JSON.stringify(state.history));
+            localStorage.setItem('planty_google', state.googleConnected);
+            localStorage.setItem('planty_apple', state.appleConnected);
+        }
+
+        // ========== PLANT FUNCTIONS ==========
+        function getPlantEmoji(name) {
+            const n = name.toLowerCase();
+            if (n.includes('cactus') || n.includes('succulent')) return '🌵';
+            if (n.includes('flower') || n.includes('rose') || n.includes('lily')) return '🌸';
+            if (n.includes('tree') || n.includes('fig') || n.includes('palm')) return '🌳';
+            if (n.includes('fern')) return '🌿';
+            if (n.includes('herb') || n.includes('basil') || n.includes('mint')) return '🌿';
+            if (n.includes('orchid')) return '🌺';
+            const emojis = ['🌱', '🌿', '🪴', '☘️', '🍀'];
+            return emojis[Math.abs(n.charCodeAt(0)) % emojis.length];
+        }
+
+        function getPlantHistory(plantId) {
+            return state.history.filter(h => h.plantId === plantId).sort((a, b) => new Date(a.date) - new Date(b.date));
+        }
+
+        function getLearnedInterval(plantId, defaultInterval = 7) {
+            const history = getPlantHistory(plantId);
+            if (history.length < 2) return defaultInterval;
+
+            const intervals = [];
+            for (let i = 1; i < history.length; i++) {
+                const diff = (new Date(history[i].date) - new Date(history[i-1].date)) / 86400000;
+                if (diff >= 2 && diff <= 30) intervals.push(diff);
+            }
+
+            if (intervals.length === 0) return defaultInterval;
+
+            let sum = 0, weight = 0;
+            intervals.forEach((v, i) => {
+                const w = Math.pow(1.5, i);
+                sum += v * w;
+                weight += w;
+            });
+
+            return Math.round(sum / weight);
+        }
+
+        function getDaysSinceLastWater(plantId) {
+            const history = getPlantHistory(plantId);
+            if (history.length === 0) return null;
+            const last = new Date(history[history.length - 1].date);
+            return Math.floor((Date.now() - last) / 86400000);
+        }
+        
+        function getHoursSinceLastWater(plantId) {
+            const history = getPlantHistory(plantId);
+            if (history.length === 0) return null;
+            const last = new Date(history[history.length - 1].date);
+            return (Date.now() - last) / (1000 * 60 * 60);
+        }
+
+        function getDaysUntilNextWater(plantId, defaultInterval = 7) {
+            const daysSince = getDaysSinceLastWater(plantId);
+            if (daysSince === null) return defaultInterval;
+            const interval = getLearnedInterval(plantId, defaultInterval);
+            return Math.max(0, interval - daysSince);
+        }
+
+        function getConfidence(plantId) {
+            const count = getPlantHistory(plantId).length;
+            return Math.min(100, Math.round(20 + count * 16));
+        }
+        
+        function canWaterPlant(plantId) {
+            const hours = getHoursSinceLastWater(plantId);
+            if (hours === null) return { allowed: true };
+            
+            if (hours < COOLDOWN_HOURS) {
+                return { 
+                    allowed: false, 
+                    hoursLeft: Math.ceil(COOLDOWN_HOURS - hours)
+                };
+            }
+            
+            return { allowed: true };
+        }
+
+        // ========== COMBINED DEATH LEARNING ==========
+        function combineDeathLearning(deadPlants) {
+            const sorted = [...deadPlants].sort((a, b) => new Date(a.deathDate) - new Date(b.deathDate));
+            const originalInterval = sorted[0].lastInterval;
+            
+            let adjustedInterval = originalInterval;
+            let overwaterCount = 0;
+            let underwaterCount = 0;
+            
+            for (const dp of sorted) {
+                if (dp.cause === 'overwatering') {
+                    overwaterCount++;
+                    adjustedInterval = Math.min(30, Math.round(adjustedInterval * (1.25 + (overwaterCount * 0.1))));
+                } else if (dp.cause === 'underwatering') {
+                    underwaterCount++;
+                    adjustedInterval = Math.max(2, Math.round(adjustedInterval * (0.8 - (underwaterCount * 0.05))));
+                } else {
+                    adjustedInterval = Math.min(30, Math.round(adjustedInterval * 1.1));
+                }
+            }
+            
+            if (overwaterCount > 0 && underwaterCount > 0) {
+                adjustedInterval = Math.round((originalInterval + adjustedInterval) / 2);
+            }
+            
+            return {
+                originalInterval,
+                suggestedInterval: adjustedInterval,
+                deathCount: sorted.length,
+                overwaterCount,
+                underwaterCount,
+                allDeaths: sorted
+            };
+        }
+
+        // ========== ADD PLANT ==========
+        function addPlant() {
+            const name = document.getElementById('plantName').value.trim();
+            if (!name) {
+                showToast('❌ Missing name', 'Please enter a plant name');
+                return;
+            }
+            
+            const location = document.getElementById('plantLocation').value.trim();
+            const selectedBtn = document.querySelector('.interval-btn.selected');
+            const interval = selectedBtn ? parseInt(selectedBtn.dataset.days) : 7;
+            const normalizedName = name.toLowerCase().trim();
+            
+            // Check for dead plants
+            const deadMatches = state.deadPlants.filter(p => p.normalized === normalizedName);
+            if (deadMatches.length > 0) {
+                state.pendingPlant = { name, location, interval };
+                const combinedData = combineDeathLearning(deadMatches);
+                state.pendingRevival = combinedData;
+                
+                document.getElementById('revivalMessage').textContent = 
+                    `You've had ${deadMatches.length} "${name}" plant(s) before.`;
+                document.getElementById('oldInterval').textContent = combinedData.originalInterval + 'd';
+                document.getElementById('newInterval').textContent = combinedData.suggestedInterval + 'd';
+                
+                showModal('revivalModal');
+                return;
+            }
+            
+            // Check for duplicates
+            const existingPlants = state.plants.filter(p => p.normalized === normalizedName);
+            if (existingPlants.length > 0 && !location) {
+                state.pendingPlant = { name, location, interval };
+                document.getElementById('duplicateMessage').textContent = 
+                    `You already have ${existingPlants.length} "${name}". Add a location to tell them apart.`;
+                showModal('duplicateModal');
+                return;
+            }
+            
+            createPlant(name, location, interval, false, null);
+        }
+
+        function createPlant(name, location, interval, isProtected, protectionData) {
+            const plant = {
+                id: Date.now(),
+                name,
+                location,
+                normalized: name.toLowerCase().trim(),
+                emoji: getPlantEmoji(name),
+                interval: protectionData ? protectionData.suggestedInterval : interval,
+                isProtected,
+                created: new Date().toISOString()
+            };
+
+            state.plants.push(plant);
+            save();
+            clearInputs();
+            render();
+            
+            showToast('🌱 Plant added!', name);
+        }
+
+        function addAsSecond() {
+            if (!state.pendingPlant) return;
+            
+            const existingCount = state.plants.filter(p => 
+                p.normalized === state.pendingPlant.name.toLowerCase().trim()
+            ).length;
+            
+            closeModal('duplicateModal');
+            document.getElementById('plantLocation').value = `#${existingCount + 1}`;
+            document.getElementById('plantLocation').focus();
+            
+            showToast('💡 Tip', 'Add a location to tell your plants apart');
+            state.pendingPlant = null;
+        }
+
+        function confirmRevival(useProtection) {
+            if (!state.pendingPlant || !state.pendingRevival) return;
+            
+            const { name, location, interval } = state.pendingPlant;
+            
+            createPlant(
+                name, location, interval, 
+                useProtection, 
+                useProtection ? state.pendingRevival : null
+            );
+            
+            closeModal('revivalModal');
+            state.pendingPlant = null;
+            state.pendingRevival = null;
+        }
+
+        function clearInputs() {
+            document.getElementById('plantName').value = '';
+            document.getElementById('plantLocation').value = '';
+            // Reset interval buttons to 7 days
+            document.querySelectorAll('.interval-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.dataset.days === '7') btn.classList.add('selected');
+            });
+        }
+
+        // ========== WATER PLANT ==========
+        function waterPlant(plantId) {
+            const canWater = canWaterPlant(plantId);
+            if (!canWater.allowed) {
+                showCooldownModal(canWater.hoursLeft);
+                return;
+            }
+            
+            const now = new Date().toISOString();
+            state.history.push({ plantId, date: now });
+            save();
+            
+            const plant = state.plants.find(p => p.id === plantId);
+            const interval = getLearnedInterval(plantId, plant?.interval || 7);
+            
+            render();
+            showToast('💧 Watered!', `Next in ~${interval} days`);
+        }
+        
+        function showCooldownModal(hoursLeft) {
+            document.getElementById('cooldownMessage').innerHTML = `
+                <div style="text-align:center;margin-bottom:16px;">
+                    <div style="font-size:48px;margin-bottom:8px;">⏳</div>
+                    <h3 style="font-size:20px;color:var(--gray-800);">Too Soon!</h3>
+                </div>
+                <p style="text-align:center;color:var(--gray-600);margin-bottom:16px;">
+                    Wait ${hoursLeft} more hour${hoursLeft !== 1 ? 's' : ''} before watering again.
+                </p>
+                <div style="background:var(--primary-light);border-radius:12px;padding:16px;">
+                    <h4 style="font-size:14px;color:var(--primary-dark);margin-bottom:8px;">
+                        🌿 Bottom Watering Tip
+                    </h4>
+                    <p style="font-size:13px;color:var(--gray-600);text-align:left;">
+                        Soil absorbs water slowly from below. Wait for the top to feel dry before watering again.
+                    </p>
+                </div>
+            `;
+            showModal('cooldownModal');
+        }
+
+        // ========== PLANT DEATH ==========
+        function showDeathModal(plantId) {
+            document.getElementById('deathPlantId').value = plantId;
+            state.selectedCause = 'unknown';
+            updateCauseSelection();
+            showModal('deathModal');
+        }
+
+        function selectCause(cause) {
+            state.selectedCause = cause;
+            updateCauseSelection();
+        }
+
+        function updateCauseSelection() {
+            document.querySelectorAll('#deathCauses .option-card').forEach(el => {
+                el.classList.toggle('selected', el.dataset.cause === state.selectedCause);
+            });
+        }
+
+        function confirmDeath() {
+            const plantId = parseInt(document.getElementById('deathPlantId').value);
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+
+            const interval = getLearnedInterval(plantId, plant.interval);
+            let newInterval = interval;
+
+            if (state.selectedCause === 'overwatering') {
+                newInterval = Math.min(30, Math.round(interval * 1.3));
+            } else if (state.selectedCause === 'underwatering') {
+                newInterval = Math.max(2, Math.round(interval * 0.75));
+            }
+
+            state.deadPlants.push({
+                id: plantId,
+                name: plant.name,
+                emoji: plant.emoji,
+                nickname: plant.nickname,
+                location: plant.location,
+                normalized: plant.normalized,
+                cause: state.selectedCause,
+                lastInterval: interval,
+                suggestedInterval: newInterval,
+                totalWaterings: getPlantHistory(plantId).length,
+                deathDate: new Date().toISOString()
+            });
+
+            state.plants = state.plants.filter(p => p.id !== plantId);
+            save();
+            closeModal('deathModal');
+            render();
+            showToast('🪦 Moved to memorial', 'Data preserved for future plants');
+        }
+
+        function deletePlant(plantId) {
+            if (!confirm('Delete this plant?')) return;
+            state.plants = state.plants.filter(p => p.id !== plantId);
+            state.history = state.history.filter(h => h.plantId !== plantId);
+            save();
+            render();
+        }
+
+        // ========== RENDER ==========
+        function render() {
+            renderPlants();
+            renderMemorial();
+            renderSchedule();
+        }
+        
+        function renderPlants() {
+            const container = document.getElementById('plantList');
+            
+            if (state.plants.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🌱</div>
+                        <h2>No plants yet!</h2>
+                        <p>Add your first plant above to get started.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.plants.map(plant => {
+                const daysUntil = getDaysUntilNextWater(plant.id, plant.interval);
+                const daysSince = getDaysSinceLastWater(plant.id);
+                const hoursSince = getHoursSinceLastWater(plant.id);
+                const interval = getLearnedInterval(plant.id, plant.interval);
+                const confidence = getConfidence(plant.id);
+                const waterings = getPlantHistory(plant.id).length;
+                const canWater = canWaterPlant(plant.id);
+                
+                let countdownClass = '';
+                let countdownText = `${daysUntil} days`;
+                let subtext = 'Looking good! 🌿';
+                
+                if (daysUntil === 0) {
+                    countdownClass = 'today';
+                    countdownText = 'Today!';
+                    subtext = 'Time to water 💧';
+                } else if (daysUntil < 0) {
+                    countdownClass = 'overdue';
+                    countdownText = 'Overdue!';
+                    subtext = 'Water me please! 🥺';
+                } else if (daysUntil === 1) {
+                    countdownClass = 'urgent';
+                    countdownText = 'Tomorrow';
+                    subtext = 'Get ready! 🌱';
+                }
+
+                const displayName = plant.nickname || plant.name;
+                const lastWateredText = daysSince === null ? 'Never watered' : 
+                    daysSince === 0 ? (hoursSince < 1 ? 'Just now' : `${Math.floor(hoursSince)}h ago`) : 
+                    `${daysSince} days ago`;
+
+                return `
+                    <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''}">
+                        <div class="plant-header">
+                            <div class="plant-emoji">${plant.emoji}</div>
+                            <div class="plant-info">
+                                <div class="plant-name">
+                                    ${displayName}
+                                    ${plant.isProtected ? '<span class="badge">🛡️</span>' : ''}
+                                </div>
+                                ${plant.nickname ? `<div class="plant-type">${plant.name}</div>` : ''}
+                                ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="plant-stats">
+                            <div class="stat-pill">
+                                <div class="stat-value">${waterings}</div>
+                                <div class="stat-label">Waterings</div>
+                            </div>
+                            <div class="stat-pill">
+                                <div class="stat-value">${interval}d</div>
+                                <div class="stat-label">Interval</div>
+                            </div>
+                            <div class="stat-pill">
+                                <div class="stat-value">${confidence}%</div>
+                                <div class="stat-label">AI</div>
+                            </div>
+                        </div>
+                        
+                        <div class="water-countdown ${countdownClass}">
+                            <div class="countdown-label">Next watering</div>
+                            <div class="countdown-value">${countdownText}</div>
+                            <div class="countdown-subtext">${subtext}</div>
+                        </div>
+                        
+                        <button class="water-btn ${!canWater.allowed ? 'water-btn-disabled' : ''}" 
+                            onclick="waterPlant(${plant.id})">
+                            <span>💧</span>
+                            ${canWater.allowed ? 'I Watered This' : `Wait ${canWater.hoursLeft}h`}
+                        </button>
+                        
+                        ${!canWater.allowed ? `
+                            <div class="cooldown-warning">
+                                <span>⏳</span> Soil still absorbing water
+                            </div>
+                        ` : ''}
+                        
+                        <div class="progress-section">
+                            <div class="progress-header">
+                                <span class="progress-label">Learning progress</span>
+                                <span class="progress-value">${confidence}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width:${confidence}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="actions-row">
+                            <span class="last-watered">Last: ${lastWateredText}</span>
+                            <div class="action-btns">
+                                <button class="action-btn danger" onclick="showDeathModal(${plant.id})">💀</button>
+                                <button class="action-btn" onclick="deletePlant(${plant.id})">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderMemorial() {
+            const container = document.getElementById('memorialList');
+            
+            if (state.deadPlants.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🌿</div>
+                        <h2>No plants here</h2>
+                        <p>Let's keep it that way! 🙏</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const grouped = {};
+            state.deadPlants.forEach(p => {
+                if (!grouped[p.normalized]) grouped[p.normalized] = [];
+                grouped[p.normalized].push(p);
+            });
+
+            container.innerHTML = Object.entries(grouped).map(([key, plants]) => {
+                const first = plants[0];
+                const combinedData = combineDeathLearning(plants);
+                
+                return `
+                    <div class="memorial-card" style="${plants.length > 1 ? 'border-color: var(--warning);' : ''}">
+                        <div class="memorial-header">
+                            <div class="memorial-emoji">${first.emoji || '🌱'}</div>
+                            <div>
+                                <div class="memorial-name">${first.name}</div>
+                                <div class="memorial-dates">
+                                    ${plants.length > 1 ? `⚠️ ${plants.length} plants died` : 
+                                    new Date(first.deathDate).toLocaleDateString()}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="memorial-details">
+                            ${plants.length > 1 ? `
+                                <p><strong>Deaths:</strong> ${combinedData.overwaterCount}× overwatering, ${combinedData.underwaterCount}× underwatering</p>
+                            ` : `
+                                <p><strong>Cause:</strong> ${first.cause === 'overwatering' ? '💧 Too much water' : 
+                                    first.cause === 'underwatering' ? '🏜️ Not enough water' : '❓ Unknown'}</p>
+                            `}
+                            <p><strong>Original interval:</strong> ${combinedData.originalInterval} days</p>
+                            <p><strong>Next plant will use:</strong> ${combinedData.suggestedInterval} days 🛡️</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSchedule() {
+            // Stats
+            document.getElementById('statTotalPlants').textContent = state.plants.length;
+            document.getElementById('statTotalWaterings').textContent = state.history.length;
+            
+            if (state.plants.length > 0) {
+                const avgInterval = state.plants.reduce((sum, p) => 
+                    sum + getLearnedInterval(p.id, p.interval), 0) / state.plants.length;
+                document.getElementById('statAvgInterval').textContent = Math.round(avgInterval) + 'd';
+                
+                const avgConfidence = state.plants.reduce((sum, p) => 
+                    sum + getConfidence(p.id), 0) / state.plants.length;
+                document.getElementById('statAvgConfidence').textContent = Math.round(avgConfidence) + '%';
+            }
+            
+            // Analytics
+            renderAnalytics();
+            
+            // Weekly schedule
+            const weekContainer = document.getElementById('weeklySchedule');
+            const today = new Date();
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            weekContainer.innerHTML = Array.from({length: 7}, (_, i) => {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const dayPlants = state.plants.filter(p => 
+                    getDaysUntilNextWater(p.id, p.interval) === i
+                );
+                
+                const isToday = i === 0;
+                const hasTask = dayPlants.length > 0;
+                
+                return `
+                    <div class="week-day ${isToday ? 'today' : ''} ${hasTask ? 'has-task' : ''}">
+                        <div class="week-day-name">${dayNames[date.getDay()]}</div>
+                        <div class="week-day-num">${date.getDate()}</div>
+                        <div class="week-day-plants">${dayPlants.map(p => p.emoji).join('') || '·'}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Upcoming list
+            const upcomingContainer = document.getElementById('upcomingList');
+            const upcoming = state.plants.map(p => ({
+                plant: p,
+                daysUntil: getDaysUntilNextWater(p.id, p.interval)
+            })).sort((a, b) => a.daysUntil - b.daysUntil);
+            
+            if (upcoming.length === 0) {
+                upcomingContainer.innerHTML = '<div style="text-align:center;color:var(--gray-400);padding:20px;">No plants yet</div>';
+            } else {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                
+                upcomingContainer.innerHTML = upcoming.slice(0, 7).map(item => {
+                    const date = new Date();
+                    date.setDate(date.getDate() + item.daysUntil);
+                    
+                    const badge = item.daysUntil === 0 ? 'today' : 'soon';
+                    const badgeText = item.daysUntil === 0 ? 'Today!' : 
+                        item.daysUntil === 1 ? 'Tomorrow' : `${item.daysUntil} days`;
+                    
+                    return `
+                        <div class="upcoming-item ${item.daysUntil === 0 ? 'today' : ''}">
+                            <div class="upcoming-date">
+                                <div class="upcoming-date-day">${date.getDate()}</div>
+                                <div class="upcoming-date-month">${months[date.getMonth()]}</div>
+                            </div>
+                            <div class="upcoming-info">
+                                <div class="upcoming-plant">${item.plant.emoji} ${item.plant.name}</div>
+                            </div>
+                            <div class="upcoming-badge ${badge}">${badgeText}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+        }
+        
+        function renderAnalytics() {
+            const container = document.getElementById('analyticsContent');
+            
+            if (state.plants.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:var(--gray-400);padding:20px;">Add plants to see analytics</div>';
+                return;
+            }
+            
+            // Calculate stats
+            const totalWaterings = state.history.length;
+            const thisWeekWaterings = state.history.filter(h => {
+                const date = new Date(h.date);
+                const weekAgo = new Date();
+                weekAgo.setDate(weekAgo.getDate() - 7);
+                return date >= weekAgo;
+            }).length;
+            
+            const thisMonthWaterings = state.history.filter(h => {
+                const date = new Date(h.date);
+                const monthAgo = new Date();
+                monthAgo.setDate(monthAgo.getDate() - 30);
+                return date >= monthAgo;
+            }).length;
+            
+            // Plants needing water today/soon
+            const needsWaterToday = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) === 0).length;
+            const needsWaterSoon = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) <= 2).length;
+            
+            // Most watered plant
+            const plantWateringCounts = {};
+            state.history.forEach(h => {
+                plantWateringCounts[h.plantId] = (plantWateringCounts[h.plantId] || 0) + 1;
+            });
+            
+            let mostWateredPlant = null;
+            let maxWaterings = 0;
+            Object.entries(plantWateringCounts).forEach(([id, count]) => {
+                if (count > maxWaterings) {
+                    maxWaterings = count;
+                    mostWateredPlant = state.plants.find(p => p.id === parseInt(id));
+                }
+            });
+            
+            // Health score (based on on-time waterings)
+            let healthScore = 85; // Base score
+            if (state.plants.length > 0) {
+                const overduePlants = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) < 0).length;
+                healthScore = Math.max(0, 100 - (overduePlants / state.plants.length * 50));
+            }
+            
+            // Avg confidence
+            const avgConfidence = state.plants.length > 0 
+                ? Math.round(state.plants.reduce((sum, p) => sum + getConfidence(p.id), 0) / state.plants.length)
+                : 0;
+            
+            container.innerHTML = `
+                <div class="analytics-grid">
+                    <div class="analytics-item water">
+                        <div class="analytics-value">${thisWeekWaterings}</div>
+                        <div class="analytics-label">This Week</div>
+                        <div class="analytics-sub">waterings</div>
+                    </div>
+                    <div class="analytics-item">
+                        <div class="analytics-value">${thisMonthWaterings}</div>
+                        <div class="analytics-label">This Month</div>
+                        <div class="analytics-sub">waterings</div>
+                    </div>
+                    <div class="analytics-item ${needsWaterToday > 0 ? 'highlight' : ''}">
+                        <div class="analytics-value">${needsWaterToday}</div>
+                        <div class="analytics-label">Due Today</div>
+                        <div class="analytics-sub">${needsWaterSoon} due soon</div>
+                    </div>
+                    <div class="analytics-item">
+                        <div class="analytics-value">${state.deadPlants.length}</div>
+                        <div class="analytics-label">In Memorial</div>
+                        <div class="analytics-sub">plants learned from</div>
+                    </div>
+                </div>
+                
+                <div class="chart-bar-container">
+                    <div class="chart-bar-label">
+                        <span>🌿 Plant Health Score</span>
+                        <span>${Math.round(healthScore)}%</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-bar-fill ${healthScore > 70 ? 'green' : healthScore > 40 ? 'amber' : 'red'}" style="width: ${healthScore}%"></div>
+                    </div>
+                </div>
+                
+                <div class="chart-bar-container">
+                    <div class="chart-bar-label">
+                        <span>🧠 AI Learning Progress</span>
+                        <span>${avgConfidence}%</span>
+                    </div>
+                    <div class="chart-bar">
+                        <div class="chart-bar-fill blue" style="width: ${avgConfidence}%"></div>
+                    </div>
+                </div>
+                
+                ${mostWateredPlant ? `
+                <div style="margin-top: 16px; padding: 12px; background: var(--gray-50); border-radius: 12px; text-align: center;">
+                    <div style="font-size: 12px; color: var(--gray-500);">Most Active Plant</div>
+                    <div style="font-size: 18px; font-weight: 700; color: var(--gray-800); margin-top: 4px;">
+                        ${mostWateredPlant.emoji} ${mostWateredPlant.name}
+                    </div>
+                    <div style="font-size: 13px; color: var(--primary);">${maxWaterings} waterings recorded</div>
+                </div>
+                ` : ''}
+            `;
+        }
+        
+        // ========== CALENDAR SUBSCRIPTION ==========
+        let currentCalendarType = 'apple';
+        
+        function generateICSContent() {
+            let ics = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Planty//Plant Watering Schedule//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:🌱 Planty Watering Schedule
+X-WR-TIMEZONE:UTC
+`;
+            
+            state.plants.forEach(plant => {
+                const interval = getLearnedInterval(plant.id, plant.interval);
+                const daysUntil = getDaysUntilNextWater(plant.id, plant.interval);
+                const nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() + daysUntil);
+                
+                const displayName = plant.nickname || plant.name;
+                const uid = `planty-${plant.id}-${Date.now()}@planty.app`;
+                const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+                const eventDate = nextDate.toISOString().split('T')[0].replace(/-/g, '');
+                
+                ics += `BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${now}
+DTSTART;VALUE=DATE:${eventDate}
+DTEND;VALUE=DATE:${eventDate}
+RRULE:FREQ=DAILY;INTERVAL=${interval}
+SUMMARY:💧 Water ${displayName}
+DESCRIPTION:Time to water your ${plant.name}!\\n\\nWatering interval: ${interval} days\\nLocation: ${plant.location || 'Not set'}\\n\\nPowered by Planty 🌱
+BEGIN:VALARM
+TRIGGER:-PT1H
+ACTION:DISPLAY
+DESCRIPTION:Time to water ${displayName}!
+END:VALARM
+BEGIN:VALARM
+TRIGGER:PT0M
+ACTION:DISPLAY
+DESCRIPTION:Water ${displayName} now!
+END:VALARM
+END:VEVENT
+`;
+            });
+            
+            ics += 'END:VCALENDAR';
+            return ics;
+        }
+        
+        function getCalendarDataUrl() {
+            const ics = generateICSContent();
+            const base64 = btoa(unescape(encodeURIComponent(ics)));
+            return `data:text/calendar;base64,${base64}`;
+        }
+        
+        function showCalendarSubscribeModal(type) {
+            currentCalendarType = type;
+            const modal = document.getElementById('calendarSubscribeModal');
+            const title = document.getElementById('subscribeModalTitle');
+            const desc = document.getElementById('subscribeModalDesc');
+            const instructions = document.getElementById('subscribeInstructions');
+            const actionBtn = document.getElementById('subscribeActionBtn');
+            const urlInput = document.getElementById('calendarUrlInput');
+            
+            // Generate a webcal URL (for demo, we'll use a data URL approach)
+            // In production, this would be a hosted URL like webcal://yourserver.com/calendar/user123.ics
+            const demoUrl = window.location.href.split('?')[0] + '?export=calendar';
+            
+            if (type === 'apple') {
+                title.innerHTML = '🍎 Apple Calendar';
+                desc.textContent = 'Subscribe on iPhone, iPad, or Mac';
+                instructions.innerHTML = `
+                    <div class="apple-help-box">
+                        <strong>📱 On iPhone/iPad:</strong>
+                        <ol>
+                            <li>Tap <strong>"Open Calendar App"</strong> below</li>
+                            <li>Tap <strong>"Subscribe"</strong> when prompted</li>
+                            <li>Choose refresh frequency (Daily recommended)</li>
+                            <li>Tap <strong>"Add"</strong> - Done! ✓</li>
+                        </ol>
+                    </div>
+                    <div class="apple-help-box" style="margin-top:12px;">
+                        <strong>💻 On Mac:</strong>
+                        <ol>
+                            <li>Open <strong>Calendar</strong> app</li>
+                            <li>Go to <strong>File → New Calendar Subscription</strong></li>
+                            <li>Paste the URL below and click Subscribe</li>
+                        </ol>
+                    </div>
+                `;
+                actionBtn.textContent = 'Open Calendar App';
+                actionBtn.onclick = () => downloadICS();
+            } else if (type === 'google') {
+                title.innerHTML = '📅 Google Calendar';
+                desc.textContent = 'Subscribe on any device';
+                instructions.innerHTML = `
+                    <div class="apple-help-box">
+                        <strong>🌐 On Computer:</strong>
+                        <ol>
+                            <li>Go to <a href="https://calendar.google.com" target="_blank">calendar.google.com</a></li>
+                            <li>Click <strong>+ next to "Other calendars"</strong></li>
+                            <li>Select <strong>"From URL"</strong></li>
+                            <li>Paste the URL below and click "Add calendar"</li>
+                        </ol>
+                    </div>
+                    <div class="apple-help-box" style="margin-top:12px;">
+                        <strong>📱 On Phone:</strong>
+                        <ol>
+                            <li>Download the .ics file below</li>
+                            <li>Open it with Google Calendar</li>
+                            <li>Tap "Add" to import events</li>
+                        </ol>
+                    </div>
+                `;
+                actionBtn.textContent = 'Download .ics File';
+                actionBtn.onclick = () => downloadICS();
+            }
+            
+            urlInput.value = demoUrl;
+            showModal('calendarSubscribeModal');
+        }
+        
+        function copyCalendarUrl() {
+            const urlInput = document.getElementById('calendarUrlInput');
+            urlInput.select();
+            document.execCommand('copy');
+            showToast('📋 Copied!', 'URL copied to clipboard');
+        }
+        
+        function openCalendarSubscription() {
+            downloadICS();
+        }
+        
+        function downloadICS() {
+            if (state.plants.length === 0) {
+                showToast('❌ No plants', 'Add plants first to export calendar');
+                return;
+            }
+            
+            const ics = generateICSContent();
+            const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'planty-watering-schedule.ics';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('📥 Downloaded!', 'Open the file to add to your calendar');
+        }
+
+        // ========== DATA ==========
+        function exportData() {
+            const data = {
+                plants: state.plants,
+                deadPlants: state.deadPlants,
+                history: state.history,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `planty-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('📤 Exported!', 'Backup saved');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.plants) state.plants = data.plants;
+                    if (data.deadPlants) state.deadPlants = data.deadPlants;
+                    if (data.history) state.history = data.history;
+                    save();
+                    render();
+                    showToast('📥 Imported!', `${state.plants.length} plants restored`);
+                } catch {
+                    showToast('❌ Error', 'Invalid backup file');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function clearAllData() {
+            if (!confirm('Delete ALL data?')) return;
+            localStorage.clear();
+            location.reload();
+        }
+
+        // ========== UI ==========
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        }
+
+        function showModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function showToast(title, subtitle = '') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastSubtitle').textContent = subtitle;
+            toast.classList.add('active');
+            setTimeout(() => toast.classList.remove('active'), 3000);
+        }
+
+        // ========== INIT ==========
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal(modal.id);
+            });
+        });
+
+        // Toggle bottom watering info
+        function toggleBottomWaterInfo() {
+            const content = document.getElementById('bottomWaterContent');
+            const arrow = document.getElementById('bottomWaterArrow');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Interval button selection
+        document.querySelectorAll('.interval-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.interval-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+
+        render();
+    </script>
+</body>
+</html>
