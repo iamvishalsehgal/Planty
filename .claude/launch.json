@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Frontend (Vite)",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "cd frontend && /opt/homebrew/Cellar/node/25.6.1/bin/node ./node_modules/.bin/vite --host"],
+      "port": 5173
+    },
+    {
+      "name": "Backend (Express + Data Pipelines)",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "cd backend && /opt/homebrew/Cellar/node/25.6.1/bin/node ./node_modules/.bin/tsx src/index.ts"],
+      "port": 3001
+    }
+  ]
+}
