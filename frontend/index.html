@@ -1841,14 +1841,103 @@
 
         function getPlantEmoji(name) {
             const n = name.toLowerCase();
-            if (n.includes('cactus') || n.includes('succulent')) return '🌵';
-            if (n.includes('flower') || n.includes('rose') || n.includes('lily')) return '🌸';
-            if (n.includes('tree') || n.includes('fig') || n.includes('palm')) return '🌳';
-            if (n.includes('fern')) return '🌿';
-            if (n.includes('herb') || n.includes('basil') || n.includes('mint')) return '🌿';
-            if (n.includes('orchid')) return '🌺';
-            const emojis = ['🌱', '🌿', '🪴', '☘️', '🍀'];
-            return emojis[Math.abs(n.charCodeAt(0)) % emojis.length];
+
+            // Exact / specific matches first
+            const map = [
+                // Cacti & succulents
+                [['cactus', 'cacti', 'saguaro', 'prickly'], '🌵'],
+                [['succulent', 'echeveria', 'sedum', 'aloe', 'agave', 'haworthia', 'lithops', 'stonecrop'], '🪨'],
+                [['jade'], '🌿'],
+
+                // Tropical / statement plants
+                [['monstera', 'swiss cheese'], '🌿'],
+                [['fiddle leaf', 'ficus', 'rubber', 'fig'], '🌳'],
+                [['bird of paradise', 'strelitzia'], '🌺'],
+                [['banana', 'plantain'], '🍌'],
+                [['palm', 'areca', 'kentia', 'majesty palm', 'parlour palm'], '🌴'],
+                [['bamboo'], '🎋'],
+
+                // Hanging / trailing
+                [['pothos', 'golden pothos', 'devil\'s ivy'], '🍃'],
+                [['spider plant', 'chlorophytum'], '🕷️'],
+                [['string of pearls', 'string of hearts', 'string of'], '📿'],
+                [['tradescantia', 'spiderwort', 'wandering'], '🌿'],
+                [['heartleaf', 'philodendron', 'brasil'], '💚'],
+                [['ivy', 'hedera'], '🍃'],
+
+                // Flowering
+                [['orchid', 'phalaenopsis', 'dendrobium'], '🌸'],
+                [['peace lily', 'spathiphyllum'], '🤍'],
+                [['anthurium', 'flamingo flower'], '❤️'],
+                [['bromeliad', 'guzmania', 'vriesea'], '🌺'],
+                [['african violet', 'saintpaulia'], '💜'],
+                [['begonia'], '🌸'],
+                [['kalanchoe'], '🌼'],
+                [['hibiscus'], '🌺'],
+                [['jasmine', 'gardenia'], '🤍'],
+                [['bougainvillea'], '🌸'],
+                [['rose', 'rosa'], '🌹'],
+                [['tulip'], '🌷'],
+                [['sunflower', 'helianthus'], '🌻'],
+                [['daisy', 'chrysanthemum', 'mum'], '🌼'],
+                [['lavender'], '💜'],
+                [['lily', 'lilium', 'calla', 'peace'], '🌸'],
+                [['violet', 'pansy'], '💜'],
+                [['peony'], '🌸'],
+                [['lotus'], '🪷'],
+                [['hyacinth'], '💐'],
+                [['daffodil', 'narcissus'], '🌼'],
+                [['poppy'], '🌺'],
+                [['carnation', 'dianthus'], '🌸'],
+
+                // Foliage / green
+                [['snake plant', 'sansevieria', 'dracaena', 'mother-in-law'], '🗡️'],
+                [['zz plant', 'zamioculcas', 'zanzibar gem'], '🪴'],
+                [['calathea', 'maranta', 'prayer plant', 'stromanthe'], '🌿'],
+                [['croton', 'codiaeum'], '🍂'],
+                [['coleus'], '🍁'],
+                [['caladium'], '🌿'],
+                [['dieffenbachia', 'dumb cane'], '🌿'],
+                [['alocasia', 'elephant ear', 'colocasia'], '🌿'],
+                [['colocasia'], '🌿'],
+                [['schefflera', 'umbrella plant'], '☂️'],
+                [['yucca'], '🌵'],
+                [['cast iron', 'aspidistra'], '🌿'],
+                [['boston fern', 'fern', 'nephrolepis', 'asparagus fern'], '🌿'],
+                [['club moss', 'selaginella'], '🌿'],
+                [['air plant', 'tillandsia'], '💨'],
+
+                // Herbs & edible
+                [['basil', 'ocimum'], '🌿'],
+                [['mint', 'mentha'], '🫙'],
+                [['rosemary', 'thyme', 'oregano', 'sage'], '🌿'],
+                [['parsley', 'cilantro', 'coriander'], '🌿'],
+                [['chive', 'allium'], '🌿'],
+                [['lemon grass', 'lemongrass'], '🌾'],
+                [['tomato'], '🍅'],
+                [['pepper', 'chili', 'capsicum'], '🌶️'],
+                [['strawberry'], '🍓'],
+
+                // Trees (indoor)
+                [['lemon', 'lime', 'citrus', 'orange', 'kumquat'], '🍋'],
+                [['olive'], '🫒'],
+                [['bonsai'], '🎋'],
+                [['money tree', 'pachira'], '🌳'],
+                [['eucalyptus'], '🌿'],
+                [['pine', 'spruce', 'conifer', 'cypress'], '🌲'],
+
+                // Water plants
+                [['water lily', 'nymphaea'], '🪷'],
+                [['water hyacinth'], '💜'],
+            ];
+
+            for (const [keywords, emoji] of map) {
+                if (keywords.some(k => n.includes(k))) return emoji;
+            }
+
+            // Fallback: deterministic from name so same plant always gets same emoji
+            const fallbacks = ['🪴', '🌱', '🌿', '🍃', '☘️'];
+            return fallbacks[Math.abs([...n].reduce((a, c) => a + c.charCodeAt(0), 0)) % fallbacks.length];
         }
 
         function getPlantHistory(plantId) {
