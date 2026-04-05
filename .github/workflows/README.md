@@ -1,64 +1,27 @@
-# GitHub Actions Workflows
+# .github/workflows/
 
-## `deploy.yml` — Deploy to GitHub Pages
+## deploy.yml
 
-Deploys the `frontend/` directory to GitHub Pages whenever code is pushed to the `master` branch.
+Deploys the `frontend/` directory to GitHub Pages on every push to `master`. No build step — `index.html` is fully self-contained so the directory is uploaded as-is.
 
-### What it does
+**What each step does:**
 
-1. Checks out the repository
-2. Configures the GitHub Pages environment
-3. Uploads the `frontend/` folder as the Pages artifact — the entire directory, including `index.html`, `vite.config.ts`, and `package.json`
-4. Deploys the artifact to GitHub Pages
+`actions/checkout@v4` — checks out the repo so the workflow can see the files.
 
-No build step runs. The frontend is a self-contained `index.html` file that works without compilation, so it's published as-is.
+`actions/configure-pages@v4` — sets up the GitHub Pages environment and validates that Pages is enabled for the repo.
 
-### When it triggers
+`actions/upload-pages-artifact@v3` — packages the `frontend/` directory into a Pages artifact. The `path: frontend/` argument means only that folder is published, not the whole repo.
 
-```yaml
-on:
-  push:
-    branches: [master]
-```
+`actions/deploy-pages@v4` — deploys the artifact and outputs the final URL.
 
-Every push to `master` starts the workflow. If a deployment is already in progress when a new push arrives, the running deployment is cancelled and replaced by the new one (`cancel-in-progress: true`).
+**Permissions:**
 
-### Required permissions
+`pages: write` and `id-token: write` are required for the deploy step to authenticate with GitHub Pages using OIDC. `contents: read` lets the checkout step access the repo.
 
-```yaml
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-```
+**Concurrency:**
 
-These are set at the workflow level. `pages: write` and `id-token: write` are required by the `actions/deploy-pages` action to authenticate with the GitHub Pages API using OIDC.
+`cancel-in-progress: true` means if two pushes happen in quick succession, the older deployment is cancelled so only the latest commit ends up live.
 
-### Setting up GitHub Pages in your repo
+**Result:**
 
-1. Go to your repository on GitHub
-2. Click **Settings** → **Pages** (in the left sidebar)
-3. Under **Source**, select **GitHub Actions**
-4. Save
-
-That's all. The next push to `master` will trigger the workflow and deploy to Pages. You don't need to configure a branch or folder — the workflow handles that through the `actions/upload-pages-artifact` and `actions/deploy-pages` actions.
-
-### The resulting URL
-
-GitHub Pages URLs follow the pattern:
-
-```
-https://<username>.github.io/<repository-name>/
-```
-
-For example, if your GitHub username is `johndoe` and the repo is named `planty`, the URL would be:
-
-```
-https://johndoe.github.io/planty/
-```
-
-The exact URL is also shown as an output of the deployment step (`steps.deployment.outputs.page_url`) and displayed in the Actions run summary after each successful deploy.
-
-### Note on the backend
-
-GitHub Pages only serves static files. The `/api/*` routes are not available from the GitHub Pages URL — those are handled by the Render backend. If the frontend is accessed via GitHub Pages and the backend is not reachable, all API calls will fail silently. The frontend continues to work fully from localStorage regardless.
+The app is available at `https://iamvishalsehgal.github.io/Planty`. Only the frontend runs here — the backend ETL pipeline and analytics are not available from this URL. For full functionality use the Render URL instead.

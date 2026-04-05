@@ -1,164 +1,89 @@
-# Pipelines
+# backend/pipelines/
 
-A 3-layer ETL pipeline that transforms raw frontend data into enriched care events and per-plant health metrics. It runs automatically every 5 minutes via APScheduler and can also be triggered on demand via the API.
+A 3-layer ETL pipeline. Runs automatically every 5 minutes via APScheduler. Can also be triggered on demand via `POST /api/analytics/run-pipeline`. Every run — scheduled or manual — is logged to the `pipeline_runs` table.
 
 ---
 
-## Architecture overview
+## Layers
 
 ```
-Frontend sync
-      │
-      ▼
-┌─────────────┐
-│  Staging    │  ingestion.py — upserts raw data into plants_raw and events_raw
-└──────┬──────┘
+events_raw (staging)
        │
-       ▼
-┌─────────────┐
-│  Transform  │  transform.py — enriches completed events with timing metrics
-└──────┬──────┘
+       ▼  transform.py
+care_events (enriched)
        │
-       ▼
-┌─────────────┐
-│  Aggregate  │  aggregation.py — computes health score per plant
-└─────────────┘
-       │
-       ▼
-  pipeline_runs  (audit log written by runner.py)
+       ▼  aggregation.py
+plant_health_metrics (scores)
 ```
 
 ---
 
-## Layer 1 — Staging (`ingestion.py`)
+## ingestion.py
 
-Receives plant and event arrays (Python dicts) and upserts them into the raw tables in a single transaction.
+Receives lists of plant and event dicts from the frontend sync endpoints and writes them into the staging tables (`plants_raw`, `events_raw`).
 
-**Plants** — upserted into `plants_raw`. On conflict (same `id`), all columns are overwritten with the incoming values. This means if a plant's name, location, interval, or dead status changes in the app, the next sync will update the record.
+Both writes use `INSERT ... ON CONFLICT(id) DO UPDATE SET ...`, so syncing the same record twice is always safe. For events, only `completed` and `feedback` are updated on conflict — the original scheduled time is never overwritten. All writes for a given sync call are wrapped in a single transaction; if anything fails, the whole batch is rolled back.
 
-**Events** — upserted into `events_raw`. On conflict (same `id`), only `completed`, `feedback`, and `synced_at` are updated. The `scheduled` date and `plant_id` are never overwritten — they're set once and treated as immutable.
-
-Both upserts happen inside a single `BEGIN / COMMIT` block. If anything fails, a `ROLLBACK` is issued before re-raising the exception.
-
-Returns `(plants_count, events_count)` — the number of rows touched in each table.
+Returns a `(plants_count, events_count)` tuple which the runner logs to `pipeline_runs`.
 
 ---
 
-## Layer 2 — Transform (`transform.py`)
+## transform.py
 
-Picks up events that exist in `events_raw` but not yet in `care_events`, and that have a non-NULL `completed` timestamp. For each one it computes:
+Picks up every row in `events_raw` that has a `completed` timestamp but does not yet exist in `care_events` (left join on `c.id IS NULL`). This means the transform layer is incremental — it only processes new completions, never re-processes rows it has already handled.
+
+For each new completion it computes:
 
 **`days_overdue`**
-
-```python
-days_overdue = (completed - scheduled).total_seconds() / 86400
 ```
-
-A positive value means the watering happened late. A negative value means it was done early. Stored rounded to 2 decimal places.
+days_overdue = (completed_datetime - scheduled_datetime).total_seconds() / 86400
+```
+A negative value means the plant was watered early. A positive value means it was watered late. Stored as a float rounded to 2 decimal places.
 
 **`was_on_time`**
-
-```python
-was_on_time = 1 if days_overdue <= 1 else 0
 ```
+was_on_time = 1  if days_overdue <= 1
+            = 0  otherwise
+```
+A 1-day grace period is applied — watering up to one day late still counts as on-time.
 
-Events watered within 1 day of the scheduled date count as on-time. This 1-day grace window accounts for normal variation (e.g. watering in the evening instead of the morning).
-
-Both values are written to `care_events` alongside the original event data. The transform is idempotent — it uses `INSERT OR IGNORE` so rerunning it on already-processed events does nothing.
-
-Returns the count of events newly written to `care_events`.
+The enriched record is inserted into `care_events` with `INSERT OR IGNORE`, so if the transform somehow runs twice on the same event, the second run is a no-op.
 
 ---
 
-## Layer 3 — Aggregation (`aggregation.py`)
+## aggregation.py
 
-Iterates over every plant in `plants_raw` and computes a health score from all of that plant's rows in `care_events`.
+Reads all completed events from `care_events` for each plant and computes a health score. A new row is appended to `plant_health_metrics` on every run, so the full history of score changes is retained.
 
-Plants with no events in `care_events` are skipped entirely (no row is written for them).
-
-### Health score formula
-
+**Health score formula:**
 ```
+compliance = completed_events / total_events          (weight: 0.4)
+timeliness = on_time_events   / total_events          (weight: 0.3)
+feedback   = average feedback score                   (weight: 0.3)
+
 health_score = compliance × 0.4 + timeliness × 0.3 + feedback × 0.3
 ```
 
-**Compliance** (`compliance_rate`): fraction of care events that were completed. Because the transform layer only processes completed events, all rows in `care_events` are completed — so `compliance = total / total = 1.0` in the current setup. This field is reserved for future support of skipped/cancelled events.
-
-**Timeliness**: fraction of events where `was_on_time = 1`.
-
-**Feedback**: average score across events that have feedback. Only events with non-NULL feedback are included in the average. Scoring:
+**Feedback scoring:**
 | Feedback value | Score |
-|----------------|-------|
-| `"happy"` | 1.0 |
-| `"sad"` | 0.3 |
-| `"overwatered"` | 0.0 |
+|---|---|
+| `happy` | 1.0 |
+| `sad` | 0.3 |
+| `overwatered` | 0.0 |
+| no feedback | 0.5 (neutral) |
 
-If no events have feedback at all, the feedback component defaults to 0.5 (neutral).
-
-The resulting `health_score` is a value between 0 and 1, stored rounded to 4 decimal places.
-
-A new row is appended to `plant_health_metrics` every time the aggregation runs (it does not update in place), so you get a time series of health scores for each plant.
-
-Returns the count of metric rows written.
+Plants with zero completed events are skipped — they have no data to score.
 
 ---
 
-## Orchestration (`runner.py`)
+## runner.py
 
-`run_pipeline(plants=None, events=None)` is the single entry point used by all callers — the scheduler, the sync routes, and the manual trigger endpoint.
+Orchestrates the three layers in order and writes an audit log entry to `pipeline_runs`.
 
-**Flow:**
+1. Inserts a `pipeline_runs` row with `status = 'running'` and captures the `run_id`
+2. Calls `ingestion.run()` if plant or event data was passed in (sync-triggered runs)
+3. Calls `transform.run()`
+4. Calls `aggregation.run()`
+5. Updates the `pipeline_runs` row with `status`, record counts, finish time, and any error message
 
-1. Insert a row into `pipeline_runs` with `status = "running"` and capture the `run_id`.
-2. If `plants` or `events` were passed in, call `ingestion.run(plants, events)`.
-3. Call `transform.run()` unconditionally.
-4. Call `aggregation.run()` unconditionally.
-5. Update the `pipeline_runs` row with final counts, status (`"success"` or `"error"`), and a finish timestamp.
-
-Steps 3 and 4 always run even on a scheduled tick with no new data — this ensures that if a previous run left partially processed events (e.g. due to a crash), they'll be picked up on the next run.
-
-If any layer raises an exception, `result["status"]` is set to `"error"` and the exception message is stored in `result["error"]`. The audit log is updated regardless of success or failure.
-
-Returns a dict:
-```python
-{
-    "plants_staged": int,
-    "events_staged": int,
-    "events_transformed": int,
-    "metrics_computed": int,
-    "status": "success" | "error",
-    "error": str | None
-}
-```
-
----
-
-## APScheduler
-
-Started in `main.py` on FastAPI startup:
-
-```python
-scheduler = BackgroundScheduler()
-scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
-scheduler.start()
-```
-
-`BackgroundScheduler` runs in a daemon thread alongside the ASGI server. The job ID is `"etl"`. On the free Render tier, the first scheduled run fires 5 minutes after the service starts.
-
----
-
-## `pipeline_runs` table schema
-
-| Column | Type | Notes |
-|--------|------|-------|
-| `id` | INTEGER PK AUTOINCREMENT | |
-| `started_at` | TEXT | UTC ISO 8601 timestamp |
-| `finished_at` | TEXT | UTC ISO 8601 timestamp, NULL while in progress |
-| `status` | TEXT | `"running"` → `"success"` or `"error"` |
-| `plants_staged` | INTEGER | Rows touched in `plants_raw` |
-| `events_staged` | INTEGER | Rows touched in `events_raw` |
-| `events_transformed` | INTEGER | New rows written to `care_events` |
-| `metrics_computed` | INTEGER | New rows written to `plant_health_metrics` |
-| `error` | TEXT | Exception message on failure, NULL on success |
-
-Query the last 50 runs via `GET /api/analytics/pipeline-runs`.
+If any layer raises an exception, the error is caught, written to `pipeline_runs.error`, and the function returns with `status = 'error'` rather than crashing the server. The APScheduler job continues running on its 5-minute interval regardless.

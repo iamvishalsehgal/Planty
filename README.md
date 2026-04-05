@@ -1,145 +1,105 @@
 # Planty
 
-Smart plant care that tracks watering schedules, learns from your habits, and adapts to weather conditions.
+**Live:** https://planty-26os.onrender.com
 
-**Live demo:** https://planty-26os.onrender.com
-
----
-
-## What it does
-
-You add your plants, tell Planty how often you water each one, and tap "Water" whenever you actually do it. Over time the app calculates your real watering rhythm using a weighted moving average across your watering history, then adjusts each plant's schedule automatically. It also pulls live weather from Open-Meteo and scales intervals by season — plants get watered more often in summer heat and less in winter.
-
-When a plant dies you record the cause (overwatering, underwatering, or unknown). If you add the same plant again later, Planty recognises it, shows you what went wrong last time, and proposes a corrected interval upfront so history doesn't repeat itself.
-
-The backend collects all of that data, runs a 3-layer ETL pipeline on a 5-minute schedule, and computes a health score per plant based on compliance, timeliness, and watering feedback.
+Planty is a plant care app that tracks your watering history and gets smarter over time. It learns your actual watering rhythm per plant, factors in live weather and season, and adjusts each plant's schedule automatically. When a plant dies, it records the cause and uses that history to suggest a corrected interval if you ever grow the same plant again.
 
 ---
 
-## Project structure
+## Architecture
 
 ```
-planty/
-├── frontend/                   # Single-page app (vanilla HTML/CSS/JS + Vite)
-│   ├── index.html              # Entire UI — all JS and CSS live in this one file
-│   ├── vite.config.ts          # Dev server config, proxies /api/* to backend :3001
-│   └── package.json
-│
-├── backend/                    # Python API server
-│   ├── main.py                 # FastAPI app, CORS, APScheduler startup
-│   ├── db.py                   # SQLite connection (WAL mode), schema creation
-│   ├── models.py               # Pydantic request models
-│   ├── requirements.txt        # fastapi, uvicorn, apscheduler, aiofiles
-│   ├── planty.db               # SQLite database (created on first run)
-│   ├── pipelines/              # ETL pipeline — 3 layers
-│   │   ├── ingestion.py        # Upsert raw plant + event data from frontend
-│   │   ├── transform.py        # Enrich events with days_overdue, was_on_time
-│   │   ├── aggregation.py      # Compute per-plant health scores
-│   │   └── runner.py           # Orchestrates layers, writes audit log
-│   └── routes/                 # FastAPI route handlers
-│       ├── plants.py           # POST /api/plants/sync, GET /api/plants
-│       ├── events.py           # POST /api/events/sync
-│       └── analytics.py        # GET /api/analytics/*
-│
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          # Deploys frontend/ to GitHub Pages on push to master
-│
-├── render.yaml                 # Render.com service config for backend
-└── package.json                # Root scripts to run both services together
+┌─────────────────────────────────────────────────────┐
+│                    Browser                          │
+│                                                     │
+│  frontend/index.html                                │
+│  ├── Adaptive scheduler (weighted moving average)   │
+│  ├── Environment scaling (weather + season)         │
+│  ├── Plant state (localStorage)                     │
+│  └── Push notifications (Service Worker)            │
+│                         │                           │
+│                    /api/* requests                  │
+└─────────────────────────┼───────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────┐
+│              backend/main.py (FastAPI)               │
+│                                                     │
+│  Routes                                             │
+│  ├── /api/plants/sync   — receive plant data        │
+│  ├── /api/events/sync   — receive watering events   │
+│  └── /api/analytics/*   — health scores, trends     │
+│                                                     │
+│  ETL Pipeline (runs every 5 minutes)                │
+│  ├── Ingestion  — stage raw data from frontend      │
+│  ├── Transform  — compute days_overdue, was_on_time │
+│  └── Aggregation — health score per plant           │
+│                                                     │
+│  SQLite (planty.db)                                 │
+│  ├── plants_raw / events_raw   — staging tables     │
+│  ├── care_events               — enriched events    │
+│  ├── plant_health_metrics      — computed scores    │
+│  └── pipeline_runs             — ETL audit log      │
+└─────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Stack
+## How the pieces connect
 
-| Layer | Tech |
-|-------|------|
-| Frontend | Vanilla HTML, CSS, JavaScript — no framework |
-| Frontend build tool | Vite 7 |
-| Backend | Python 3, FastAPI 0.115 |
-| Database | SQLite (file: `backend/planty.db`) |
-| Background scheduler | APScheduler 3.10 — ETL runs every 5 minutes |
-| Deployment (backend) | Render.com free tier |
-| Deployment (frontend) | GitHub Pages via GitHub Actions |
+The frontend is fully self-contained. All plant state, watering history, and schedule logic live in the browser (localStorage). The app works completely offline or without the backend.
+
+When a user waters a plant, the frontend syncs that event to the backend via `/api/events/sync`. The backend's ETL pipeline then picks it up, enriches it (was it on time? how many days overdue?), and rolls up a health score for that plant. Those health scores are available via `/api/analytics/summary` and displayed in the Schedule tab.
+
+The backend also serves `frontend/index.html` as a catch-all, so the full app runs from a single Render URL with no separate frontend deployment needed.
 
 ---
 
-## Running locally
+## Components
 
-### Prerequisites
+| Component | What it does |
+|---|---|
+| `frontend/index.html` | The entire UI — adaptive scheduler, watering logic, plant state, notifications |
+| `backend/main.py` | FastAPI app entry point, CORS, startup, APScheduler, serves frontend |
+| `backend/db.py` | SQLite connection in WAL mode, schema for all 6 tables |
+| `backend/models.py` | Pydantic models that validate incoming sync payloads |
+| `backend/pipelines/` | 3-layer ETL — ingestion, transform, aggregation |
+| `backend/routes/` | REST API handlers for plants, events, analytics |
+| `frontend/sw.js` | Service Worker — delivers browser notifications for plants due for water |
+| `render.yaml` | Render.com deployment config — one service, frontend + backend together |
+| `.github/workflows/deploy.yml` | Deploys frontend-only to GitHub Pages on every push to master |
 
-- Node.js 18+
-- Python 3.11+
+---
 
-### Install dependencies
+## Data flow
 
-```bash
-# From the project root
-npm install                   # installs concurrently
-npm run install:frontend      # cd frontend && npm install
-npm run install:backend       # cd backend && pip3 install -r requirements.txt
+```
+User waters a plant
+       │
+       ▼
+frontend records event in localStorage
+       │
+       ▼
+frontend POSTs to /api/events/sync
+       │
+       ▼
+ingestion.py upserts into events_raw
+       │
+       ▼  (every 5 min via APScheduler)
+transform.py computes days_overdue + was_on_time → care_events
+       │
+       ▼
+aggregation.py computes health_score per plant → plant_health_metrics
+       │
+       ▼
+GET /api/analytics/summary returns scores to frontend
 ```
 
-### Start both services at once
-
-```bash
-npm start
-```
-
-This runs Vite on http://localhost:5173 and uvicorn on http://localhost:3001 concurrently. Vite proxies all `/api/*` requests to the backend so there are no CORS issues in development.
-
-### Start them separately
-
-```bash
-# Terminal 1 — backend
-npm run dev:backend
-# equivalent: cd backend && uvicorn main:app --reload --port 3001
-
-# Terminal 2 — frontend
-npm run dev:frontend
-# equivalent: cd frontend && npm run dev
-```
-
 ---
 
-## Deployment
+## Subfolder docs
 
-### Backend — Render.com
-
-`render.yaml` at the project root configures a Python web service on Render's free tier.
-
-- **Build command:** `pip install -r backend/requirements.txt`
-- **Start command:** `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT`
-
-The backend also serves `frontend/index.html` as a catch-all for non-API routes, so the full app works from the Render URL without needing GitHub Pages.
-
-To deploy: connect the GitHub repo to Render — it picks up `render.yaml` automatically.
-
-### Frontend — GitHub Pages
-
-Pushes to `master` trigger `.github/workflows/deploy.yml`, which uploads the `frontend/` directory directly to GitHub Pages. No build step is needed because `index.html` is fully self-contained.
-
-See [`.github/workflows/README.md`](.github/workflows/README.md) for step-by-step setup instructions.
-
----
-
-## Keeping the backend awake (UptimeRobot)
-
-Render's free tier spins a service down after 15 minutes of inactivity, causing a cold-start delay on the next request. To prevent this, set up a free UptimeRobot monitor that pings the service every 5 minutes.
-
-1. Sign up at https://uptimerobot.com (free account)
-2. Create a new **HTTP(S)** monitor
-3. Set the URL to your Render service URL (e.g. `https://planty-26os.onrender.com`)
-4. Set the check interval to **5 minutes**
-5. Save — the pings will keep the service warm
-
----
-
-## Subfolder documentation
-
-- [frontend/README.md](frontend/README.md) — UI structure, all 4 tabs, adaptive scheduling, localStorage data model
-- [backend/README.md](backend/README.md) — API endpoints, database schema, how to run
-- [backend/pipelines/README.md](backend/pipelines/README.md) — ETL pipeline detail, health score formula
-- [backend/routes/README.md](backend/routes/README.md) — Every API endpoint with request/response shapes and examples
-- [.github/workflows/README.md](.github/workflows/README.md) — GitHub Pages deployment setup
+- [frontend/README.md](frontend/README.md) — adaptive scheduling algorithm, all 4 tabs, notification system, localStorage model
+- [backend/README.md](backend/README.md) — database schema, API endpoints, how FastAPI serves the frontend
+- [backend/pipelines/README.md](backend/pipelines/README.md) — ETL pipeline detail, health score formula, audit log
+- [backend/routes/README.md](backend/routes/README.md) — every endpoint with request/response shapes
+- [.github/workflows/README.md](.github/workflows/README.md) — GitHub Pages deployment
