@@ -1,212 +1,87 @@
-# 🌱 PlantMind - AI-Powered Plant Care Scheduler
+# Planty
 
-An intelligent plant care scheduler that uses **Reinforcement Learning** to learn your watering patterns and automatically schedules future waterings. Integrates with **Google Calendar** and **Apple Calendar** for seamless scheduling.
+Planty is a smart plant care app that learns how you water your plants and adjusts schedules over time. It uses a Q-learning agent per plant to adapt watering intervals based on your feedback, live weather, and season. A separate backend runs ETL pipelines to compute health scores and track care history across your whole collection.
 
-## ✨ Features
+## How it works
 
-### Core Features
-- **One-Tap Water Recording**: Record waterings instantly with a single button tap
-- **AI-Predicted Schedules**: RL agent learns your actual watering patterns
-- **"Next Water in X Days"**: Always know when your plant needs water next
-- **Calendar Integration**: Syncs with Google Calendar and Apple Calendar (iCloud)
+When you water a plant and leave feedback (happy, sad, overwatered), Planty's RL agent updates that plant's watering interval. Weather data from Open-Meteo shifts intervals up or down based on temperature and humidity. A backend ETL pipeline runs every 5 minutes, staging raw data, computing per-event metrics, and rolling up health scores per plant.
 
-### Plant Memorial System
-- **Death Recording**: When a plant dies, record what happened
-- **Learning Preservation**: All watering data is saved even when plants die
-- **AI Protection**: New plants with the same name get adjusted schedules based on past failures
-- **Gemini AI Analysis**: Uses Google's Gemini to analyze deaths and suggest improvements
+## Stack
 
-### Reinforcement Learning
-- **Per-Plant Agents**: Each plant has its own independent learning agent
-- **Q-Learning Algorithm**: Uses temporal difference learning to optimize schedules
-- **Reward Signals**: +10 for on-time waterings, penalties for overwatering
-- **Confidence Scoring**: Shows how confident the AI is in its predictions
-- **Bottom Watering Logic**: Enforces 2-day minimum cooldown between waterings
+**Frontend** — self-contained HTML/CSS/JS, no framework. Vite for local dev.
 
-## 🚀 Quick Start
+**Backend** — Python with FastAPI and SQLite. APScheduler runs the ETL pipeline every 5 minutes.
 
-### 1. Install Dependencies
+## Project structure
+
+```
+frontend/
+  index.html        full app — all logic in one file
+  vite.config.ts    dev server with /api proxy to :3001
+
+backend/
+  main.py           FastAPI app, startup, CORS, scheduler
+  db.py             SQLite connection, WAL mode, schema init
+  models.py         Pydantic request models
+  pipelines/
+    ingestion.py    upsert raw plants + events from frontend
+    transform.py    compute days_overdue, was_on_time per event
+    aggregation.py  roll up health scores per plant
+    runner.py       orchestrate all three layers, write audit log
+  routes/
+    plants.py       CRUD + sync
+    events.py       care event ingestion
+    analytics.py    summary, trends, export, pipeline trigger
+  requirements.txt
+```
+
+## ETL pipeline
+
+Runs every 5 minutes via APScheduler. Three layers:
+
+| Layer | What it does |
+|---|---|
+| Staging | Upserts raw plant and event data sent from the frontend |
+| Transform | Enriches each event with `days_overdue` and `was_on_time` |
+| Aggregate | Computes health score per plant: compliance×0.4 + timeliness×0.3 + feedback×0.3 |
+
+Every run is logged to `pipeline_runs` with record counts and any errors.
+
+## Reinforcement learning
+
+Each plant has its own Q-learning agent stored in localStorage:
+
+- **State** — `{days_since_water}_{interval_bucket}_{season}_{temp_band}`
+- **Actions** — shift interval by −2, −1, 0, +1, or +2 days
+- **Rewards** — +10 watered on time, +5 happy feedback, −8 overwatered, −10 skipped
+- **Exploration** — ε-greedy, decays from 0.3 to 0.05 over time
+- **Season scaling** — summer ×1.4, winter ×0.6
+
+## Running locally
 
 ```bash
-pip install -r requirements.txt
+# frontend
+cd frontend && npm install && npm run dev
+# → http://localhost:5173
+
+# backend
+cd backend && pip3 install -r requirements.txt
+uvicorn main:app --reload --port 3001
+# → http://localhost:3001
+
+# both together from root
+npm install && npm start
 ```
 
-### 2. Set Environment Variables (Optional)
+## API
 
-```bash
-# For Google Calendar
-export GOOGLE_CLIENT_ID="your-client-id"
-export GOOGLE_CLIENT_SECRET="your-client-secret"
-export GOOGLE_REDIRECT_URI="http://localhost:8000/auth/google/callback"
-
-# Gemini API (already included, but you can override)
-export GEMINI_API_KEY="your-gemini-api-key"
-```
-
-### 3. Run the Application
-
-```bash
-# Development mode with auto-reload
-uvicorn main:app --reload
-
-# Or run directly
-python main.py
-```
-
-### 4. Open in Browser
-
-Navigate to: **http://localhost:8000**
-
-## 📁 Project Structure
-
-```
-plantmind/
-├── main.py              # FastAPI application & routes
-├── models.py            # SQLAlchemy database models
-├── rl_agent.py          # Reinforcement learning agent
-├── gemini_service.py    # Google Gemini AI integration
-├── calendar_service.py  # Google & Apple Calendar integration
-├── requirements.txt     # Python dependencies
-├── templates/
-│   └── index.html       # Frontend UI
-└── plantmind.db         # SQLite database (created on first run)
-```
-
-## 🧠 Reinforcement Learning Formulation
-
-### State Space
-- Days since last watering
-- Days since last fertilizing
-- Average watering interval
-- Interval variance
-- Consecutive skips
-- Day of week
-- Cooldown status
-
-### Action Space
-- Schedule water in N days
-- Schedule fertilize in N days
-- Skip action
-
-### Reward Function
-| Action | Reward |
-|--------|--------|
-| Water on predicted day | +10 |
-| Water 1 day off | +5 |
-| Water 2-3 days off | +2 |
-| Water far off prediction | -5 |
-| Skip watering | -8 |
-| Overwatering (< 2 days) | -15 |
-
-### Q-Learning Update
-```
-Q(s,a) ← Q(s,a) + α[r + γ·max(Q(s',a')) - Q(s,a)]
-
-α = 0.15 (learning rate)
-γ = 0.95 (discount factor)
-ε = decaying (exploration rate)
-```
-
-## 📅 Calendar Integration
-
-### Google Calendar
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create OAuth 2.0 credentials
-3. Set redirect URI to `http://localhost:8000/auth/google/callback`
-4. Add credentials to environment variables
-5. Click "Connect Google Calendar" in the app
-
-### Apple Calendar (iCloud)
-1. Go to [appleid.apple.com](https://appleid.apple.com)
-2. Sign in and go to **Security** → **App-Specific Passwords**
-3. Generate a password named "PlantMind"
-4. Enter your Apple ID and the app-specific password in the app
-
-### Export .ics
-- Download an .ics file that works with any calendar app
-- Just double-click to import into your calendar
-
-## 🔌 API Endpoints
-
-### Plants
-- `GET /api/plants` - Get all plants with learning data
-- `POST /api/plants` - Create a new plant
-- `DELETE /api/plants/{id}` - Delete a plant
-- `POST /api/plants/{id}/water` - Record watering (main learning trigger)
-- `POST /api/plants/{id}/died` - Mark plant as deceased
-
-### Memorial
-- `GET /api/dead-plants` - Get deceased plants
-- `POST /api/plants/{id}/revive` - Create plant using dead plant's learning
-
-### AI & Insights
-- `POST /api/chat` - Chat with Gemini AI
-- `GET /api/reward-signals` - Get RL reward signals
-- `GET /api/explanations` - Get AI explanations
-
-### Calendar
-- `GET /api/calendar/status` - Get connection status
-- `GET /auth/google` - Start Google OAuth
-- `POST /api/calendar/apple/connect` - Connect Apple Calendar
-- `GET /api/export/ics` - Export calendar as .ics
-
-## 🌊 Bottom Watering Logic
-
-PlantMind is designed specifically for **bottom watering**:
-
-1. **Minimum 2-day Cooldown**: Plants need time to absorb water from below
-2. **Longer Hydration Effect**: Bottom watering provides more sustained moisture
-3. **Overwatering Prevention**: Heavy penalties for watering too frequently
-4. **No Same-Day Watering**: Unless heavily reinforced by learning
-
-## 💀 Death & Revival System
-
-When a plant dies:
-1. Record the cause (overwatering, underwatering, unknown)
-2. Gemini AI analyzes what went wrong
-3. A new interval is suggested
-4. All learning data is preserved
-
-When you get a replacement:
-1. Add a plant with the same name
-2. App detects the previous death
-3. Shows warning with AI-adjusted interval
-4. New plant starts with "death protection"
-
-## 🛡️ Failure Safeguards
-
-- **Model Divergence**: Hard bounds on intervals (2-30 days)
-- **Cold Start**: Conservative defaults until enough data
-- **Calendar API Failures**: Graceful fallback to local storage
-- **Data Loss Prevention**: Calendar events serve as backup
-- **Exploration Decay**: Reduces random scheduling over time
-
-## 📱 Screenshots
-
-The app provides:
-- Dashboard with quick water buttons
-- Plant cards showing next watering countdown
-- AI Insights tab with reward signals
-- Calendar setup with Google/Apple integration
-- Plant Memorial for deceased plants
-
-## 🔧 Development
-
-```bash
-# Install dev dependencies
-pip install -r requirements.txt
-
-# Run with auto-reload
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-
-# Run tests (if added)
-pytest
-```
-
-## 📄 License
-
-MIT License - Feel free to use and modify!
-
----
-
-Built with 💚 for plant lovers who want AI-powered care schedules.
+| Method | Path | Description |
+|---|---|---|
+| POST | `/api/plants/sync` | Upsert plants from frontend |
+| POST | `/api/events/sync` | Ingest care events |
+| GET | `/api/plants` | List plants with latest health metrics |
+| GET | `/api/analytics/summary` | Health score, compliance rate, overdue count |
+| GET | `/api/analytics/trends` | Weekly event counts and health time series |
+| POST | `/api/analytics/run-pipeline` | Manually trigger ETL |
+| GET | `/api/analytics/export` | Full JSON data dump |
+| GET | `/api/analytics/pipeline-runs` | ETL audit log |
