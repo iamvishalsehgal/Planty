@@ -2342,6 +2342,63 @@
             });
         });
 
+        // ── Notifications ───────────────────────────────────────────────
+        let swRegistration = null;
+
+        async function registerServiceWorker() {
+            if (!('serviceWorker' in navigator)) return;
+            try {
+                swRegistration = await navigator.serviceWorker.register('/sw.js');
+            } catch (e) { /* SW not supported in this context */ }
+        }
+
+        async function requestNotificationPermission() {
+            if (!('Notification' in window)) return false;
+            if (Notification.permission === 'granted') return true;
+            if (Notification.permission === 'denied') return false;
+            const result = await Notification.requestPermission();
+            return result === 'granted';
+        }
+
+        function getPlantsNeedingWater() {
+            return state.plants
+                .filter(p => !p.isDead)
+                .map(p => ({ plant: p, daysUntil: getDaysUntilNextWater(p.id, p.interval) }))
+                .filter(({ daysUntil }) => daysUntil <= 0)
+                .map(({ plant, daysUntil }) => ({
+                    id: plant.id,
+                    message: daysUntil < 0
+                        ? `${plant.name} is overdue by ${Math.abs(daysUntil)} day${Math.abs(daysUntil) > 1 ? 's' : ''}! 🥺`
+                        : `${plant.name} needs water today! 💧`
+                }));
+        }
+
+        async function sendWaterNotifications() {
+            if (Notification.permission !== 'granted') return;
+            const plants = getPlantsNeedingWater();
+            if (plants.length === 0) return;
+
+            if (swRegistration && swRegistration.active) {
+                swRegistration.active.postMessage({ type: 'NOTIFY_PLANTS', plants });
+            } else {
+                // Fallback: direct Notification API
+                plants.forEach(p => new Notification('Planty 🌱', { body: p.message, icon: '/favicon.ico', tag: `plant-${p.id}` }));
+            }
+        }
+
+        async function initNotifications() {
+            await registerServiceWorker();
+            const granted = await requestNotificationPermission();
+            if (granted) {
+                sendWaterNotifications();
+                // Re-check every hour
+                setInterval(sendWaterNotifications, 3600000);
+            }
+        }
+
+        initNotifications();
+        // ────────────────────────────────────────────────────────────────
+
         loadEnvironment();
         updateWeatherDisplay();
         fetchWeather();
