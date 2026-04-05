@@ -829,10 +829,39 @@ function SettingsTab({
         </p>
       </div>
 
-      {/* App Info */}
-      <div className="text-center text-xs text-gray-400 py-4">
-        <p>PlantCare AI v1.0</p>
-        <p>Using reinforcement learning to optimize your plant care</p>
+      {/* About */}
+      <div className="bg-white rounded-xl p-4 space-y-3">
+        <h3 className="font-medium text-gray-900 flex items-center gap-2">
+          About PlantCare AI
+        </h3>
+        <div className="space-y-2 text-sm text-gray-600">
+          <p>
+            <strong className="text-gray-800">v1.0</strong> — Intelligent plant care with per-plant reinforcement learning.
+            Each plant has its own Q-learning agent that adapts watering intervals based on your feedback,
+            live weather, and seasonal conditions.
+          </p>
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <div className="bg-gray-50 rounded-lg p-2.5">
+              <p className="text-xs font-medium text-gray-700">RL Algorithm</p>
+              <p className="text-xs text-gray-500 mt-0.5">Q-learning, ε-greedy</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-2.5">
+              <p className="text-xs font-medium text-gray-700">Weather</p>
+              <p className="text-xs text-gray-500 mt-0.5">Open-Meteo (free)</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-2.5">
+              <p className="text-xs font-medium text-gray-700">Storage</p>
+              <p className="text-xs text-gray-500 mt-0.5">localStorage + SQLite</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-2.5">
+              <p className="text-xs font-medium text-gray-700">Backend</p>
+              <p className="text-xs text-gray-500 mt-0.5">Express + ETL pipelines</p>
+            </div>
+          </div>
+          <p className="text-xs text-gray-400 pt-1">
+            The Analytics tab shows health scores and trends computed by the data engineering backend (port 3001).
+          </p>
+        </div>
       </div>
     </div>
   );
