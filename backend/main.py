@@ -6,6 +6,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from db import init_db
@@ -14,11 +15,13 @@ from routes.plants import router as plants_router
 from routes.events import router as events_router
 from routes.analytics import router as analytics_router
 
+FRONTEND = Path(__file__).parent.parent / "frontend"
+
 app = FastAPI(title="Planty")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -34,10 +37,15 @@ def startup():
     scheduler = BackgroundScheduler()
     scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
     scheduler.start()
-    print("Planty backend running on :3001")
-    print("ETL pipeline scheduled every 5 minutes")
+    print("Planty started — ETL pipeline running every 5 minutes")
 
 
 @app.get("/")
-def root():
-    return {"status": "ok", "app": "Planty"}
+def serve_frontend():
+    return FileResponse(FRONTEND / "index.html")
+
+
+@app.get("/{full_path:path}")
+def catch_all(full_path: str):
+    # Serve index.html for any non-API route (SPA fallback)
+    return FileResponse(FRONTEND / "index.html")
