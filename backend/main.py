@@ -47,5 +47,9 @@ def serve_frontend():
 
 @app.get("/{full_path:path}")
 def catch_all(full_path: str):
-    # Serve index.html for any non-API route (SPA fallback)
+    # Serve static files from frontend/public/ if they exist
+    static_file = FRONTEND / "public" / full_path
+    if static_file.is_file():
+        return FileResponse(static_file)
+    # SPA fallback — serve index.html for everything else
     return FileResponse(FRONTEND / "index.html")
