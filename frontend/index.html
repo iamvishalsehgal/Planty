@@ -1329,6 +1329,64 @@
             color: var(--gray-600);
             line-height: 1.6;
         }
+
+        /* Pot size selector */
+        .pot-size-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .pot-btn {
+            flex: 1;
+            min-width: 52px;
+            padding: 10px 4px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            font-size: 11px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            line-height: 1.4;
+            color: var(--gray-600);
+        }
+        .pot-btn.selected {
+            border-color: var(--primary);
+            background: #ecfdf5;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        /* Repot badge on plant card */
+        .repot-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        .repot-badge.soon {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .repot-badge.overdue {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .repot-badge button {
+            background: none;
+            border: 1px solid currentColor;
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            color: inherit;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -1413,6 +1471,17 @@
                             <button type="button" class="interval-btn" data-days="14">Every 14 days</button>
                         </div>
                         <p class="input-hint">The app learns and adjusts automatically!</p>
+                    </div>
+                    <div class="input-group">
+                        <label>Pot Size</label>
+                        <div class="pot-size-buttons">
+                            <button type="button" class="pot-btn" data-size="tiny">Tiny<br><small>&lt; 4"</small></button>
+                            <button type="button" class="pot-btn" data-size="small">Small<br><small>4–6"</small></button>
+                            <button type="button" class="pot-btn selected" data-size="medium">Medium<br><small>6–8"</small></button>
+                            <button type="button" class="pot-btn" data-size="large">Large<br><small>8–12"</small></button>
+                            <button type="button" class="pot-btn" data-size="xl">XL<br><small>12"+</small></button>
+                        </div>
+                        <p class="input-hint">Used to estimate when repotting is due</p>
                     </div>
                 </div>
                 <button class="add-btn" onclick="addPlant()">
@@ -1643,6 +1712,40 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Repot Modal -->
+    <div class="modal-overlay" id="repotModal">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <h3>🪴 Log Repotting</h3>
+            <p>Select the new pot size</p>
+            <div class="option-cards" id="repotSizeCards">
+                <div class="option-card selected" onclick="selectRepotSize('tiny')" data-size="tiny">
+                    <span class="icon">🌱</span>
+                    <div class="text"><div class="title">Tiny</div><div class="subtitle">Under 4" / 10cm</div></div>
+                </div>
+                <div class="option-card" onclick="selectRepotSize('small')" data-size="small">
+                    <span class="icon">🪴</span>
+                    <div class="text"><div class="title">Small</div><div class="subtitle">4–6" / 10–15cm</div></div>
+                </div>
+                <div class="option-card" onclick="selectRepotSize('medium')" data-size="medium">
+                    <span class="icon">🌿</span>
+                    <div class="text"><div class="title">Medium</div><div class="subtitle">6–8" / 15–20cm</div></div>
+                </div>
+                <div class="option-card" onclick="selectRepotSize('large')" data-size="large">
+                    <span class="icon">🌳</span>
+                    <div class="text"><div class="title">Large</div><div class="subtitle">8–12" / 20–30cm</div></div>
+                </div>
+                <div class="option-card" onclick="selectRepotSize('xl')" data-size="xl">
+                    <span class="icon">🌲</span>
+                    <div class="text"><div class="title">XL</div><div class="subtitle">12"+ / 30cm+</div></div>
+                </div>
+            </div>
+            <input type="hidden" id="repotPlantId">
+            <button class="modal-btn" onclick="confirmRepot()">Done</button>
+            <button class="modal-btn secondary" onclick="closeModal('repotModal')">Cancel</button>
         </div>
     </div>
 
@@ -1939,6 +2042,16 @@
             return fallbacks[[...n].reduce((a, c) => a + c.charCodeAt(0), 0) % fallbacks.length];
         }
 
+        function getRepottingInterval(potSize) {
+            return { tiny: 180, small: 365, medium: 548, large: 730, xl: 1095 }[potSize] || 548;
+        }
+
+        function getDaysUntilRepot(plant) {
+            if (!plant.lastRepotted) return null;
+            const daysSince = Math.floor((Date.now() - new Date(plant.lastRepotted)) / 86400000);
+            return getRepottingInterval(plant.potSize) - daysSince;
+        }
+
         function getPlantHistory(plantId) {
             return state.history.filter(h => h.plantId === plantId).sort((a, b) => new Date(a.date) - new Date(b.date));
         }
@@ -2025,10 +2138,11 @@
             const location = document.getElementById('plantLocation').value.trim();
             const selectedBtn = document.querySelector('.interval-btn.selected');
             const interval = selectedBtn ? parseInt(selectedBtn.dataset.days) : 7;
+            const potSize = document.querySelector('.pot-btn.selected')?.dataset.size || 'medium';
             const normalizedName = name.toLowerCase().trim();
             const deadMatches = state.deadPlants.filter(p => p.normalized === normalizedName);
             if (deadMatches.length > 0) {
-                state.pendingPlant = { name, location, interval };
+                state.pendingPlant = { name, location, interval, potSize };
                 const combinedData = combineDeathLearning(deadMatches);
                 state.pendingRevival = combinedData;
                 document.getElementById('revivalMessage').textContent = `You've had ${deadMatches.length} "${name}" plant(s) before.`;
@@ -2039,15 +2153,15 @@
             }
             const existingPlants = state.plants.filter(p => p.normalized === normalizedName);
             if (existingPlants.length > 0 && !location) {
-                state.pendingPlant = { name, location, interval };
+                state.pendingPlant = { name, location, interval, potSize };
                 document.getElementById('duplicateMessage').textContent = `You already have ${existingPlants.length} "${name}". Add a location to tell them apart.`;
                 showModal('duplicateModal');
                 return;
             }
-            createPlant(name, location, interval, false, null);
+            createPlant(name, location, interval, false, null, potSize);
         }
 
-        function createPlant(name, location, interval, isProtected, protectionData) {
+        function createPlant(name, location, interval, isProtected, protectionData, potSize) {
             const plant = {
                 id: Date.now(),
                 name, location,
@@ -2055,6 +2169,8 @@
                 emoji: getPlantEmoji(name),
                 interval: protectionData ? protectionData.suggestedInterval : interval,
                 isProtected,
+                potSize: potSize || 'medium',
+                lastRepotted: new Date().toISOString(),
                 created: new Date().toISOString()
             };
             state.plants.push(plant);
@@ -2076,8 +2192,8 @@
 
         function confirmRevival(useProtection) {
             if (!state.pendingPlant || !state.pendingRevival) return;
-            const { name, location, interval } = state.pendingPlant;
-            createPlant(name, location, interval, useProtection, useProtection ? state.pendingRevival : null);
+            const { name, location, interval, potSize } = state.pendingPlant;
+            createPlant(name, location, interval, useProtection, useProtection ? state.pendingRevival : null, potSize);
             closeModal('revivalModal');
             state.pendingPlant = null;
             state.pendingRevival = null;
@@ -2189,6 +2305,12 @@
                 else if (daysUntil === 1) { countdownClass = 'urgent'; countdownText = 'Tomorrow'; subtext = 'Get ready! 🌱'; }
                 const lastWateredText = daysSince === null ? 'Never watered' :
                     daysSince === 0 ? (hoursSince < 1 ? 'Just now' : `${Math.floor(hoursSince)}h ago`) : `${daysSince} days ago`;
+                const daysUntilRepot = getDaysUntilRepot(plant);
+                const repotBadge = daysUntilRepot !== null && daysUntilRepot <= 60
+                    ? `<div class="repot-badge ${daysUntilRepot <= 0 ? 'overdue' : 'soon'}">
+                           <span>🪴 ${daysUntilRepot <= 0 ? 'Repotting overdue' : `Repot in ${daysUntilRepot}d`}</span>
+                           <button onclick="showRepotModal(${plant.id})">Repot now</button>
+                       </div>` : '';
                 return `
                     <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''}">
                         <div class="plant-header">
@@ -2212,9 +2334,11 @@
                             <span>💧</span>${canWater.allowed ? 'I Watered This' : `Wait ${canWater.hoursLeft}h`}
                         </button>
                         ${!canWater.allowed ? `<div class="cooldown-warning"><span>⏳</span> Soil still absorbing water</div>` : ''}
+                        ${repotBadge}
                         <div class="actions-row">
                             <span class="last-watered">Last: ${lastWateredText}</span>
                             <div class="action-btns">
+                                <button class="action-btn" title="Log repotting" onclick="showRepotModal(${plant.id})">🪴</button>
                                 <button class="action-btn danger" onclick="showDeathModal(${plant.id})">💀</button>
                                 <button class="action-btn" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
@@ -2430,6 +2554,13 @@
             });
         });
 
+        document.querySelectorAll('.pot-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pot-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+
         // ── Notifications ───────────────────────────────────────────────
         let swRegistration = null;
 
@@ -2448,6 +2579,46 @@
             return result === 'granted';
         }
 
+        function showRepotModal(plantId) {
+            const plant = state.plants.find(p => p.id === plantId);
+            document.getElementById('repotPlantId').value = plantId;
+            document.querySelectorAll('#repotSizeCards .option-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.size === (plant?.potSize || 'medium'));
+            });
+            showModal('repotModal');
+        }
+
+        function selectRepotSize(size) {
+            document.querySelectorAll('#repotSizeCards .option-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.size === size);
+            });
+        }
+
+        function confirmRepot() {
+            const plantId = +document.getElementById('repotPlantId').value;
+            const newSize = document.querySelector('#repotSizeCards .option-card.selected')?.dataset.size || 'medium';
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            plant.potSize = newSize;
+            plant.lastRepotted = new Date().toISOString();
+            save();
+            closeModal('repotModal');
+            render();
+            const months = Math.round(getRepottingInterval(newSize) / 30);
+            showToast('🪴 Repotted!', `Next repot in ~${months} months`);
+        }
+
+        function getPlantsNeedingRepot() {
+            return state.plants
+                .filter(p => !p.isDead)
+                .map(p => ({ plant: p, daysUntil: getDaysUntilRepot(p) }))
+                .filter(({ daysUntil }) => daysUntil !== null && daysUntil <= 0)
+                .map(({ plant }) => ({
+                    id: `repot-${plant.id}`,
+                    message: `${plant.name} needs repotting — roots may be crowded! 🪴`
+                }));
+        }
+
         function getPlantsNeedingWater() {
             return state.plants
                 .filter(p => !p.isDead)
@@ -2463,13 +2634,12 @@
 
         async function sendWaterNotifications() {
             if (Notification.permission !== 'granted') return;
-            const plants = getPlantsNeedingWater();
+            const plants = [...getPlantsNeedingWater(), ...getPlantsNeedingRepot()];
             if (plants.length === 0) return;
 
             if (swRegistration && swRegistration.active) {
                 swRegistration.active.postMessage({ type: 'NOTIFY_PLANTS', plants });
             } else {
-                // Fallback: direct Notification API
                 plants.forEach(p => new Notification('Planty 🌱', { body: p.message, icon: '/favicon.ico', tag: `plant-${p.id}` }));
             }
         }
