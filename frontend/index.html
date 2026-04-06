@@ -1387,6 +1387,14 @@
             color: inherit;
             font-weight: 600;
         }
+        .repot-change-info { margin: 12px 0 8px; padding: 12px; border-radius: 12px; font-size: 13px; border: 1px solid transparent; }
+        .repot-change-info.upgrade { background: #f0fdf4; border-color: #bbf7d0; }
+        .repot-change-info.upgrade .change-label { color: var(--primary-dark); font-weight: 600; }
+        .repot-change-info.same { background: #fefce8; border-color: #fde68a; }
+        .repot-change-info.same .change-label { color: #92400e; font-weight: 600; }
+        .repot-change-info.downsize { background: #fff7ed; border-color: #fed7aa; }
+        .repot-change-info.downsize .change-label { color: #c2410c; font-weight: 600; }
+        .repot-change-info .change-sub { color: var(--gray-500); margin-top: 3px; }
     </style>
 </head>
 <body>
@@ -1743,7 +1751,9 @@
                     <div class="text"><div class="title">XL</div><div class="subtitle">12"+ / 30cm+</div></div>
                 </div>
             </div>
+            <div id="repotChangeInfo"></div>
             <input type="hidden" id="repotPlantId">
+            <input type="hidden" id="repotPrevSize">
             <button class="modal-btn" onclick="confirmRepot()">Done</button>
             <button class="modal-btn secondary" onclick="closeModal('repotModal')">Cancel</button>
         </div>
@@ -2049,7 +2059,53 @@
         function getDaysUntilRepot(plant) {
             if (!plant.lastRepotted) return null;
             const daysSince = Math.floor((Date.now() - new Date(plant.lastRepotted)) / 86400000);
-            return getRepottingInterval(plant.potSize) - daysSince;
+            return (plant.repotInterval || getRepottingInterval(plant.potSize)) - daysSince;
+        }
+
+        function calculateAdaptiveRepotInterval(oldSize, newSize, daysSinceLastRepot) {
+            const order = ['tiny', 'small', 'medium', 'large', 'xl'];
+            const oldIdx = order.indexOf(oldSize || 'medium');
+            const newIdx = order.indexOf(newSize);
+            const base = getRepottingInterval(newSize);
+            const sizeDiff = newIdx - oldIdx;
+            let mult = 1.0;
+            if (sizeDiff === 0)      mult = 0.75; // same pot — roots grew fast, soil exhausted
+            else if (sizeDiff >= 2)  mult = 0.82; // jumped 2+ sizes — roots were very cramped
+            else if (sizeDiff < 0)   mult = 0.90; // downsizing — use slightly shorter interval
+            if (daysSinceLastRepot !== null) {
+                const expected = getRepottingInterval(oldSize || 'medium');
+                if (daysSinceLastRepot < expected * 0.7)      mult *= 0.88; // repotted early — fast grower
+                else if (daysSinceLastRepot > expected * 1.3) mult *= 1.12; // repotted late — slow grower
+            }
+            return Math.round(base * Math.min(Math.max(mult, 0.5), 1.5));
+        }
+
+        function updateRepotChangeInfo() {
+            const plantId = +document.getElementById('repotPlantId').value;
+            const plant = state.plants.find(p => p.id === plantId);
+            const prevSize = document.getElementById('repotPrevSize').value || (plant?.potSize || 'medium');
+            const newSize = document.querySelector('#repotSizeCards .option-card.selected')?.dataset.size || 'medium';
+            const order = ['tiny', 'small', 'medium', 'large', 'xl'];
+            const labels = { tiny: 'Tiny', small: 'Small', medium: 'Medium', large: 'Large', xl: 'XL' };
+            const diff = order.indexOf(newSize) - order.indexOf(prevSize);
+            const daysSince = plant?.lastRepotted
+                ? Math.floor((Date.now() - new Date(plant.lastRepotted)) / 86400000) : null;
+            const adaptedDays = calculateAdaptiveRepotInterval(prevSize, newSize, daysSince);
+            const months = Math.round(adaptedDays / 30);
+            const cls = diff > 0 ? 'upgrade' : diff < 0 ? 'downsize' : 'same';
+            const icon = diff > 0 ? '⬆️' : diff < 0 ? '⬇️' : '🔄';
+            const prompt = diff > 0
+                ? 'Moving to a bigger pot — giving roots more room!'
+                : diff < 0
+                ? 'Downsizing — smaller pot will fill faster.'
+                : 'Same size — refreshing soil or root pruning?';
+            const el = document.getElementById('repotChangeInfo');
+            el.className = `repot-change-info ${cls}`;
+            el.innerHTML = `
+                <div class="change-label">${icon} ${labels[prevSize]} → ${labels[newSize]}</div>
+                <div class="change-sub">${prompt}</div>
+                <div class="change-sub" style="margin-top:5px;">Next repot estimated in <strong>~${months} months</strong></div>
+            `;
         }
 
         function getPlantHistory(plantId) {
@@ -2581,10 +2637,13 @@
 
         function showRepotModal(plantId) {
             const plant = state.plants.find(p => p.id === plantId);
+            const currentSize = plant?.potSize || 'medium';
             document.getElementById('repotPlantId').value = plantId;
+            document.getElementById('repotPrevSize').value = currentSize;
             document.querySelectorAll('#repotSizeCards .option-card').forEach(c => {
-                c.classList.toggle('selected', c.dataset.size === (plant?.potSize || 'medium'));
+                c.classList.toggle('selected', c.dataset.size === currentSize);
             });
+            updateRepotChangeInfo();
             showModal('repotModal');
         }
 
@@ -2592,19 +2651,24 @@
             document.querySelectorAll('#repotSizeCards .option-card').forEach(c => {
                 c.classList.toggle('selected', c.dataset.size === size);
             });
+            updateRepotChangeInfo();
         }
 
         function confirmRepot() {
             const plantId = +document.getElementById('repotPlantId').value;
+            const prevSize = document.getElementById('repotPrevSize').value || 'medium';
             const newSize = document.querySelector('#repotSizeCards .option-card.selected')?.dataset.size || 'medium';
             const plant = state.plants.find(p => p.id === plantId);
             if (!plant) return;
+            const daysSince = plant.lastRepotted
+                ? Math.floor((Date.now() - new Date(plant.lastRepotted)) / 86400000) : null;
+            plant.repotInterval = calculateAdaptiveRepotInterval(prevSize, newSize, daysSince);
             plant.potSize = newSize;
             plant.lastRepotted = new Date().toISOString();
             save();
             closeModal('repotModal');
             render();
-            const months = Math.round(getRepottingInterval(newSize) / 30);
+            const months = Math.round(plant.repotInterval / 30);
             showToast('🪴 Repotted!', `Next repot in ~${months} months`);
         }
 
