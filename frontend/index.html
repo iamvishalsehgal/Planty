@@ -2291,6 +2291,10 @@
         function save() {
             localStorage.setItem('planty_plants', JSON.stringify(state.plants));
             localStorage.setItem('planty_dead', JSON.stringify(state.deadPlants));
+            // Cap history at 1000 entries (keep most recent)
+            if (state.history.length > 1000) {
+                state.history = state.history.slice(-1000);
+            }
             localStorage.setItem('planty_history', JSON.stringify(state.history));
             syncToBackend();
             updateStreak();
@@ -3567,7 +3571,9 @@
         // ── Keyboard Shortcuts ───────────────────────────────────────
         document.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
-            if (e.metaKey || e.ctrlKey) return; // Don't steal Cmd/Ctrl combos
+            if (e.metaKey || e.ctrlKey) return;
+            // Don't fire shortcuts when a modal is open
+            if (document.querySelector('.modal-overlay.active')) return;
             switch (e.key.toLowerCase()) {
                 case 'n': document.getElementById('plantName')?.focus(); e.preventDefault(); break;
                 case '1': showTab('home'); break;
@@ -3697,12 +3703,20 @@
         // Track last notification time per plant for cooldown
         let _notifyTimestamps = {};
 
+        function _cleanNotifyTimestamps() {
+            const cutoff = Date.now() - 86400000; // 24h
+            for (const key of Object.keys(_notifyTimestamps)) {
+                if (_notifyTimestamps[key] < cutoff) delete _notifyTimestamps[key];
+            }
+        }
+
         function _isQuietHours() {
             const hour = new Date().getHours();
             return hour >= 22 || hour < 7;
         }
 
         function _shouldNotify(plantId) {
+            _cleanNotifyTimestamps();
             const last = _notifyTimestamps[plantId] || 0;
             return (Date.now() - last) > 7200000; // 2-hour cooldown
         }
@@ -3756,15 +3770,18 @@
             render();
         })();
 
-        populateSpeciesDropdown();
-        initDailyTip();
-        applyDarkMode();
-        updateDarkModeLabel();
-        const savedStreak = parseInt(localStorage.getItem('planty_streak') || '0');
-        updateStreakDisplay(savedStreak);
-        loadEnvironment();
-        updateWeatherDisplay();
-        fetchWeather();
+        // Startup — each init wrapped so one failure doesn't block the rest
+        try { populateSpeciesDropdown(); } catch(e) { console.warn('init: species dropdown failed', e); }
+        try { initDailyTip(); } catch(e) { console.warn('init: daily tip failed', e); }
+        try { applyDarkMode(); } catch(e) { console.warn('init: dark mode failed', e); }
+        try { updateDarkModeLabel(); } catch(e) { console.warn('init: dark mode label failed', e); }
+        try {
+            const savedStreak = parseInt(localStorage.getItem('planty_streak') || '0');
+            updateStreakDisplay(savedStreak);
+        } catch(e) { console.warn('init: streak failed', e); }
+        try { loadEnvironment(); } catch(e) { console.warn('init: environment failed', e); }
+        try { updateWeatherDisplay(); } catch(e) { console.warn('init: weather display failed', e); }
+        try { fetchWeather(); } catch(e) { console.warn('init: weather fetch failed', e); }
         const _weatherInterval = setInterval(fetchWeather, 3600000);
 
         // Cleanup intervals on page unload
