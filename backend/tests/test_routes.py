@@ -184,3 +184,55 @@ def test_events_sync_invalid_payload():
     """POST /api/events/sync with bad body returns 422."""
     response = client.post("/api/events/sync", json={"events": [{}]})
     assert response.status_code == 422
+
+
+# ── Health ────────────────────────────────────────────────────────
+
+def test_health_endpoint():
+    """GET /api/health returns status and metadata."""
+    response = client.get("/api/health")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert "version" in data
+    assert "uptime_seconds" in data
+    assert "request_count" in data
+    assert isinstance(data["request_count"], int)
+
+
+# ── Validation ───────────────────────────────────────────────────
+
+def test_plant_validation_interval_too_low():
+    """POST /api/plants/sync with interval < 2 returns 422."""
+    response = client.post("/api/plants/sync", json={
+        "plants": [{"id": "test-v", "name": "Bad", "interval": 1}]
+    })
+    assert response.status_code == 422
+
+
+def test_plant_validation_empty_name():
+    """POST /api/plants/sync with empty name returns 422."""
+    response = client.post("/api/plants/sync", json={
+        "plants": [{"id": "test-v", "name": "  ", "interval": 7}]
+    })
+    assert response.status_code == 422
+
+
+def test_plant_validation_interval_too_high():
+    """POST /api/plants/sync with interval > 30 returns 422."""
+    response = client.post("/api/plants/sync", json={
+        "plants": [{"id": "test-v", "name": "Bad", "interval": 99}]
+    })
+    assert response.status_code == 422
+
+
+def test_ingestion_rejects_batch_with_invalid_item():
+    """One bad plant in batch → whole request returns 422 (Pydantic layer).
+    Ingestion-level skip only applies when pipeline is called directly (scheduler)."""
+    response = client.post("/api/plants/sync", json={
+        "plants": [
+            {"id": "bad-1", "name": "", "interval": 7},
+            {"id": "good-1", "name": "Survivor", "interval": 7},
+        ]
+    })
+    assert response.status_code == 422

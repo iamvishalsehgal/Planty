@@ -2186,6 +2186,8 @@
         }
 
         async function syncToBackend() {
+            const MAX_RETRIES = 3;
+            const RETRY_DELAYS = [1000, 3000, 8000]; // 1s, 3s, 8s — exponential-ish
             try {
                 const apiBase = getApiBase();
                 const plants = state.plants.map(p => ({
@@ -2204,22 +2206,35 @@
                     completed: h.date,
                     feedback: null
                 }));
-                // Fire and forget — don't block UI
+
+                const postWithRetry = async (url, body) => {
+                    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+                        try {
+                            const resp = await fetch(url, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(body),
+                                signal: AbortSignal.timeout(5000)
+                            });
+                            if (resp.ok) return;
+                            if (attempt < MAX_RETRIES) {
+                                await new Promise(r => setTimeout(r, RETRY_DELAYS[attempt]));
+                            }
+                        } catch (_) {
+                            if (attempt < MAX_RETRIES) {
+                                await new Promise(r => setTimeout(r, RETRY_DELAYS[attempt]));
+                            }
+                        }
+                    }
+                };
+
                 if (plants.length > 0) {
-                    fetch(`${apiBase}/api/plants/sync`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ plants })
-                    }).catch(() => {}); // Backend may not be running — silent fail
+                    postWithRetry(`${apiBase}/api/plants/sync`, { plants });
                 }
                 if (events.length > 0) {
-                    fetch(`${apiBase}/api/events/sync`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ events })
-                    }).catch(() => {});
+                    postWithRetry(`${apiBase}/api/events/sync`, { events });
                 }
-            } catch (_) { /* Offline or backend unavailable — no-op */ }
+            } catch (_) { /* Offline — no-op */ }
         }
 
         function getPlantEmoji(name) {

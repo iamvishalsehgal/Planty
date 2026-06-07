@@ -17,6 +17,7 @@ from pipelines.runner import run_pipeline
 from routes.plants import router as plants_router
 from routes.events import router as events_router
 from routes.analytics import router as analytics_router
+from routes.health import router as health_router
 
 FRONTEND = Path(__file__).parent.parent / "frontend"
 
@@ -64,6 +65,15 @@ app.add_middleware(
 app.include_router(plants_router)
 app.include_router(events_router)
 app.include_router(analytics_router)
+app.include_router(health_router)
+
+# ── Request counter middleware ────────────────────────────────────
+@app.middleware("http")
+async def count_requests(request: Request, call_next):
+    from routes.health import increment_request_count
+    increment_request_count()
+    response = await call_next(request)
+    return response
 
 
 @app.get("/")
