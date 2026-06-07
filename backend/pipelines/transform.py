@@ -1,10 +1,18 @@
-"""Transform layer — enriches raw events with days_overdue and was_on_time."""
+"""Transform layer — enriches raw events with days_overdue and was_on_time.
+
+For each completed event not yet in care_events, computes:
+    days_overdue = (completed - scheduled) in fractional days (capped at 365)
+    was_on_time  = 1 if days_overdue <= 1, else 0
+"""
 
 from datetime import datetime, timezone
 from db import get_conn
 
+MAX_DAYS_OVERDUE = 365  # Cap to prevent overflow on very old/stale events
+
 
 def run() -> int:
+    """Process new completed events from staging. Returns number of events transformed."""
     now = datetime.now(timezone.utc).isoformat()
     conn = get_conn()
 
@@ -23,6 +31,7 @@ def run() -> int:
             scheduled = datetime.fromisoformat(row["scheduled"].replace("Z", "+00:00"))
             completed = datetime.fromisoformat(row["completed"].replace("Z", "+00:00"))
             days_overdue = (completed - scheduled).total_seconds() / 86400
+            days_overdue = max(-MAX_DAYS_OVERDUE, min(MAX_DAYS_OVERDUE, days_overdue))
             was_on_time = 1 if days_overdue <= 1 else 0
 
             conn.execute("""

@@ -2097,6 +2097,41 @@
             }
         }
 
+        // ── Plant Species Database ────────────────────────────────────
+        const SPECIES = {
+            'monstera deliciosa': { emoji:'🌿', interval:7, light:'Bright indirect', humidity:'Medium-High', difficulty:'Easy', tip:'Let soil dry slightly between watering. Wipe leaves monthly.' },
+            'snake plant': { emoji:'🌿', interval:14, light:'Low to bright', humidity:'Low', difficulty:'Very Easy', tip:'Almost unkillable. Water sparingly — every 2-3 weeks.' },
+            'pothos': { emoji:'🍃', interval:7, light:'Low to bright indirect', humidity:'Medium', difficulty:'Very Easy', tip:'Trails beautifully. Trim regularly to encourage bushiness.' },
+            'peace lily': { emoji:'🌸', interval:5, light:'Low to medium', humidity:'Medium-High', difficulty:'Easy', tip:'Dramatic drooper — perks up fast after watering.' },
+            'fiddle leaf fig': { emoji:'🌳', interval:7, light:'Bright indirect', humidity:'Medium-High', difficulty:'Challenging', tip:'Hates change. Don't move it. Clean leaves for better light.' },
+            'spider plant': { emoji:'🌿', interval:5, light:'Bright indirect', humidity:'Medium', difficulty:'Very Easy', tip:'Produces babies (spiderettes). Brown tips = fluoride in water.' },
+            'zz plant': { emoji:'🪴', interval:14, light:'Low to bright indirect', humidity:'Low', difficulty:'Very Easy', tip:'Thrives on neglect. Water monthly in low light.' },
+            'aloe vera': { emoji:'🌵', interval:14, light:'Bright direct', humidity:'Low', difficulty:'Very Easy', tip:'Let soil dry completely. Overwatering = mushy leaves.' },
+            'rubber plant': { emoji:'🌳', interval:7, light:'Bright indirect', humidity:'Medium', difficulty:'Easy', tip:'Wipe leaves with damp cloth. Don't overwater.' },
+            'philodendron': { emoji:'🌿', interval:7, light:'Low to bright indirect', humidity:'Medium', difficulty:'Very Easy', tip:'Fast grower. Pinch tips to control shape.' },
+            'orchid': { emoji:'🌸', interval:7, light:'Bright indirect', humidity:'Medium-High', difficulty:'Moderate', tip:'Water with ice cubes or soak bark. Never let crown stay wet.' },
+            'cactus': { emoji:'🌵', interval:21, light:'Bright direct', humidity:'Low', difficulty:'Very Easy', tip:'Drench thoroughly when dry. Winter dormancy = no water needed.' },
+            'succulent': { emoji:'🌵', interval:14, light:'Bright direct', humidity:'Low', difficulty:'Easy', tip:'Water only when soil is bone dry. Stretching = needs more light.' },
+            'calathea': { emoji:'🌿', interval:5, light:'Low to medium', humidity:'High', difficulty:'Challenging', tip:'Prayer plant — leaves move day/night. Sensitive to tap water.' },
+            'boston fern': { emoji:'🌿', interval:4, light:'Bright indirect', humidity:'High', difficulty:'Moderate', tip:'Mist daily. Never let soil dry out. Loves bathrooms.' },
+            'chinese money plant': { emoji:'🪴', interval:7, light:'Bright indirect', humidity:'Medium', difficulty:'Easy', tip:'Rotate weekly for even growth. Produces pups to propagate.' },
+            'dracaena': { emoji:'🌿', interval:10, light:'Low to bright indirect', humidity:'Medium', difficulty:'Easy', tip:'Sensitive to fluoride. Use distilled or rainwater for best results.' },
+            'jade plant': { emoji:'🌿', interval:14, light:'Bright direct', humidity:'Low', difficulty:'Easy', tip:'Treat like a succulent. Overwatering = main killer.' },
+            'english ivy': { emoji:'🍃', interval:5, light:'Bright indirect', humidity:'Medium-High', difficulty:'Moderate', tip:'Mist regularly. Watch for spider mites in dry air.' },
+            'anthurium': { emoji:'🌺', interval:5, light:'Bright indirect', humidity:'High', difficulty:'Moderate', tip:'Flowers last months. Brown edges = low humidity.' },
+            'begonia': { emoji:'🌸', interval:5, light:'Bright indirect', humidity:'Medium-High', difficulty:'Moderate', tip:'Let top inch of soil dry. Avoid wetting leaves.' },
+            'hoya': { emoji:'🌿', interval:10, light:'Bright indirect', humidity:'Medium', difficulty:'Easy', tip:'Semi-succulent — let soil dry between waterings. Fragrant blooms.' },
+            'bird of paradise': { emoji:'🌺', interval:7, light:'Bright direct to indirect', humidity:'High', difficulty:'Moderate', tip:'Needs lots of light to flower. Misting helps humidity.' },
+            'bamboo palm': { emoji:'🌴', interval:7, light:'Low to medium', humidity:'Medium-High', difficulty:'Easy', tip:'Keep soil moist. Good air purifier. Pet-friendly.' },
+            'money tree': { emoji:'🌳', interval:10, light:'Bright indirect', humidity:'Medium', difficulty:'Easy', tip:'Braided trunk. Overwatering = leaf drop. Good luck charm.' },
+            'croton': { emoji:'🌿', interval:5, light:'Bright direct', humidity:'High', difficulty:'Moderate', tip:'More light = more color. Hates being moved. Leaf drop is normal.' },
+            'dieffenbachia': { emoji:'🌿', interval:7, light:'Bright indirect', humidity:'Medium', difficulty:'Easy', tip:'Toxic to pets. Wear gloves when pruning. Also called Dumb Cane.' },
+            'ponytail palm': { emoji:'🌴', interval:14, light:'Bright direct', humidity:'Low', difficulty:'Very Easy', tip:'Stores water in trunk. Treat like a succulent. Easy care.' },
+            'african violet': { emoji:'🌸', interval:5, light:'Bright indirect', humidity:'Medium', difficulty:'Moderate', tip:'Bottom-water only. Never wet leaves. Blooms year-round.' },
+            'basil': { emoji:'🌿', interval:3, light:'Bright direct', humidity:'Medium', difficulty:'Easy', tip:'Harvest from top. Pinch flower buds. Needs frequent water in sun.' },
+            'rosemary': { emoji:'🌿', interval:5, light:'Bright direct', humidity:'Low', difficulty:'Easy', tip:'Mediterranean herb. Let soil dry between waterings. Great aroma.' },
+            'mint': { emoji:'🌿', interval:3, light:'Bright indirect', humidity:'Medium', difficulty:'Very Easy', tip:'Invasive grower — keep in own pot. Keep soil moist.' },
+        };
 
         function populateSpeciesDropdown() {
             const select = document.getElementById('plantSpecies');
@@ -2603,6 +2638,39 @@
             showModal('deathModal');
         }
 
+        // ── Symptom Checker / Plant Doctor ────────────────────────────
+        const DIAGNOSIS = {
+            yellow_leaves: [
+                { cause: 'Overwatering', prob: 'Most likely', fix: 'Let soil dry out completely before next watering. Check drainage holes — roots may be rotting. Consider repotting in fresh, well-draining soil.', urgency: 'high' },
+                { cause: 'Nutrient deficiency', prob: 'Possible', fix: 'Yellow lower leaves often mean nitrogen deficiency. Apply balanced liquid fertilizer (10-10-10) at half strength.', urgency: 'medium' },
+                { cause: 'Natural aging', prob: 'If only bottom leaves', fix: 'Oldest leaves naturally yellow and drop. Nothing to worry about — just trim them off.', urgency: 'low' },
+            ],
+            brown_tips: [
+                { cause: 'Low humidity', prob: 'Most likely', fix: 'Mist leaves regularly, use a pebble tray with water, or move to bathroom/kitchen. Brown tips won\'t heal but new growth will be healthy.', urgency: 'medium' },
+                { cause: 'Fluoride/chemical burn', prob: 'Possible', fix: 'Switch to distilled, rain, or filtered water. Let tap water sit 24h before using. Snake plants and dracaenas are especially sensitive.', urgency: 'medium' },
+                { cause: 'Over-fertilizing', prob: 'If you fertilized recently', fix: 'Flush soil with water to remove excess salts. Reduce fertilizer to quarter-strength every 2-3 months.', urgency: 'medium' },
+            ],
+            drooping: [
+                { cause: 'Underwatering', prob: 'Most likely if soil is dry', fix: 'Water thoroughly until water drains from bottom. Plant should perk up within hours. Consider bottom-watering for deep saturation.', urgency: 'high' },
+                { cause: 'Overwatering (root rot)', prob: 'If soil is wet', fix: 'Stop watering immediately. Check roots — if brown/mushy, trim rotted roots and repot in dry soil. Reduce watering frequency.', urgency: 'high' },
+                { cause: 'Temperature shock', prob: 'If near draft/window', fix: 'Move away from cold drafts, AC vents, or heat sources. Most houseplants prefer 18-27°C (65-80°F).', urgency: 'medium' },
+            ],
+            spots: [
+                { cause: 'Fungal/bacterial infection', prob: 'If spots are spreading', fix: 'Remove affected leaves immediately. Improve air circulation. Avoid wetting leaves when watering. Apply neem oil or copper fungicide.', urgency: 'high' },
+                { cause: 'Sunburn', prob: 'If spots are dry/bleached', fix: 'Move plant away from direct sun, especially afternoon sun. Most houseplants want bright INDIRECT light.', urgency: 'medium' },
+                { cause: 'Pest damage', prob: 'Check undersides of leaves', fix: 'Look for tiny insects, webbing, or sticky residue. See pest diagnosis below.', urgency: 'medium' },
+            ],
+            pests: [
+                { cause: 'Spider mites', prob: 'If fine webbing, tiny dots', fix: 'Wipe leaves with damp cloth. Spray with neem oil solution (5ml neem + 1L water + drop of soap). Repeat weekly for 3 weeks. Increase humidity.', urgency: 'high' },
+                { cause: 'Mealybugs', prob: 'If white cotton-like fuzz', fix: 'Dab with alcohol on cotton swab. Spray with insecticidal soap. Check leaf joints and undersides thoroughly.', urgency: 'high' },
+                { cause: 'Fungus gnats', prob: 'If tiny black flies in soil', fix: 'Let soil surface dry out. Use sticky traps. Sprinkle cinnamon on soil (natural fungicide). Avoid overwatering.', urgency: 'medium' },
+            ],
+            no_growth: [
+                { cause: 'Insufficient light', prob: 'Most likely', fix: 'Move closer to window. Even "low light" plants need some light. Consider grow light if no bright spot available. Rotate plant weekly.', urgency: 'medium' },
+                { cause: 'Root bound', prob: 'If roots circle the pot', fix: 'Repot to next size up (2-5cm wider). Gently loosen roots before repotting. Best done in spring/early summer.', urgency: 'medium' },
+                { cause: 'Dormancy/wrong season', prob: 'If winter', fix: 'Most plants grow little in winter. This is normal. Reduce watering and fertilizing. Growth will resume in spring.', urgency: 'low' },
+            ],
+        };
 
         function showDiagnosisModal(plantId) {
             const plant = state.plants.find(p => p.id === plantId);

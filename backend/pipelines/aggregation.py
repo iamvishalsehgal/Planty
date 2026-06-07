@@ -1,10 +1,24 @@
-"""Aggregation layer — computes health score per plant."""
+"""Aggregation layer — computes health score per plant.
+
+Health score formula (0.0–1.0):
+    score = compliance * W_COMPLIANCE + timeliness * W_TIMELINESS + feedback * W_FEEDBACK
+Where:
+    compliance  = completed_events / total_events  (always 1.0 for care_events)
+    timeliness  = on_time_events / total_events     (was_on_time == 1)
+    feedback    = avg(feedback_score)               (happy=1.0, sad=0.3, overwatered=0.0, none=0.5)
+"""
 
 from datetime import datetime, timezone
 from db import get_conn
 
+# Configurable weights — tune these to adjust scoring priorities
+W_COMPLIANCE = 0.4   # How consistently you water at all
+W_TIMELINESS = 0.3   # How often you water on time
+W_FEEDBACK = 0.3     # How the plant responds to your care
+
 
 def run() -> int:
+    """Compute health_score for every plant with care_events. Returns number of plants scored."""
     now = datetime.now(timezone.utc).isoformat()
     conn = get_conn()
 
@@ -40,7 +54,7 @@ def run() -> int:
                     feedback_scores.append(0.0)
             feedback = sum(feedback_scores) / len(feedback_scores) if feedback_scores else 0.5
 
-            health_score = compliance * 0.4 + timeliness * 0.3 + feedback * 0.3
+            health_score = compliance * W_COMPLIANCE + timeliness * W_TIMELINESS + feedback * W_FEEDBACK
             avg_overdue = sum(e["days_overdue"] or 0 for e in events) / total
 
             conn.execute("""
