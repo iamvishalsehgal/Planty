@@ -8,3 +8,15 @@ services:
     envVars:
       - key: PYTHONUNBUFFERED
         value: "true"
+
+  - type: web
+    name: llm-council
+    runtime: python
+    buildCommand: pip install fastapi uvicorn python-dotenv httpx pydantic
+    startCommand: cd llm-council && python -m backend.main
+    plan: free
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: PYTHONUNBUFFERED
+        value: "true"

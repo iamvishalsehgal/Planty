@@ -12,3 +12,7 @@ venv/
 *.egg-info/
 graphify-out/
 *.bak
+llm-council/.env
+llm-council/data/
+llm-council/.venv/
+llm-council/frontend/node_modules/
