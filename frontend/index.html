@@ -1624,7 +1624,30 @@
                 <h4 id="dailyTipIcon">💡</h4>
                 <p id="dailyTipText">Loading tip...</p>
             </div>
+            <!-- Search & Filter -->
+            <div id="searchBar" style="display:none;margin-bottom:12px;">
+                <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="render()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
+                <div style="display:flex;gap:6px;margin-top:8px;" id="filterButtons">
+                    ${['All','Needs Water','Healthy','Protected'].map(f => `<button class="filter-btn" data-filter="${f.toLowerCase().replace(' ','_')}" onclick="setFilter('${f.toLowerCase().replace(' ','_')}')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">${f}</button>`).join('')}
+                </div>
+                <div id="filterCount" style="font-size:12px;color:var(--gray-500);margin-top:6px;"></div>
+            </div>
             <div id="plantList"></div>
+
+            <!-- Wishlist -->
+            <div class="add-section" style="margin-top:20px;">
+                <h2>📝 Plant Wishlist</h2>
+                <div style="display:flex;gap:8px;">
+                    <input type="text" id="wishlistName" placeholder="Plant name" style="flex:1;padding:12px;border:2px solid var(--gray-200);border-radius:12px;font-size:14px;outline:none;">
+                    <select id="wishlistPriority" style="padding:12px;border:2px solid var(--gray-200);border-radius:12px;font-size:14px;background:white;">
+                        <option value="high">🔴 High</option>
+                        <option value="medium" selected>🟡 Medium</option>
+                        <option value="low">🟢 Low</option>
+                    </select>
+                    <button onclick="addWishlistItem()" style="padding:12px 20px;background:var(--primary);color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;">+ Add</button>
+                </div>
+                <div id="wishlistItems" style="margin-top:12px;"></div>
+            </div>
         </div>
     </div>
 
@@ -2152,6 +2175,25 @@
             selectedCause: 'unknown'
         };
 
+        let _filter = 'all';
+        function setFilter(f) {
+            _filter = f;
+            document.querySelectorAll('.filter-btn').forEach(b => b.style.background = b.dataset.filter === f ? 'var(--primary)' : 'white');
+            document.querySelectorAll('.filter-btn').forEach(b => b.style.color = b.dataset.filter === f ? 'white' : 'var(--gray-600)');
+            document.getElementById('plantSearch').value = '';
+            render();
+        }
+
+        function getFilteredPlants() {
+            const search = (document.getElementById('plantSearch')?.value || '').toLowerCase();
+            let plants = state.plants;
+            if (search) plants = plants.filter(p => p.name.toLowerCase().includes(search) || (p.location||'').toLowerCase().includes(search));
+            if (_filter === 'needs_water') plants = plants.filter(p => getDaysUntilNextWater(p.id, p.interval) <= 0);
+            if (_filter === 'healthy') plants = plants.filter(p => getDaysUntilNextWater(p.id, p.interval) > 0);
+            if (_filter === 'protected') plants = plants.filter(p => p.isProtected);
+            return plants;
+        }
+
         function save() {
             localStorage.setItem('planty_plants', JSON.stringify(state.plants));
             localStorage.setItem('planty_dead', JSON.stringify(state.deadPlants));
@@ -2191,6 +2233,42 @@
             } else {
                 badge.style.display = 'none';
             }
+        }
+
+        // ── Wishlist ────────────────────────────────────────────────
+        function getWishlist() { return JSON.parse(localStorage.getItem('planty_wishlist') || '[]'); }
+        function saveWishlist(items) { localStorage.setItem('planty_wishlist', JSON.stringify(items)); }
+
+        function addWishlistItem() {
+            const name = document.getElementById('wishlistName').value.trim();
+            if (!name) return;
+            const items = getWishlist();
+            items.push({ id: Date.now(), name, priority: document.getElementById('wishlistPriority').value, added: new Date().toISOString() });
+            saveWishlist(items);
+            document.getElementById('wishlistName').value = '';
+            renderWishlist();
+        }
+
+        function removeWishlistItem(id) {
+            saveWishlist(getWishlist().filter(i => i.id !== id));
+            renderWishlist();
+        }
+
+        function renderWishlist() {
+            const items = getWishlist();
+            const container = document.getElementById('wishlistItems');
+            if (!container) return;
+            if (items.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:var(--gray-400);padding:12px;font-size:13px;">No plants on your wishlist yet</div>';
+                return;
+            }
+            const priorityEmoji = { high: '🔴', medium: '🟡', low: '🟢' };
+            container.innerHTML = items.map(i => `
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--gray-50);border-radius:10px;margin-bottom:6px;">
+                    <span>${priorityEmoji[i.priority] || '🟡'} <strong>${i.name}</strong></span>
+                    <button onclick="removeWishlistItem(${i.id})" style="background:none;border:none;cursor:pointer;font-size:16px;" aria-label="Remove ${i.name} from wishlist">✕</button>
+                </div>
+            `).join('');
         }
 
         // ── Daily Care Tips ─────────────────────────────────────────
@@ -2808,6 +2886,19 @@
             showToast('🪦 Moved to memorial', 'Data preserved for future plants');
         }
 
+        async function sharePlant(plantId) {
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            const waterings = getPlantHistory(plantId).length;
+            const created = new Date(plant.created);
+            const monthsActive = Math.round((Date.now() - created) / (86400000 * 30));
+            const text = `${plant.emoji} My ${plant.name}${plant.location ? ' in my ' + plant.location : ''} — watered ${waterings} time${waterings!==1?'s':''} over ${monthsActive || 1} month${monthsActive!==1?'s':''}! #PlantyApp`;
+            if (navigator.share) {
+                try { await navigator.share({ title: `My ${plant.name}`, text }); return; } catch (_) {}
+            }
+            try { await navigator.clipboard.writeText(text); showToast('📋 Copied!', 'Share text copied to clipboard'); } catch (_) { showToast('❌ Error', 'Sharing not supported'); }
+        }
+
         function deletePlant(plantId) {
             if (!confirm('Delete this plant?')) return;
             state.plants = state.plants.filter(p => p.id !== plantId);
@@ -2820,23 +2911,29 @@
         function render(immediate = false) {
             if (immediate) {
                 clearTimeout(_renderTimer);
-                renderPlants(); renderMemorial(); renderSchedule();
+                renderPlants(); renderMemorial(); renderSchedule(); renderWishlist();
                 return;
             }
             if (_renderTimer) return; // debounce — max once per animation frame
             _renderTimer = requestAnimationFrame(() => {
-                renderPlants(); renderMemorial(); renderSchedule();
+                renderPlants(); renderMemorial(); renderSchedule(); renderWishlist();
                 _renderTimer = null;
             });
         }
 
         function renderPlants() {
             const container = document.getElementById('plantList');
+            const searchBar = document.getElementById('searchBar');
             if (state.plants.length === 0) {
+                if (searchBar) searchBar.style.display = 'none';
                 container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above or pick a popular one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${['Monstera','Pothos','Snake Plant','Spider Plant','Aloe Vera'].map(n => `<button onclick="document.getElementById('plantSpecies').value='${n.toLowerCase()}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(n)} ${n}</button>`).join('')}</div></div>`;
                 return;
             }
-            container.innerHTML = state.plants.map(plant => {
+            if (searchBar) searchBar.style.display = 'block';
+            const filteredPlants = getFilteredPlants();
+            const countEl = document.getElementById('filterCount');
+            if (countEl) countEl.textContent = `Showing ${filteredPlants.length} of ${state.plants.length} plants`;
+            container.innerHTML = filteredPlants.map(plant => {
                 const daysUntil = getDaysUntilNextWater(plant.id, plant.interval);
                 const daysSince = getDaysSinceLastWater(plant.id);
                 const hoursSince = getHoursSinceLastWater(plant.id);
@@ -2934,6 +3031,7 @@
                                 <button class="action-btn" title="Diagnose problem" aria-label="Diagnose ${plant.name}" onclick="showDiagnosisModal(${plant.id})">🩺</button>
                                 <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
                                 <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
+                                <button class="action-btn" title="Share plant" aria-label="Share ${plant.name}" onclick="sharePlant(${plant.id})">📤</button>
                                 <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
                         </div>
