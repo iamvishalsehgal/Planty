@@ -48,6 +48,33 @@
             --gray-600: #4b5563;
             --gray-800: #1f2937;
             --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.5);
+        }
+
+        /* ── Accessibility ────────────────────────────────────── */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 16px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 999;
+            font-weight: 600;
+            text-decoration: none;
+            transition: top 0.2s;
+        }
+        .skip-link:focus {
+            top: 16px;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+            box-shadow: var(--focus-ring);
         }
 
         body {
@@ -1479,6 +1506,9 @@
     </style>
 </head>
 <body>
+    <!-- Skip to content -->
+    <a href="#tab-home" class="skip-link">Skip to main content</a>
+
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -2829,7 +2859,7 @@
                                     ${plant.photos.map((p, i) => `
                                         <div style="position:relative;flex-shrink:0;">
                                             <img src="${p.data}" loading="lazy" decoding="async" alt="Plant photo ${i+1}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;cursor:pointer;" onerror="this.style.display='none'" onclick="this.style.width='200px';this.style.height='200px';this.style.position='fixed';this.style.top='50%';this.style.left='50%';this.style.transform='translate(-50%,-50%)';this.style.zIndex='400';this.style.borderRadius='16px';this.style.boxShadow='0 20px 60px rgba(0,0,0,0.5)'" onmouseleave="this.style.width='60px';this.style.height='60px';this.style.position='';this.style.top='';this.style.left='';this.style.transform='';this.style.zIndex='';this.style.borderRadius='10px';this.style.boxShadow=''" ondblclick="this.style.width='60px';this.style.height='60px';this.style.position='';this.style.top='';this.style.left='';this.style.transform='';this.style.zIndex='';this.style.borderRadius='10px';this.style.boxShadow=''">
-                                            <button onclick="deletePhoto(${plant.id},${i})" style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;">×</button>
+                                            <button onclick="deletePhoto(${plant.id},${i})" aria-label="Delete photo ${i+1}" style="position:absolute;top:-6px;right:-6px;background:#ef4444;color:white;border:none;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;line-height:1;">×</button>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -2838,11 +2868,11 @@
                         <div class="actions-row">
                             <span class="last-watered">Last: ${lastWateredText}</span>
                             <div class="action-btns">
-                                <button class="action-btn" title="Take photo" onclick="startPhotoCapture(${plant.id})">📸</button>
-                                <button class="action-btn" title="Diagnose problem" onclick="showDiagnosisModal(${plant.id})">🩺</button>
-                                <button class="action-btn" title="Log repotting" onclick="showRepotModal(${plant.id})">🪴</button>
-                                <button class="action-btn danger" onclick="showDeathModal(${plant.id})">💀</button>
-                                <button class="action-btn" onclick="deletePlant(${plant.id})">🗑️</button>
+                                <button class="action-btn" title="Take photo" aria-label="Take photo of ${plant.name}" onclick="startPhotoCapture(${plant.id})">📸</button>
+                                <button class="action-btn" title="Diagnose problem" aria-label="Diagnose ${plant.name}" onclick="showDiagnosisModal(${plant.id})">🩺</button>
+                                <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
+                                <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
+                                <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
                         </div>
                     </div>`;

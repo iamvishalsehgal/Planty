@@ -1,5 +1,6 @@
 import os
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 # Make backend/ importable as root package
@@ -19,7 +20,24 @@ from routes.analytics import router as analytics_router
 
 FRONTEND = Path(__file__).parent.parent / "frontend"
 
-app = FastAPI(title="Planty")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Startup: init DB, start ETL scheduler. Shutdown: stop scheduler."""
+    init_db()
+    scheduler = None
+    if not os.environ.get("PLANTY_TESTING"):
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
+        scheduler.start()
+        print("Planty started — ETL pipeline running every 5 minutes")
+    yield
+    if scheduler:
+        scheduler.shutdown(wait=False)
+        print("Planty stopped — scheduler shut down")
+
+
+app = FastAPI(title="Planty", lifespan=lifespan)
 
 # ── Security Headers ─────────────────────────────────────────────
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -30,7 +48,6 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=self"
-        # HSTS only applies in production (HTTPS)
         if request.url.scheme == "https" or "render" in str(request.url):
             response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         return response
@@ -49,16 +66,6 @@ app.include_router(events_router)
 app.include_router(analytics_router)
 
 
-@app.on_event("startup")
-def startup():
-    init_db()
-    if not os.environ.get("PLANTY_TESTING"):
-        scheduler = BackgroundScheduler()
-        scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
-        scheduler.start()
-        print("Planty started — ETL pipeline running every 5 minutes")
-
-
 @app.get("/")
 def serve_frontend():
     return FileResponse(FRONTEND / "index.html")
@@ -66,9 +73,7 @@ def serve_frontend():
 
 @app.get("/{full_path:path}")
 def catch_all(full_path: str):
-    # Serve static files from frontend/public/ if they exist
     static_file = FRONTEND / "public" / full_path
     if static_file.is_file():
         return FileResponse(static_file)
-    # SPA fallback — serve index.html for everything else
     return FileResponse(FRONTEND / "index.html")
