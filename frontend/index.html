@@ -11,11 +11,12 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#10b981">
     <meta name="description" content="Smart plant care - tracks watering, learns your patterns">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:3001 https://api.open-meteo.com; img-src 'self' data:;">
 
     <!-- Home screen icons -->
     <link rel="manifest" href="/manifest.json">
     <link rel="apple-touch-icon" sizes="180x180" href="/icon-512.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
 
     <title>Planty - Smart Plant Care</title>
@@ -2437,15 +2438,23 @@
                     feedback: null
                 }));
 
+                // Safari < 15.4 polyfill for AbortSignal.timeout
+                const fetchWithTimeout = (url, opts, ms) => {
+                    if (AbortSignal.timeout) {
+                        return fetch(url, { ...opts, signal: AbortSignal.timeout(ms) });
+                    }
+                    const ctrl = new AbortController();
+                    setTimeout(() => ctrl.abort(), ms);
+                    return fetch(url, { ...opts, signal: ctrl.signal });
+                };
                 const postWithRetry = async (url, body) => {
                     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
                         try {
-                            const resp = await fetch(url, {
+                            const resp = await fetchWithTimeout(url, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(body),
-                                signal: AbortSignal.timeout(5000)
-                            });
+                            }, 5000);
                             if (resp.ok) return;
                             if (attempt < MAX_RETRIES) {
                                 await new Promise(r => setTimeout(r, RETRY_DELAYS[attempt]));

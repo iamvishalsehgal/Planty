@@ -1,5 +1,5 @@
 const CACHE = 'planty-v2.1';
-const SHELL = ['/', '/index.html', '/manifest.json', '/icon-512.png', '/favicon.ico'];
+const SHELL = ['/', '/index.html', '/manifest.json', '/icon-512.png', '/icon-512.png'];
 
 // Install — pre-cache app shell
 self.addEventListener('install', event => {
