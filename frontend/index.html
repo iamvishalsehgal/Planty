@@ -3129,7 +3129,7 @@
             initOnboarding();
             if (state.plants.length === 0) {
                 if (searchBar) searchBar.style.display = 'none';
-                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above or pick a popular one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${['Monstera','Pothos','Snake Plant','Spider Plant','Aloe Vera'].map(n => `<button onclick="document.getElementById('plantSpecies').value='${n.toLowerCase()}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(n)} ${n}</button>`).join('')}</div></div>`;
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above or pick a popular one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${[{label:'Monstera',key:'monstera deliciosa'},{label:'Pothos',key:'pothos'},{label:'Snake Plant',key:'snake plant'},{label:'Spider Plant',key:'spider plant'},{label:'Aloe Vera',key:'aloe vera'}].map(p => `<button onclick="document.getElementById('plantSpecies').value='${p.key}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(p.label)} ${p.label}</button>`).join('')}</div></div>`;
                 return;
             }
             if (searchBar) searchBar.style.display = 'block';
