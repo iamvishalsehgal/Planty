@@ -103,11 +103,13 @@ async def process_request(request: Request, call_next):
 
 
 @app.get("/")
+@app.head("/")
 def serve_frontend():
     return FileResponse(FRONTEND / "index.html")
 
 
 @app.get("/{full_path:path}")
+@app.head("/{full_path:path}")
 def catch_all(full_path: str):
     static_file = FRONTEND / "public" / full_path
     if static_file.is_file():

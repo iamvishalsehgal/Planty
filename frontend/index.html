@@ -81,7 +81,9 @@
             background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             min-height: 100vh;
             min-height: -webkit-fill-available;
-            padding-bottom: calc(100px + var(--safe-bottom));
+            padding-bottom: calc(90px + var(--safe-bottom));
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Header */
@@ -697,12 +699,15 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: white;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid var(--gray-200);
             display: flex;
-            padding: 8px 20px;
-            padding-bottom: calc(8px + var(--safe-bottom));
+            padding: 6px 16px;
+            padding-bottom: calc(6px + var(--safe-bottom));
             z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
 
         .nav-item {
@@ -710,13 +715,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 8px;
+            justify-content: center;
+            padding: 10px 4px;
+            min-height: 56px;
             background: none;
             border: none;
             color: var(--gray-400);
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-item:active {
+            background: var(--gray-100);
         }
 
         .nav-item.active {
@@ -724,17 +737,37 @@
         }
 
         .nav-item .nav-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
+            font-size: 26px;
+            margin-bottom: 2px;
         }
 
         /* Tab Content */
         .tab-content {
             display: none;
+            animation: fadeIn 0.2s ease;
         }
 
         .tab-content.active {
             display: block;
+        }
+
+        /* Mobile: full-width cards, no horizontal scroll */
+        .content {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 400px) {
+            .content { padding: 12px; }
+            .header { padding: 16px 14px; padding-top: calc(16px + env(safe-area-inset-top, 20px)); }
+            .header h1 { font-size: 26px; }
+            .plant-card { padding: 14px; }
+            .add-section { padding: 14px; }
+            .water-btn { padding: 14px; font-size: 16px; }
+            .interval-btn { padding: 8px 12px; font-size: 12px; }
         }
 
         /* Modal */
@@ -2043,10 +2076,10 @@
         </div>
     </div>
 
-    <script src="species.js"></script>
-    <script src="diagnosis.js"></script>
-    <script src="photostore.js"></script>
-    <script src="engine.js"></script>
+    <script src="species.js" onerror="console.warn('species.js failed to load')"></script>
+    <script src="diagnosis.js" onerror="console.warn('diagnosis.js failed to load')"></script>
+    <script src="photostore.js" onerror="console.warn('photostore.js failed to load')"></script>
+    <script src="engine.js" onerror="console.warn('engine.js failed to load')"></script>
     <script>
         const COOLDOWN_HOURS = 48;
 
@@ -2198,6 +2231,7 @@
         function populateSpeciesDropdown() {
             const select = document.getElementById('plantSpecies');
             if (!select) return;
+            if (typeof SPECIES === 'undefined') { console.warn('SPECIES not loaded — species picker disabled'); return; }
             const sorted = Object.entries(SPECIES).sort((a, b) => a[0].localeCompare(b[0]));
             sorted.forEach(([name, data]) => {
                 const opt = document.createElement('option');
@@ -2208,6 +2242,7 @@
         }
 
         function onSpeciesSelect() {
+            if (typeof SPECIES === 'undefined') return;
             const species = document.getElementById('plantSpecies').value;
             if (!species || !SPECIES[species]) return;
             const data = SPECIES[species];
@@ -2699,7 +2734,7 @@
 
         function createPlant(name, location, interval, isProtected, protectionData, potSize) {
             const speciesKey = (name || '').toLowerCase().trim();
-            const speciesData = SPECIES[speciesKey] || null;
+            const speciesData = (typeof SPECIES !== 'undefined' && SPECIES[speciesKey]) || null;
             const plant = {
                 id: Date.now(),
                 name, location,
@@ -2885,6 +2920,7 @@
         }
 
         function diagnose(symptom) {
+            if (typeof DIAGNOSIS === 'undefined') { showToast('❌ Error', 'Diagnosis data not loaded'); return; }
             const causes = DIAGNOSIS[symptom];
             if (!causes) return;
             document.getElementById('diagnosisSymptoms').style.display = 'none';
