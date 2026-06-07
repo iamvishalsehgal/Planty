@@ -29,6 +29,8 @@ async def query_model(
     payload = {
         "model": model,
         "messages": messages,
+        "max_tokens": 2048,
+        "temperature": 0.7,
     }
 
     try:
