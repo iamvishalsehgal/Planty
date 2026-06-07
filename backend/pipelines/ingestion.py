@@ -48,9 +48,15 @@ def _validate_event(e: dict) -> bool:
     return True
 
 
-def run(plants: list[dict], events: list[dict]) -> tuple[int, int]:
+def run(conn=None, plants: list[dict] = None, events: list[dict] = None) -> tuple[int, int]:
+    """Stage plant and event data. Accepts optional conn for DI. Returns (plants_staged, events_staged)."""
+    plants = plants or []
+    events = events or []
     now = datetime.now(timezone.utc).isoformat()
-    conn = get_conn()
+    _close = False
+    if conn is None:
+        conn = get_conn()
+        _close = True
 
     plants_count = 0
     events_count = 0
@@ -64,7 +70,7 @@ def run(plants: list[dict], events: list[dict]) -> tuple[int, int]:
         logger.info(f"Ingestion: {skipped_plants} plants, {skipped_events} events skipped (validation)")
 
     if not valid_plants and not valid_events:
-        conn.close()
+        if _close: conn.close()
         return 0, 0
 
     try:
@@ -105,8 +111,8 @@ def run(plants: list[dict], events: list[dict]) -> tuple[int, int]:
         conn.execute("COMMIT")
     except Exception:
         conn.execute("ROLLBACK")
-        conn.close()
+        if _close: conn.close()
         raise
 
-    conn.close()
+    if _close: conn.close()
     return plants_count, events_count

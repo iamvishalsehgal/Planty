@@ -33,12 +33,12 @@ def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
 
     try:
         if plants is not None or events is not None:
-            ps, es = ingestion.run(plants or [], events or [])
+            ps, es = ingestion.run(conn=conn, plants=plants or [], events=events or [])
             result["plants_staged"] = ps
             result["events_staged"] = es
 
-        result["events_transformed"] = transform.run()
-        result["metrics_computed"] = aggregation.run()
+        result["events_transformed"] = transform.run(conn=conn)
+        result["metrics_computed"] = aggregation.run(conn=conn)
 
     except Exception as e:
         result["status"] = "error"

@@ -10,13 +10,17 @@ from datetime import datetime, timezone
 from db import get_conn
 
 logger = logging.getLogger("planty.transform")
-MAX_DAYS_OVERDUE = 365  # Cap to prevent overflow on very old/stale events
+from shared import MAX_DAYS_OVERDUE
 
 
-def run() -> int:
-    """Process new completed events from staging. Returns number of events transformed."""
+def run(conn=None) -> int:
+    """Process new completed events from staging. Returns number of events transformed.
+    Accepts optional conn for dependency injection."""
     now = datetime.now(timezone.utc).isoformat()
-    conn = get_conn()
+    _close = False
+    if conn is None:
+        conn = get_conn()
+        _close = True
 
     rows = conn.execute("""
         SELECT e.id, e.plant_id, e.event_type, e.scheduled, e.completed, e.feedback
@@ -50,9 +54,9 @@ def run() -> int:
         conn.execute("COMMIT")
     except Exception:
         conn.execute("ROLLBACK")
-        conn.close()
+        if _close: conn.close()
         raise
 
-    conn.close()
+    if _close: conn.close()
     logger.info(f"Transformed {count} events into care_events")
     return count

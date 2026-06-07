@@ -14,16 +14,17 @@ from db import get_conn
 
 logger = logging.getLogger("planty.aggregation")
 
-# Configurable weights — tune these to adjust scoring priorities
-W_COMPLIANCE = 0.4   # How consistently you water at all
-W_TIMELINESS = 0.3   # How often you water on time
-W_FEEDBACK = 0.3     # How the plant responds to your care
+from shared import W_COMPLIANCE, W_TIMELINESS, W_FEEDBACK, FEEDBACK_SCORES, DEFAULT_FEEDBACK
 
 
-def run() -> int:
-    """Compute health_score for every plant with care_events. Returns number of plants scored."""
+def run(conn=None) -> int:
+    """Compute health_score for every plant with care_events. Returns number of plants scored.
+    Accepts optional conn for dependency injection (tests); opens own if not provided."""
     now = datetime.now(timezone.utc).isoformat()
-    conn = get_conn()
+    _close = False
+    if conn is None:
+        conn = get_conn()
+        _close = True
 
     plant_ids = [r["id"] for r in conn.execute("SELECT id FROM plants_raw").fetchall()]
     count = 0
@@ -47,15 +48,8 @@ def run() -> int:
             on_time = sum(1 for e in events if e["was_on_time"])
             timeliness = on_time / total
 
-            feedback_scores = []
-            for e in events:
-                if e["feedback"] == "happy":
-                    feedback_scores.append(1.0)
-                elif e["feedback"] == "sad":
-                    feedback_scores.append(0.3)
-                elif e["feedback"] == "overwatered":
-                    feedback_scores.append(0.0)
-            feedback = sum(feedback_scores) / len(feedback_scores) if feedback_scores else 0.5
+            feedback_scores = [FEEDBACK_SCORES.get(e["feedback"], DEFAULT_FEEDBACK) for e in events]
+            feedback = sum(feedback_scores) / len(feedback_scores) if feedback_scores else DEFAULT_FEEDBACK
 
             health_score = compliance * W_COMPLIANCE + timeliness * W_TIMELINESS + feedback * W_FEEDBACK
             avg_overdue = sum(e["days_overdue"] or 0 for e in events) / total
@@ -74,9 +68,9 @@ def run() -> int:
         conn.execute("COMMIT")
     except Exception:
         conn.execute("ROLLBACK")
-        conn.close()
+        if _close: conn.close()
         raise
 
-    conn.close()
+    if _close: conn.close()
     logger.info(f"Computed health metrics for {count} plants")
     return count
