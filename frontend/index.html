@@ -400,15 +400,30 @@
         }
 
         .plant-emoji {
-            width: 60px;
-            height: 60px;
+            width: 72px;
+            height: 72px;
+            min-width: 72px;
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
             border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            font-size: 36px;
             box-shadow: 0 2px 10px rgba(16, 185, 129, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+        .plant-emoji img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+        }
+        .plant-emoji img.loading { opacity: 0; }
+        .plant-emoji img.loaded { opacity: 1; animation: fadeIn 0.3s ease; }
+        .plant-emoji .emoji-fallback {
+            z-index: 1;
         }
 
         .plant-info {
@@ -3264,7 +3279,7 @@
                 return `
                     <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''}">
                         <div class="plant-header">
-                            <div class="plant-emoji">${plant.emoji}</div>
+                            <div class="plant-emoji"><span class="emoji-fallback">${plant.emoji}</span>${getPlantImageUrl(plant.normalized) ? `<img src="${getPlantImageUrl(plant.normalized)}" loading="lazy" alt="${plant.name}" onerror="this.remove()" class="loaded">` : ''}</div>
                             <div class="plant-info">
                                 <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}${plant.isOutdoor ? ' <span class="badge" style="font-size:12px;" title="Outdoor — full weather adaptation">🌤️</span>' : ''}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
@@ -3774,6 +3789,41 @@
         initNotifications();
         // ────────────────────────────────────────────────────────────────
 
+        // ── Plant Image Prefetch ─────────────────────────────────────
+        const _plantImages = JSON.parse(localStorage.getItem('planty_images') || '{}');
+
+        function getPlantImageUrl(speciesKey) {
+            // Returns cached Wikipedia thumbnail URL or null
+            return _plantImages[speciesKey] || null;
+        }
+
+        async function prefetchPlantImages() {
+            if (typeof SPECIES === 'undefined') return;
+            // Don't re-fetch if we already have images cached
+            const cached = Object.keys(_plantImages).length;
+            const total = Object.values(SPECIES).filter(s => s.wiki).length;
+            if (cached >= total * 0.8) return; // Already have most images
+            const entries = Object.entries(SPECIES).filter(([, v]) => v.wiki);
+            for (const [key, species] of entries) {
+                if (_plantImages[key]) continue; // Already cached
+                try {
+                    const resp = await fetch(
+                        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(species.wiki)}`
+                    );
+                    if (!resp.ok) continue;
+                    const data = await resp.json();
+                    if (data.thumbnail?.source) {
+                        // Resize to 150px wide for thumbnails
+                        _plantImages[key] = data.thumbnail.source.replace(/\/\d+px-/, '/150px-');
+                    }
+                } catch (_) {}
+                // Small delay between requests to be polite to Wikipedia API
+                await new Promise(r => setTimeout(r, 200));
+            }
+            localStorage.setItem('planty_images', JSON.stringify(_plantImages));
+            render(); // Re-render with images
+        }
+
         // Migrate photos from localStorage to IndexedDB, then init
         (async function migratePhotos() {
             try { await photoStore.init(); } catch (_) { return; }
@@ -3795,6 +3845,7 @@
 
         // Startup — each init wrapped so one failure doesn't block the rest
         try { populateSpeciesDropdown(); } catch(e) { console.warn('init: species dropdown failed', e); }
+        try { prefetchPlantImages(); } catch(e) { console.warn('init: plant images failed', e); }
         try { initDailyTip(); } catch(e) { console.warn('init: daily tip failed', e); }
         try { applyDarkMode(); } catch(e) { console.warn('init: dark mode failed', e); }
         try { updateDarkModeLabel(); } catch(e) { console.warn('init: dark mode label failed', e); }
