@@ -14,7 +14,6 @@ def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
         (started,)
     ).lastrowid
     conn.commit()
-    conn.close()
 
     result = {
         "plants_staged": 0,
@@ -39,7 +38,6 @@ def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
         result["error"] = str(e)
 
     finished = datetime.now(timezone.utc).isoformat()
-    conn = get_conn()
     conn.execute("""
         UPDATE pipeline_runs SET
             finished_at         = ?,

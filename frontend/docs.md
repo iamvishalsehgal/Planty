@@ -104,14 +104,15 @@ adjustedInterval = Math.round((originalInterval + adjustedInterval) / 2)
 
 ## Weather: `fetchWeather()`
 
-1. Calls `navigator.geolocation.getCurrentPosition()`
-2. Requests `https://api.open-meteo.com/v1/forecast` with `hourly=temperature_2m,relativehumidity_2m&timezone=auto`
-3. Finds the index matching the current hour in the `hourly.time` array
-4. Reads `temperature_2m[index]` and `relativehumidity_2m[index]`
+1. Calls `navigator.geolocation.getCurrentPosition()` with 5s timeout
+2. Determines hemisphere from latitude: `latitude >= 0` = north, `< 0` = south
+3. Requests `https://api.open-meteo.com/v1/forecast?latitude=...&longitude=...&current_weather=true`
+4. Reads `data.current_weather.temperature` directly (no hourly array parsing needed)
 5. Stores result in `environment` object and saves to `planty_env` in localStorage
 6. Cache TTL: 1 hour (`environment.lastFetch` timestamp check)
+7. Season is always recalculated fresh via `detectSeason()` on every load
 
-Fallback: if geolocation is denied or the fetch fails, `environment.temperature` stays `null` and only seasonal scaling is applied.
+Fallback: if geolocation is denied or the fetch fails, `environment.temperature` stays `null` and only seasonal scaling is applied. Hemisphere defaults to `'north'`.
 
 ---
 
@@ -147,10 +148,10 @@ Re-check interval: `setInterval(sendWaterNotifications, 3600000)` (every hour).
 
 | Key | Type | Contents |
 |---|---|---|
-| `planty_plants` | Array | `{ id, name, location, interval, isProtected, isProtectedData }` |
-| `planty_dead` | Array | `{ id, name, location, cause, deathDate, lastInterval }` |
-| `planty_history` | Array | `{ id, plantId, date (ISO string) }` |
-| `planty_env` | Object | `{ temperature, humidity, season, lastFetch (timestamp) }` |
+| `planty_plants` | Array | `{ id, name, normalized, emoji, location, interval, isProtected, potSize, lastRepotted, repotInterval, created }` |
+| `planty_dead` | Array | `{ id, name, normalized, emoji, location, cause, deathDate, lastInterval, suggestedInterval, totalWaterings }` |
+| `planty_history` | Array | `{ plantId, date (ISO string) }` |
+| `planty_env` | Object | `{ temperature, humidity, season, hemisphere, latitude, longitude, lastFetch (timestamp) }` |
 
 ---
 

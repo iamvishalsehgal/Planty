@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent / "planty.db"
@@ -10,6 +11,16 @@ def get_conn() -> sqlite3.Connection:
     conn.execute("PRAGMA journal_mode = WAL")
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
+
+
+@contextmanager
+def get_db():
+    """Context manager that ensures connection is always closed."""
+    conn = get_conn()
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 
 def init_db():
@@ -33,14 +44,6 @@ def init_db():
             completed   TEXT,
             feedback    TEXT,
             synced_at   TEXT NOT NULL
-        );
-
-        CREATE TABLE IF NOT EXISTS weather_snapshots (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            captured_at TEXT NOT NULL,
-            temp_c      REAL,
-            humidity    REAL,
-            condition   TEXT
         );
 
         CREATE TABLE IF NOT EXISTS care_events (

@@ -16,15 +16,20 @@ When a plant dies, you tell it why (overwatered, underwatered, or unknown). The 
 
 ## Features
 
+- **Species presets** — 30+ common houseplants with pre-filled care settings, light/humidity/difficulty guides, and species-specific tips
 - **Automatic schedule** — learns from your actual watering history, not just the initial setting
+- **Fertilizer tracking** — separate reminders for fertilizing, with adaptive schedule
+- **Plant Doctor** — symptom checker: yellow leaves, brown tips, drooping, pests, and more with treatment guides
+- **Photo journal** — capture plant growth over time, stored locally on your device
 - **Weather-aware** — pulls live weather and adjusts for temperature and season
+- **Dark mode** — follows system theme or manual toggle, full component coverage
 - **48-hour cooldown** — blocks accidental double-waterings
 - **Death + revival system** — records cause of death, uses it to protect future plants
 - **Notifications** — browser alerts when a plant is due or overdue, even with the tab in the background
 - **Memorial tab** — keeps a record of every plant that didn't make it
 - **Calendar export** — download a `.ics` file to add watering reminders to any calendar app
 - **Backup and restore** — export your plant data as JSON and import it on any device
-- **Analytics** — health scores per plant based on how consistently you've been watering
+- **Analytics** — health scores per plant based on how consistently you've been watering (requires backend running for full analytics)
 
 ---
 
