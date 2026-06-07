@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 
@@ -51,10 +52,11 @@ app.include_router(analytics_router)
 @app.on_event("startup")
 def startup():
     init_db()
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
-    scheduler.start()
-    print("Planty started — ETL pipeline running every 5 minutes")
+    if not os.environ.get("PLANTY_TESTING"):
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
+        scheduler.start()
+        print("Planty started — ETL pipeline running every 5 minutes")
 
 
 @app.get("/")

@@ -1,8 +1,26 @@
 import sqlite3
+import time
+import logging
 from contextlib import contextmanager
 from pathlib import Path
 
-DB_PATH = Path(__file__).parent / "planty.db"
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logger = logging.getLogger("planty.db")
+
+SLOW_QUERY_MS = 100  # Log queries slower than this
+
+import os as _os
+DB_PATH = Path(_os.environ.get("PLANTY_DB_PATH", str(Path(__file__).parent / "planty.db")))
+
+
+def timed_execute(conn, sql, params=(), label=""):
+    """Execute SQL with timing — logs slow queries."""
+    start = time.perf_counter()
+    cursor = conn.execute(sql, params)
+    elapsed_ms = (time.perf_counter() - start) * 1000
+    if elapsed_ms > SLOW_QUERY_MS:
+        logger.warning(f"Slow query ({elapsed_ms:.1f}ms) {label}: {sql[:120]}")
+    return cursor
 
 
 def get_conn() -> sqlite3.Connection:
@@ -80,6 +98,12 @@ def init_db():
             metrics_computed INTEGER DEFAULT 0,
             error           TEXT
         );
+
+        -- Indexes for analytics queries
+        CREATE INDEX IF NOT EXISTS idx_events_raw_plant ON events_raw(plant_id);
+        CREATE INDEX IF NOT EXISTS idx_care_events_plant ON care_events(plant_id);
+        CREATE INDEX IF NOT EXISTS idx_health_plant_computed ON plant_health_metrics(plant_id, computed_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_pipeline_runs_started ON pipeline_runs(started_at DESC);
     """)
     conn.commit()
     conn.close()
