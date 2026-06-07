@@ -3114,6 +3114,15 @@
             save(); render();
         }
 
+        function toggleOutdoor(plantId) {
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            plant.isOutdoor = !plant.isOutdoor;
+            save(); render();
+            const msg = plant.isOutdoor ? '🌤️ Moved outside — full weather adaptation active' : '🏠 Moved inside — mild weather adjustment';
+            showToast(msg, plant.name);
+        }
+
         function deletePlant(plantId) {
             if (!confirm('Delete this plant?')) return;
             state.plants = state.plants.filter(p => p.id !== plantId);
@@ -3292,6 +3301,7 @@
                                 <button class="action-btn" title="Diagnose problem" aria-label="Diagnose ${plant.name}" onclick="showDiagnosisModal(${plant.id})">🩺</button>
                                 <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
                                 <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
+                                <button class="action-btn" title="${plant.isOutdoor ? 'Move inside' : 'Move outside'}" aria-label="Toggle indoor/outdoor for ${plant.name}" onclick="toggleOutdoor(${plant.id})">${plant.isOutdoor ? '🏠' : '🌤️'}</button>
                                 <button class="action-btn" title="Edit notes" aria-label="Edit notes for ${plant.name}" onclick="editPlantNotes(${plant.id})">📝</button>
                                 <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
