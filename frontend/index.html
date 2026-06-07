@@ -2949,6 +2949,11 @@
             updateCauseSelection();
         }
 
+        function selectCause(cause) {
+            state.selectedCause = cause;
+            updateCauseSelection();
+        }
+
         function updateCauseSelection() {
             document.querySelectorAll('#deathCauses .option-card').forEach(el => {
                 el.classList.toggle('selected', el.dataset.cause === state.selectedCause);
@@ -2977,6 +2982,15 @@
         }
 
             if (notes === null) return; // cancelled
+            plant.notes = notes.trim() || null;
+            save(); render();
+        }
+
+        function editPlantNotes(plantId) {
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            const notes = prompt('Notes for ' + plant.name + ':', plant.notes || '');
+            if (notes === null) return;
             plant.notes = notes.trim() || null;
             save(); render();
         }
@@ -3029,6 +3043,19 @@
         function dismissOnboarding() {
             localStorage.setItem('planty_onboarded', '1');
             document.getElementById('onboardingCard').style.display = 'none';
+        }
+
+        function toggleBottomWaterInfo() {
+            const content = document.getElementById('bottomWaterContent');
+            const arrow = document.getElementById('bottomWaterArrow');
+            if (!content || !arrow) return;
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
         }
 
         function initOnboarding() {
