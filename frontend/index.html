@@ -1696,20 +1696,6 @@
             </div>
             <div id="plantList"></div>
 
-            <!-- Wishlist -->
-            <div class="add-section" style="margin-top:20px;">
-                <h2>📝 Plant Wishlist</h2>
-                <div style="display:flex;gap:8px;">
-                    <input type="text" id="wishlistName" placeholder="Plant name" style="flex:1;padding:12px;border:2px solid var(--gray-200);border-radius:12px;font-size:14px;outline:none;">
-                    <select id="wishlistPriority" style="padding:12px;border:2px solid var(--gray-200);border-radius:12px;font-size:14px;background:white;">
-                        <option value="high">🔴 High</option>
-                        <option value="medium" selected>🟡 Medium</option>
-                        <option value="low">🟢 Low</option>
-                    </select>
-                    <button onclick="addWishlistItem()" style="padding:12px 20px;background:var(--primary);color:white;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;">+ Add</button>
-                </div>
-                <div id="wishlistItems" style="margin-top:12px;"></div>
-            </div>
         </div>
     </div>
 
@@ -1832,14 +1818,6 @@
                         <div class="settings-text">
                             <div class="settings-title">Export Backup (JSON)</div>
                             <div class="settings-subtitle">Full data backup for restore</div>
-                        </div>
-                        <span class="settings-arrow">›</span>
-                    </div>
-                    <div class="settings-item" onclick="exportCSV()">
-                        <div class="settings-icon" style="background: #dbeafe; color: #2563eb;">📊</div>
-                        <div class="settings-text">
-                            <div class="settings-title">Export CSV</div>
-                            <div class="settings-subtitle">Open in Excel / Google Sheets</div>
                         </div>
                         <span class="settings-arrow">›</span>
                     </div>
@@ -2333,42 +2311,6 @@
             }
         }
 
-        // ── Wishlist ────────────────────────────────────────────────
-        function getWishlist() { return JSON.parse(localStorage.getItem('planty_wishlist') || '[]'); }
-        function saveWishlist(items) { localStorage.setItem('planty_wishlist', JSON.stringify(items)); }
-
-        function addWishlistItem() {
-            const name = document.getElementById('wishlistName').value.trim();
-            if (!name) return;
-            const items = getWishlist();
-            items.push({ id: Date.now(), name, priority: document.getElementById('wishlistPriority').value, added: new Date().toISOString() });
-            saveWishlist(items);
-            document.getElementById('wishlistName').value = '';
-            renderWishlist();
-        }
-
-        function removeWishlistItem(id) {
-            saveWishlist(getWishlist().filter(i => i.id !== id));
-            renderWishlist();
-        }
-
-        function renderWishlist() {
-            const items = getWishlist();
-            const container = document.getElementById('wishlistItems');
-            if (!container) return;
-            if (items.length === 0) {
-                container.innerHTML = '<div style="text-align:center;color:var(--gray-400);padding:12px;font-size:13px;">No plants on your wishlist yet</div>';
-                return;
-            }
-            const priorityEmoji = { high: '🔴', medium: '🟡', low: '🟢' };
-            container.innerHTML = items.map(i => `
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--gray-50);border-radius:10px;margin-bottom:6px;">
-                    <span>${priorityEmoji[i.priority] || '🟡'} <strong>${i.name}</strong></span>
-                    <button onclick="removeWishlistItem(${i.id})" style="background:none;border:none;cursor:pointer;font-size:16px;" aria-label="Remove ${i.name} from wishlist">✕</button>
-                </div>
-            `).join('');
-        }
-
         // ── Daily Care Tips ─────────────────────────────────────────
         const CARE_TIPS = [
             { icon: '💧', tip: 'Most houseplants die from overwatering, not underwatering. When in doubt, wait a day.' },
@@ -2824,40 +2766,10 @@
             const interval = getAdjustedInterval(plantId, plant?.interval || 7);
             render();
             showToast('💧 Watered! Tap to undo', '');
-            // Show quick feedback prompt in toast
-            setTimeout(() => {
-                const toast = document.getElementById('toast');
-                if (toast && toast.classList.contains('active')) {
-                    document.getElementById('toastTitle').textContent = 'How does it look?';
-                    document.getElementById('toastSubtitle').innerHTML = '<span onclick="waterFeedback('+plantId+',\'happy\')" style="cursor:pointer;font-size:24px;">😊</span> <span onclick="waterFeedback('+plantId+',\'ok\')" style="cursor:pointer;font-size:24px;">😐</span> <span onclick="waterFeedback('+plantId+',\'sad\')" style="cursor:pointer;font-size:24px;">😢</span>';
-                }
-            }, 1500);
             const toast = document.getElementById('toast');
             if (toast) { toast.onclick = () => { undoLastAction(); toast.onclick = null; }; }
             if (_undoTimer) clearTimeout(_undoTimer);
             _undoTimer = setTimeout(() => { _lastAction = null; }, 8000);
-        }
-
-        function waterFeedback(plantId, mood) {
-            const plant = state.plants.find(p => p.id === plantId);
-            if (!plant) return;
-            if (!plant.feedbackHistory) plant.feedbackHistory = [];
-            plant.feedbackHistory.push({ date: new Date().toISOString(), mood });
-            if (plant.feedbackHistory.length > 20) plant.feedbackHistory.shift();
-            const map = { happy: '😊 Looking great!', ok: '😐 Same as usual', sad: '😢 Needs attention' };
-            save();
-            showToast(map[mood] || 'Thanks!', 'Feedback recorded');
-        }
-
-        function getPlantTrend(plantId) {
-            const plant = state.plants.find(p => p.id === plantId);
-            if (!plant || !plant.feedbackHistory || plant.feedbackHistory.length < 3) return null;
-            const recent = plant.feedbackHistory.slice(-5);
-            const happy = recent.filter(f => f.mood === 'happy').length;
-            const sad = recent.filter(f => f.mood === 'sad').length;
-            if (happy > sad && happy >= 3) return 'improving';
-            if (sad > happy && sad >= 3) return 'declining';
-            return 'stable';
         }
 
         function fertilizePlant(plantId) {
@@ -3064,23 +2976,6 @@
             showToast('🪦 Moved to memorial', 'Data preserved for future plants');
         }
 
-        async function sharePlant(plantId) {
-            const plant = state.plants.find(p => p.id === plantId);
-            if (!plant) return;
-            const waterings = getPlantHistory(plantId).length;
-            const created = new Date(plant.created);
-            const monthsActive = Math.round((Date.now() - created) / (86400000 * 30));
-            const text = `${plant.emoji} My ${plant.name}${plant.location ? ' in my ' + plant.location : ''} — watered ${waterings} time${waterings!==1?'s':''} over ${monthsActive || 1} month${monthsActive!==1?'s':''}! #PlantyApp`;
-            if (navigator.share) {
-                try { await navigator.share({ title: `My ${plant.name}`, text }); return; } catch (_) {}
-            }
-            try { await navigator.clipboard.writeText(text); showToast('📋 Copied!', 'Share text copied to clipboard'); } catch (_) { showToast('❌ Error', 'Sharing not supported'); }
-        }
-
-        function editPlantNotes(plantId) {
-            const plant = state.plants.find(p => p.id === plantId);
-            if (!plant) return;
-            const notes = prompt('Notes for ' + plant.name + ':', plant.notes || '');
             if (notes === null) return; // cancelled
             plant.notes = notes.trim() || null;
             save(); render();
@@ -3121,12 +3016,12 @@
         function render(immediate = false) {
             if (immediate) {
                 clearTimeout(_renderTimer);
-                renderPlants(); renderMemorial(); renderSchedule(); renderMonthView(); renderWishlist();
+                renderPlants(); renderMemorial(); renderSchedule(); renderMonthView();
                 return;
             }
             if (_renderTimer) return; // debounce — max once per animation frame
             _renderTimer = requestAnimationFrame(() => {
-                renderPlants(); renderMemorial(); renderSchedule(); renderMonthView(); renderWishlist();
+                renderPlants(); renderMemorial(); renderSchedule(); renderMonthView();
                 _renderTimer = null;
             });
         }
@@ -3211,7 +3106,7 @@
                         <div class="plant-header">
                             <div class="plant-emoji">${plant.emoji}</div>
                             <div class="plant-info">
-                                <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}${(() => { const t = getPlantTrend(plant.id); return t === 'improving' ? ' 📈' : t === 'declining' ? ' 📉' : ''; })()}</div>
+                                <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
                                 <div style="font-size:11px;color:var(--gray-400);">Added ${(() => { const days = Math.floor((Date.now() - new Date(plant.created))/86400000); return days < 1 ? 'today' : days < 30 ? `${days}d ago` : days < 365 ? `${Math.floor(days/30)}mo ago` : `${Math.floor(days/365)}y ago`; })()}</div>
                             </div>
@@ -3252,7 +3147,6 @@
                                 <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
                                 <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
                                 <button class="action-btn" title="Edit notes" aria-label="Edit notes for ${plant.name}" onclick="editPlantNotes(${plant.id})">📝</button>
-                                <button class="action-btn" title="Share plant" aria-label="Share ${plant.name}" onclick="sharePlant(${plant.id})">📤</button>
                                 <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
                         </div>
@@ -3465,30 +3359,6 @@
             showToast('📤 Exported!', 'Backup saved');
         }
 
-        function exportCSV() {
-            if (state.plants.length === 0) { showToast('No data', 'Add plants first'); return; }
-            let csv = 'Name,Location,Interval,Last Repotted,Pot Size,Waterings,Status\n';
-            state.plants.forEach(p => {
-                const waterings = getPlantHistory(p.id).length;
-                csv += `"${p.name}","${p.location||''}",${p.interval},"${p.lastRepotted||''}","${p.potSize||''}",${waterings},${p.isProtected?'Protected':'Active'}\n`;
-            });
-            // Add watering history
-            csv += '\nWatering History\nDate,Plant,Action\n';
-            state.history.forEach(h => {
-                const plant = state.plants.find(p => p.id === h.plantId);
-                csv += `${h.date},${plant?plant.name:'Unknown'},Watered\n`;
-            });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = `planty-data-${new Date().toISOString().split('T')[0]}.csv`;
-            a.click(); URL.revokeObjectURL(url);
-            showToast('📊 CSV Exported!', 'Open in Excel / Google Sheets');
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
