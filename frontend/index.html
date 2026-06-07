@@ -2833,7 +2833,7 @@
         function renderPlants() {
             const container = document.getElementById('plantList');
             if (state.plants.length === 0) {
-                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above to get started.</p></div>`;
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above or pick a popular one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${['Monstera','Pothos','Snake Plant','Spider Plant','Aloe Vera'].map(n => `<button onclick="document.getElementById('plantSpecies').value='${n.toLowerCase()}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(n)} ${n}</button>`).join('')}</div></div>`;
                 return;
             }
             container.innerHTML = state.plants.map(plant => {
@@ -2855,6 +2855,26 @@
                            <span>🪴 ${daysUntilRepot <= 0 ? 'Repotting overdue' : `Repot in ${daysUntilRepot}d`}</span>
                            <button onclick="showRepotModal(${plant.id})">Repot now</button>
                        </div>` : '';
+                const history = getPlantHistory(plant.id);
+                const historyHTML = history.length > 0 ? `
+                    <details style="margin-top:12px;">
+                        <summary style="cursor:pointer;font-size:13px;color:var(--gray-500);font-weight:500;">💧 Watering History (last ${Math.min(10,history.length)})</summary>
+                        <div style="margin-top:8px;max-height:200px;overflow-y:auto;">
+                            ${history.slice(-10).reverse().map((h, i) => {
+                                const d = new Date(h.date);
+                                const prev = history.length - 1 - i > 1 ? history[history.length - 2 - i] : null;
+                                const gap = prev ? Math.round((new Date(h.date) - new Date(prev.date))/86400000) : null;
+                                const dateStr = d.toLocaleDateString('en-US', {month:'short',day:'numeric'});
+                                const interval = getAdjustedInterval(plant.id, plant.interval);
+                                const since = Math.floor((Date.now() - d)/86400000);
+                                const onTime = since <= interval;
+                                return `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--gray-100);">
+                                    <span>${dateStr} ${gap ? `(every ${gap}d)` : ''}</span>
+                                    <span style="color:${onTime?'var(--primary)':'var(--warning)'}">${onTime?'✅ On time':'⚠️ Late'}</span>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                    </details>` : '';
                 const speciesTip = plant.species ? `
                     <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;padding:12px;margin-top:12px;font-size:13px;color:#166534;">
                         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
@@ -2892,6 +2912,7 @@
                         </button>
                         ${(() => { const fs = getFertilizerStatus(plant); return fs ? `<div style="background:${fs.overdue?'#fee2e2':'#ede9fe'};color:${fs.overdue?'#991b1b':'#7c3aed'};padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;margin-top:6px;">🧪 ${fs.text}</div>` : ''; })()}
                         ${repotBadge}
+                        ${historyHTML}
                         ${speciesTip}
                         ${(plant.photos && plant.photos.length > 0) ? `
                             <div style="margin-top:12px;">
@@ -2923,7 +2944,7 @@
         function renderMemorial() {
             const container = document.getElementById('memorialList');
             if (state.deadPlants.length === 0) {
-                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌿</div><h2>No plants here</h2><p>Let's keep it that way! 🙏</p></div>`;
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🎉</div><h2>Zero plant casualties!</h2><p>You're doing amazing — every plant is thriving. Keep up the great care! 🌟</p></div>`;
                 return;
             }
             const grouped = {};
@@ -2996,7 +3017,7 @@
             const upcoming = state.plants.map(p => ({ plant: p, daysUntil: getDaysUntilNextWater(p.id, p.interval) })).sort((a, b) => a.daysUntil - b.daysUntil);
             const upcomingContainer = document.getElementById('upcomingList');
             if (upcoming.length === 0) {
-                upcomingContainer.innerHTML = '<div style="text-align:center;color:var(--gray-400);padding:20px;">No plants yet</div>';
+                upcomingContainer.innerHTML = '<div style="text-align:center;padding:30px;"><div style="font-size:48px;">📋</div><p style="color:var(--gray-400);margin-top:8px;">Add plants to see your weekly watering schedule</p></div>';
             } else {
                 upcomingContainer.innerHTML = upcoming.slice(0, 7).map(item => {
                     const date = new Date();
@@ -3184,6 +3205,24 @@
             else if (pref === 'light') { label.textContent = 'Light Mode'; status.textContent = 'Always light'; }
             else { label.textContent = 'Auto Theme'; status.textContent = 'Follows system setting'; }
         }
+
+        // ── Keyboard Shortcuts ───────────────────────────────────────
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+            if (e.metaKey || e.ctrlKey) return; // Don't steal Cmd/Ctrl combos
+            switch (e.key.toLowerCase()) {
+                case 'n': document.getElementById('plantName')?.focus(); e.preventDefault(); break;
+                case '1': showTab('home'); break;
+                case '2': showTab('schedule'); break;
+                case '3': showTab('memorial'); break;
+                case '4': showTab('settings'); break;
+                case 'w': {
+                    const needsWater = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) <= 0);
+                    if (needsWater.length > 0) waterPlant(needsWater[0].id);
+                    e.preventDefault(); break;
+                }
+            }
+        });
 
         // Listen for system theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
