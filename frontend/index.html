@@ -1619,6 +1619,11 @@
             </div>
 
             <!-- Plant List -->
+            <!-- Daily Tip -->
+            <div class="tip-card" id="dailyTipCard" style="cursor:pointer; margin-bottom:20px;" onclick="cycleTip()">
+                <h4 id="dailyTipIcon">💡</h4>
+                <p id="dailyTipText">Loading tip...</p>
+            </div>
             <div id="plantList"></div>
         </div>
     </div>
@@ -1722,8 +1727,16 @@
                     <div class="settings-item" onclick="exportData()">
                         <div class="settings-icon" style="background: #ede9fe; color: #7c3aed;">📤</div>
                         <div class="settings-text">
-                            <div class="settings-title">Export Backup</div>
-                            <div class="settings-subtitle">Download your plant data</div>
+                            <div class="settings-title">Export Backup (JSON)</div>
+                            <div class="settings-subtitle">Full data backup for restore</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+                    <div class="settings-item" onclick="exportCSV()">
+                        <div class="settings-icon" style="background: #dbeafe; color: #2563eb;">📊</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Export CSV</div>
+                            <div class="settings-subtitle">Open in Excel / Google Sheets</div>
                         </div>
                         <span class="settings-arrow">›</span>
                     </div>
@@ -2178,6 +2191,48 @@
             } else {
                 badge.style.display = 'none';
             }
+        }
+
+        // ── Daily Care Tips ─────────────────────────────────────────
+        const CARE_TIPS = [
+            { icon: '💧', tip: 'Most houseplants die from overwatering, not underwatering. When in doubt, wait a day.' },
+            { icon: '☀️', tip: 'Dust on leaves blocks light absorption. Wipe leaves with a damp cloth monthly.' },
+            { icon: '🔄', tip: 'Rotate your plants a quarter turn every week for even, balanced growth.' },
+            { icon: '🪴', tip: 'Spring is the best time to repot — plants are entering their active growing season.' },
+            { icon: '🐛', tip: 'Check leaf undersides weekly for pests. Early detection prevents infestations.' },
+            { icon: '❄️', tip: 'Winter: most houseplants need less water and zero fertilizer. Let soil dry more between waterings.' },
+            { icon: '🌡️', tip: 'Keep plants away from AC vents and radiators — sudden temperature changes cause leaf drop.' },
+            { icon: '💦', tip: 'Brown leaf tips often mean low humidity. Group plants together or use a pebble tray with water.' },
+            { icon: '✂️', tip: 'Prune dead or yellowing leaves promptly — the plant wastes energy trying to repair them.' },
+            { icon: '🕳️', tip: 'Always use pots with drainage holes. Sitting in water = root rot within days.' },
+            { icon: '🌱', tip: 'New growth is lighter green than old growth. That\'s normal — it will darken over time.' },
+            { icon: '🧪', tip: 'Fertilize only during the growing season (spring/summer). Over-fertilizing burns roots.' },
+            { icon: '📏', tip: 'A plant that stops growing may be root-bound. Check if roots are circling the pot bottom.' },
+            { icon: '🪟', tip: 'South-facing windows give the most light. North-facing give the least. Match plants accordingly.' },
+            { icon: '🗣️', tip: 'Talk to your plants! The CO2 in your breath and the vibration both stimulate growth.' },
+        ];
+
+        function cycleTip() {
+            const idx = parseInt(localStorage.getItem('planty_tip_idx') || '0');
+            const next = (idx + 1) % CARE_TIPS.length;
+            localStorage.setItem('planty_tip_idx', next);
+            showTip(next);
+        }
+
+        function showTip(idx) {
+            const tip = CARE_TIPS[idx % CARE_TIPS.length];
+            const iconEl = document.getElementById('dailyTipIcon');
+            const textEl = document.getElementById('dailyTipText');
+            if (iconEl) iconEl.textContent = tip.icon + ' Tip of the Day';
+            if (textEl) textEl.textContent = tip.tip;
+        }
+
+        function initDailyTip() {
+            // Pick tip based on day of year (changes daily automatically)
+            const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+            const stored = localStorage.getItem('planty_tip_idx');
+            const idx = stored !== null ? parseInt(stored) : dayOfYear % CARE_TIPS.length;
+            showTip(idx);
         }
 
         // ── Backend Sync ───────────────────────────────────────────────
@@ -2873,7 +2928,27 @@
             }
             const grouped = {};
             state.deadPlants.forEach(p => { if (!grouped[p.normalized]) grouped[p.normalized] = []; grouped[p.normalized].push(p); });
-            container.innerHTML = Object.entries(grouped).map(([key, plants]) => {
+            // Lessons learned summary
+            const causeCounts = {};
+            state.deadPlants.forEach(p => { causeCounts[p.cause] = (causeCounts[p.cause] || 0) + 1; });
+            const topCause = Object.entries(causeCounts).sort((a, b) => b[1] - a[1])[0];
+            const causeNames = { overwatering: '💧 Overwatering', underwatering: '🏜️ Underwatering', unknown: '❓ Unknown' };
+            const causeTips = { overwatering: 'Check soil moisture before watering — use finger test. Ensure pots have drainage.', underwatering: 'Set more frequent reminders. Consider self-watering pots or humidity trays.', unknown: 'Track symptoms more closely. Use the Plant Doctor to diagnose issues early.' };
+            const totalWaterings = state.deadPlants.reduce((sum, d) => sum + (d.totalWaterings || 0), 0);
+            const lessonHTML = `
+                <div class="analytics-section" style="margin-bottom:20px;">
+                    <h2>📊 Lessons Learned</h2>
+                    <div class="analytics-grid">
+                        <div class="analytics-item"><div class="analytics-value">${state.deadPlants.length}</div><div class="analytics-label">Plants Lost</div></div>
+                        <div class="analytics-item water"><div class="analytics-value">${totalWaterings}</div><div class="analytics-label">Total Waterings</div></div>
+                        <div class="analytics-item ${topCause?.[0]==='overwatering'?'highlight':''}"><div class="analytics-value">${causeNames[topCause?.[0]] || '—'}</div><div class="analytics-label">Top Cause</div></div>
+                        <div class="analytics-item"><div class="analytics-value">${Object.keys(grouped).length}</div><div class="analytics-label">Species Lost</div></div>
+                    </div>
+                    <div style="background:#fef3c7;border-radius:12px;padding:12px;margin-top:12px;font-size:13px;color:#92400e;">
+                        💡 <strong>Remember:</strong> ${topCause ? causeTips[topCause[0]] : 'Every plant death teaches you something. Adjust your care routine based on what went wrong.'}
+                    </div>
+                </div>`;
+            container.innerHTML = lessonHTML + Object.entries(grouped).map(([key, plants]) => {
                 const first = plants[0];
                 const combinedData = combineDeathLearning(plants);
                 return `
@@ -3005,6 +3080,27 @@
             a.href = url; a.download = `planty-backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click(); URL.revokeObjectURL(url);
             showToast('📤 Exported!', 'Backup saved');
+        }
+
+        function exportCSV() {
+            if (state.plants.length === 0) { showToast('No data', 'Add plants first'); return; }
+            let csv = 'Name,Location,Interval,Last Repotted,Pot Size,Waterings,Status\n';
+            state.plants.forEach(p => {
+                const waterings = getPlantHistory(p.id).length;
+                csv += `"${p.name}","${p.location||''}",${p.interval},"${p.lastRepotted||''}","${p.potSize||''}",${waterings},${p.isProtected?'Protected':'Active'}\n`;
+            });
+            // Add watering history
+            csv += '\nWatering History\nDate,Plant,Action\n';
+            state.history.forEach(h => {
+                const plant = state.plants.find(p => p.id === h.plantId);
+                csv += `${h.date},${plant?plant.name:'Unknown'},Watered\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = `planty-data-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click(); URL.revokeObjectURL(url);
+            showToast('📊 CSV Exported!', 'Open in Excel / Google Sheets');
         }
 
         function importData(event) {
@@ -3245,6 +3341,7 @@
         // ────────────────────────────────────────────────────────────────
 
         populateSpeciesDropdown();
+        initDailyTip();
         applyDarkMode();
         updateDarkModeLabel();
         const savedStreak = parseInt(localStorage.getItem('planty_streak') || '0');
