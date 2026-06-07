@@ -2828,7 +2828,7 @@
                 potSize: potSize || 'medium',
                 lastRepotted: new Date().toISOString(),
                 lastFertilized: null,
-                fertilizerInterval: speciesData ? 60 : null,
+                fertilizerInterval: speciesData ? (speciesData.fertilizer || 60) : null,
                 photos: [],
                 isOutdoor: !!isOutdoor,
                 created: new Date().toISOString()
@@ -3254,6 +3254,11 @@
                             <span>💧 ${plant.species.humidity}</span>
                             <span>📊 ${plant.species.difficulty}</span>
                         </div>
+                        ${plant.species.soil ? `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;font-size:12px;">
+                            <span>🪴 ${plant.species.soil}</span>
+                            ${plant.species.fertilizer ? `<span>🧪 Fertilize every ${Math.round(plant.species.fertilizer/30)}mo</span>` : ''}
+                            ${plant.species.petSafe !== undefined ? `<span>${plant.species.petSafe ? '🐾 Pet-safe' : '⚠️ Toxic to pets'}</span>` : ''}
+                        </div>` : ''}
                         <div style="color:#14532d;font-style:italic;">💡 ${plant.species.tip}</div>
                     </div>` : '';
                 return `
