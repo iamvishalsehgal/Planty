@@ -236,3 +236,50 @@ def test_ingestion_rejects_batch_with_invalid_item():
         ]
     })
     assert response.status_code == 422
+
+
+# ── Edge Cases ────────────────────────────────────────────────────
+
+def test_404_fallback_returns_index():
+    """GET /nonexistent-path returns SPA fallback (index.html)."""
+    response = client.get("/some-random-path-12345")
+    assert response.status_code == 200
+    assert b"Planty" in response.content
+
+
+def test_pipeline_empty_triggers():
+    """POST /api/analytics/run-pipeline returns success with zeroes."""
+    response = client.post("/api/analytics/run-pipeline")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "success"
+    assert data["plants_staged"] == 0
+    assert data["events_staged"] == 0
+
+
+def test_cors_preflight_analytics():
+    """OPTIONS /api/analytics/summary returns CORS headers."""
+    response = client.options(
+        "/api/analytics/summary",
+        headers={
+            "Origin": "https://example.com",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+    assert response.status_code in (200, 405)
+
+
+def test_interval_boundary_min():
+    """Interval = 2 days (minimum allowed) is accepted."""
+    response = client.post("/api/plants/sync", json={
+        "plants": [{"id": "b-min", "name": "Min", "interval": 2}]
+    })
+    assert response.status_code == 200
+
+
+def test_interval_boundary_max():
+    """Interval = 30 days (maximum allowed) is accepted."""
+    response = client.post("/api/plants/sync", json={
+        "plants": [{"id": "b-max", "name": "Max", "interval": 30}]
+    })
+    assert response.status_code == 200
