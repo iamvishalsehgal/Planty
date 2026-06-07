@@ -2001,6 +2001,7 @@
 
     <script src="species.js"></script>
     <script src="diagnosis.js"></script>
+    <script src="photostore.js"></script>
     <script>
         const COOLDOWN_HOURS = 48;
 
@@ -2724,10 +2725,40 @@
             const interval = getAdjustedInterval(plantId, plant?.interval || 7);
             render();
             showToast('💧 Watered! Tap to undo', '');
+            // Show quick feedback prompt in toast
+            setTimeout(() => {
+                const toast = document.getElementById('toast');
+                if (toast && toast.classList.contains('active')) {
+                    document.getElementById('toastTitle').textContent = 'How does it look?';
+                    document.getElementById('toastSubtitle').innerHTML = '<span onclick="waterFeedback('+plantId+',\'happy\')" style="cursor:pointer;font-size:24px;">😊</span> <span onclick="waterFeedback('+plantId+',\'ok\')" style="cursor:pointer;font-size:24px;">😐</span> <span onclick="waterFeedback('+plantId+',\'sad\')" style="cursor:pointer;font-size:24px;">😢</span>';
+                }
+            }, 1500);
             const toast = document.getElementById('toast');
             if (toast) { toast.onclick = () => { undoLastAction(); toast.onclick = null; }; }
             if (_undoTimer) clearTimeout(_undoTimer);
             _undoTimer = setTimeout(() => { _lastAction = null; }, 8000);
+        }
+
+        function waterFeedback(plantId, mood) {
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            if (!plant.feedbackHistory) plant.feedbackHistory = [];
+            plant.feedbackHistory.push({ date: new Date().toISOString(), mood });
+            if (plant.feedbackHistory.length > 20) plant.feedbackHistory.shift();
+            const map = { happy: '😊 Looking great!', ok: '😐 Same as usual', sad: '😢 Needs attention' };
+            save();
+            showToast(map[mood] || 'Thanks!', 'Feedback recorded');
+        }
+
+        function getPlantTrend(plantId) {
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant || !plant.feedbackHistory || plant.feedbackHistory.length < 3) return null;
+            const recent = plant.feedbackHistory.slice(-5);
+            const happy = recent.filter(f => f.mood === 'happy').length;
+            const sad = recent.filter(f => f.mood === 'sad').length;
+            if (happy > sad && happy >= 3) return 'improving';
+            if (sad > happy && sad >= 3) return 'declining';
+            return 'stable';
         }
 
         function fertilizePlant(plantId) {
@@ -2838,28 +2869,28 @@
             document.getElementById('photoInput').click();
         }
 
-        function capturePhoto(event) {
+        async function capturePhoto(event) {
             const file = event.target.files[0];
             if (!file || !_photoTargetPlantId) { event.target.value = ''; return; }
             const plant = state.plants.find(p => p.id === _photoTargetPlantId);
             if (!plant) { event.target.value = ''; return; }
             const reader = new FileReader();
-            reader.onload = function(e) {
-                if (!plant.photos) plant.photos = [];
-                // Limit to 10 photos, keep most recent
-                if (plant.photos.length >= 10) plant.photos.shift();
-                plant.photos.push({
-                    data: e.target.result,
-                    date: new Date().toISOString(),
-                    caption: ''
-                });
-                save();
-                render();
-                showToast('📸 Photo saved!', `${plant.name} has ${plant.photos.length} photo${plant.photos.length!==1?'s':''}`);
+            reader.onload = async function(e) {
+                try {
+                    await photoStore.savePhoto(_photoTargetPlantId, e.target.result);
+                    plant.photoCount = (plant.photoCount || 0) + 1;
+                    save();
+                    render();
+                    showToast('📸 Photo saved!', `${plant.name} has ${plant.photoCount} photo${plant.photoCount!==1?'s':''}`);
+                } catch (_) { showToast('❌ Error', 'Could not save photo'); }
             };
             reader.readAsDataURL(file);
             event.target.value = '';
             _photoTargetPlantId = null;
+        }
+
+        async function loadPlantPhotos(plantId) {
+            try { return await photoStore.getPhotos(plantId); } catch (_) { return []; }
         }
 
         function deletePhoto(plantId, photoIdx) {
@@ -2917,6 +2948,15 @@
                 try { await navigator.share({ title: `My ${plant.name}`, text }); return; } catch (_) {}
             }
             try { await navigator.clipboard.writeText(text); showToast('📋 Copied!', 'Share text copied to clipboard'); } catch (_) { showToast('❌ Error', 'Sharing not supported'); }
+        }
+
+        function editPlantNotes(plantId) {
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            const notes = prompt('Notes for ' + plant.name + ':', plant.notes || '');
+            if (notes === null) return; // cancelled
+            plant.notes = notes.trim() || null;
+            save(); render();
         }
 
         function deletePlant(plantId) {
@@ -3029,7 +3069,7 @@
                         <div class="plant-header">
                             <div class="plant-emoji">${plant.emoji}</div>
                             <div class="plant-info">
-                                <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}</div>
+                                <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}${(() => { const t = getPlantTrend(plant.id); return t === 'improving' ? ' 📈' : t === 'declining' ? ' 📉' : ''; })()}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
                             </div>
                         </div>
@@ -3053,6 +3093,7 @@
                         ${(() => { const fs = getFertilizerStatus(plant); return fs ? `<div style="background:${fs.overdue?'#fee2e2':'#ede9fe'};color:${fs.overdue?'#991b1b':'#7c3aed'};padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;margin-top:6px;">🧪 ${fs.text}</div>` : ''; })()}
                         ${repotBadge}
                         ${historyHTML}
+                        ${plant.notes ? `<div style="background:#f9fafb;border-radius:10px;padding:10px;margin-top:10px;font-size:13px;color:var(--gray-600);font-style:italic;">📝 ${plant.notes}</div>` : ''}
                         ${speciesTip}
                         ${(plant.photos && plant.photos.length > 0) ? `
                             <div style="margin-top:12px;">
@@ -3074,6 +3115,7 @@
                                 <button class="action-btn" title="Diagnose problem" aria-label="Diagnose ${plant.name}" onclick="showDiagnosisModal(${plant.id})">🩺</button>
                                 <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
                                 <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
+                                <button class="action-btn" title="Edit notes" aria-label="Edit notes for ${plant.name}" onclick="editPlantNotes(${plant.id})">📝</button>
                                 <button class="action-btn" title="Share plant" aria-label="Share ${plant.name}" onclick="sharePlant(${plant.id})">📤</button>
                                 <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
@@ -3519,6 +3561,25 @@
 
         initNotifications();
         // ────────────────────────────────────────────────────────────────
+
+        // Migrate photos from localStorage to IndexedDB, then init
+        (async function migratePhotos() {
+            try { await photoStore.init(); } catch (_) { return; }
+            for (const plant of state.plants) {
+                if (plant.photos && plant.photos.length > 0 && plant.photos[0].data) {
+                    for (const p of plant.photos) {
+                        try { await photoStore.savePhoto(plant.id, p.data, p.caption || ''); } catch (_) {}
+                    }
+                    plant.photoCount = plant.photos.length;
+                    plant.photos = []; // Clear base64 from memory — now in IndexedDB
+                }
+                if (!plant.photoCount) {
+                    try { plant.photoCount = await photoStore.getPhotoCount(plant.id); } catch (_) { plant.photoCount = 0; }
+                }
+            }
+            save();
+            render();
+        })();
 
         populateSpeciesDropdown();
         initDailyTip();
