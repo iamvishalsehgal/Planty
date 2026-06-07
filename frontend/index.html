@@ -93,7 +93,12 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(5, 150, 105, 0.4);
+            transition: background 0.8s ease, box-shadow 0.8s ease;
         }
+        .header.spring { background: linear-gradient(135deg, #059669, #047857, #065f46); box-shadow: 0 4px 20px rgba(5,150,105,0.4); }
+        .header.summer { background: linear-gradient(135deg, #d97706, #b45309, #92400e); box-shadow: 0 4px 20px rgba(217,119,6,0.4); }
+        .header.fall   { background: linear-gradient(135deg, #b45309, #92400e, #78350f); box-shadow: 0 4px 20px rgba(180,83,9,0.4); }
+        .header.winter { background: linear-gradient(135deg, #1d4ed8, #1e40af, #1e3a8a); box-shadow: 0 4px 20px rgba(29,78,216,0.4); }
 
         .header::before {
             content: '';
@@ -2109,7 +2114,14 @@
             environment.season = detectSeason();
         }
 
+        function applySeasonalTheme() {
+            const season = environment.season || detectSeason();
+            const header = document.querySelector('.header');
+            if (header) { header.className = header.className.replace(/\b(spring|summer|fall|winter)\b/g, '').trim(); header.classList.add(season); }
+        }
+
         function updateWeatherDisplay() {
+            applySeasonalTheme();
             const container = document.getElementById('headerWeather');
             if (!container) return;
             const seasonIcons = { spring: '🌸', summer: '☀️', fall: '🍂', winter: '❄️' };
@@ -2705,17 +2717,23 @@
         function waterPlant(plantId) {
             const canWater = canWaterPlant(plantId);
             if (!canWater.allowed) { showCooldownModal(canWater.hoursLeft); return; }
+            saveUndoState();
             state.history.push({ plantId, date: new Date().toISOString() });
             save();
             const plant = state.plants.find(p => p.id === plantId);
             const interval = getAdjustedInterval(plantId, plant?.interval || 7);
             render();
-            showToast('💧 Watered!', `Next in ~${interval} days`);
+            showToast('💧 Watered! Tap to undo', '');
+            const toast = document.getElementById('toast');
+            if (toast) { toast.onclick = () => { undoLastAction(); toast.onclick = null; }; }
+            if (_undoTimer) clearTimeout(_undoTimer);
+            _undoTimer = setTimeout(() => { _lastAction = null; }, 8000);
         }
 
         function fertilizePlant(plantId) {
             const plant = state.plants.find(p => p.id === plantId);
             if (!plant) return;
+            saveUndoState();
             plant.lastFertilized = new Date().toISOString();
             if (!plant.fertilizerInterval) plant.fertilizerInterval = 60;
             // Adaptive: if fertilizing more often than scheduled, shorten interval
@@ -2730,7 +2748,9 @@
             save();
             render();
             const months = Math.round(plant.fertilizerInterval / 30);
-            showToast('🧪 Fertilized!', `Next in ~${months} month${months!==1?'s':''}`);
+            showToast('🧪 Fertilized! Tap to undo', '');
+            const toast2 = document.getElementById('toast');
+            if (toast2) { toast2.onclick = () => { undoLastAction(); toast2.onclick = null; }; }
         }
 
         function getDaysSinceFertilized(plantId) {
@@ -2905,6 +2925,29 @@
             state.history = state.history.filter(h => h.plantId !== plantId);
             save();
             render();
+        }
+
+        // ── Undo ────────────────────────────────────────────────────
+        let _lastAction = null;
+        let _undoTimer = null;
+
+        function saveUndoState() {
+            _lastAction = {
+                plants: JSON.parse(JSON.stringify(state.plants)),
+                deadPlants: JSON.parse(JSON.stringify(state.deadPlants)),
+                history: JSON.parse(JSON.stringify(state.history)),
+            };
+        }
+
+        function undoLastAction() {
+            if (!_lastAction) return;
+            state.plants = _lastAction.plants;
+            state.deadPlants = _lastAction.deadPlants;
+            state.history = _lastAction.history;
+            _lastAction = null;
+            if (_undoTimer) clearTimeout(_undoTimer);
+            save(); render();
+            showToast('↩️ Undone!', 'Previous action reversed');
         }
 
         let _renderTimer = null;
