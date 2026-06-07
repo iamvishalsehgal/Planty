@@ -2945,10 +2945,6 @@
             document.getElementById('diagnosisResult').style.display = 'none';
             document.getElementById('diagnosisBackBtn').style.display = 'none';
         }
-            state.selectedCause = cause;
-            updateCauseSelection();
-        }
-
         function selectCause(cause) {
             state.selectedCause = cause;
             updateCauseSelection();
@@ -2979,11 +2975,6 @@
             closeModal('deathModal');
             render();
             showToast('🪦 Moved to memorial', 'Data preserved for future plants');
-        }
-
-            if (notes === null) return; // cancelled
-            plant.notes = notes.trim() || null;
-            save(); render();
         }
 
         function editPlantNotes(plantId) {
@@ -3386,6 +3377,9 @@
             showToast('📤 Exported!', 'Backup saved');
         }
 
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -3489,17 +3483,6 @@
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (getDarkModePref() === 'auto') applyDarkMode();
         });
-            const content = document.getElementById('bottomWaterContent');
-            const arrow = document.getElementById('bottomWaterArrow');
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                content.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
-
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal.id); });
         });
