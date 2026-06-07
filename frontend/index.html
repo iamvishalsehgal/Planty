@@ -326,6 +326,12 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            contain: layout style paint;
+            content-visibility: auto;
+            contain-intrinsic-size: 300px;
+        }
+        .plant-card.needs-water {
+            will-change: box-shadow;
         }
 
         .plant-card::before {
@@ -1888,7 +1894,7 @@
     </div>
 
     <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
+    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
         <button class="nav-item active" onclick="showTab('home')" data-tab="home">
             <span class="nav-icon">🏠</span>
             <span>Home</span>
@@ -1911,7 +1917,7 @@
     <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="capturePhoto(event)">
 
     <!-- Toast -->
-    <div class="toast" id="toast">
+    <div class="toast" id="toast" role="alert" aria-live="polite">
         <span class="icon" id="toastIcon">💧</span>
         <div class="toast-text">
             <h4 id="toastTitle"></h4>
@@ -2739,7 +2745,19 @@
             render();
         }
 
-        function render() { renderPlants(); renderMemorial(); renderSchedule(); }
+        let _renderTimer = null;
+        function render(immediate = false) {
+            if (immediate) {
+                clearTimeout(_renderTimer);
+                renderPlants(); renderMemorial(); renderSchedule();
+                return;
+            }
+            if (_renderTimer) return; // debounce — max once per animation frame
+            _renderTimer = requestAnimationFrame(() => {
+                renderPlants(); renderMemorial(); renderSchedule();
+                _renderTimer = null;
+            });
+        }
 
         function renderPlants() {
             const container = document.getElementById('plantList');
@@ -2810,7 +2828,7 @@
                                 <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
                                     ${plant.photos.map((p, i) => `
                                         <div style="position:relative;flex-shrink:0;">
-                                            <img src="${p.data}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;cursor:pointer;" onclick="this.style.width='200px';this.style.height='200px';this.style.position='fixed';this.style.top='50%';this.style.left='50%';this.style.transform='translate(-50%,-50%)';this.style.zIndex='400';this.style.borderRadius='16px';this.style.boxShadow='0 20px 60px rgba(0,0,0,0.5)'" onmouseleave="this.style.width='60px';this.style.height='60px';this.style.position='';this.style.top='';this.style.left='';this.style.transform='';this.style.zIndex='';this.style.borderRadius='10px';this.style.boxShadow=''" ondblclick="this.style.width='60px';this.style.height='60px';this.style.position='';this.style.top='';this.style.left='';this.style.transform='';this.style.zIndex='';this.style.borderRadius='10px';this.style.boxShadow=''">
+                                            <img src="${p.data}" loading="lazy" decoding="async" alt="Plant photo ${i+1}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;cursor:pointer;" onerror="this.style.display='none'" onclick="this.style.width='200px';this.style.height='200px';this.style.position='fixed';this.style.top='50%';this.style.left='50%';this.style.transform='translate(-50%,-50%)';this.style.zIndex='400';this.style.borderRadius='16px';this.style.boxShadow='0 20px 60px rgba(0,0,0,0.5)'" onmouseleave="this.style.width='60px';this.style.height='60px';this.style.position='';this.style.top='';this.style.left='';this.style.transform='';this.style.zIndex='';this.style.borderRadius='10px';this.style.boxShadow=''" ondblclick="this.style.width='60px';this.style.height='60px';this.style.position='';this.style.top='';this.style.left='';this.style.transform='';this.style.zIndex='';this.style.borderRadius='10px';this.style.boxShadow=''">
                                             <button onclick="deletePhoto(${plant.id},${i})" style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;line-height:1;">×</button>
                                         </div>
                                     `).join('')}
