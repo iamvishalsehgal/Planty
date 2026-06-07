@@ -1633,6 +1633,25 @@
             <div id="waterAllBar" style="display:none;margin-bottom:12px;">
                 <button onclick="waterAllDue()" style="width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;">💧 Water All Due Today</button>
             </div>
+            <!-- Onboarding -->
+            <div id="onboardingCard" class="add-section" style="display:none;">
+                <h2>🌱 Welcome to Planty!</h2>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border-radius:12px;">
+                        <span style="font-size:28px;">1️⃣</span>
+                        <div><strong>Add your plants</strong><br><span style="font-size:13px;color:var(--gray-500);">Pick a species or name it yourself</span></div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border-radius:12px;">
+                        <span style="font-size:28px;">2️⃣</span>
+                        <div><strong>Water on schedule</strong><br><span style="font-size:13px;color:var(--gray-500);">Tap 💧 when you water — Planty learns your rhythm</span></div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--gray-50);border-radius:12px;">
+                        <span style="font-size:28px;">3️⃣</span>
+                        <div><strong>Get smart reminders</strong><br><span style="font-size:13px;color:var(--gray-500);">Weather-aware notifications keep your plants thriving</span></div>
+                    </div>
+                </div>
+                <button class="add-btn" onclick="dismissOnboarding()" style="margin-top:12px;">Got it! 🌿</button>
+            </div>
             <!-- Search & Filter -->
             <div id="searchBar" style="display:none;margin-bottom:12px;">
                 <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="render()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
@@ -1730,6 +1749,20 @@
             </div>
 
             <div class="settings-section">
+                <h3 class="settings-section-title">🔄 Sync</h3>
+                <div class="settings-list">
+                    <div class="settings-item" onclick="syncToBackend();renderSyncStatus()">
+                        <div class="settings-icon" style="background: #dbeafe; color: #2563eb;">🔄</div>
+                        <div class="settings-text">
+                            <div class="settings-title">Sync Now</div>
+                            <div class="settings-subtitle" id="syncStatus">Last sync: never</div>
+                        </div>
+                        <span class="settings-arrow">›</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
                 <h3 class="settings-section-title">🎨 Appearance</h3>
                 <div class="settings-list">
                     <div class="settings-item" onclick="toggleDarkMode()">
@@ -1803,6 +1836,9 @@
                 <div class="about-desc">
                     Smart plant care that learns your patterns and adapts to weather conditions.<br><br>
                     Made with 💚 for indoor plant lovers.
+                </div>
+                <div style="margin-top:12px;font-size:12px;color:var(--gray-400);">
+                    v3.7 · <span id="syncFooter"></span>
                 </div>
             </div>
         </div>
@@ -2392,7 +2428,16 @@
                 if (events.length > 0) {
                     postWithRetry(`${apiBase}/api/events/sync`, { events });
                 }
+                localStorage.setItem('planty_last_sync', new Date().toISOString());
+                renderSyncStatus();
             } catch (_) { /* Offline — no-op */ }
+        }
+
+        function renderSyncStatus() {
+            const el = document.getElementById('syncStatus');
+            if (!el) return;
+            const last = localStorage.getItem('planty_last_sync');
+            el.textContent = last ? `Last sync: ${new Date(last).toLocaleString()}` : 'Last sync: never';
         }
 
         function getPlantEmoji(name) {
@@ -3028,9 +3073,21 @@
             });
         }
 
+        function dismissOnboarding() {
+            localStorage.setItem('planty_onboarded', '1');
+            document.getElementById('onboardingCard').style.display = 'none';
+        }
+
+        function initOnboarding() {
+            if (!localStorage.getItem('planty_onboarded') && state.plants.length === 0) {
+                document.getElementById('onboardingCard').style.display = 'block';
+            }
+        }
+
         function renderPlants() {
             const container = document.getElementById('plantList');
             const searchBar = document.getElementById('searchBar');
+            initOnboarding();
             if (state.plants.length === 0) {
                 if (searchBar) searchBar.style.display = 'none';
                 container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above or pick a popular one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${['Monstera','Pothos','Snake Plant','Spider Plant','Aloe Vera'].map(n => `<button onclick="document.getElementById('plantSpecies').value='${n.toLowerCase()}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(n)} ${n}</button>`).join('')}</div></div>`;
@@ -3098,6 +3155,7 @@
                             <div class="plant-info">
                                 <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}${(() => { const t = getPlantTrend(plant.id); return t === 'improving' ? ' 📈' : t === 'declining' ? ' 📉' : ''; })()}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
+                                <div style="font-size:11px;color:var(--gray-400);">Added ${(() => { const days = Math.floor((Date.now() - new Date(plant.created))/86400000); return days < 1 ? 'today' : days < 30 ? `${days}d ago` : days < 365 ? `${Math.floor(days/30)}mo ago` : `${Math.floor(days/365)}y ago`; })()}</div>
                             </div>
                         </div>
                         <div class="plant-stats">

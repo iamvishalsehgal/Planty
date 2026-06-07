@@ -1,13 +1,17 @@
 import os
 import sys
+import time
+import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
+from collections import defaultdict
 
 # Make backend/ importable as root package
 sys.path.insert(0, str(Path(__file__).parent))
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import FileResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -20,6 +24,11 @@ from routes.analytics import router as analytics_router
 from routes.health import router as health_router
 
 FRONTEND = Path(__file__).parent.parent / "frontend"
+
+# ── Rate limiter (simple token bucket, 10 req/s per IP) ──────────
+_rate_buckets: dict[str, tuple[float, int]] = defaultdict(lambda: (time.time(), 10))
+RATE_LIMIT = 10  # requests per second per IP
+RATE_REFILL = 1.0  # tokens per second
 
 
 @asynccontextmanager
@@ -54,6 +63,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(GZipMiddleware, minimum_size=500)
 
 app.add_middleware(
     CORSMiddleware,
@@ -67,12 +77,28 @@ app.include_router(events_router)
 app.include_router(analytics_router)
 app.include_router(health_router)
 
-# ── Request counter middleware ────────────────────────────────────
+# ── Request middleware (rate limit + count + request ID) ──────────
 @app.middleware("http")
-async def count_requests(request: Request, call_next):
+async def process_request(request: Request, call_next):
+    # Request ID
+    req_id = str(uuid.uuid4())[:8]
+    request.state.req_id = req_id
+
+    # Rate limit (skip health endpoint and test mode)
+    if not os.environ.get("PLANTY_TESTING") and not request.url.path.startswith("/api/health"):
+        client_ip = request.client.host if request.client else "unknown"
+        now = time.time()
+        last_refill, tokens = _rate_buckets[client_ip]
+        elapsed = now - last_refill
+        tokens = min(RATE_LIMIT, tokens + elapsed * RATE_REFILL)
+        if tokens < 1:
+            raise HTTPException(status_code=429, detail="Too many requests")
+        _rate_buckets[client_ip] = (now, tokens - 1)
+
     from routes.health import increment_request_count
     increment_request_count()
     response = await call_next(request)
+    response.headers["X-Request-ID"] = req_id
     return response
 
 
