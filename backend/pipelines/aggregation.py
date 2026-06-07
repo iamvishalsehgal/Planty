@@ -8,8 +8,11 @@ Where:
     feedback    = avg(feedback_score)               (happy=1.0, sad=0.3, overwatered=0.0, none=0.5)
 """
 
+import logging
 from datetime import datetime, timezone
 from db import get_conn
+
+logger = logging.getLogger("planty.aggregation")
 
 # Configurable weights — tune these to adjust scoring priorities
 W_COMPLIANCE = 0.4   # How consistently you water at all
@@ -75,4 +78,5 @@ def run() -> int:
         raise
 
     conn.close()
+    logger.info(f"Computed health metrics for {count} plants")
     return count

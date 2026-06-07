@@ -1517,6 +1517,9 @@
                     <h1><span>🌱</span> Planty</h1>
                     <p class="header-sub">Smart plant care for indoor plants</p>
                 </div>
+                <div id="streakBadge" style="display:none;background:rgba(255,255,255,0.2);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:600;text-align:center;margin-right:10px;">
+                    🔥 <span id="streakCount">0</span> day streak
+                </div>
                 <div class="header-weather" id="headerWeather">
                     <div class="weather-loading">
                         <span class="weather-icon">🌡️</span>
@@ -2141,6 +2144,40 @@
             localStorage.setItem('planty_dead', JSON.stringify(state.deadPlants));
             localStorage.setItem('planty_history', JSON.stringify(state.history));
             syncToBackend();
+            updateStreak();
+        }
+
+        // ── Streak Counter ──────────────────────────────────────────
+        function updateStreak() {
+            if (state.plants.length === 0) { updateStreakDisplay(0); return; }
+            let stored = parseInt(localStorage.getItem('planty_streak') || '0');
+            const today = new Date().toISOString().split('T')[0];
+            const lastChecked = localStorage.getItem('planty_streak_date') || '';
+            if (lastChecked === today) { updateStreakDisplay(stored); return; } // Already counted today
+            // Check yesterday's standing
+            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+            const yStr = yesterday.toISOString().split('T')[0];
+            const overdue = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) < 0);
+            if (overdue.length === 0) {
+                stored++; // All plants on track — extend streak
+            } else {
+                stored = 0; // Something overdue — streak broken
+            }
+            localStorage.setItem('planty_streak', stored);
+            localStorage.setItem('planty_streak_date', today);
+            updateStreakDisplay(stored);
+        }
+
+        function updateStreakDisplay(count) {
+            const badge = document.getElementById('streakBadge');
+            const countEl = document.getElementById('streakCount');
+            if (!badge || !countEl) return;
+            if (count > 0) {
+                badge.style.display = 'block';
+                countEl.textContent = count;
+            } else {
+                badge.style.display = 'none';
+            }
         }
 
         // ── Backend Sync ───────────────────────────────────────────────
@@ -3164,15 +3201,33 @@
                 }));
         }
 
+        // Track last notification time per plant for cooldown
+        let _notifyTimestamps = {};
+
+        function _isQuietHours() {
+            const hour = new Date().getHours();
+            return hour >= 22 || hour < 7;
+        }
+
+        function _shouldNotify(plantId) {
+            const last = _notifyTimestamps[plantId] || 0;
+            return (Date.now() - last) > 7200000; // 2-hour cooldown
+        }
+
         async function sendWaterNotifications() {
             if (Notification.permission !== 'granted') return;
-            const plants = [...getPlantsNeedingWater(), ...getPlantsNeedingRepot()];
+            if (_isQuietHours()) return; // Don't wake people up
+            const plants = [...getPlantsNeedingWater(), ...getPlantsNeedingRepot()]
+                .filter(p => _shouldNotify(p.id));
             if (plants.length === 0) return;
+
+            // Record notification timestamps
+            plants.forEach(p => { _notifyTimestamps[p.id] = Date.now(); });
 
             if (swRegistration && swRegistration.active) {
                 swRegistration.active.postMessage({ type: 'NOTIFY_PLANTS', plants });
             } else {
-                plants.forEach(p => new Notification('Planty 🌱', { body: p.message, icon: '/favicon.ico', tag: `plant-${p.id}` }));
+                plants.forEach(p => new Notification('Planty 🌱', { body: p.message, icon: '/icon-512.png', tag: `plant-${p.id}` }));
             }
         }
 
@@ -3192,6 +3247,8 @@
         populateSpeciesDropdown();
         applyDarkMode();
         updateDarkModeLabel();
+        const savedStreak = parseInt(localStorage.getItem('planty_streak') || '0');
+        updateStreakDisplay(savedStreak);
         loadEnvironment();
         updateWeatherDisplay();
         fetchWeather();

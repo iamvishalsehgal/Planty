@@ -5,9 +5,11 @@ For each completed event not yet in care_events, computes:
     was_on_time  = 1 if days_overdue <= 1, else 0
 """
 
+import logging
 from datetime import datetime, timezone
 from db import get_conn
 
+logger = logging.getLogger("planty.transform")
 MAX_DAYS_OVERDUE = 365  # Cap to prevent overflow on very old/stale events
 
 
@@ -52,4 +54,5 @@ def run() -> int:
         raise
 
     conn.close()
+    logger.info(f"Transformed {count} events into care_events")
     return count
