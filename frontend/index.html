@@ -1666,11 +1666,6 @@
                         </div>
                         <p class="input-hint">Used to estimate when repotting is due</p>
                     </div>
-                    <div class="input-group" style="flex-direction:row;align-items:center;gap:10px;">
-                        <input type="checkbox" id="plantOutdoor" style="width:20px;height:20px;accent-color:var(--primary);">
-                        <label for="plantOutdoor" style="margin:0;cursor:pointer;">🌤️ Outdoor plant — full weather adaptation</label>
-                        <p class="input-hint" style="margin:0;">Indoor plants get mild weather adjustments; outdoor plants adapt fully</p>
-                    </div>
                 </div>
                 <button class="add-btn" onclick="addPlant()">
                     <span>🌱</span> Add Plant
@@ -2186,26 +2181,41 @@
             return Math.max(0, Math.min(1, score));
         }
 
-        function getWeatherAdjustedInterval(baseDays, isOutdoor = false) {
-            // Indoor plants: mild adjustment. Outdoor plants: full weather impact.
+        function getWeatherAdjustedInterval(baseDays) {
+            // Auto-adapt: warm weather → full outdoor-style adjustment
+            //             cold weather → muted indoor-style adjustment
             const idx = computeWeatherIndex();
-            // weatherIndex 0.5 = neutral (multiplier 1.0)
-            // weatherIndex 0.0 = dry/hot/windy (multiplier 0.7 → shorter interval)
-            // weatherIndex 1.0 = wet/cool/calm (multiplier 1.3 → longer interval)
-            const fullMult = 0.7 + idx * 0.6; // range: 0.7–1.3
-            const indoorMult = 0.9 + idx * 0.2; // range: 0.9–1.1 (muted)
-            const mult = isOutdoor ? fullMult : indoorMult;
+            const temp = environment.temperature;
+            // Warm (>22°C) → plants behave like they're outside → full range
+            // Cool (<15°C) → plants behave like indoor → muted range
+            // In between → blend
+            let outdoorWeight;
+            if (temp !== null) {
+                outdoorWeight = Math.max(0, Math.min(1, (temp - 15) / 10)); // 0 at 15°C, 1 at 25°C+
+            } else {
+                const season = environment.season || detectSeason();
+                outdoorWeight = (season === 'summer') ? 1.0 : (season === 'spring') ? 0.6 : (season === 'fall') ? 0.3 : 0.0;
+            }
+            const fullMult = 0.7 + idx * 0.6;   // range: 0.7–1.3
+            const indoorMult = 0.9 + idx * 0.2;  // range: 0.9–1.1 (muted)
+            const mult = indoorMult + (fullMult - indoorMult) * outdoorWeight;
             return Math.round(baseDays * mult);
         }
 
-        function getDynamicCooldown(isOutdoor = false) {
-            // Hot/dry/windy → shorter cooldown (soil dries faster)
-            // Cool/wet/calm → longer cooldown (soil stays wet)
+        function getDynamicCooldown() {
+            // Auto-adapt cooldown: warmer → shorter (soil dries faster)
             const idx = computeWeatherIndex();
-            const baseHours = isOutdoor ? 36 : 48;
-            const minHours = isOutdoor ? 12 : 24;
-            const maxHours = isOutdoor ? 60 : 72;
-            // idx=0 (dry/hot) → minHours, idx=0.5 (neutral) → baseHours, idx=1 (wet/cool) → maxHours
+            const temp = environment.temperature;
+            let outdoorWeight;
+            if (temp !== null) {
+                outdoorWeight = Math.max(0, Math.min(1, (temp - 15) / 10));
+            } else {
+                const season = environment.season || detectSeason();
+                outdoorWeight = (season === 'summer') ? 1.0 : (season === 'spring') ? 0.6 : (season === 'fall') ? 0.3 : 0.0;
+            }
+            const baseHours = 48 - outdoorWeight * 12;   // 48 (indoor) → 36 (outdoor)
+            const minHours = 24 - outdoorWeight * 12;    // 24 (indoor) → 12 (outdoor)
+            const maxHours = 72 - outdoorWeight * 12;    // 72 (indoor) → 60 (outdoor)
             return Math.round(minHours + idx * (maxHours - minHours));
         }
 
@@ -2739,13 +2749,10 @@
         }
 
         function getAdjustedInterval(plantId, defaultInterval = 7) {
-            const plant = state.plants.find(p => p.id === plantId);
-            const isOutdoor = plant?.isOutdoor || false;
             const base = getBaseInterval(plantId, defaultInterval);
-            // Use weather-aware adjustment when weather data is available
             let adjusted;
             if (environment.weatherIndex !== null) {
-                adjusted = getWeatherAdjustedInterval(base, isOutdoor);
+                adjusted = getWeatherAdjustedInterval(base);
             } else {
                 adjusted = Math.round(base * getEnvironmentMultiplier());
             }
@@ -2779,8 +2786,7 @@
         function canWaterPlant(plantId) {
             const hours = getHoursSinceLastWater(plantId);
             if (hours === null) return { allowed: true };
-            const plant = state.plants.find(p => p.id === plantId);
-            const cooldown = getDynamicCooldown(plant?.isOutdoor || false);
+            const cooldown = getDynamicCooldown();
             if (hours < cooldown) return { allowed: false, hoursLeft: Math.ceil(cooldown - hours) };
             return { allowed: true };
         }
@@ -2806,11 +2812,10 @@
             const selectedBtn = document.querySelector('.interval-btn.selected');
             const interval = selectedBtn ? parseInt(selectedBtn.dataset.days) : 7;
             const potSize = document.querySelector('.pot-btn.selected')?.dataset.size || 'medium';
-            const isOutdoor = document.getElementById('plantOutdoor')?.checked || false;
             const normalizedName = name.toLowerCase().trim();
             const deadMatches = state.deadPlants.filter(p => p.normalized === normalizedName);
             if (deadMatches.length > 0) {
-                state.pendingPlant = { name, location, interval, potSize, isOutdoor };
+                state.pendingPlant = { name, location, interval, potSize };
                 const combinedData = combineDeathLearning(deadMatches);
                 state.pendingRevival = combinedData;
                 document.getElementById('revivalMessage').textContent = `You've had ${deadMatches.length} "${name}" plant(s) before.`;
@@ -2821,15 +2826,15 @@
             }
             const existingPlants = state.plants.filter(p => p.normalized === normalizedName);
             if (existingPlants.length > 0 && !location) {
-                state.pendingPlant = { name, location, interval, potSize, isOutdoor };
+                state.pendingPlant = { name, location, interval, potSize };
                 document.getElementById('duplicateMessage').textContent = `You already have ${existingPlants.length} "${name}". Add a location to tell them apart.`;
                 showModal('duplicateModal');
                 return;
             }
-            createPlant(name, location, interval, false, null, potSize, isOutdoor);
+            createPlant(name, location, interval, false, null, potSize);
         }
 
-        function createPlant(name, location, interval, isProtected, protectionData, potSize, isOutdoor) {
+        function createPlant(name, location, interval, isProtected, protectionData, potSize) {
             const speciesKey = (name || '').toLowerCase().trim();
             const speciesData = (typeof SPECIES !== 'undefined' && SPECIES[speciesKey]) || null;
             const plant = {
@@ -2845,7 +2850,6 @@
                 lastFertilized: null,
                 fertilizerInterval: speciesData ? (speciesData.fertilizer || 60) : null,
                 photos: [],
-                isOutdoor: !!isOutdoor,
                 created: new Date().toISOString()
             };
             state.plants.push(plant);
@@ -2867,8 +2871,8 @@
 
         function confirmRevival(useProtection) {
             if (!state.pendingPlant || !state.pendingRevival) return;
-            const { name, location, interval, potSize, isOutdoor } = state.pendingPlant;
-            createPlant(name, location, interval, useProtection, useProtection ? state.pendingRevival : null, potSize, isOutdoor);
+            const { name, location, interval, potSize } = state.pendingPlant;
+            createPlant(name, location, interval, useProtection, useProtection ? state.pendingRevival : null, potSize);
             closeModal('revivalModal');
             state.pendingPlant = null;
             state.pendingRevival = null;
@@ -3129,15 +3133,6 @@
             save(); render();
         }
 
-        function toggleOutdoor(plantId) {
-            const plant = state.plants.find(p => p.id === plantId);
-            if (!plant) return;
-            plant.isOutdoor = !plant.isOutdoor;
-            save(); render();
-            const msg = plant.isOutdoor ? '🌤️ Moved outside — full weather adaptation active' : '🏠 Moved inside — mild weather adjustment';
-            showToast(msg, plant.name);
-        }
-
         function deletePlant(plantId) {
             if (!confirm('Delete this plant?')) return;
             state.plants = state.plants.filter(p => p.id !== plantId);
@@ -3281,7 +3276,7 @@
                         <div class="plant-header">
                             <div class="plant-emoji"><span class="emoji-fallback">${plant.emoji}</span>${getPlantImageUrl(plant.normalized) ? `<img src="${getPlantImageUrl(plant.normalized)}" loading="lazy" alt="${plant.name}" onerror="this.remove()" class="loaded">` : ''}</div>
                             <div class="plant-info">
-                                <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}${plant.isOutdoor ? ' <span class="badge" style="font-size:12px;" title="Outdoor — full weather adaptation">🌤️</span>' : ''}</div>
+                                <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
                                 <div style="font-size:11px;color:var(--gray-400);">Added ${(() => { const days = Math.floor((Date.now() - new Date(plant.created))/86400000); return days < 1 ? 'today' : days < 30 ? `${days}d ago` : days < 365 ? `${Math.floor(days/30)}mo ago` : `${Math.floor(days/365)}y ago`; })()}</div>
                             </div>
@@ -3321,7 +3316,6 @@
                                 <button class="action-btn" title="Diagnose problem" aria-label="Diagnose ${plant.name}" onclick="showDiagnosisModal(${plant.id})">🩺</button>
                                 <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
                                 <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
-                                <button class="action-btn" title="${plant.isOutdoor ? 'Move inside' : 'Move outside'}" aria-label="Toggle indoor/outdoor for ${plant.name}" onclick="toggleOutdoor(${plant.id})">${plant.isOutdoor ? '🏠' : '🌤️'}</button>
                                 <button class="action-btn" title="Edit notes" aria-label="Edit notes for ${plant.name}" onclick="editPlantNotes(${plant.id})">📝</button>
                                 <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
                             </div>
