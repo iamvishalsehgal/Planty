@@ -1,6 +1,8 @@
 """FastAPI backend for LLM Council."""
 
-from fastapi import FastAPI, HTTPException
+import os
+import ipaddress
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -14,7 +16,25 @@ from .council import run_full_council, generate_conversation_title, stage1_colle
 
 app = FastAPI(title="LLM Council API")
 
-# Enable CORS for local development
+# ── Render IP whitelist ──────────────────────────────────────────
+RENDER_IPS = [
+    "74.220.48.0/24",
+    "74.220.56.0/24",
+]
+LOCALHOST_IPS = ["127.0.0.1", "::1", "localhost"]
+ALLOWED_NETS = [ipaddress.ip_network(n) for n in RENDER_IPS]
+
+
+@app.middleware("http")
+async def ip_whitelist(request: Request, call_next):
+    client = request.client.host if request.client else ""
+    # Allow localhost and Render IPs
+    if client in LOCALHOST_IPS or any(ipaddress.ip_address(client) in net for net in ALLOWED_NETS):
+        return await call_next(request)
+    raise HTTPException(status_code=403, detail="Access restricted")
+
+
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
