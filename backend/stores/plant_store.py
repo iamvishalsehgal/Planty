@@ -1,13 +1,4 @@
-"""Plant data access — thin DB layer consumed by routes and pipeline."""
-
-def sync_plants(conn, plants: list[dict]) -> int:
-    """Upsert plant records. Returns count staged."""
-    count = 0
-    for p in plants:
-        conn.execute("""...""")  # handled by ingestion pipeline
-        count += 1
-    return count
-
+"""Plant data access — thin DB layer consumed by routes."""
 
 def list_plants(conn):
     """Return all plants with their latest health metrics."""
