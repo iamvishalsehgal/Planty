@@ -36,7 +36,7 @@ def health():
 
     return {
         "status": "ok",
-        "version": "3.8",
+        "version": "3.9",
         "uptime_seconds": uptime_seconds,
         "request_count": REQUEST_COUNT,
         "db_size_kb": db_size_kb,
