@@ -2965,11 +2965,15 @@
             document.getElementById('photoInput').click();
         }
 
+        let _photoCapturing = false;
+
         async function capturePhoto(event) {
+            if (_photoCapturing) return; // Prevent double-click
             const file = event.target.files[0];
             if (!file || !_photoTargetPlantId) { event.target.value = ''; return; }
             const plant = state.plants.find(p => p.id === _photoTargetPlantId);
             if (!plant) { event.target.value = ''; return; }
+            _photoCapturing = true;
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
@@ -2979,7 +2983,9 @@
                     render();
                     showToast('📸 Photo saved!', `${plant.name} has ${plant.photoCount} photo${plant.photoCount!==1?'s':''}`);
                 } catch (_) { showToast('❌ Error', 'Could not save photo'); }
+                _photoCapturing = false;
             };
+            reader.onerror = () => { _photoCapturing = false; };
             reader.readAsDataURL(file);
             event.target.value = '';
             _photoTargetPlantId = null;
