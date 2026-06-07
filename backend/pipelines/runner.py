@@ -1,11 +1,17 @@
-"""ETL orchestrator — runs all three pipeline layers and writes an audit log."""
+"""ETL orchestrator — runs all three pipeline layers, writes an audit log with timing."""
 
+import logging
+import time
 from datetime import datetime, timezone
 from db import get_conn
 from pipelines import ingestion, transform, aggregation
 
+logger = logging.getLogger("planty.runner")
+
 
 def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
+    """Run full ETL: ingestion → transform → aggregation. Returns result dict with duration_ms."""
+    t0 = time.perf_counter()
     started = datetime.now(timezone.utc).isoformat()
     conn = get_conn()
 
@@ -20,6 +26,7 @@ def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
         "events_staged": 0,
         "events_transformed": 0,
         "metrics_computed": 0,
+        "duration_ms": 0,
         "status": "success",
         "error": None,
     }
@@ -37,7 +44,10 @@ def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
         result["status"] = "error"
         result["error"] = str(e)
 
+    duration_ms = round((time.perf_counter() - t0) * 1000)
+    result["duration_ms"] = duration_ms
     finished = datetime.now(timezone.utc).isoformat()
+
     conn.execute("""
         UPDATE pipeline_runs SET
             finished_at         = ?,
@@ -57,4 +67,7 @@ def run_pipeline(plants: list[dict] = None, events: list[dict] = None) -> dict:
     conn.commit()
     conn.close()
 
+    logger.info(f"Pipeline {run_id} completed in {duration_ms}ms — "
+                f"staged {result['plants_staged']}p/{result['events_staged']}e, "
+                f"transformed {result['events_transformed']}, metrics {result['metrics_computed']}")
     return result

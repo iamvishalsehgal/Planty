@@ -283,3 +283,32 @@ def test_interval_boundary_max():
         "plants": [{"id": "b-max", "name": "Max", "interval": 30}]
     })
     assert response.status_code == 200
+
+
+# ── Health Metrics ────────────────────────────────────────────────
+
+def test_health_metrics():
+    """GET /api/health/metrics returns pipeline stats."""
+    response = client.get("/api/health/metrics")
+    assert response.status_code == 200
+    data = response.json()
+    assert "recent_runs" in data
+    assert "error_rate" in data
+
+
+def test_health_consistency():
+    """GET /api/health/consistency returns table counts."""
+    response = client.get("/api/health/consistency")
+    assert response.status_code == 200
+    data = response.json()
+    assert "plants_raw" in data
+    assert "events_raw" in data
+    assert "events_unprocessed" in data
+
+
+def test_pipeline_result_includes_duration():
+    """Pipeline result dict includes duration_ms field."""
+    response = client.post("/api/analytics/run-pipeline")
+    assert response.status_code == 200
+    data = response.json()
+    assert "duration_ms" in data
