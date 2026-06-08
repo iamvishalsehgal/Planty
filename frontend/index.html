@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,8 +10,25 @@
     <meta name="apple-mobile-web-app-title" content="Planty">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#10b981">
-    <meta name="description" content="Smart plant care - tracks watering, learns your patterns">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:3001 https://api.open-meteo.com; img-src 'self' data:;">
+    <meta name="description" content="Smart plant care PWA — adaptive watering schedules, weather-aware reminders, plant doctor diagnostics, and memorial tracking. Keep your plants thriving.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Planty — Smart Plant Care">
+    <meta property="og:description" content="Adaptive watering schedules, weather-aware reminders, and plant health tracking. The smart way to care for your plants.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://planty-26os.onrender.com">
+    <meta property="og:image" content="https://planty-26os.onrender.com/icon-512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:site_name" content="Planty">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Planty — Smart Plant Care">
+    <meta name="twitter:description" content="Adaptive watering schedules, weather-aware reminders, and plant health tracking.">
+    <meta name="twitter:image" content="https://planty-26os.onrender.com/icon-512.png">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com; img-src 'self' data: blob:;">
 
     <!-- Home screen icons -->
     <link rel="manifest" href="/manifest.json">
@@ -20,6 +37,21 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
 
     <title>Planty - Smart Plant Care</title>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Planty",
+      "description": "Smart plant care PWA with adaptive watering schedules and weather-aware reminders",
+      "url": "https://planty-26os.onrender.com",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "All",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "browserRequirements": "Requires JavaScript"
+    }
+    </script>
 
     <style>
         * {
@@ -1616,7 +1648,7 @@
     </header>
 
     <!-- Tab: Home -->
-    <div id="tab-home" class="tab-content active">
+    <div id="tab-home" class="tab-content active" role="main" aria-label="Home">
         <div class="content">
             <!-- Bottom Watering Info - Collapsible -->
             <div class="tip-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); margin-bottom: 20px; padding: 0; overflow: hidden;">
@@ -3572,37 +3604,105 @@
             showToast('📥 Downloaded!', 'Open to add to calendar');
         }
 
-        function exportData() {
-            const blob = new Blob([JSON.stringify({ plants: state.plants, deadPlants: state.deadPlants, history: state.history, exportDate: new Date().toISOString() }, null, 2)], { type: 'application/json' });
+        async function exportData() {
+            // Collect photos from IndexedDB
+            let photos = [];
+            try {
+                for (const plant of state.plants) {
+                    const plantPhotos = await photoStore.getPhotos(plant.id);
+                    photos.push(...plantPhotos);
+                }
+            } catch (_) { /* IndexedDB unavailable — skip photos */ }
+
+            const backup = {
+                version: '4.0',
+                exportDate: new Date().toISOString(),
+                plants: state.plants,
+                deadPlants: state.deadPlants,
+                history: state.history,
+                environment: JSON.parse(localStorage.getItem('planty_env') || '{}'),
+                streak: parseInt(localStorage.getItem('planty_streak') || '0'),
+                streakDate: localStorage.getItem('planty_streak_date') || null,
+                photos: photos,
+                plantCount: state.plants.length,
+                deadCount: state.deadPlants.length,
+                eventCount: state.history.length,
+            };
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = `planty-backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click(); URL.revokeObjectURL(url);
-            showToast('📤 Exported!', 'Backup saved');
+            showToast('📤 Exported!', `${backup.plantCount} plants, ${backup.eventCount} events, ${photos.length} photos`);
         }
 
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (data.plants) state.plants = data.plants;
-                    if (data.deadPlants) state.deadPlants = data.deadPlants;
-                    if (data.history) state.history = data.history;
+                    // Validate structure
+                    if (!data.plants || !Array.isArray(data.plants)) throw new Error('Missing plants array');
+                    if (!data.history || !Array.isArray(data.history)) throw new Error('Missing history array');
+                    if (!data.deadPlants) data.deadPlants = [];
+
+                    // Show confirmation
+                    const plantCount = data.plants.length;
+                    const eventCount = data.history.length;
+                    const photoCount = (data.photos || []).length;
+                    const exportDate = data.exportDate ? new Date(data.exportDate).toLocaleDateString() : 'unknown';
+                    if (!confirm(`Restore backup from ${exportDate}?\n\nPlants: ${plantCount}\nEvents: ${eventCount}\nPhotos: ${photoCount}\n\nThis will REPLACE all current data.`)) {
+                        event.target.value = '';
+                        return;
+                    }
+
+                    // Save current as undo state
+                    saveUndoState();
+
+                    // Restore data
+                    state.plants = data.plants;
+                    state.deadPlants = data.deadPlants;
+                    state.history = data.history;
+                    if (data.environment) {
+                        localStorage.setItem('planty_env', JSON.stringify(data.environment));
+                        loadEnvironment();
+                    }
+                    if (data.streak) localStorage.setItem('planty_streak', data.streak);
+                    if (data.streakDate) localStorage.setItem('planty_streak_date', data.streakDate);
+
+                    // Restore photos
+                    if (data.photos && data.photos.length > 0) {
+                        try {
+                            for (const photo of data.photos) {
+                                await photoStore.savePhoto(photo.plantId, photo.data, photo.caption || '');
+                            }
+                        } catch (_) { console.warn('Photo restore partial — some photos may not be restored'); }
+                    }
+
                     save(); render();
-                    showToast('📥 Imported!', `${state.plants.length} plants restored`);
-                } catch { showToast('❌ Error', 'Invalid backup file'); }
+                    showToast('📥 Imported!', `${plantCount} plants, ${eventCount} events restored`);
+                } catch (err) {
+                    showToast('❌ Invalid backup', err.message || 'File is corrupted');
+                }
             };
             reader.readAsText(file);
             event.target.value = '';
         }
 
         function clearAllData() {
-            if (!confirm('Delete ALL data?')) return;
+            if (!confirm('Delete ALL data? This cannot be undone.')) return;
             localStorage.clear();
-            location.reload();
+            // Also clear IndexedDB photos
+            try {
+                const req = indexedDB.deleteDatabase('planty-photos');
+                req.onsuccess = () => location.reload();
+                req.onerror = () => location.reload();
+                setTimeout(() => location.reload(), 2000); // Fallback
+            } catch (_) {
+                location.reload();
+            }
         }
 
         function showTab(tabId) {
@@ -3612,8 +3712,36 @@
             document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
         }
 
-        function showModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        let _lastFocusedEl = null;
+        function showModal(id) {
+            _lastFocusedEl = document.activeElement;
+            const modal = document.getElementById(id);
+            modal.classList.add('active');
+            // Focus first focusable element in modal
+            const focusable = modal.querySelector('button, [onclick], input, select');
+            if (focusable) setTimeout(() => focusable.focus(), 100);
+            // Trap focus inside modal
+            modal.addEventListener('keydown', _trapFocus);
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('active');
+            modal.removeEventListener('keydown', _trapFocus);
+            // Restore focus
+            if (_lastFocusedEl && typeof _lastFocusedEl.focus === 'function') {
+                setTimeout(() => _lastFocusedEl.focus(), 100);
+                _lastFocusedEl = null;
+            }
+        }
+        function _trapFocus(e) {
+            if (e.key !== 'Tab') return;
+            const modal = e.currentTarget;
+            const focusable = modal.querySelectorAll('button, [onclick], input, select');
+            if (!focusable.length) return;
+            const first = focusable[0], last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
 
         function showToast(title, subtitle = '') {
             const toast = document.getElementById('toast');
@@ -3712,6 +3840,32 @@
             if (!('serviceWorker' in navigator)) return;
             try {
                 swRegistration = await navigator.serviceWorker.register('/sw.js');
+                // Listen for updates
+                swRegistration.addEventListener('updatefound', () => {
+                    const newWorker = swRegistration.installing;
+                    if (!newWorker) return;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New version available — show update prompt
+                            const toast = document.getElementById('toast');
+                            if (toast && !toast.dataset.updateShown) {
+                                toast.dataset.updateShown = '1';
+                                document.getElementById('toastTitle').textContent = '🔄 Update Available';
+                                document.getElementById('toastSubtitle').textContent = 'Tap to refresh';
+                                toast.classList.add('active');
+                                toast.onclick = () => {
+                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    window.location.reload();
+                                };
+                                setTimeout(() => toast.classList.remove('active'), 8000);
+                            }
+                        }
+                    });
+                });
+                // Check for updates every 30 minutes
+                window._swUpdateInterval = setInterval(() => {
+                    swRegistration.update().catch(() => {});
+                }, 1800000);
             } catch (e) { console.warn('Service Worker registration failed:', e.message); }
         }
 
@@ -3908,9 +4062,53 @@
         window.addEventListener('beforeunload', () => {
             clearInterval(_weatherInterval);
             if (typeof _notifyInterval !== 'undefined') clearInterval(_notifyInterval);
+            if (typeof window._swUpdateInterval !== 'undefined') clearInterval(window._swUpdateInterval);
         });
 
         render();
+    </script>
+
+    <!-- Client-side error reporting -->
+    <script>
+        (function() {
+            var apiBase = window.location.hostname === 'localhost' ? 'http://localhost:3001' : window.location.origin;
+            var reported = new Set();
+            window.addEventListener('error', function(e) {
+                var key = e.message + '|' + (e.filename || '');
+                if (reported.has(key)) return; // Deduplicate
+                reported.add(key);
+                try {
+                    fetch(apiBase + '/api/health/client-error', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: e.message || 'Unknown error',
+                            stack: (e.error && e.error.stack) ? e.error.stack.substring(0, 2000) : null,
+                            url: e.filename || window.location.href,
+                            timestamp: new Date().toISOString()
+                        })
+                    }).catch(function(){});
+                } catch(_) {}
+            });
+            window.addEventListener('unhandledrejection', function(e) {
+                var msg = e.reason ? (e.reason.message || String(e.reason)) : 'Unhandled rejection';
+                var key = msg;
+                if (reported.has(key)) return;
+                reported.add(key);
+                try {
+                    fetch(apiBase + '/api/health/client-error', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: msg,
+                            stack: (e.reason && e.reason.stack) ? e.reason.stack.substring(0, 2000) : null,
+                            url: window.location.href,
+                            timestamp: new Date().toISOString()
+                        })
+                    }).catch(function(){});
+                } catch(_) {}
+            });
+        })();
     </script>
 </body>
 </html>

@@ -99,11 +99,22 @@ def init_db():
             error           TEXT
         );
 
+        CREATE TABLE IF NOT EXISTS error_log (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp       TEXT NOT NULL,
+            endpoint        TEXT NOT NULL,
+            error_type      TEXT NOT NULL,
+            message         TEXT NOT NULL,
+            source          TEXT DEFAULT 'server',
+            traceback       TEXT
+        );
+
         -- Indexes for analytics queries
         CREATE INDEX IF NOT EXISTS idx_events_raw_plant ON events_raw(plant_id);
         CREATE INDEX IF NOT EXISTS idx_care_events_plant ON care_events(plant_id);
         CREATE INDEX IF NOT EXISTS idx_health_plant_computed ON plant_health_metrics(plant_id, computed_at DESC);
         CREATE INDEX IF NOT EXISTS idx_pipeline_runs_started ON pipeline_runs(started_at DESC);
+        CREATE INDEX IF NOT EXISTS idx_error_log_timestamp ON error_log(timestamp DESC);
     """)
     conn.commit()
     conn.close()

@@ -2,11 +2,14 @@
   "name": "Planty - Smart Plant Care",
   "short_name": "Planty",
   "description": "Track watering, learn your patterns, keep your plants alive",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#f0fdf4",
   "theme_color": "#10b981",
-  "orientation": "portrait",
+  "orientation": "any",
+  "categories": ["lifestyle", "health", "productivity"],
   "icons": [
     {
       "src": "/icon-512.png",
@@ -14,5 +17,21 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Add Plant",
+      "short_name": "Add",
+      "description": "Add a new plant",
+      "url": "/?action=add"
+    },
+    {
+      "name": "Water Schedule",
+      "short_name": "Schedule",
+      "description": "View watering schedule",
+      "url": "/?action=schedule"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
 }

@@ -1,10 +1,12 @@
-const CACHE = 'planty-v3.9';
-const SHELL = ['/', '/index.html', '/manifest.json', '/icon-512.png', '/icon-512.png'];
+const CACHE = 'planty-v4.0';
+const SHELL = ['/', '/index.html', '/manifest.json', '/icon-512.png', '/favicon.svg'];
 
 // Install — pre-cache app shell
 self.addEventListener('install', event => {
     event.waitUntil(
-        caches.open(CACHE).then(cache => cache.addAll(SHELL))
+        caches.open(CACHE).then(cache => cache.addAll(SHELL).catch(e => {
+            console.warn('SW: failed to cache some shell assets', e);
+        }))
     );
     self.skipWaiting();
 });
@@ -18,14 +20,21 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch — cache-first with network fallback
+// Fetch — cache-first for static assets, network-only for API
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
+    const url = new URL(event.request.url);
+
+    // Never cache API calls — always go to network
+    if (url.pathname.startsWith('/api/')) {
+        return; // Let browser handle normally
+    }
+
     event.respondWith(
         caches.match(event.request).then(cached =>
             cached || fetch(event.request).then(response => {
-                // Cache successful same-origin responses
-                if (response.ok && new URL(event.request.url).origin === self.location.origin) {
+                // Cache successful same-origin responses (static assets only)
+                if (response.ok && response.type === 'basic' && !url.pathname.startsWith('/api/')) {
                     const clone = response.clone();
                     caches.open(CACHE).then(cache => cache.put(event.request, clone));
                 }

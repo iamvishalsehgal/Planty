@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://planty-26os.onrender.com/sitemap.xml

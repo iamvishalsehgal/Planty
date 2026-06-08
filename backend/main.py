@@ -24,6 +24,10 @@ from routes.analytics import router as analytics_router
 from routes.health import router as health_router
 
 FRONTEND = Path(__file__).parent.parent / "frontend"
+FRONTEND_DIST = FRONTEND / "dist"
+# In production (Render), serve from built dist/; in dev, serve from frontend/
+STATIC_DIR = FRONTEND_DIST if FRONTEND_DIST.is_dir() else FRONTEND
+STATIC_PUBLIC = STATIC_DIR / "public"
 
 # ── Rate limiter (simple token bucket, 10 req/s per IP) ──────────
 _rate_buckets: dict[str, tuple[float, int]] = defaultdict(lambda: (time.time(), 10))
@@ -77,12 +81,13 @@ app.include_router(events_router)
 app.include_router(analytics_router)
 app.include_router(health_router)
 
-# ── Request middleware (rate limit + count + request ID) ──────────
+# ── Request middleware (rate limit + count + request ID + timing) ──
 @app.middleware("http")
 async def process_request(request: Request, call_next):
     # Request ID
     req_id = str(uuid.uuid4())[:8]
     request.state.req_id = req_id
+    t0 = time.perf_counter()
 
     # Rate limit (skip health endpoint and test mode)
     if not os.environ.get("PLANTY_TESTING") and not request.url.path.startswith("/api/health"):
@@ -99,19 +104,41 @@ async def process_request(request: Request, call_next):
     increment_request_count()
     response = await call_next(request)
     response.headers["X-Request-ID"] = req_id
+
+    # Record performance (skip health endpoints to avoid noise)
+    if not os.environ.get("PLANTY_TESTING"):
+        duration_ms = (time.perf_counter() - t0) * 1000
+        try:
+            from error_tracker import record_request
+            record_request(request.url.path, duration_ms)
+        except Exception:
+            pass
+
     return response
 
 
 @app.get("/")
 @app.head("/")
 def serve_frontend():
-    return FileResponse(FRONTEND / "index.html")
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/{full_path:path}")
 @app.head("/{full_path:path}")
 def catch_all(full_path: str):
-    static_file = FRONTEND / "public" / full_path
-    if static_file.is_file():
-        return FileResponse(static_file)
-    return FileResponse(FRONTEND / "index.html")
+    # Block path traversal attempts
+    if ".." in full_path or full_path.startswith("/"):
+        full_path = full_path.lstrip("/")
+    if ".." in full_path:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    # Check flat dist/ structure first (production), then public/ subfolder (dev)
+    root_file = (STATIC_DIR / full_path).resolve()
+    public_file = (STATIC_PUBLIC / full_path).resolve()
+
+    # Ensure resolved paths stay within STATIC_DIR
+    if root_file.is_file() and str(root_file).startswith(str(STATIC_DIR.resolve())):
+        return FileResponse(root_file)
+    if public_file.is_file() and str(public_file).startswith(str(STATIC_DIR.resolve())):
+        return FileResponse(public_file)
+    return FileResponse(STATIC_DIR / "index.html")
