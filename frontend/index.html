@@ -354,42 +354,28 @@
         /* Plant Card */
         .plant-card {
             background: white;
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            margin-bottom: 16px;
-            transition: all 0.3s;
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+            margin-bottom: 12px;
+            transition: all 0.2s;
             position: relative;
             overflow: hidden;
             contain: layout style paint;
             content-visibility: auto;
             contain-intrinsic-size: 300px;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .plant-card:active {
+            transform: scale(0.995);
         }
         .plant-card.needs-water {
-            will-change: box-shadow;
+            border-left: 3px solid var(--water-blue);
         }
 
-        .plant-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--water-blue) 100%);
-        }
-
-        .plant-card.protected::before {
-            background: linear-gradient(90deg, #f59e0b 0%, #10b981 100%);
-        }
-
-        .plant-card.needs-water {
-            animation: needsWater 2s infinite;
-        }
-
-        @keyframes needsWater {
-            0%, 100% { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-            50% { box-shadow: 0 4px 25px rgba(59, 130, 246, 0.3); }
+        .plant-card.overdue-water {
+            border-left: 3px solid var(--danger);
+            background: #fffbfb;
         }
 
         .plant-header {
@@ -1060,6 +1046,52 @@
         .week-day-plants {
             font-size: 14px;
         }
+
+        /* ── Contribution Year Grid ─────────────────────────────── */
+        .contribution-grid {
+            display: flex;
+            gap: 3px;
+            overflow-x: auto;
+            padding: 4px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .contrib-col {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 12px;
+        }
+        .contrib-col-label {
+            font-size: 9px;
+            color: var(--gray-400);
+            text-align: center;
+            margin-bottom: 2px;
+            min-height: 12px;
+        }
+        .contrib-cell {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            background: #ebedf0;
+            cursor: pointer;
+            transition: transform 0.15s;
+            flex-shrink: 0;
+        }
+        .contrib-cell:hover, .contrib-cell:active {
+            transform: scale(1.5);
+            z-index: 2;
+        }
+        .contrib-cell[data-level="1"] { background: #9be9a8; }
+        .contrib-cell[data-level="2"] { background: #40c463; }
+        .contrib-cell[data-level="3"] { background: #30a14e; }
+        .contrib-cell[data-level="4"] { background: #216e39; }
+        .contrib-cell[data-missed="true"] { background: #ffcdd2; }
+        body.dark-mode .contrib-cell { background: #1e293b; }
+        body.dark-mode .contrib-cell[data-level="1"] { background: #0e4429; }
+        body.dark-mode .contrib-cell[data-level="2"] { background: #006d32; }
+        body.dark-mode .contrib-cell[data-level="3"] { background: #26a641; }
+        body.dark-mode .contrib-cell[data-level="4"] { background: #39d353; }
+        body.dark-mode .contrib-cell[data-missed="true"] { background: #5c1a1a; }
 
         .upcoming-list {
             display: flex;
@@ -1747,11 +1779,18 @@
 
             <div class="schedule-card">
                 <h2 style="display:flex;justify-content:space-between;align-items:center;">
-                    📅 <span id="scheduleTitle">This Week</span>
-                    <button onclick="toggleCalendarView()" style="font-size:13px;padding:6px 12px;border:2px solid var(--gray-200);border-radius:20px;background:white;cursor:pointer;" id="calendarToggleBtn">📅 Month</button>
+                    📅 <span id="scheduleTitle">Watering Year</span>
+                    <div style="display:flex;gap:4px;align-items:center;font-size:11px;color:var(--gray-400);">
+                        <span>Less</span>
+                        <span style="width:10px;height:10px;border-radius:2px;background:#ebedf0;"></span>
+                        <span style="width:10px;height:10px;border-radius:2px;background:#9be9a8;"></span>
+                        <span style="width:10px;height:10px;border-radius:2px;background:#40c463;"></span>
+                        <span style="width:10px;height:10px;border-radius:2px;background:#30a14e;"></span>
+                        <span style="width:10px;height:10px;border-radius:2px;background:#216e39;"></span>
+                        <span>More</span>
+                    </div>
                 </h2>
-                <div id="weeklySchedule" class="weekly-schedule"></div>
-                <div id="monthlySchedule" style="display:none;"></div>
+                <div id="yearGrid" class="contribution-grid"></div>
             </div>
 
             <div class="schedule-card">
@@ -3168,12 +3207,12 @@
         function render(immediate = false) {
             if (immediate) {
                 clearTimeout(_renderTimer);
-                renderPlants(); renderMemorial(); renderSchedule(); renderMonthView();
+                renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid();
                 return;
             }
             if (_renderTimer) return; // debounce — max once per animation frame
             _renderTimer = requestAnimationFrame(() => {
-                renderPlants(); renderMemorial(); renderSchedule(); renderMonthView();
+                renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid();
                 _renderTimer = null;
             });
         }
@@ -3272,7 +3311,7 @@
                         <div style="color:#14532d;font-style:italic;">💡 ${plant.species.tip}</div>
                     </div>` : '';
                 return `
-                    <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''}">
+                    <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''} ${daysUntil < 0 ? 'overdue-water' : ''}">
                         <div class="plant-header">
                             <div class="plant-emoji"><span class="emoji-fallback">${plant.emoji}</span>${getPlantImageUrl(plant.normalized) ? `<img src="${getPlantImageUrl(plant.normalized)}" loading="lazy" alt="${plant.name}" onerror="this.remove()" class="loaded">` : ''}</div>
                             <div class="plant-info">
@@ -3287,9 +3326,14 @@
                             <div class="stat-pill"><div class="stat-value">${daysSince === null ? '-' : daysSince + 'd'}</div><div class="stat-label">Since Last</div></div>
                         </div>
                         <div class="water-countdown ${countdownClass}">
-                            <div class="countdown-label">Next watering</div>
-                            <div class="countdown-value">${countdownText}</div>
-                            <div class="countdown-subtext">${subtext}</div>
+                            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                                <div class="countdown-label" style="margin:0;">Next watering</div>
+                                <div style="font-size:12px;color:var(--gray-500);">${daysSince === null ? 'Never watered' : `${daysSince}d / ${interval}d`}</div>
+                            </div>
+                            <div style="background:var(--gray-200);border-radius:4px;height:6px;overflow:hidden;margin-bottom:6px;">
+                                <div style="height:100%;border-radius:4px;background:${daysUntil <= 0 ? 'var(--danger)' : 'var(--primary)'};width:${daysSince === null ? '0' : Math.min(100, Math.round((daysSince / (daysSince + daysUntil || 1)) * 100))}%;transition:width 0.5s;"></div>
+                            </div>
+                            <div class="countdown-subtext" style="text-align:center;">${subtext}</div>
                         </div>
                         <button class="water-btn ${!canWater.allowed ? 'water-btn-disabled' : ''}" onclick="waterPlant(${plant.id})">
                             <span>💧</span>${canWater.allowed ? 'I Watered This' : `Wait ${canWater.hoursLeft}h`}
@@ -3374,47 +3418,68 @@
             }).join('');
         }
 
-        let _calendarView = 'week'; // 'week' or 'month'
-
-        function toggleCalendarView() {
-            _calendarView = _calendarView === 'week' ? 'month' : 'week';
-            document.getElementById('calendarToggleBtn').textContent = _calendarView === 'week' ? '📅 Month' : '📅 Week';
-            document.getElementById('scheduleTitle').textContent = _calendarView === 'week' ? 'This Week' : 'This Month';
-            document.getElementById('weeklySchedule').style.display = _calendarView === 'week' ? '' : 'none';
-            document.getElementById('monthlySchedule').style.display = _calendarView === 'month' ? '' : 'none';
-            render();
-        }
-
-        function renderMonthView() {
-            if (_calendarView !== 'month') return;
+        function renderYearGrid() {
+            const container = document.getElementById('yearGrid');
+            if (!container) return;
             const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-            // Build watering day set
-            const waterDays = new Set();
+            const yearStart = new Date(today.getFullYear(), 0, 1);
+            const yearEnd = new Date(today.getFullYear(), 11, 31);
+
+            // Index all watering events by date string
+            const waterDates = {};
+            state.history.forEach(h => {
+                const d = new Date(h.date).toISOString().split('T')[0];
+                waterDates[d] = (waterDates[d] || 0) + 1;
+            });
+
+            // Also mark overdue days (had plants, didn't water)
+            const overdueDates = new Set();
             state.plants.forEach(p => {
-                for (let d = 1; d <= daysInMonth; d++) {
-                    const date = new Date(year, month, d);
-                    const daysUntil = getDaysUntilNextWater(p.id, p.interval);
-                    const dueDate = new Date(); dueDate.setDate(today.getDate() + daysUntil);
-                    if (dueDate.getDate() === d && dueDate.getMonth() === month && dueDate.getFullYear() === year) {
-                        waterDays.add(d);
+                const history = getPlantHistory(p.id);
+                if (history.length === 0) return;
+                const lastWater = new Date(history[history.length - 1].date);
+                const interval = getAdjustedInterval(p.id, p.interval);
+                // Mark days between when watering was due and today as potentially missed
+                for (let d = new Date(lastWater); d <= today; d.setDate(d.getDate() + 1)) {
+                    const daysSince = Math.floor((d - lastWater) / 86400000);
+                    if (daysSince > interval) {
+                        overdueDates.add(d.toISOString().split('T')[0]);
                     }
                 }
             });
-            let html = `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;">`;
-            ['S','M','T','W','T','F','S'].forEach(d => html += `<div style="font-size:11px;color:var(--gray-500);font-weight:600;padding:4px;">${d}</div>`);
-            for (let i = 0; i < firstDay; i++) html += '<div></div>';
-            for (let d = 1; d <= daysInMonth; d++) {
-                const isToday = d === today.getDate();
-                const hasWater = waterDays.has(d);
-                html += `<div style="padding:6px;border-radius:8px;font-size:14px;font-weight:${isToday?'700':'400'};background:${isToday?'var(--primary-light)':hasWater?'#dbeafe':'var(--gray-50)'};${hasWater?'border:2px solid var(--water-blue)':''}">${hasWater?'💧':''}${d}</div>`;
+
+            // Build columns: Jan through current month
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const currentMonth = today.getMonth();
+            let html = '';
+
+            for (let m = 0; m <= currentMonth; m++) {
+                const daysInMonth = new Date(today.getFullYear(), m + 1, 0).getDate();
+                const firstDayOfWeek = new Date(today.getFullYear(), m, 1).getDay(); // 0=Sun
+                let cells = '';
+                // Empty cells for days before the 1st
+                for (let e = 0; e < firstDayOfWeek; e++) cells += '<div class="contrib-cell" style="background:transparent;"></div>';
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const dateStr = `${today.getFullYear()}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                    const count = waterDates[dateStr] || 0;
+                    const isOverdue = overdueDates.has(dateStr) && count === 0;
+                    const isToday = d === today.getDate() && m === today.getMonth();
+                    let level = 0;
+                    if (count > 0) {
+                        if (count >= 4) level = 4;
+                        else if (count >= 3) level = 3;
+                        else if (count >= 2) level = 2;
+                        else level = 1;
+                    }
+                    const title = `${months[m]} ${d}: ${count} watering${count!==1?'s':''}${isOverdue?' (missed)':''}`;
+                    cells += `<div class="contrib-cell" data-level="${level}" data-missed="${isOverdue && count === 0}" title="${title}"${isToday ? ' style="box-shadow:0 0 0 2px var(--primary);"' : ''}></div>`;
+                }
+                html += `<div class="contrib-col"><div class="contrib-col-label">${months[m]}</div>${cells}</div>`;
             }
-            html += '</div>';
-            document.getElementById('monthlySchedule').innerHTML = html;
+            container.innerHTML = html;
+            // Scroll to current month
+            const cols = container.querySelectorAll('.contrib-col');
+            if (cols.length > 0) cols[cols.length - 1].scrollIntoView({ inline: 'center', behavior: 'smooth' });
         }
 
         function renderSchedule() {
@@ -3426,19 +3491,6 @@
                 document.getElementById('statOverdue').textContent = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) < 0).length;
             }
             renderAnalytics();
-            const today = new Date();
-            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            document.getElementById('weeklySchedule').innerHTML = Array.from({length: 7}, (_, i) => {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i);
-                const dayPlants = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) === i);
-                return `
-                    <div class="week-day ${i === 0 ? 'today' : ''} ${dayPlants.length > 0 ? 'has-task' : ''}">
-                        <div class="week-day-name">${dayNames[date.getDay()]}</div>
-                        <div class="week-day-num">${date.getDate()}</div>
-                        <div class="week-day-plants">${dayPlants.map(p => p.emoji).join('') || '·'}</div>
-                    </div>`;
-            }).join('');
             const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             const upcoming = state.plants.map(p => ({ plant: p, daysUntil: getDaysUntilNextWater(p.id, p.interval) })).sort((a, b) => a.daysUntil - b.daysUntil);
             const upcomingContainer = document.getElementById('upcomingList');
