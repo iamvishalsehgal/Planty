@@ -1769,7 +1769,10 @@
             <div id="searchBar" style="display:none;margin-bottom:12px;">
                 <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="render()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
                 <div style="display:flex;gap:6px;margin-top:8px;" id="filterButtons">
-                    ${['All','Needs Water','Healthy','Protected'].map(f => `<button class="filter-btn" data-filter="${f.toLowerCase().replace(' ','_')}" onclick="setFilter('${f.toLowerCase().replace(' ','_')}')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">${f}</button>`).join('')}
+                    <button class="filter-btn" data-filter="all" onclick="setFilter('all')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">All</button>
+                    <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Needs Water</button>
+                    <button class="filter-btn" data-filter="healthy" onclick="setFilter('healthy')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Healthy</button>
+                    <button class="filter-btn" data-filter="protected" onclick="setFilter('protected')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Protected</button>
                 </div>
                 <div id="filterCount" style="font-size:12px;color:var(--gray-500);margin-top:6px;"></div>
             </div>
