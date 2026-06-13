@@ -2456,14 +2456,53 @@
             return SPECIES[key] || null;
         }
 
-        const state = {
-            plants: JSON.parse(localStorage.getItem('planty_plants') || '[]'),
-            deadPlants: JSON.parse(localStorage.getItem('planty_dead') || '[]'),
-            history: JSON.parse(localStorage.getItem('planty_history') || '[]'),
-            pendingPlant: null,
-            pendingRevival: null,
-            selectedCause: 'unknown'
-        };
+        // ── Single versioned state store ─────────────────────────────
+        const STORE_VERSION = 1;
+        const STORE_KEY = 'planty_state';
+
+        function _loadState() {
+            try {
+                const raw = localStorage.getItem(STORE_KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    if (data.version === STORE_VERSION) return data;
+                    // Migrate from older versions
+                    if (data.plants || data.deadPlants || data.history) {
+                        return { version: STORE_VERSION, plants: data.plants || [], deadPlants: data.deadPlants || [], history: (data.history || []).slice(-1000) };
+                    }
+                }
+            } catch (_) {}
+            // Try legacy keys (v0 — stored separately)
+            try {
+                const plants = JSON.parse(localStorage.getItem('planty_plants') || '[]');
+                const deadPlants = JSON.parse(localStorage.getItem('planty_dead') || '[]');
+                const history = JSON.parse(localStorage.getItem('planty_history') || '[]');
+                if (plants.length || deadPlants.length || history.length) {
+                    const migrated = { version: STORE_VERSION, plants, deadPlants, history: history.slice(-1000) };
+                    localStorage.removeItem('planty_plants');
+                    localStorage.removeItem('planty_dead');
+                    localStorage.removeItem('planty_history');
+                    return migrated;
+                }
+            } catch (_) {}
+            return { version: STORE_VERSION, plants: [], deadPlants: [], history: [] };
+        }
+
+        function _saveState() {
+            try {
+                const data = { version: STORE_VERSION, plants: state.plants, deadPlants: state.deadPlants, history: state.history.slice(-1000) };
+                localStorage.setItem(STORE_KEY, JSON.stringify(data));
+                return true;
+            } catch (e) {
+                if (e.name === 'QuotaExceededError' || e.code === 22) {
+                    state.history = state.history.slice(-200);
+                    try { _saveState(); return true; } catch (_) {}
+                }
+                return false;
+            }
+        }
+
+        const state = { pendingPlant: null, pendingRevival: null, selectedCause: 'unknown', ..._loadState() };
 
         let _filter = 'all';
         function setFilter(f) {
@@ -2491,29 +2530,7 @@
         }
 
         function save() {
-            const _safeSet = (key, value) => {
-                try {
-                    localStorage.setItem(key, JSON.stringify(value));
-                    return true;
-                } catch (e) {
-                    if (e.name === 'QuotaExceededError' || e.code === 22) {
-                        console.warn('localStorage quota exceeded — trimming history');
-                        state.history = state.history.slice(-100);
-                        if (state.history.length > 0) save(); // Retry with trimmed data
-                        return false;
-                    }
-                    throw e;
-                }
-            };
-            // Cap history at 1000 entries
-            if (state.history.length > 1000) state.history = state.history.slice(-1000);
-            // Early quota check — trim aggressively if estimated > 4MB
-            const estimated = JSON.stringify(state).length * 2;
-            if (estimated > 4_000_000) state.history = state.history.slice(-200);
-
-            _safeSet('planty_plants', state.plants);
-            _safeSet('planty_dead', state.deadPlants);
-            _safeSet('planty_history', state.history);
+            _saveState();
             syncToBackend();
             updateStreak();
         }
@@ -3700,7 +3717,7 @@
             } catch (_) { /* IndexedDB unavailable — skip photos */ }
 
             const backup = {
-                version: '4.0',
+                storeVersion: STORE_VERSION,
                 exportDate: new Date().toISOString(),
                 plants: state.plants,
                 deadPlants: state.deadPlants,
@@ -3709,16 +3726,13 @@
                 streak: parseInt(localStorage.getItem('planty_streak') || '0'),
                 streakDate: localStorage.getItem('planty_streak_date') || null,
                 photos: photos,
-                plantCount: state.plants.length,
-                deadCount: state.deadPlants.length,
-                eventCount: state.history.length,
             };
             const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url; a.download = `planty-backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click(); URL.revokeObjectURL(url);
-            showToast('📤 Exported!', `${backup.plantCount} plants, ${backup.eventCount} events, ${photos.length} photos`);
+            showToast('📤 Exported!', `${state.plants.length} plants, ${state.history.length} events, ${photos.length} photos`);
         }
 
         function importData(event) {
@@ -3728,46 +3742,29 @@
             reader.onload = async function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    // Validate structure
-                    if (!data.plants || !Array.isArray(data.plants)) throw new Error('Missing plants array');
-                    if (!data.history || !Array.isArray(data.history)) throw new Error('Missing history array');
+                    if (!data.plants || !Array.isArray(data.plants)) throw new Error('Invalid backup: missing plants');
+                    if (!data.history) data.history = [];
                     if (!data.deadPlants) data.deadPlants = [];
 
-                    // Show confirmation
-                    const plantCount = data.plants.length;
-                    const eventCount = data.history.length;
-                    const photoCount = (data.photos || []).length;
                     const exportDate = data.exportDate ? new Date(data.exportDate).toLocaleDateString() : 'unknown';
-                    if (!confirm(`Restore backup from ${exportDate}?\n\nPlants: ${plantCount}\nEvents: ${eventCount}\nPhotos: ${photoCount}\n\nThis will REPLACE all current data.`)) {
-                        event.target.value = '';
-                        return;
+                    const photos = data.photos || [];
+                    if (!confirm(`Restore backup from ${exportDate}?\n\nPlants: ${data.plants.length}\nEvents: ${data.history.length}\nPhotos: ${photos.length}\n\nThis REPLACES all current data.`)) {
+                        event.target.value = ''; return;
                     }
 
-                    // Save current as undo state
                     saveUndoState();
-
-                    // Restore data
                     state.plants = data.plants;
                     state.deadPlants = data.deadPlants;
                     state.history = data.history;
-                    if (data.environment) {
-                        localStorage.setItem('planty_env', JSON.stringify(data.environment));
-                        loadEnvironment();
-                    }
+                    if (data.environment) { localStorage.setItem('planty_env', JSON.stringify(data.environment)); loadEnvironment(); }
                     if (data.streak) localStorage.setItem('planty_streak', data.streak);
                     if (data.streakDate) localStorage.setItem('planty_streak_date', data.streakDate);
-
-                    // Restore photos
-                    if (data.photos && data.photos.length > 0) {
-                        try {
-                            for (const photo of data.photos) {
-                                await photoStore.savePhoto(photo.plantId, photo.data, photo.caption || '');
-                            }
-                        } catch (_) { console.warn('Photo restore partial — some photos may not be restored'); }
+                    if (photos.length > 0) {
+                        for (const p of photos) { try { await photoStore.savePhoto(p.plantId, p.data, p.caption || ''); } catch (_) {} }
                     }
 
                     save(); render();
-                    showToast('📥 Imported!', `${plantCount} plants, ${eventCount} events restored`);
+                    showToast('📥 Imported!', `${data.plants.length} plants, ${data.history.length} events`);
                 } catch (err) {
                     showToast('❌ Invalid backup', err.message || 'File is corrupted');
                 }
