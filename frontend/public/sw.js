@@ -1,4 +1,4 @@
-const CACHE = 'planty-v4.0';
+const CACHE = 'planty-v4.1';
 const SHELL = ['/', '/index.html', '/manifest.json', '/icon-512.png', '/favicon.svg'];
 
 // Install — pre-cache app shell
