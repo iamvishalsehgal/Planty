@@ -154,16 +154,44 @@
         }
 
         body {
-            background: #f0fdf4;
-            background-image:
-                radial-gradient(ellipse at 20% 0%, #d1fae5 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, #a7f3d0 0%, transparent 40%);
+            background: linear-gradient(170deg, #f0fdf4 0%, #ecfdf5 30%, #f8fafc 60%, #f0fdf4 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             min-height: -webkit-fill-available;
             padding-bottom: calc(84px + var(--safe-bottom));
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             color: var(--gray-800);
+        }
+        /* Animated background orbs */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+            top: -80px; right: -80px;
+            animation: bgOrb1 20s ease-in-out infinite;
+        }
+        body::after {
+            width: 250px; height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
+            bottom: -60px; left: -60px;
+            animation: bgOrb2 25s ease-in-out infinite;
+        }
+        @keyframes bgOrb1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-30px, 40px) rotate(120deg); }
+            66% { transform: translate(20px, -20px) rotate(240deg); }
+        }
+        @keyframes bgOrb2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(40px, -30px) rotate(180deg); }
         }
 
         /* Header */
@@ -451,15 +479,24 @@
             background: var(--surface);
             border-radius: var(--radius-lg);
             padding: 18px;
-            box-shadow: var(--shadow-card);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
             margin-bottom: 14px;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
             position: relative;
             overflow: hidden;
-            contain: layout style paint;
-            content-visibility: auto;
-            contain-intrinsic-size: 200px;
             border: none;
+            animation: cardEnter 0.4s ease-out both;
+            opacity: 0;
+        }
+        .plant-card:nth-child(1) { animation-delay: 0.05s; }
+        .plant-card:nth-child(2) { animation-delay: 0.10s; }
+        .plant-card:nth-child(3) { animation-delay: 0.15s; }
+        .plant-card:nth-child(4) { animation-delay: 0.20s; }
+        .plant-card:nth-child(5) { animation-delay: 0.25s; }
+        .plant-card:nth-child(6) { animation-delay: 0.30s; }
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(12px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         /* Left-edge accent bar — always visible, color = plant state */
         .plant-card::before {
@@ -504,10 +541,19 @@
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255,255,255,0.6);
             overflow: hidden;
             position: relative;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        .plant-card:hover .plant-emoji {
+            transform: scale(1.05);
+        }
+        .plant-emoji.type-1 { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); }
+        .plant-emoji.type-2 { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(255,255,255,0.6); }
+        .plant-emoji.type-3 { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); box-shadow: 0 4px 16px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255,255,255,0.6); }
+        .plant-emoji.type-4 { background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255,255,255,0.6); }
+        .plant-emoji.type-5 { background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); box-shadow: 0 4px 16px rgba(236, 72, 153, 0.15), inset 0 1px 0 rgba(255,255,255,0.6); }
         .plant-emoji img {
             width: 100%;
             height: 100%;
@@ -553,77 +599,94 @@
         .stat-pill {
             flex: 1;
             text-align: center;
-            padding: 10px;
-            background: var(--gray-50);
-            border-radius: 12px;
+            padding: 10px 8px;
+            background: var(--surface-subtle);
+            border-radius: 14px;
+            border: 1px solid var(--border-subtle);
+            transition: background 0.2s ease;
         }
+        .stat-pill.health { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); }
+        .stat-pill.water  { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); }
+        .stat-pill.age    { background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); }
 
         .stat-value {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            color: var(--gray-800);
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            font-variant-numeric: tabular-nums;
         }
 
         .stat-label {
             font-size: 10px;
-            color: var(--gray-500);
+            color: var(--text-secondary);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-top: 2px;
         }
 
         /* Water Countdown */
         .water-countdown {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            background: var(--gradient-water-normal);
             border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
             position: relative;
-            overflow: hidden;
+            transition: background 0.3s ease;
         }
-
         .water-countdown.urgent {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            animation: pulse 2s infinite;
+            background: var(--gradient-water-urgent);
+            animation: softPulse 2s ease-in-out infinite;
         }
-
         .water-countdown.overdue {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            background: var(--gradient-water-overdue);
         }
-
         .water-countdown.today {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            background: var(--gradient-water-today);
         }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.85; }
+        @keyframes softPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
+            50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
         }
-
-        .countdown-label {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .countdown-value {
-            font-size: 42px;
+        .countdown-circle {
+            width: 52px; height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             font-weight: 800;
             color: var(--water-blue);
-            line-height: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
-
-        .water-countdown.urgent .countdown-value {
-            color: var(--warning);
+        .water-countdown.urgent .countdown-circle { color: var(--warning); }
+        .water-countdown.overdue .countdown-circle { color: var(--danger); }
+        .countdown-info {
+            flex: 1;
+            min-width: 0;
         }
-
-        .water-countdown.overdue .countdown-value {
-            color: var(--danger);
+        .countdown-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-
+        .countdown-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
         .countdown-subtext {
-            font-size: 14px;
-            color: var(--gray-600);
-            margin-top: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         /* Water Button */
@@ -876,14 +939,19 @@
             width: 56px;
             height: 56px;
             border-radius: 28px;
-            background: var(--primary);
+            background: var(--gradient-btn-primary);
             color: white;
             border: none;
             font-size: 26px;
             cursor: pointer;
             z-index: 90;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+        }
+        .fab:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 28px rgba(16, 185, 129, 0.5);
+        }
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1189,11 +1257,12 @@
             bottom: calc(96px + var(--safe-bottom));
             left: 20px;
             right: 20px;
-            background: var(--gray-800);
+            background: linear-gradient(135deg, #1f2937, #111827);
             color: white;
             padding: 16px 20px;
-            border-radius: 16px;
+            border-radius: 18px;
             display: none;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
             z-index: 300;
             animation: fadeIn 0.3s ease;
         }
@@ -1676,9 +1745,12 @@
             --accent-healthy: #1e293b;
             --accent-water: #3b82f6;
             --accent-overdue: #ef4444;
-            background: var(--bg);
+            background: linear-gradient(170deg, #0a0f14 0%, #0f1720 30%, #0a1018 60%, #0a0f14 100%);
+            background-attachment: fixed;
             color: var(--text-primary);
         }
+        body.dark-mode::before { background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%); }
+        body.dark-mode::after  { background: radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%); }
         /* Transitions for smooth theme switch */
         body.dark-mode,
         body.dark-mode .plant-card,
@@ -1703,12 +1775,18 @@
         body.dark-mode .bottom-nav { background: rgba(20, 26, 32, 0.92); border-color: var(--border-default); }
         body.dark-mode .nav-item { color: var(--text-secondary); }
         body.dark-mode .nav-item.active { color: #34d399; }
-        body.dark-mode .stat-pill { background: var(--surface-subtle); }
+        body.dark-mode .stat-pill { background: var(--surface-subtle); border-color: rgba(255,255,255,0.04); }
+        body.dark-mode .stat-pill.health { background: linear-gradient(135deg, #052e16, #064e3b); }
+        body.dark-mode .stat-pill.water  { background: linear-gradient(135deg, #0f172a, #1e293b); }
+        body.dark-mode .stat-pill.age    { background: linear-gradient(135deg, #2a0e1e, #3b1228); }
         body.dark-mode .stat-value { color: var(--text-primary); }
         body.dark-mode .stat-label { color: var(--text-secondary); }
         body.dark-mode .water-countdown { background: var(--gradient-water-normal); }
         body.dark-mode .water-countdown.urgent { background: var(--gradient-water-urgent); }
         body.dark-mode .water-countdown.overdue { background: var(--gradient-water-overdue); }
+        body.dark-mode .countdown-circle { background: #1e293b; color: var(--text-primary); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        body.dark-mode .water-countdown.urgent .countdown-circle { color: #f59e0b; }
+        body.dark-mode .water-countdown.overdue .countdown-circle { color: #ef4444; }
         body.dark-mode .countdown-label { color: var(--text-secondary); }
         body.dark-mode .countdown-subtext { color: var(--text-muted); }
         body.dark-mode .plant-name { color: #f1f5f9; }
@@ -3632,7 +3710,7 @@
             initOnboarding();
             if (state.plants.length === 0) {
                 if (searchBar) searchBar.style.display = 'none';
-                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Tap + to add a plant or pick one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${[{label:'Monstera',key:'monstera deliciosa'},{label:'Pothos',key:'pothos'},{label:'Snake Plant',key:'snake plant'},{label:'Spider Plant',key:'spider plant'},{label:'Aloe Vera',key:'aloe vera'}].map(p => `<button onclick="document.getElementById('plantSpecies').value='${p.key}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(p.label)} ${p.label}</button>`).join('')}</div></div>`;
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🪴</div><h2>Your plant family awaits</h2><p>Start by adding your first plant below</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px;">${[{label:'Monstera',key:'monstera deliciosa'},{label:'Pothos',key:'pothos'},{label:'Snake Plant',key:'snake plant'},{label:'Spider Plant',key:'spider plant'},{label:'Aloe Vera',key:'aloe vera'}].map((p,i) => `<button onclick="document.getElementById('plantSpecies').value='${p.key}';onSpeciesSelect();addPlant()" style="padding:10px 18px;background:var(--surface);border:1.5px solid var(--border-default);border-radius:24px;cursor:pointer;font-size:14px;font-weight:500;box-shadow:var(--shadow-sm);transition:all 0.2s;">${getPlantEmoji(p.label)} ${p.label}</button>`).join('')}</div></div>`;
                 return;
             }
             if (searchBar) searchBar.style.display = 'block';
@@ -3642,7 +3720,7 @@
             const filteredPlants = getFilteredPlants();
             const countEl = document.getElementById('filterCount');
             if (countEl) countEl.textContent = `Showing ${filteredPlants.length} of ${state.plants.length} plants`;
-            container.innerHTML = filteredPlants.map(plant => {
+            container.innerHTML = filteredPlants.map((plant, i) => {
                 const daysUntil = getDaysUntilNextWater(plant.id, plant.interval);
                 const daysSince = getDaysSinceLastWater(plant.id);
                 const hoursSince = getHoursSinceLastWater(plant.id);
@@ -3705,26 +3783,24 @@
                 return `
                     <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''} ${daysUntil < 0 ? 'overdue-water' : ''}">
                         <div class="plant-header">
-                            <div class="plant-emoji"><span class="emoji-fallback">${plant.emoji}</span>${getPlantImageUrl(plant.normalized) ? `<img src="${getPlantImageUrl(plant.normalized)}" loading="lazy" alt="${plant.name}" onerror="this.remove()" class="loaded">` : ''}</div>
+                            <div class="plant-emoji type-${(i % 5) + 1}"><span class="emoji-fallback">${plant.emoji}</span>${getPlantImageUrl(plant.normalized) ? `<img src="${getPlantImageUrl(plant.normalized)}" loading="lazy" alt="${plant.name}" onerror="this.remove()" class="loaded">` : ''}</div>
                             <div class="plant-info">
                                 <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
                             </div>
                         </div>
                         <div class="plant-stats">
-                            <div class="stat-pill"><div class="stat-value">${waterings}</div><div class="stat-label">Waterings</div></div>
-                            <div class="stat-pill"><div class="stat-value">${interval}d</div><div class="stat-label">Interval</div></div>
-                            <div class="stat-pill"><div class="stat-value">${daysSince === null ? '-' : daysSince + 'd'}</div><div class="stat-label">Since Last</div></div>
+                            <div class="stat-pill water"><div class="stat-value">${waterings}</div><div class="stat-label">Waterings</div></div>
+                            <div class="stat-pill health"><div class="stat-value">${interval}d</div><div class="stat-label">Interval</div></div>
+                            <div class="stat-pill age"><div class="stat-value">${daysSince === null ? '-' : daysSince + 'd'}</div><div class="stat-label">Since Last</div></div>
                         </div>
                         <div class="water-countdown ${countdownClass}">
-                            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
-                                <div class="countdown-label" style="margin:0;">Next watering</div>
-                                <div style="font-size:12px;color:var(--gray-500);">${daysSince === null ? 'Never watered' : `${daysSince}d / ${interval}d`}</div>
+                            <div class="countdown-circle">${daysUntil <= 0 ? '💧' : daysUntil <= 2 ? '⏰' : daysUntil <= 7 ? '📅' : '🌿'}</div>
+                            <div class="countdown-info">
+                                <div class="countdown-label">${daysUntil <= 0 ? 'Water overdue' : daysUntil === 0 ? 'Water today' : 'Next watering'}</div>
+                                <div class="countdown-value">${daysUntil < 0 ? Math.abs(daysUntil) + 'd overdue' : daysUntil === 0 ? 'Today!' : daysUntil + ' days'}</div>
+                                <div class="countdown-subtext">${subtext} · ${daysSince === null ? 'never watered' : daysSince + 'd ago'}</div>
                             </div>
-                            <div style="background:var(--gray-200);border-radius:4px;height:6px;overflow:hidden;margin-bottom:6px;">
-                                <div style="height:100%;border-radius:4px;background:${daysUntil <= 0 ? 'var(--danger)' : 'var(--primary)'};width:${daysSince === null ? '0' : Math.min(100, Math.round((daysSince / (daysSince + daysUntil || 1)) * 100))}%;transition:width 0.5s;"></div>
-                            </div>
-                            <div class="countdown-subtext" style="text-align:center;">${subtext}</div>
                         </div>
                         <button class="water-btn ${!canWater.allowed ? 'water-btn-disabled' : ''}" onclick="waterPlant(${plant.id})">
                             <span>💧</span>${canWater.allowed ? 'I Watered This' : `Wait ${canWater.hoursLeft}h`}
