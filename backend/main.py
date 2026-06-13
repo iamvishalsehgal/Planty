@@ -18,6 +18,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 from db import init_db
 from pipelines.runner import run_pipeline
+from backup import run_backup
 from routes.plants import router as plants_router
 from routes.events import router as events_router
 from routes.analytics import router as analytics_router
@@ -43,8 +44,9 @@ async def lifespan(app: FastAPI):
     if not os.environ.get("PLANTY_TESTING"):
         scheduler = BackgroundScheduler()
         scheduler.add_job(run_pipeline, "interval", minutes=5, id="etl")
+        scheduler.add_job(run_backup, "cron", hour=3, minute=7, id="db-backup")
         scheduler.start()
-        print("Planty started — ETL pipeline running every 5 minutes")
+        print("Planty started — ETL every 5 min, DB backup daily at 03:07 UTC")
     yield
     if scheduler:
         scheduler.shutdown(wait=False)

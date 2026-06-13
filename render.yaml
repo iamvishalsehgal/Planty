@@ -11,3 +11,15 @@ services:
         value: "true"
       - key: PLANTY_DB_PATH
         value: /var/data/planty.db
+      - key: PLANTY_BACKUP_DIR
+        value: /var/data/backups
+      - key: PLANTY_BACKUP_TOKEN
+        generateValue: true
+
+  - type: cron
+    name: planty-db-backup
+    runtime: python
+    schedule: "47 3 * * *"
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python backend/cron_backup.py
+    plan: free

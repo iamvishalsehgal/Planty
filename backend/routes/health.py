@@ -15,6 +15,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Optional
 from db import get_db, get_conn
+from backup import run_backup, get_last_backup, get_uptime_stats, record_health_check
 
 router = APIRouter(prefix="/api", tags=["health"])
 
@@ -224,6 +225,7 @@ def health():
             failure_reason = f"integrity_check: {integrity[0]}"
             checks["db_integrity"] = failure_reason
             conn.close()
+            record_health_check(False, "unhealthy", checks)
             return JSONResponse(
                 content=_build_payload(
                     "unhealthy", checks, 0.0, failure_reason
@@ -233,6 +235,7 @@ def health():
         checks["db_integrity"] = "ok"
     except Exception as e:
         failure_reason = f"cannot_connect: {e}"
+        record_health_check(False, "unhealthy", {"db_integrity": failure_reason})
         return JSONResponse(
             content=_build_payload(
                 "unhealthy",
@@ -251,6 +254,7 @@ def health():
             failure_reason = f"schema_issues: {schema_issues}"
             db_size_kb = _get_db_size_kb(conn)
             conn.close()
+            record_health_check(False, "unhealthy", checks)
             return JSONResponse(
                 content=_build_payload(
                     "unhealthy", checks, db_size_kb, failure_reason
@@ -261,6 +265,7 @@ def health():
     except Exception as e:
         failure_reason = f"schema_check_failed: {e}"
         conn.close()
+        record_health_check(False, "unhealthy", checks)
         return JSONResponse(
             content=_build_payload(
                 "unhealthy", checks, 0.0, failure_reason
@@ -277,11 +282,13 @@ def health():
     checks["db_writeability"] = "ok" if writable else (write_err or "unknown")
 
     if not writable:
+        record_health_check(True, "degraded", checks)
         return JSONResponse(
             content=_build_payload("degraded", checks, db_size_kb),
             status_code=200,
         )
 
+    record_health_check(True, "healthy", checks)
     return JSONResponse(
         content=_build_payload("healthy", checks, db_size_kb),
         status_code=200,
@@ -419,3 +426,30 @@ def db_backup():
         media_type="application/octet-stream",
         filename=f"planty-backup-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.db"
     )
+
+
+# ── Backup & Uptime Monitoring ────────────────────────────────────
+
+@router.post("/health/backup/trigger")
+def trigger_backup(token: Optional[str] = None):
+    """Trigger an on-demand database backup. Optional token for cron auth."""
+    expected = os.environ.get("PLANTY_BACKUP_TOKEN", "")
+    if expected and token != expected:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=403, detail="Invalid backup token")
+    result = run_backup()
+    if result["success"]:
+        return {"ok": True, **result}
+    return {"ok": False, **result}
+
+
+@router.get("/health/backup/status")
+def backup_status():
+    """Return info about the most recent backup."""
+    return get_last_backup()
+
+
+@router.get("/health/uptime")
+def uptime_stats():
+    """Return uptime statistics from health check history."""
+    return get_uptime_stats()
