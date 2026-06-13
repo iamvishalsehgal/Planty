@@ -1,7 +1,7 @@
-const CACHE = 'planty-v4.1';
-const SHELL = ['/', '/index.html', '/manifest.json', '/icon-512.png', '/favicon.svg'];
+const CACHE = 'planty-v4.2';
+const SHELL = ['/manifest.json', '/icon-512.png', '/favicon.svg'];
 
-// Install — pre-cache app shell
+// Install — pre-cache static assets (NOT index.html — always network-first)
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE).then(cache => cache.addAll(SHELL).catch(e => {
@@ -11,7 +11,7 @@ self.addEventListener('install', event => {
     self.skipWaiting();
 });
 
-// Activate — clean old caches
+// Activate — clean old caches, claim clients
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keys =>
@@ -20,31 +20,38 @@ self.addEventListener('activate', event => {
     );
 });
 
-// Fetch — cache-first for static assets, network-only for API
+// Fetch — network-first for HTML, cache-first for assets, network-only for API
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
     const url = new URL(event.request.url);
 
-    // Never cache API calls — always go to network
-    if (url.pathname.startsWith('/api/')) {
-        return; // Let browser handle normally
-    }
+    // Never cache API calls
+    if (url.pathname.startsWith('/api/')) return;
 
-    event.respondWith(
-        caches.match(event.request).then(cached =>
-            cached || fetch(event.request).then(response => {
-                // Cache successful same-origin responses (static assets only)
-                if (response.ok && response.type === 'basic' && !url.pathname.startsWith('/api/')) {
+    // Navigation requests (HTML pages) — network-first, cache fallback
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).then(response => {
+                // Cache the fresh response for offline fallback
+                if (response.ok && response.type === 'basic') {
                     const clone = response.clone();
                     caches.open(CACHE).then(cache => cache.put(event.request, clone));
                 }
                 return response;
-            }).catch(() => {
-                // Offline fallback — return cached index for navigation requests
-                if (event.request.mode === 'navigate') {
-                    return caches.match('/index.html');
+            }).catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // Static assets — cache-first, network fallback
+    event.respondWith(
+        caches.match(event.request).then(cached =>
+            cached || fetch(event.request).then(response => {
+                if (response.ok && response.type === 'basic') {
+                    const clone = response.clone();
+                    caches.open(CACHE).then(cache => cache.put(event.request, clone));
                 }
-                return new Response('Offline', { status: 503 });
+                return response;
             })
         )
     );

@@ -4348,32 +4348,23 @@
             if (!('serviceWorker' in navigator)) return;
             try {
                 swRegistration = await navigator.serviceWorker.register('/sw.js');
-                // Listen for updates
+                // Listen for updates — auto-refresh when new version activates
+                let refreshing = false;
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    if (refreshing) return;
+                    refreshing = true;
+                    window.location.reload();
+                });
                 swRegistration.addEventListener('updatefound', () => {
                     const newWorker = swRegistration.installing;
                     if (!newWorker) return;
                     newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // New version available — show update prompt
-                            const toast = document.getElementById('toast');
-                            if (toast && !toast.dataset.updateShown) {
-                                toast.dataset.updateShown = '1';
-                                document.getElementById('toastTitle').textContent = '🔄 Update Available';
-                                document.getElementById('toastSubtitle').textContent = 'Tap to refresh';
-                                toast.classList.add('active');
-                                toast.onclick = () => {
-                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
-                                    window.location.reload();
-                                };
-                                setTimeout(() => toast.classList.remove('active'), 8000);
-                            }
+                        if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+                            // New SW activated — page will auto-refresh via controllerchange
+                            console.log('Planty: new version activated, reloading...');
                         }
                     });
                 });
-                // Check for updates every 30 minutes
-                window._swUpdateInterval = setInterval(() => {
-                    swRegistration.update().catch(() => {});
-                }, 1800000);
             } catch (e) { console.warn('Service Worker registration failed:', e.message); }
         }
 
