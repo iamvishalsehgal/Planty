@@ -452,12 +452,12 @@
 
         .interval-btn {
             padding: 10px 16px;
-            border: 2px solid var(--gray-200);
+            border: 2px solid var(--border-default);
             border-radius: 12px;
-            background: white;
+            background: rgba(255,255,255,0.05);
             font-size: 14px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -548,7 +548,8 @@
             background: var(--accent-water);
         }
         .plant-card.overdue-water {
-            background: #fffbfb;
+            background: rgba(239,68,68,0.08);
+            border-color: rgba(239,68,68,0.2);
         }
         .plant-card.overdue-water::before {
             background: var(--accent-overdue);
@@ -2069,12 +2070,12 @@
             font-weight: 600;
         }
         .repot-change-info { margin: 12px 0 8px; padding: 12px; border-radius: 12px; font-size: 13px; border: 1px solid transparent; }
-        .repot-change-info.upgrade { background: #f0fdf4; border-color: #bbf7d0; }
-        .repot-change-info.upgrade .change-label { color: var(--primary-dark); font-weight: 600; }
-        .repot-change-info.same { background: #fefce8; border-color: #fde68a; }
-        .repot-change-info.same .change-label { color: #92400e; font-weight: 600; }
-        .repot-change-info.downsize { background: #fff7ed; border-color: #fed7aa; }
-        .repot-change-info.downsize .change-label { color: #c2410c; font-weight: 600; }
+        .repot-change-info.upgrade { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.2); }
+        .repot-change-info.upgrade .change-label { color: #34d399; font-weight: 600; }
+        .repot-change-info.same { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.2); }
+        .repot-change-info.same .change-label { color: #fbbf24; font-weight: 600; }
+        .repot-change-info.downsize { background: rgba(249,115,22,0.12); border-color: rgba(249,115,22,0.2); }
+        .repot-change-info.downsize .change-label { color: #fb923c; font-weight: 600; }
         .repot-change-info .change-sub { color: var(--gray-500); margin-top: 3px; }
     </style>
 </head>
@@ -2156,7 +2157,7 @@
                 <div class="input-row">
                     <div class="input-group">
                         <label>Plant Species (Quick Setup)</label>
-                        <select id="plantSpecies" onchange="onSpeciesSelect()" style="padding: 14px 16px; border: 2px solid var(--gray-200); border-radius: 14px; font-size: 16px; outline: none; background: white; width: 100%;">
+                        <select id="plantSpecies" onchange="onSpeciesSelect()" style="padding: 14px 16px; border: 2px solid var(--border-default); border-radius: 14px; font-size: 16px; outline: none; background: rgba(255,255,255,0.06); color: var(--text-primary); width: 100%;">
                             <option value="">— Custom plant —</option>
                         </select>
                         <p class="input-hint" id="speciesHint">Auto-fills care settings ⚡</p>
