@@ -197,8 +197,8 @@
         /* Header */
         .header {
             background: linear-gradient(135deg, #059669 0%, #047857 40%, #065f46 100%);
-            padding: 28px 20px 24px;
-            padding-top: calc(28px + env(safe-area-inset-top, 20px));
+            padding: 16px 16px 14px;
+            padding-top: calc(16px + env(safe-area-inset-top, 20px));
             color: white;
             position: relative;
             overflow: hidden;
@@ -251,11 +251,11 @@
         }
 
         .header h1 {
-            font-size: 30px;
+            font-size: 22px;
             font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             text-shadow: 0 2px 12px rgba(0,0,0,0.12);
             letter-spacing: -0.5px;
             line-height: 1.1;
@@ -264,6 +264,7 @@
         .header h1 span {
             display: inline-block;
             animation: wave 2s ease-in-out infinite;
+            font-size: 22px;
         }
 
         @keyframes wave {
@@ -273,9 +274,9 @@
         }
 
         .header-sub {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 4px;
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 2px;
             font-weight: 500;
             letter-spacing: 0.2px;
         }
@@ -478,9 +479,9 @@
         .plant-card {
             background: var(--surface);
             border-radius: var(--radius-lg);
-            padding: 18px;
+            padding: 12px;
             box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
-            margin-bottom: 14px;
+            margin-bottom: 10px;
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
             position: relative;
             overflow: hidden;
@@ -527,20 +528,20 @@
         .plant-header {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 16px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .plant-emoji {
-            width: 72px;
-            height: 72px;
-            min-width: 72px;
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
             background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-            border-radius: 18px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 28px;
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255,255,255,0.6);
             overflow: hidden;
             position: relative;
@@ -572,18 +573,18 @@
         }
 
         .plant-name {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--gray-800);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .plant-location {
             font-size: 13px;
             color: var(--gray-500);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .badge {
@@ -592,16 +593,16 @@
 
         .plant-stats {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 6px;
+            margin-bottom: 8px;
         }
 
         .stat-pill {
             flex: 1;
             text-align: center;
-            padding: 10px 8px;
+            padding: 6px 4px;
             background: var(--surface-subtle);
-            border-radius: 14px;
+            border-radius: 10px;
             border: 1px solid var(--border-subtle);
             transition: background 0.2s ease;
         }
@@ -610,7 +611,7 @@
         .stat-pill.age    { background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%); }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-primary);
             letter-spacing: -0.3px;
@@ -626,17 +627,30 @@
             margin-top: 2px;
         }
 
-        /* Water Countdown */
+        /* Water Countdown — primary action, big tap target */
         .water-countdown {
             background: var(--gradient-water-normal);
-            border-radius: 16px;
-            padding: 14px 16px;
+            border-radius: 14px;
+            padding: 14px 14px;
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 8px;
+            min-height: 60px;
             position: relative;
             transition: background 0.3s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .water-countdown:active {
+            transform: scale(0.98);
+        }
+        .water-countdown.cooldown {
+            cursor: default;
+            opacity: 0.6;
+        }
+        .water-countdown.cooldown:active {
+            transform: none;
         }
         .water-countdown.urgent {
             background: var(--gradient-water-urgent);
@@ -652,9 +666,25 @@
             0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.3); }
             50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
         }
+
+        /* Accessibility: respect OS motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            body::before, body::after,
+            .header::before, .header::after,
+            .header h1 span {
+                animation: none !important;
+            }
+            .water-countdown.urgent {
+                animation: none;
+            }
+            .plant-card {
+                animation: none;
+                opacity: 1;
+            }
+        }
         .countdown-circle {
-            width: 52px; height: 52px;
-            min-width: 52px;
+            width: 48px; height: 48px;
+            min-width: 48px;
             border-radius: 50%;
             background: white;
             display: flex;
@@ -674,40 +704,45 @@
         .countdown-label {
             font-size: 12px;
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .countdown-value {
-            font-size: 22px;
+            font-size: 19px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.2;
         }
         .countdown-subtext {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-secondary);
         }
+        .countdown-last {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
 
-        /* Water Button */
+        /* Water Button — compact, only shown during cooldown */
         .water-btn {
             width: 100%;
-            padding: 18px;
+            padding: 10px;
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             border: none;
-            border-radius: 16px;
-            font-size: 18px;
+            border-radius: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35);
             position: relative;
             overflow: hidden;
+            margin-bottom: 8px;
         }
 
         .water-btn::after {
@@ -813,12 +848,25 @@
         /* Card details — hidden by default */
         .card-details {
             display: none;
-            margin-top: 12px;
-            padding-top: 12px;
+            margin-top: 8px;
+            padding-top: 8px;
             border-top: 1px solid var(--gray-100);
             animation: fadeIn 0.2s ease;
         }
         .card-details.open { display: block; }
+
+        /* Compact species info — single line */
+        .species-compact {
+            font-size: 11px;
+            color: #166534;
+            background: linear-gradient(135deg,#f0fdf4,#dcfce7);
+            border-radius: 10px;
+            padding: 6px 10px;
+            margin-top: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         .card-toggle {
             display: flex;
@@ -830,51 +878,92 @@
             background: none;
             border: none;
             color: var(--gray-400);
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
-            margin-top: 6px;
+            margin-top: 4px;
         }
 
-        /* Actions — compact menu */
-        .actions-row {
+        /* Quick Actions — icon row, phone-friendly 46px targets */
+        .quick-actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding-top: 12px;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 8px;
+            padding-top: 8px;
             border-top: 1px solid var(--gray-100);
         }
-
-        .last-watered {
-            font-size: 13px;
-            color: var(--gray-400);
+        .quick-action {
+            width: 46px;
+            height: 46px;
+            border: none;
+            background: var(--gray-50);
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+            color: var(--gray-600);
+            min-width: 46px;
+            min-height: 46px;
+        }
+        .quick-action:active {
+            background: var(--gray-200);
+            transform: scale(0.9);
+        }
+        .quick-action.danger {
+            color: var(--danger);
+            background: var(--danger-light);
+        }
+        .quick-action.danger:active {
+            background: #fecaca;
+        }
+        .quick-action.primary {
+            color: var(--primary);
+            background: var(--primary-light);
+            font-size: 24px;
         }
 
-        .action-btns {
+        /* Species compact bar — always visible above actions */
+        .species-bar {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--gray-50);
+            border-radius: 10px;
+            padding: 6px 10px;
+            margin-bottom: 4px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Status row — fert + repot always visible */
+        .status-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+        .status-row > div {
+            flex: 1;
+            min-width: 0;
+            padding: 5px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Secondary actions — inside details only */
+        .secondary-actions {
             display: flex;
             gap: 8px;
-        }
-
-        .action-btn {
-            padding: 8px 12px;
-            background: var(--gray-100);
-            border: none;
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s;
-            min-width: 36px;
-            min-height: 36px;
-        }
-
-        .action-btn.danger {
-            color: var(--danger);
-        }
-
-        .action-btn:active {
-            background: var(--gray-200);
-            transform: scale(0.95);
+            justify-content: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--gray-100);
         }
 
         .action-menu {
@@ -1307,17 +1396,23 @@
         }
 
         .weekly-schedule {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 4px 0;
+            scroll-snap-type: x proximity;
         }
 
         .week-day {
             text-align: center;
-            padding: 10px 4px;
+            padding: 12px 10px;
             border-radius: 12px;
             background: var(--gray-50);
             transition: all 0.2s;
+            flex: 0 0 auto;
+            min-width: 52px;
+            scroll-snap-align: start;
         }
 
         .week-day.today {
@@ -1330,21 +1425,21 @@
         }
 
         .week-day-name {
-            font-size: 10px;
+            font-size: 12px;
             color: var(--gray-500);
             font-weight: 600;
             text-transform: uppercase;
         }
 
         .week-day-num {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--gray-800);
             margin: 4px 0;
         }
 
         .week-day-plants {
-            font-size: 14px;
+            font-size: 16px;
         }
 
         /* ── Contribution Year Grid ─────────────────────────────── */
@@ -1358,19 +1453,19 @@
         .contrib-col {
             display: flex;
             flex-direction: column;
-            gap: 3px;
-            min-width: 12px;
+            gap: 4px;
+            min-width: 16px;
         }
         .contrib-col-label {
-            font-size: 9px;
+            font-size: 11px;
             color: var(--gray-400);
             text-align: center;
             margin-bottom: 2px;
-            min-height: 12px;
+            min-height: 14px;
         }
         .contrib-cell {
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             border-radius: 2px;
             background: #ebedf0;
             cursor: pointer;
@@ -1747,7 +1842,7 @@
             --gradient-water-urgent: linear-gradient(135deg, #78350f, #92400e);
             --gradient-water-overdue: linear-gradient(135deg, #7f1d1d, #991b1b);
             --gradient-header: linear-gradient(135deg, #064e3b, #065f46, #064e3b);
-            --accent-healthy: #1e293b;
+            --accent-healthy: #34d399;
             --accent-water: #3b82f6;
             --accent-overdue: #ef4444;
             background: linear-gradient(170deg, #0a0f14 0%, #0f1720 30%, #0a1018 60%, #0a0f14 100%);
@@ -2025,7 +2120,7 @@
                         <select id="plantSpecies" onchange="onSpeciesSelect()" style="padding: 14px 16px; border: 2px solid var(--gray-200); border-radius: 14px; font-size: 16px; outline: none; background: white; width: 100%;">
                             <option value="">— Custom plant —</option>
                         </select>
-                        <p class="input-hint">Select a species for auto-filled care settings</p>
+                        <p class="input-hint" id="speciesHint">Auto-fills care settings ⚡</p>
                     </div>
                     <div class="input-group">
                         <label>Plant Name *</label>
@@ -2034,29 +2129,26 @@
                     <div class="input-group">
                         <label>Location (Optional)</label>
                         <input type="text" id="plantLocation" placeholder="e.g., Living Room, Bedroom Window">
-                        <p class="input-hint">Helps if you have multiple of the same plant</p>
                     </div>
                     <div class="input-group">
-                        <label>How often do you water it?</label>
+                        <label>Watering interval</label>
                         <div class="interval-buttons" id="intervalButtons">
-                            <button type="button" class="interval-btn" data-days="3">Every 3 days</button>
-                            <button type="button" class="interval-btn" data-days="5">Every 5 days</button>
-                            <button type="button" class="interval-btn selected" data-days="7">Every 7 days</button>
-                            <button type="button" class="interval-btn" data-days="10">Every 10 days</button>
-                            <button type="button" class="interval-btn" data-days="14">Every 14 days</button>
+                            <button type="button" class="interval-btn" data-days="3">3d</button>
+                            <button type="button" class="interval-btn" data-days="5">5d</button>
+                            <button type="button" class="interval-btn selected" data-days="7">7d</button>
+                            <button type="button" class="interval-btn" data-days="10">10d</button>
+                            <button type="button" class="interval-btn" data-days="14">14d</button>
                         </div>
-                        <p class="input-hint">The app learns and adjusts automatically!</p>
                     </div>
                     <div class="input-group">
                         <label>Pot Size</label>
                         <div class="pot-size-buttons">
-                            <button type="button" class="pot-btn" data-size="tiny">Tiny<br><small>&lt; 4"</small></button>
-                            <button type="button" class="pot-btn" data-size="small">Small<br><small>4–6"</small></button>
-                            <button type="button" class="pot-btn selected" data-size="medium">Medium<br><small>6–8"</small></button>
-                            <button type="button" class="pot-btn" data-size="large">Large<br><small>8–12"</small></button>
-                            <button type="button" class="pot-btn" data-size="xl">XL<br><small>12"+</small></button>
+                            <button type="button" class="pot-btn" data-size="tiny">Tiny</button>
+                            <button type="button" class="pot-btn" data-size="small">Small</button>
+                            <button type="button" class="pot-btn selected" data-size="medium">Medium</button>
+                            <button type="button" class="pot-btn" data-size="large">Large</button>
+                            <button type="button" class="pot-btn" data-size="xl">XL</button>
                         </div>
-                        <p class="input-hint">Used to estimate when repotting is due</p>
                     </div>
                 </div>
                 <button class="add-btn" onclick="addPlant()">
@@ -2094,13 +2186,18 @@
                 <button class="add-btn" onclick="dismissOnboarding()" style="margin-top:12px;">Got it! 🌿</button>
             </div>
             <!-- Search & Filter -->
-            <div id="searchBar" style="display:none;margin-bottom:12px;">
+            <div id="searchToggle" style="display:none;text-align:right;margin-bottom:6px;">
+                <button onclick="toggleSearchBar()" style="background:var(--surface);border:1.5px solid var(--gray-200);border-radius:12px;padding:8px 14px;font-size:16px;cursor:pointer;color:var(--gray-500);">
+                    🔍 <span id="searchToggleLabel">Search</span>
+                </button>
+            </div>
+            <div id="searchBar" style="display:none;margin-bottom:12px;position:sticky;top:0;z-index:10;background:var(--bg);padding-bottom:8px;">
                 <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="scheduleSearchRender()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
-                <div style="display:flex;gap:6px;margin-top:8px;" id="filterButtons">
-                    <button class="filter-btn" data-filter="all" onclick="setFilter('all')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">All</button>
-                    <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Needs Water</button>
-                    <button class="filter-btn" data-filter="healthy" onclick="setFilter('healthy')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Healthy</button>
-                    <button class="filter-btn" data-filter="protected" onclick="setFilter('protected')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Protected</button>
+                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;" id="filterButtons">
+                    <button class="filter-btn" data-filter="all" onclick="setFilter('all')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">All</button>
+                    <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Needs Water</button>
+                    <button class="filter-btn" data-filter="healthy" onclick="setFilter('healthy')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Healthy</button>
+                    <button class="filter-btn" data-filter="protected" onclick="setFilter('protected')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Protected</button>
                 </div>
                 <div id="filterCount" style="font-size:12px;color:var(--gray-500);margin-top:6px;"></div>
             </div>
@@ -2769,7 +2866,12 @@
         function onSpeciesSelect() {
             if (typeof SPECIES === 'undefined') return;
             const species = document.getElementById('plantSpecies').value;
-            if (!species || !SPECIES[species]) return;
+            const hint = document.getElementById('speciesHint');
+            if (!species) {
+                if (hint) hint.textContent = 'Auto-fills care settings ⚡';
+                return;
+            }
+            if (!SPECIES[species]) return;
             const data = SPECIES[species];
             document.getElementById('plantName').value = species.split(' ').map(w => w[0].toUpperCase()+w.slice(1)).join(' ');
             document.getElementById('plantName').dataset.species = species;
@@ -2777,6 +2879,14 @@
             document.querySelectorAll('.interval-btn').forEach(b => {
                 b.classList.toggle('selected', parseInt(b.dataset.days) === data.interval);
             });
+            // Auto-select pot size
+            if (data.potSize) {
+                document.querySelectorAll('.pot-btn').forEach(b => {
+                    b.classList.toggle('selected', b.dataset.size === data.potSize);
+                });
+            }
+            // Show feedback
+            if (hint) hint.textContent = '✅ Interval: ' + data.interval + 'd' + (data.potSize ? ', Pot: ' + data.potSize : '') + ' — auto-filled!';
         }
 
         function getSpeciesTip(name) {
@@ -3704,6 +3814,20 @@
             }
         }
 
+        function toggleSearchBar() {
+            const bar = document.getElementById('searchBar');
+            const label = document.getElementById('searchToggleLabel');
+            if (!bar || !label) return;
+            if (bar.style.display === 'none' || !bar.style.display) {
+                bar.style.display = 'block';
+                label.textContent = 'Hide';
+                document.getElementById('plantSearch')?.focus();
+            } else {
+                bar.style.display = 'none';
+                label.textContent = 'Search';
+            }
+        }
+
         function initOnboarding() {
             if (!localStorage.getItem('planty_onboarded') && state.plants.length === 0) {
                 document.getElementById('onboardingCard').style.display = 'block';
@@ -3713,13 +3837,16 @@
         function renderPlants() {
             const container = document.getElementById('plantList');
             const searchBar = document.getElementById('searchBar');
+            const searchToggle = document.getElementById('searchToggle');
             initOnboarding();
             if (state.plants.length === 0) {
                 if (searchBar) searchBar.style.display = 'none';
+                if (searchToggle) searchToggle.style.display = 'none';
                 container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🪴</div><h2>Your plant family awaits</h2><p>Start by adding your first plant below</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px;">${[{label:'Monstera',key:'monstera deliciosa'},{label:'Pothos',key:'pothos'},{label:'Snake Plant',key:'snake plant'},{label:'Spider Plant',key:'spider plant'},{label:'Aloe Vera',key:'aloe vera'}].map((p,i) => `<button onclick="document.getElementById('plantSpecies').value='${p.key}';onSpeciesSelect();addPlant()" style="padding:10px 18px;background:var(--surface);border:1.5px solid var(--border-default);border-radius:24px;cursor:pointer;font-size:14px;font-weight:500;box-shadow:var(--shadow-sm);transition:all 0.2s;">${getPlantEmoji(p.label)} ${p.label}</button>`).join('')}</div></div>`;
                 return;
             }
-            if (searchBar) searchBar.style.display = 'block';
+            if (searchBar) searchBar.style.display = 'none';
+            if (searchToggle) searchToggle.style.display = 'block';
             const waterAllBar = document.getElementById('waterAllBar');
             const dueCount = state.plants.filter(p => canWaterPlant(p.id).allowed && getDaysUntilNextWater(p.id, p.interval) <= 0).length;
             if (waterAllBar) waterAllBar.style.display = dueCount > 1 ? 'block' : 'none';
@@ -3778,16 +3905,17 @@
                         </div>` : ''}
                         <div style="color:#14532d;font-style:italic;">💡 ${plant.species.tip}</div>
                     </div>` : '';
+                const speciesCompact = plant.species ? `<div class="species-compact">☀️ ${plant.species.light} · 💧 ${plant.species.humidity} · 📊 ${plant.species.difficulty}</div>` : '';
                 const fs = getFertilizerStatus(plant);
-                const fertHTML = fs ? `<div style="background:${fs.overdue?'#fee2e2':'#ede9fe'};color:${fs.overdue?'#991b1b':'#7c3aed'};padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;margin-top:6px;">🧪 ${fs.text}</div>` : '';
-                const notesHTML = plant.notes ? `<div style="background:#f9fafb;border-radius:10px;padding:10px;margin-top:8px;font-size:13px;color:var(--gray-600);font-style:italic;">📝 ${plant.notes}</div>` : '';
+                const fertHTML = fs ? `<div style="background:${fs.overdue?'#fee2e2':'#ede9fe'};color:${fs.overdue?'#991b1b':'#7c3aed'};padding:6px 10px;border-radius:8px;font-size:11px;text-align:center;margin-top:6px;">🧪 ${fs.text}</div>` : '';
+                const notesHTML = plant.notes ? `<div style="background:#f9fafb;border-radius:8px;padding:8px;margin-top:6px;font-size:12px;color:var(--gray-600);font-style:italic;">📝 ${plant.notes}</div>` : '';
                 const photosHTML = (plant.photoCount > 0) ? `
-                    <div style="margin-top:8px;">
-                        <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px;cursor:pointer;" onclick="loadAndShowPhotos(${plant.id})" id="photoBadge-${plant.id}">📸 ${plant.photoCount} photo${plant.photoCount!==1?'s':''} — tap to view</div>
-                        <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;" id="photoGallery-${plant.id}"></div>
+                    <div style="margin-top:6px;">
+                        <div style="font-size:11px;color:var(--gray-500);margin-bottom:3px;cursor:pointer;" onclick="loadAndShowPhotos(${plant.id})" id="photoBadge-${plant.id}">📸 ${plant.photoCount} photo${plant.photoCount!==1?'s':''} — tap to view</div>
+                        <div style="display:flex;gap:4px;overflow-x:auto;padding-bottom:4px;" id="photoGallery-${plant.id}"></div>
                     </div>` : '';
                 return `
-                    <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''} ${daysUntil < 0 ? 'overdue-water' : ''}">
+                    <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''} ${daysUntil < 0 ? 'overdue-water' : ''}" data-plant-id="${plant.id}">
                         <div class="plant-header">
                             <div class="plant-emoji type-${(i % 5) + 1}"><span class="emoji-fallback">${plant.emoji}</span>${getPlantImageUrl(plant.normalized) ? `<img src="${getPlantImageUrl(plant.normalized)}" loading="lazy" alt="${plant.name}" onerror="this.remove()" class="loaded">` : ''}</div>
                             <div class="plant-info">
@@ -3795,48 +3923,35 @@
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
                             </div>
                         </div>
-                        <div class="plant-stats">
-                            <div class="stat-pill water"><div class="stat-value">${waterings}</div><div class="stat-label">Waterings</div></div>
-                            <div class="stat-pill health"><div class="stat-value">${interval}d</div><div class="stat-label">Interval</div></div>
-                            <div class="stat-pill age"><div class="stat-value">${daysSince === null ? '-' : daysSince + 'd'}</div><div class="stat-label">Since Last</div></div>
-                        </div>
-                        <div class="water-countdown ${countdownClass}">
-                            <div class="countdown-circle">${daysUntil <= 0 ? '💧' : daysUntil <= 2 ? '⏰' : daysUntil <= 7 ? '📅' : '🌿'}</div>
+                        <div class="water-countdown ${countdownClass} ${!canWater.allowed ? 'cooldown' : ''}" onclick="${canWater.allowed ? `waterPlant(${plant.id})` : `showCooldownModal(${canWater.hoursLeft})`}">
+                            <div class="countdown-circle">${daysUntil < 0 ? Math.abs(daysUntil) : daysUntil === 0 ? '0' : daysUntil}</div>
                             <div class="countdown-info">
                                 <div class="countdown-label">${daysUntil < 0 ? 'Water overdue' : daysUntil === 0 ? 'Water today' : 'Next watering'}</div>
                                 <div class="countdown-value">${daysUntil < 0 ? Math.abs(daysUntil) + 'd overdue' : daysUntil === 0 ? 'Today!' : daysUntil + ' days'}</div>
-                                <div class="countdown-subtext">${subtext} · ${daysSince === null ? 'never watered' : daysSince + 'd ago'}</div>
+                                <div class="countdown-subtext">${canWater.allowed ? (daysUntil <= 0 ? 'Tap to water 💧' : `${interval}d interval`) : `⏳ Wait ${canWater.hoursLeft}h`}</div>
+                                <div class="countdown-last">${lastWateredText}</div>
                             </div>
                         </div>
-                        <button class="water-btn ${!canWater.allowed ? 'water-btn-disabled' : ''}" onclick="waterPlant(${plant.id})">
-                            <span>💧</span>${canWater.allowed ? 'I Watered This' : `Wait ${canWater.hoursLeft}h`}
-                        </button>
-                        ${!canWater.allowed ? `<div class="cooldown-warning"><span>⏳</span> Soil still absorbing water</div>` : ''}
-                        <div class="actions-row">
-                            <span class="last-watered">Last: ${lastWateredText}</span>
-                            <div class="action-menu">
-                                <button class="action-menu-btn" onclick="toggleActionMenu(${plant.id},event)" aria-label="More actions">•••</button>
-                                <div class="action-menu-dropdown" id="menu-${plant.id}">
-                                    <button onclick="startPhotoCapture(${plant.id});toggleActionMenu(${plant.id})">📸 Photo</button>
-                                    <button onclick="fertilizePlant(${plant.id});toggleActionMenu(${plant.id})">🧪 Fertilize</button>
-                                    <button onclick="showDiagnosisModal(${plant.id});toggleActionMenu(${plant.id})">🩺 Diagnose</button>
-                                    <button onclick="showRepotModal(${plant.id});toggleActionMenu(${plant.id})">🪴 Repot</button>
-                                    ${plant.notes ? '<button onclick="editPlantNotes(' + plant.id + ');toggleActionMenu(' + plant.id + ')">📝 Edit Notes</button>' : '<button onclick="editPlantNotes(' + plant.id + ');toggleActionMenu(' + plant.id + ')">📝 Add Notes</button>'}
-                                    <button onclick="showDeathModal(${plant.id});toggleActionMenu(${plant.id})" class="danger">💀 Died</button>
-                                    <button onclick="deletePlant(${plant.id});toggleActionMenu(${plant.id})" class="danger">🗑️ Delete</button>
-                                </div>
-                            </div>
+                        ${!canWater.allowed ? `<div class="cooldown-warning"><span>⏳</span> Soil still absorbing water — wait ${canWater.hoursLeft}h</div>` : ''}
+                        ${speciesCompact ? `<div class="species-bar">${speciesCompact}</div>` : ''}
+                        ${fertHTML || repotBadge ? `<div class="status-row">${fertHTML}${repotBadge}</div>` : ''}
+                        <div class="quick-actions">
+                            <button class="quick-action primary" onclick="startPhotoCapture(${plant.id})" title="Photo">📸</button>
+                            <button class="quick-action primary" onclick="fertilizePlant(${plant.id})" title="Fertilize">🧪</button>
+                            <button class="quick-action primary" onclick="showDiagnosisModal(${plant.id})" title="Diagnose">🩺</button>
                         </div>
                         <button class="card-toggle" onclick="toggleCardDetails(${plant.id})">
-                            <span id="toggleIcon-${plant.id}">▸</span> <span id="toggleLabel-${plant.id}">Show details</span>
+                            <span id="toggleIcon-${plant.id}">▸</span> <span id="toggleLabel-${plant.id}">More</span>
                         </button>
                         <div class="card-details" id="details-${plant.id}">
-                            ${fertHTML}
-                            ${repotBadge}
                             ${historyHTML}
                             ${notesHTML}
-                            ${speciesTip}
                             ${photosHTML}
+                            <div class="secondary-actions">
+                                <button class="quick-action" onclick="showRepotModal(${plant.id})" title="Repot">🪴</button>
+                                <button class="quick-action" onclick="showDeathModal(${plant.id})" title="Died">💀</button>
+                                <button class="quick-action danger" onclick="deletePlant(${plant.id})" title="Delete">🗑️</button>
+                            </div>
                         </div>
                     </div>`;
         }).join('');
@@ -3906,6 +4021,26 @@
                 icon.textContent = '▾';
                 label.textContent = 'Hide details';
             }
+        }
+
+        // Long-press on plant card shows context menu (death/delete)
+        let _longPressTimer = null;
+        function initLongPress() {
+            document.getElementById('plantList').addEventListener('touchstart', function(e) {
+                const card = e.target.closest('.plant-card');
+                if (!card) return;
+                const plantId = parseInt(card.dataset.plantId);
+                if (isNaN(plantId)) return;
+                _longPressTimer = setTimeout(() => {
+                    if (confirm('Options for this plant:\n\nTap OK to mark as dead, Cancel to delete permanently.')) {
+                        showDeathModal(plantId);
+                    } else {
+                        deletePlant(plantId);
+                    }
+                }, 600);
+            }, {passive: true});
+            document.getElementById('plantList').addEventListener('touchend', () => clearTimeout(_longPressTimer));
+            document.getElementById('plantList').addEventListener('touchmove', () => clearTimeout(_longPressTimer));
         }
 
         function toggleActionMenu(plantId, event) {
@@ -4572,6 +4707,7 @@
         });
 
         render();
+        initLongPress();
     </script>
 
     <!-- Client-side error reporting -->

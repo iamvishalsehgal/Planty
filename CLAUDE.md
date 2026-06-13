@@ -2,6 +2,10 @@
 
 Planty — smart plant care PWA. Adaptive watering schedule, weather-aware, offline-first. Single `index.html` frontend + FastAPI backend.
 
+## Session Start
+
+**Always run `/graphify` at the start of every session** to load the knowledge graph from `graphify-out/graph.json`. This provides full project context without needing to re-read all files. Use `/graphify query "<question>"` to answer codebase questions from the graph.
+
 ## Build & Run
 
 ```bash
