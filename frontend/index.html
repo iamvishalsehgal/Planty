@@ -1627,6 +1627,9 @@
     <!-- Skip to content -->
     <a href="#tab-home" class="skip-link">Skip to main content</a>
 
+    <!-- Connection status banner -->
+    <div id="connectionBanner" style="display:none;text-align:center;padding:8px 16px;font-size:13px;font-weight:600;transition:background 0.3s;"></div>
+
     <!-- Header -->
     <header class="header">
         <div class="header-content">
@@ -1767,7 +1770,7 @@
             </div>
             <!-- Search & Filter -->
             <div id="searchBar" style="display:none;margin-bottom:12px;">
-                <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="render()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
+                <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="scheduleSearchRender()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
                 <div style="display:flex;gap:6px;margin-top:8px;" id="filterButtons">
                     <button class="filter-btn" data-filter="all" onclick="setFilter('all')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">All</button>
                     <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')" style="padding:6px 14px;border:2px solid var(--gray-200);border-radius:20px;background:white;font-size:13px;cursor:pointer;">Needs Water</button>
@@ -2471,6 +2474,12 @@
             render();
         }
 
+        let _searchTimer = null;
+        function scheduleSearchRender() {
+            clearTimeout(_searchTimer);
+            _searchTimer = setTimeout(() => render(), 200);
+        }
+
         function getFilteredPlants() {
             const search = (document.getElementById('plantSearch')?.value || '').toLowerCase();
             let plants = state.plants;
@@ -2482,13 +2491,29 @@
         }
 
         function save() {
-            localStorage.setItem('planty_plants', JSON.stringify(state.plants));
-            localStorage.setItem('planty_dead', JSON.stringify(state.deadPlants));
-            // Cap history at 1000 entries (keep most recent)
-            if (state.history.length > 1000) {
-                state.history = state.history.slice(-1000);
-            }
-            localStorage.setItem('planty_history', JSON.stringify(state.history));
+            const _safeSet = (key, value) => {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                    return true;
+                } catch (e) {
+                    if (e.name === 'QuotaExceededError' || e.code === 22) {
+                        console.warn('localStorage quota exceeded — trimming history');
+                        state.history = state.history.slice(-100);
+                        if (state.history.length > 0) save(); // Retry with trimmed data
+                        return false;
+                    }
+                    throw e;
+                }
+            };
+            // Cap history at 1000 entries
+            if (state.history.length > 1000) state.history = state.history.slice(-1000);
+            // Early quota check — trim aggressively if estimated > 4MB
+            const estimated = JSON.stringify(state).length * 2;
+            if (estimated > 4_000_000) state.history = state.history.slice(-200);
+
+            _safeSet('planty_plants', state.plants);
+            _safeSet('planty_dead', state.deadPlants);
+            _safeSet('planty_history', state.history);
             syncToBackend();
             updateStreak();
         }
@@ -2635,16 +2660,67 @@
                     postWithRetry(`${apiBase}/api/events/sync`, { events });
                 }
                 localStorage.setItem('planty_last_sync', new Date().toISOString());
+                _conn.syncState = 'success';
+                updateConnectionBanner();
                 renderSyncStatus();
-            } catch (_) { /* Offline — no-op */ }
+            } catch (_) {
+                _conn.syncState = 'error';
+                _conn.pendingChanges++;
+                updateConnectionBanner();
+            }
         }
 
         function renderSyncStatus() {
             const el = document.getElementById('syncStatus');
             if (!el) return;
             const last = localStorage.getItem('planty_last_sync');
-            el.textContent = last ? `Last sync: ${new Date(last).toLocaleString()}` : 'Last sync: never';
+            const pending = _conn ? _conn.pendingChanges : 0;
+            el.textContent = last
+                ? `Last sync: ${new Date(last).toLocaleString()}${pending > 0 ? ' • ' + pending + ' pending' : ''}`
+                : 'Last sync: never';
         }
+
+        // ── Connection Awareness ────────────────────────────────────────
+        const _conn = {
+            online: navigator.onLine,
+            syncState: 'idle',
+            pendingChanges: 0,
+        };
+
+        function updateConnectionBanner() {
+            const banner = document.getElementById('connectionBanner');
+            if (!banner) return;
+            if (_conn.syncState === 'error' && _conn.pendingChanges > 0) {
+                banner.style.display = 'block';
+                banner.style.background = '#fee2e2';
+                banner.style.color = '#991b1b';
+                banner.textContent = `⚠️ Sync failed — ${_conn.pendingChanges} changes pending. Will retry.`;
+            } else if (!_conn.online) {
+                banner.style.display = 'block';
+                banner.style.background = '#dbeafe';
+                banner.style.color = '#1e40af';
+                banner.textContent = '📴 You are offline — changes saved locally';
+            } else if (_conn.syncState === 'error' && _conn.pendingChanges === 0) {
+                banner.style.display = 'none';
+                _conn.syncState = 'idle';
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('online', () => {
+            _conn.online = true;
+            _conn.syncState = 'idle';
+            updateConnectionBanner();
+            syncToBackend();
+        });
+
+        window.addEventListener('offline', () => {
+            _conn.online = false;
+            _conn.syncState = 'idle';
+            updateConnectionBanner();
+        });
+        updateConnectionBanner();
 
         function getPlantEmoji(name) {
             const n = name.toLowerCase();
@@ -2972,9 +3048,7 @@
             saveUndoState();
             due.forEach(p => state.history.push({ plantId: p.id, date: new Date().toISOString() }));
             save(); render();
-            showToast(`💧 Watered ${due.length} plants! Tap to undo`, '');
-            const toast = document.getElementById('toast');
-            if (toast) { toast.onclick = () => { undoLastAction(); toast.onclick = null; }; }
+            showToast(`💧 Watered ${due.length} plants! Tap to undo`, '', () => { undoLastAction(); });
         }
 
         function waterPlant(plantId) {
@@ -2986,9 +3060,7 @@
             const plant = state.plants.find(p => p.id === plantId);
             const interval = getAdjustedInterval(plantId, plant?.interval || 7);
             render();
-            showToast('💧 Watered! Tap to undo', '');
-            const toast = document.getElementById('toast');
-            if (toast) { toast.onclick = () => { undoLastAction(); toast.onclick = null; }; }
+            showToast('💧 Watered! Tap to undo', '', () => { undoLastAction(); });
             if (_undoTimer) clearTimeout(_undoTimer);
             _undoTimer = setTimeout(() => { _lastAction = null; }, 8000);
         }
@@ -3011,9 +3083,7 @@
             save();
             render();
             const months = Math.round(plant.fertilizerInterval / 30);
-            showToast('🧪 Fertilized! Tap to undo', '');
-            const toast2 = document.getElementById('toast');
-            if (toast2) { toast2.onclick = () => { undoLastAction(); toast2.onclick = null; }; }
+            showToast('🧪 Fertilized! Tap to undo', '', () => { undoLastAction(); });
         }
 
         function getDaysSinceFertilized(plantId) {
@@ -3208,11 +3278,17 @@
         }
 
         function deletePlant(plantId) {
-            if (!confirm('Delete this plant?')) return;
+            const plant = state.plants.find(p => p.id === plantId);
+            if (!plant) return;
+            if (!confirm(`Delete ${plant.emoji} ${plant.name}? This removes all watering history.`)) return;
+            saveUndoState();
             state.plants = state.plants.filter(p => p.id !== plantId);
             state.history = state.history.filter(h => h.plantId !== plantId);
             save();
             render();
+            showToast(`🗑️ Deleted ${plant.emoji} ${plant.name}`, 'Tap to undo', () => { undoLastAction(); });
+            if (_undoTimer) clearTimeout(_undoTimer);
+            _undoTimer = setTimeout(() => { _lastAction = null; }, 8000);
         }
 
         // ── Undo ────────────────────────────────────────────────────
@@ -3239,17 +3315,23 @@
         }
 
         let _renderTimer = null;
+        let _lastRenderError = null;
         function render(immediate = false) {
+            const run = () => { renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid(); };
             if (immediate) {
                 clearTimeout(_renderTimer);
-                renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid();
+                try { run(); } catch (e) { console.error('Render failed:', e); _lastRenderError = e; showErrorBoundary(e); }
                 return;
             }
-            if (_renderTimer) return; // debounce — max once per animation frame
+            if (_renderTimer) return;
             _renderTimer = requestAnimationFrame(() => {
-                renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid();
+                try { run(); } catch (e) { console.error('Render failed:', e); _lastRenderError = e; showErrorBoundary(e); }
                 _renderTimer = null;
             });
+        }
+
+        function showErrorBoundary(err) {
+            document.getElementById('plantList').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><h2>Something went wrong</h2><p style="margin-bottom:16px;">The app hit an unexpected error. Your data is safe.</p><button onclick="location.reload()" style="padding:12px 24px;background:var(--primary);color:white;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;">🔄 Reload App</button><details style="margin-top:16px;text-align:left;max-width:400px;margin-left:auto;margin-right:auto;"><summary style="cursor:pointer;color:var(--gray-500);font-size:12px;">Technical details</summary><pre style="background:var(--gray-100);padding:8px;border-radius:8px;font-size:11px;overflow-x:auto;margin-top:8px;color:var(--gray-600);">${err.message}\n${err.stack?.substring(0,500)||''}</pre></details></div>`;
         }
 
         function dismissOnboarding() {
@@ -3720,16 +3802,25 @@
             _lastFocusedEl = document.activeElement;
             const modal = document.getElementById(id);
             modal.classList.add('active');
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('role', 'dialog');
+            // Hide background from screen readers
+            document.querySelectorAll('.tab-content, .bottom-nav, .header').forEach(el => el.setAttribute('aria-hidden', 'true'));
             // Focus first focusable element in modal
             const focusable = modal.querySelector('button, [onclick], input, select');
             if (focusable) setTimeout(() => focusable.focus(), 100);
-            // Trap focus inside modal
+            // Trap focus + ESC
             modal.addEventListener('keydown', _trapFocus);
+            modal.addEventListener('keydown', _handleModalKeys);
         }
         function closeModal(id) {
             const modal = document.getElementById(id);
             modal.classList.remove('active');
+            modal.removeAttribute('aria-modal');
             modal.removeEventListener('keydown', _trapFocus);
+            modal.removeEventListener('keydown', _handleModalKeys);
+            // Restore screen reader access
+            document.querySelectorAll('.tab-content, .bottom-nav, .header').forEach(el => el.removeAttribute('aria-hidden'));
             // Restore focus
             if (_lastFocusedEl && typeof _lastFocusedEl.focus === 'function') {
                 setTimeout(() => _lastFocusedEl.focus(), 100);
@@ -3745,13 +3836,37 @@
             if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
             else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
         }
+        function _handleModalKeys(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault(); e.stopPropagation();
+                const activeModal = document.querySelector('.modal-overlay.active');
+                if (activeModal) closeModal(activeModal.id);
+            }
+        }
 
-        function showToast(title, subtitle = '') {
+        let _toastQueue = [];
+        let _toastTimer = null;
+
+        function showToast(title, subtitle = '', onClick = null) {
+            _toastQueue.push({ title, subtitle, onClick });
+            if (_toastQueue.length === 1) _showNextToast();
+        }
+
+        function _showNextToast() {
+            if (_toastQueue.length === 0) return;
+            const { title, subtitle, onClick } = _toastQueue[0];
             const toast = document.getElementById('toast');
             document.getElementById('toastTitle').textContent = title;
             document.getElementById('toastSubtitle').textContent = subtitle;
+            toast.onclick = onClick || null;
+            toast.style.cursor = onClick ? 'pointer' : 'default';
             toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 3000);
+            clearTimeout(_toastTimer);
+            _toastTimer = setTimeout(() => {
+                toast.classList.remove('active');
+                _toastQueue.shift();
+                setTimeout(() => _showNextToast(), 200);
+            }, 3000);
         }
 
         // ── Dark Mode ────────────────────────────────────────────────
