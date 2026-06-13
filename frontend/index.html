@@ -1457,6 +1457,11 @@
             color: var(--gray-600);
         }
 
+        .upcoming-badge.overdue {
+            background: var(--danger);
+            color: white;
+        }
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -3266,7 +3271,7 @@
         function getDaysUntilNextWater(plantId, defaultInterval = 7) {
             const daysSince = getDaysSinceLastWater(plantId);
             if (daysSince === null) return getAdjustedInterval(plantId, defaultInterval);
-            return Math.max(0, getAdjustedInterval(plantId, defaultInterval) - daysSince);
+            return getAdjustedInterval(plantId, defaultInterval) - daysSince;
         }
 
         function getConfidence(plantId) {
@@ -3390,6 +3395,9 @@
             save(); render();
             showToast(`💧 Watered ${due.length} plants! Tap to undo`, '', () => { undoLastAction(); });
         }
+
+        let _lastAction = null;
+        let _undoTimer = null;
 
         function waterPlant(plantId) {
             const canWater = canWaterPlant(plantId);
@@ -3638,8 +3646,6 @@
         }
 
         // ── Undo ────────────────────────────────────────────────────
-        let _lastAction = null;
-        let _undoTimer = null;
 
         function saveUndoState() {
             _lastAction = {
@@ -3797,7 +3803,7 @@
                         <div class="water-countdown ${countdownClass}">
                             <div class="countdown-circle">${daysUntil <= 0 ? '💧' : daysUntil <= 2 ? '⏰' : daysUntil <= 7 ? '📅' : '🌿'}</div>
                             <div class="countdown-info">
-                                <div class="countdown-label">${daysUntil <= 0 ? 'Water overdue' : daysUntil === 0 ? 'Water today' : 'Next watering'}</div>
+                                <div class="countdown-label">${daysUntil < 0 ? 'Water overdue' : daysUntil === 0 ? 'Water today' : 'Next watering'}</div>
                                 <div class="countdown-value">${daysUntil < 0 ? Math.abs(daysUntil) + 'd overdue' : daysUntil === 0 ? 'Today!' : daysUntil + ' days'}</div>
                                 <div class="countdown-subtext">${subtext} · ${daysSince === null ? 'never watered' : daysSince + 'd ago'}</div>
                             </div>
@@ -3833,6 +3839,7 @@
                             ${photosHTML}
                         </div>
                     </div>`;
+        }).join('');
         }
 
         function renderMemorial() {
@@ -4027,8 +4034,8 @@
                 upcomingContainer.innerHTML = upcoming.slice(0, 7).map(item => {
                     const date = new Date();
                     date.setDate(date.getDate() + item.daysUntil);
-                    const badge = item.daysUntil === 0 ? 'today' : 'soon';
-                    const badgeText = item.daysUntil === 0 ? 'Today!' : item.daysUntil === 1 ? 'Tomorrow' : `${item.daysUntil} days`;
+                    const badge = item.daysUntil < 0 ? 'overdue' : item.daysUntil === 0 ? 'today' : 'soon';
+                    const badgeText = item.daysUntil < 0 ? `${Math.abs(item.daysUntil)}d overdue` : item.daysUntil === 0 ? 'Today!' : item.daysUntil === 1 ? 'Tomorrow' : `${item.daysUntil} days`;
                     return `
                         <div class="upcoming-item ${item.daysUntil === 0 ? 'today' : ''}">
                             <div class="upcoming-date">
@@ -4050,7 +4057,7 @@
             const thisWeekWaterings = state.history.filter(h => new Date(h.date) >= weekAgo).length;
             const thisMonthWaterings = state.history.filter(h => new Date(h.date) >= monthAgo).length;
             const needsWaterToday = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) === 0).length;
-            const needsWaterSoon = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) <= 2).length;
+            const needsWaterSoon = state.plants.filter(p => { const d = getDaysUntilNextWater(p.id, p.interval); return d > 0 && d <= 2; }).length;
             const overduePlants = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) < 0).length;
             const avgInterval = Math.round(state.plants.reduce((sum, p) => sum + getAdjustedInterval(p.id, p.interval), 0) / state.plants.length);
             container.innerHTML = `

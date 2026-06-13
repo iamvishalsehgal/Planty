@@ -891,3 +891,11 @@ def test_health_sql_injection_path_safe(monkeypatch):
         assert "failure" in data
     finally:
         _restore_db_path(original_path, original_env)
+        # Clean up the SQLite file created at the injection path
+        injection_file = Path(injection_path)
+        if injection_file.exists():
+            injection_file.unlink()
+        for suffix in ("-wal", "-shm"):
+            companion = Path(str(injection_file) + suffix)
+            if companion.exists():
+                companion.unlink()
