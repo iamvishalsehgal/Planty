@@ -1206,7 +1206,10 @@
         }
 
         .modal {
-            background: white;
+            background: var(--surface-raised);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-default);
             border-radius: 24px 24px 0 0;
             width: 100%;
             max-width: 500px;
@@ -1225,14 +1228,14 @@
         .modal-handle {
             width: 40px;
             height: 5px;
-            background: var(--gray-300);
+            background: var(--text-muted);
             border-radius: 3px;
             margin: 0 auto 20px;
         }
 
         .modal h3 {
             font-size: 22px;
-            color: var(--gray-800);
+            color: var(--text-primary);
             margin-bottom: 8px;
             text-align: center;
         }
@@ -1408,16 +1411,17 @@
 
         /* Schedule Tab */
         .schedule-card {
-            background: white;
-            border-radius: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-card);
             margin-bottom: 20px;
         }
 
         .schedule-card h2 {
             font-size: 18px;
-            color: var(--gray-800);
+            color: var(--text-primary);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
@@ -1528,13 +1532,15 @@
             align-items: center;
             gap: 14px;
             padding: 14px;
-            background: var(--gray-50);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-subtle);
             border-radius: 14px;
             transition: all 0.2s;
         }
 
         .upcoming-item.today {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            background: linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.1) 100%);
+            border: 1px solid rgba(245,158,11,0.2);
         }
 
         .upcoming-date {
@@ -1545,12 +1551,12 @@
         .upcoming-date-day {
             font-size: 20px;
             font-weight: 700;
-            color: var(--gray-800);
+            color: var(--text-primary);
         }
 
         .upcoming-date-month {
             font-size: 11px;
-            color: var(--gray-500);
+            color: var(--text-secondary);
             text-transform: uppercase;
         }
 
@@ -1610,12 +1616,12 @@
         .stat-card-value {
             font-size: 28px;
             font-weight: 700;
-            color: var(--gray-800);
+            color: var(--text-primary);
         }
 
         .stat-card-label {
             font-size: 12px;
-            color: var(--gray-500);
+            color: var(--text-secondary);
             margin-top: 4px;
         }
 
@@ -2223,7 +2229,7 @@
                 </button>
             </div>
             <div id="searchBar" style="display:none;margin-bottom:12px;position:sticky;top:0;z-index:10;background:var(--bg);padding-bottom:8px;">
-                <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="scheduleSearchRender()" style="width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:14px;font-size:16px;outline:none;background:white;">
+                <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="scheduleSearchRender()" style="width:100%;padding:12px 16px;border:2px solid var(--border-default);border-radius:14px;font-size:16px;outline:none;background:rgba(255,255,255,0.06);color:var(--text-primary);">
                 <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;" id="filterButtons">
                     <button class="filter-btn" data-filter="all" onclick="setFilter('all')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">All</button>
                     <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Needs Water</button>
