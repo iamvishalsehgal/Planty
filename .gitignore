@@ -16,3 +16,9 @@ llm-council/.env
 llm-council/data/
 llm-council/.venv/
 llm-council/frontend/node_modules/
+
+# Agent & intelligence runtime artifacts
+.claude-flow/
+.swarm/
+agents/
+ONBOARDING.md
