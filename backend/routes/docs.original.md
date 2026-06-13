@@ -1,6 +1,6 @@
 # backend/routes/ — Technical Reference
 
-All routes registered in `main.py`. Every path prefixed `/api/`. FastAPI generates interactive docs at `/docs`.
+All routes are registered in `main.py`. Every path is prefixed with `/api/`. FastAPI generates interactive docs at `/docs`.
 
 ---
 
@@ -8,7 +8,7 @@ All routes registered in `main.py`. Every path prefixed `/api/`. FastAPI generat
 
 ### POST `/api/plants/sync`
 
-Receives current plant list from frontend. Passes to `ingestion.run()` → triggers `run_pipeline()` so health metrics update immediately.
+Receives the current plant list from the frontend. Passes to `ingestion.run()` then triggers `run_pipeline()` so health metrics are updated immediately.
 
 **Request body:**
 ```json
@@ -26,20 +26,20 @@ Receives current plant list from frontend. Passes to `ingestion.run()` → trigg
 }
 ```
 
-All fields except `location`, `lastWatered`, and `isDead` required. `isDead` defaults to `false`.
+All fields except `location`, `lastWatered`, and `isDead` are required. `isDead` defaults to `false`.
 
 **Response:**
 ```json
 { "ok": true, "staged": 3 }
 ```
 
-`staged` = count of rows written to `plants_raw`.
+`staged` is the count of rows written to `plants_raw`.
 
 ---
 
 ### GET `/api/plants`
 
-Returns all rows from `plants_raw` with most recent `plant_health_metrics` row joined per plant.
+Returns all rows from `plants_raw` with the most recent `plant_health_metrics` row joined per plant.
 
 **Response:**
 ```json
@@ -60,7 +60,7 @@ Returns all rows from `plants_raw` with most recent `plant_health_metrics` row j
 ]
 ```
 
-`metrics` is `null` for plants with no completed events yet.
+`metrics` is `null` for plants that have no completed events yet.
 
 ---
 
@@ -68,7 +68,7 @@ Returns all rows from `plants_raw` with most recent `plant_health_metrics` row j
 
 ### POST `/api/events/sync`
 
-Receives care events from frontend. Passes to `ingestion.run()` → triggers `run_pipeline()`.
+Receives care events from the frontend. Passes to `ingestion.run()` then triggers `run_pipeline()`.
 
 **Request body:**
 ```json
@@ -86,7 +86,7 @@ Receives care events from frontend. Passes to `ingestion.run()` → triggers `ru
 }
 ```
 
-`completed` and `feedback` optional — events without `completed` staged but skipped by transform layer until completed.
+`completed` and `feedback` are optional — events without `completed` are staged but skipped by the transform layer until they are completed.
 
 **Response:**
 ```json
@@ -99,7 +99,7 @@ Receives care events from frontend. Passes to `ingestion.run()` → triggers `ru
 
 ### GET `/api/analytics/summary`
 
-Aggregate KPIs across all plants. `avg_health_score` = mean of most recent `health_score` per plant (uses subquery with `MAX(computed_at)` grouped by `plant_id`).
+Aggregate KPIs across all plants. `avg_health_score` is the mean of the most recent `health_score` per plant (uses a subquery with `MAX(computed_at)` grouped by `plant_id`).
 
 **Response:**
 ```json
@@ -141,7 +141,7 @@ GROUP BY day ORDER BY day DESC LIMIT 28
 
 ### POST `/api/analytics/run-pipeline`
 
-Triggers `runner.run_pipeline()` with no args — runs transform and aggregation only, no ingestion.
+Triggers `runner.run_pipeline()` with no arguments — runs transform and aggregation only, no ingestion.
 
 **Response:** The audit dict written to `pipeline_runs`:
 ```json

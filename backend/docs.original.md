@@ -14,17 +14,17 @@
 
 ## main.py
 
-Registers three APIRouters (`plants`, `events`, `analytics`) under `/api/`. CORS middleware: `allow_origins=["*"]` → works from any deployment URL (GitHub Pages, Render).
+Registers three APIRouters (`plants`, `events`, `analytics`) all under `/api/`. CORS middleware is set to `allow_origins=["*"]` so the app works from any deployment URL including GitHub Pages and Render.
 
-On `startup`:
-1. `init_db()` — creates all 6 tables via `CREATE TABLE IF NOT EXISTS`
-2. `BackgroundScheduler` starts with one job: `run_pipeline` every 5 min
+On the `startup` event:
+1. `init_db()` — creates all 6 tables with `CREATE TABLE IF NOT EXISTS`
+2. `BackgroundScheduler` is started with one job: `run_pipeline` on a 5-minute interval
 
 Two catch-all routes serve `frontend/index.html`:
 - `GET /` → `FileResponse(FRONTEND / "index.html")`
 - `GET /{full_path:path}` → same
 
-Registered after API routers → `/api/*` paths match first, never caught by fallback. `FRONTEND` = `Path(__file__).parent.parent / "frontend"` — works from repo root or `backend/` dir.
+These are registered after the API routers so `/api/*` paths match first and are never caught by the fallback. `FRONTEND` is resolved as `Path(__file__).parent.parent / "frontend"`, which works whether the server is run from the repo root or the `backend/` directory.
 
 ---
 
@@ -37,15 +37,15 @@ conn.execute("PRAGMA journal_mode = WAL")
 conn.execute("PRAGMA foreign_keys = ON")
 ```
 
-`check_same_thread=False` needed — FastAPI handles reqs across threads. `row_factory = sqlite3.Row` → all query results addressable by column name. WAL mode → concurrent reads during write tx (ETL pipeline + API req simultaneously).
+`check_same_thread=False` is required because FastAPI handles requests across threads. `row_factory = sqlite3.Row` makes all query results addressable by column name. WAL mode allows concurrent reads during a write transaction, which matters when the ETL pipeline and an API request happen simultaneously.
 
-`DB_PATH` = `Path(__file__).parent / "planty.db"` → DB always created inside `backend/` regardless of uvicorn invocation dir.
+`DB_PATH` is resolved relative to the file (`Path(__file__).parent / "planty.db"`), so the database is always created inside the `backend/` directory regardless of where uvicorn is invoked from.
 
 ---
 
 ## models.py
 
-Pydantic v2 models used as FastAPI req body types. FastAPI validates incoming JSON automatically → HTTP 422 if required field missing or wrong type.
+Pydantic v2 models used as FastAPI request body types. FastAPI validates incoming JSON against these automatically and returns HTTP 422 if any required field is missing or the wrong type.
 
 ```python
 class PlantIn(BaseModel):
@@ -65,14 +65,14 @@ class EventIn(BaseModel):
     feedback: Optional[str] = None
 ```
 
-Field names match frontend camelCase payload. Pipeline layers receive plain dicts via `.model_dump()`, not Pydantic objects.
+Field names match the frontend's camelCase payload. The pipeline layers receive plain dicts (via `.model_dump()`), not Pydantic objects.
 
 ---
 
 ## Database schema
 
 ### plants_raw
-Staging table. Upserted from frontend on every sync.
+Staging table. Upserted from the frontend on every sync.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -85,7 +85,7 @@ Staging table. Upserted from frontend on every sync.
 | synced_at | TEXT NOT NULL | UTC ISO timestamp of last sync |
 
 ### events_raw
-Staging table. On conflict: only `completed`, `feedback`, `synced_at` updated — `scheduled` immutable.
+Staging table. On conflict, only `completed`, `feedback`, and `synced_at` are updated — `scheduled` is immutable.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -93,12 +93,12 @@ Staging table. On conflict: only `completed`, `feedback`, `synced_at` updated �
 | plant_id | TEXT NOT NULL | references plants_raw.id |
 | event_type | TEXT NOT NULL | e.g. `water` |
 | scheduled | TEXT NOT NULL | when watering was due |
-| completed | TEXT | when done, nullable |
+| completed | TEXT | when it was done, nullable |
 | feedback | TEXT | `happy` / `sad` / `overwatered`, nullable |
 | synced_at | TEXT NOT NULL | |
 
 ### care_events
-Enriched events. Written by `transform.py`. Only completed events appear.
+Enriched events. Written by `transform.py`. Only completed events appear here.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -113,7 +113,7 @@ Enriched events. Written by `transform.py`. Only completed events appear.
 | processed_at | TEXT NOT NULL | when transform ran |
 
 ### plant_health_metrics
-One row per plant per pipeline run. Query latest via `MAX(computed_at)`.
+One row appended per plant per pipeline run. Query for latest with `MAX(computed_at)`.
 
 | Column | Type | Notes |
 |---|---|---|
@@ -127,7 +127,7 @@ One row per plant per pipeline run. Query latest via `MAX(computed_at)`.
 | completed_events | INTEGER | |
 
 ### weather_snapshots
-Schema exists, not currently written. Reserved for future server-side weather logging.
+Schema exists, not currently written to. Reserved for future server-side weather logging.
 
 ### pipeline_runs
 Audit log. One row per ETL execution.
@@ -142,4 +142,4 @@ Audit log. One row per ETL execution.
 | events_staged | INTEGER | |
 | events_transformed | INTEGER | |
 | metrics_computed | INTEGER | |
-| error | TEXT | exception msg if status = error |
+| error | TEXT | exception message if status = error |

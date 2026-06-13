@@ -24,24 +24,24 @@ Skills that read domain docs:
 
 ### CONTEXT.md
 
-The domain glossary. Implementation-agnostic definitions of the project's core concepts. Resolves ambiguity across the codebase. No implementation details — those live in ADRs and source comments.
+Domain glossary. Implementation-agnostic definitions of core concepts. Resolves ambiguity across codebase. No implementation details — those live in ADRs + source comments.
 
-Skills read it first before touching code. If it doesn't exist, the skill skips the domain-awareness step and works purely from code — which is less accurate.
+Skills read it first before touching code. If missing, skill skips domain-awareness step, works purely from code — less accurate.
 
 ### docs/adr/
 
-Architecture Decision Records. One `.md` file per significant architectural choice. Follows the [ADR format](https://adr.github.io/):
+Architecture Decision Records. One `.md` per significant architectural choice. Follows [ADR format](https://adr.github.io/):
 
 - **Title**: short noun phrase
 - **Status**: proposed | accepted | deprecated | superseded
-- **Context**: what problem are we solving?
-- **Decision**: what did we choose and why?
-- **Consequences**: what becomes easier, what becomes harder?
+- **Context**: problem being solved
+- **Decision**: what chosen + why
+- **Consequences**: what gets easier, what gets harder
 
-Numbered sequentially: `0001-`, `0002-`, etc. Reference related ADRs by number in the text.
+Numbered sequentially: `0001-`, `0002-`, etc. Reference related ADRs by number.
 
-Skills read ALL ADRs when preparing an architectural change. A missing ADR directory means no recorded decisions — the skill treats the codebase as greenfield for architecture purposes.
+Skills read ALL ADRs when preparing architectural change. Missing ADR dir → no recorded decisions → skill treats codebase as greenfield for architecture.
 
 ## Creating CONTEXT.md
 
-Run `/graphify` on the repo first to surface core concepts and surprising connections, then distill the god nodes into a glossary. The graph report's "God Nodes" section is a natural starting point for the domain glossary entries.
+Run `/graphify` on repo first → surface core concepts + surprising connections → distill god nodes into glossary. Graph report's "God Nodes" section = natural starting point for domain glossary entries.

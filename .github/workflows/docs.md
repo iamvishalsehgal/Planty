@@ -2,7 +2,7 @@
 
 ## deploy.yml
 
-Deploys the `frontend/` directory to GitHub Pages on push to `master`. No build step — `index.html` is fully self-contained so the directory is uploaded as-is using the Pages artifact API.
+Deploy `frontend/` to GitHub Pages on push to `master`. No build step — `index.html` self-contained, directory uploaded as-is via Pages artifact API.
 
 ---
 
@@ -14,7 +14,7 @@ on:
     branches: [master]
 ```
 
-Runs on every push to `master`. Not triggered by PRs or pushes to other branches.
+Runs every push to `master`. Not PRs or other branches.
 
 ---
 
@@ -27,9 +27,9 @@ permissions:
   id-token: write
 ```
 
-`pages: write` + `id-token: write` — required for OIDC-based authentication with the GitHub Pages deployment API. Without these, `actions/deploy-pages` fails with a 403.
+`pages: write` + `id-token: write` — required for OIDC auth with Pages deployment API. Without → `actions/deploy-pages` fails 403.
 
-`contents: read` — allows `actions/checkout` to clone the repo.
+`contents: read` — lets `actions/checkout` clone repo.
 
 ---
 
@@ -41,19 +41,19 @@ concurrency:
   cancel-in-progress: true
 ```
 
-If two pushes happen in quick succession, the older in-flight deployment is cancelled and only the latest commit is deployed. Without this, pushes can queue up and deploy stale code out of order.
+Two pushes rapid → older inflight deploy cancelled, only latest commit deploys. Without → pushes queue, stale code deploys out of order.
 
 ---
 
 ## Steps
 
-**`actions/checkout@v4`** — Clones the repo at the commit that triggered the workflow.
+**`actions/checkout@v4`** — Clone repo at triggering commit.
 
-**`actions/configure-pages@v4`** — Validates that GitHub Pages is enabled for the repo and sets output variables used by the deploy step. If Pages is not enabled in repo settings, this step fails with a descriptive error.
+**`actions/configure-pages@v4`** — Validate Pages enabled for repo, set output vars for deploy step. Pages disabled → step fails with descriptive error.
 
-**`actions/upload-pages-artifact@v3`** — Packages the directory at `path: frontend/` into a Pages artifact. Only the `frontend/` folder is included — the `backend/`, `README.md`, and other repo files are not published.
+**`actions/upload-pages-artifact@v3`** — Package `path: frontend/` into Pages artifact. Only `frontend/` included — `backend/`, `README.md`, other files excluded.
 
-**`actions/deploy-pages@v4`** — Deploys the artifact. Outputs `page_url` which is surfaced in the GitHub environment UI as the deployment URL.
+**`actions/deploy-pages@v4`** — Deploy artifact. Output `page_url` surfaced in GitHub environment UI as deployment URL.
 
 ---
 
@@ -65,7 +65,7 @@ environment:
   url: ${{ steps.deployment.outputs.page_url }}
 ```
 
-Links the workflow run to the `github-pages` environment in GitHub, which shows the live URL in the repo's Deployments sidebar and tracks deployment history.
+Links workflow run to `github-pages` environment → shows live URL in repo's Deployments sidebar, tracks deployment history.
 
 ---
 
@@ -73,4 +73,4 @@ Links the workflow run to the `github-pages` environment in GitHub, which shows 
 
 Published at: `https://iamvishalsehgal.github.io/Planty`
 
-Only the frontend runs at this URL. The backend ETL pipeline, analytics endpoints, and SQLite database are not available — those require the Render deployment.
+Only frontend runs here. Backend ETL pipeline, analytics endpoints, SQLite DB unavailable — need Render deployment for those.

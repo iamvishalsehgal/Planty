@@ -1,21 +1,21 @@
 # backend/pipelines/
 
-This folder contains the data processing logic. Every 5 minutes, it goes through all the watering events that have come in from the app and works out how well each plant is being looked after.
+This folder = data processing logic. Every 5 min, processes all watering events from app → calculates plant care quality.
 
 ---
 
 ## What it does
 
-Think of it as three steps that run one after another:
+Three sequential steps:
 
-**Step 1 — Collect** (`ingestion.py`): Takes the raw data sent from the app and saves it to the database.
+**Step 1 — Collect** (`ingestion.py`): Raw app data → DB.
 
-**Step 2 — Analyse** (`transform.py`): Looks at each completed watering and works out whether it was done on time or how late it was.
+**Step 2 — Analyse** (`transform.py`): Each completed watering → on-time/late check.
 
-**Step 3 — Score** (`aggregation.py`): Uses all that information to give each plant a health score between 0 and 1.
+**Step 3 — Score** (`aggregation.py`): All data → plant health score (0–1).
 
-`runner.py` is what coordinates all three steps and keeps a log of every time they run.
+`runner.py` coordinates all three + logs each run.
 
 ---
 
-For the full technical breakdown, see [docs.md](docs.md).
+Full technical breakdown → [docs.md](docs.md).

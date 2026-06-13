@@ -18,7 +18,7 @@ python3 -m pytest backend/tests/test_routes.py -q
 
 ## Deploy
 
-Push to `master` → Render auto-deploys from GitHub. Live: https://planty-26os.onrender.com
+Push to `master` — Render auto-deploys from GitHub. Live: https://planty-26os.onrender.com
 
 ## Architecture
 

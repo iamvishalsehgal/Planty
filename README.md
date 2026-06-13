@@ -2,44 +2,44 @@
 
 **Live app:** https://planty-26os.onrender.com
 
-Planty helps you remember to water your plants. You add your plants, tap Water whenever you actually water them, and the app figures out the right schedule on its own — no manual tweaking needed.
+Planty help remember to water plants. Add plants → tap Water when water → app figures schedule. No manual tweaking.
 
 ---
 
 ## What makes it different
 
-Most plant apps just remind you on a fixed schedule. Planty watches how you actually water and adjusts around that. If you tend to water your Monstera every 9 days even though you set it to 7, it picks that up and shifts the schedule to match. It also checks the current weather and season — so in summer heat it reminds you sooner, and in winter it backs off.
+Most plant apps remind on fixed schedule. Planty watches actual watering → adjusts. Water Monstera every 9 days instead of set 7 → shifts schedule to match. Checks weather + season → summer heat = sooner reminders, winter = backs off.
 
-When a plant dies, you tell it why (overwatered, underwatered, or unknown). The next time you add the same plant, Planty shows you what went wrong and suggests a corrected starting schedule.
+Plant dies → tell why (overwatered, underwatered, unknown). Next time add same plant → Planty shows what went wrong + suggests corrected starting schedule.
 
 ---
 
 ## Features
 
-- **Species presets** — 30+ common houseplants with pre-filled care settings, light/humidity/difficulty guides, and species-specific tips
-- **Automatic schedule** — learns from your actual watering history, not just the initial setting
-- **Fertilizer tracking** — separate reminders for fertilizing, with adaptive schedule
-- **Plant Doctor** — symptom checker: yellow leaves, brown tips, drooping, pests, and more with treatment guides
-- **Photo journal** — capture plant growth over time, stored locally on your device
-- **Weather-aware** — pulls live weather and adjusts for temperature and season
+- **Species presets** — 30+ common houseplants with pre-filled care settings, light/humidity/difficulty guides, species-specific tips
+- **Automatic schedule** — learns from actual watering history, not just initial setting
+- **Fertilizer tracking** — separate reminders for fertilizing, adaptive schedule
+- **Plant Doctor** — symptom checker: yellow leaves, brown tips, drooping, pests, more with treatment guides
+- **Photo journal** — capture plant growth over time, stored locally on device
+- **Weather-aware** — pulls live weather, adjusts for temperature + season
 - **Dark mode** — follows system theme or manual toggle, full component coverage
 - **48-hour cooldown** — blocks accidental double-waterings
-- **Death + revival system** — records cause of death, uses it to protect future plants
-- **Notifications** — browser alerts when a plant is due or overdue, even with the tab in the background
-- **Memorial tab** — keeps a record of every plant that didn't make it
-- **Calendar export** — download a `.ics` file to add watering reminders to any calendar app
-- **Backup and restore** — export your plant data as JSON and import it on any device
-- **Analytics** — health scores per plant based on how consistently you've been watering (requires backend running for full analytics)
+- **Death + revival system** — records cause of death, protects future plants
+- **Notifications** — browser alerts when plant due or overdue, tab in background
+- **Memorial tab** — record of every plant that didn't make it
+- **Calendar export** — download `.ics` file, add watering reminders to any calendar app
+- **Backup and restore** — export plant data as JSON, import on any device
+- **Analytics** — health scores per plant based on watering consistency (backend needed for full analytics)
 
 ---
 
 ## How it's built
 
-There are two parts that work together:
+Two parts:
 
-**The app (frontend)** — everything you see and tap. It runs entirely in your browser and stores your plant data locally on your device. It works offline and doesn't need an account.
+**App (frontend)** — UI. Runs in browser, stores plant data locally. Works offline, no account needed.
 
-**The data backend** — a small server running in the background. It receives your watering history, processes it every 5 minutes, and computes a health score for each plant. This is what powers the analytics section.
+**Data backend** — small server. Receives watering history, processes every 5 min, computes health score per plant. Powers analytics.
 
 ---
 
@@ -47,8 +47,8 @@ There are two parts that work together:
 
 | Folder | What's in it |
 |---|---|
-| `frontend/` | The app — the entire UI in one HTML file |
-| `backend/` | The Python server that handles data processing |
-| `.github/workflows/` | Automatic deployment to GitHub Pages |
+| `frontend/` | App — entire UI in one HTML file |
+| `backend/` | Python server for data processing |
+| `.github/workflows/` | Auto-deploy to GitHub Pages |
 
-For technical documentation on each part, see the `docs.md` file inside each folder.
+Technical docs for each part → `docs.md` inside each folder.

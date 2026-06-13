@@ -1,64 +1,64 @@
 # Planty — Domain Glossary
 
-Canonical terms for the smart plant care application. Implementation-agnostic.
-Definitions resolve ambiguity across frontend and backend. No code.
+Canonical terms for smart plant care app. Implementation-agnostic.
+Definitions resolve ambiguity across frontend + backend. No code.
 
 ---
 
 ## Plant
-A living indoor plant tracked by the app. Has a **name**, optional **location**, **species** (optional, from preset database), **pot size**, and a **watering interval**. May be alive or dead (**Memorial**).
+Living indoor plant tracked by app. Has **name**, optional **location**, **species** (optional, from preset DB), **pot size**, **watering interval**. May be alive or dead (**Memorial**).
 
 ## Watering Event
-A timestamped record that a **Plant** was watered. The app learns the **Adaptive Interval** from the sequence of watering events. Each event may be **on time** (within 1 day of schedule) or **late**.
+Timestamped record that **Plant** was watered. App learns **Adaptive Interval** from event sequence. Each event may be **on time** (within 1 day of schedule) or **late**.
 
 ## Interval
-The number of days between waterings. Two forms:
+Days between waterings. Two forms:
 
-- **Base Interval** — the user's initial setting or species default. A starting point.
-- **Adaptive Interval** — computed from actual watering history using a weighted moving average. Recent behavior has more influence. Clamped to **2–30 days**.
+- **Base Interval** — user's initial setting or species default. Starting point.
+- **Adaptive Interval** — computed from actual watering history via weighted moving average. Recent behavior → more influence. Clamped to **2–30 days**.
 
 ## Environment Multiplier
-A scalar applied to the **Adaptive Interval** to account for current conditions. Composed of two sub-multipliers, averaged:
+Scalar applied to **Adaptive Interval** for current conditions. Two sub-multipliers, averaged:
 
 - **Seasonal Multiplier** — summer (0.7), spring (0.9), fall (1.1), winter (1.4). Season detected from month + hemisphere.
-- **Temperature Multiplier** — hotter = more frequent watering (range 0.6–1.4).
+- **Temperature Multiplier** — hotter → more frequent watering (range 0.6–1.4).
 
-Hemisphere determined from geolocation latitude. If unavailable, defaults to northern hemisphere; if temperature unavailable, defaults to 1.0.
+Hemisphere from geolocation latitude. If unavailable → default northern hemisphere; if temperature unavailable → default 1.0.
 
 ## Cooldown
-A **48-hour** lockout after watering. Prevents accidental double-watering. The same plant cannot be watered again until the cooldown expires.
+**48-hour** lockout after watering. Prevents accidental double-watering. Same plant cannot be watered again until cooldown expires.
 
 ## Health Score
-A 0.0–1.0 score computed per plant from its **Care Events**. Formula:
+0.0–1.0 score computed per plant from **Care Events**. Formula:
 
 ```
 health_score = compliance × 0.4 + timeliness × 0.3 + feedback × 0.3
 ```
 
-- **Compliance** — fraction of scheduled events that were completed (always 1.0 for events in care_events).
+- **Compliance** — fraction of scheduled events completed (always 1.0 for events in care_events).
 - **Timeliness** — fraction of events completed on time (within 1 day of schedule).
-- **Feedback** — average user-reported plant response: happy (1.0), sad (0.3), overwatered (0.0). Defaults to 0.5 if no feedback.
+- **Feedback** — avg user-reported plant response: happy (1.0), sad (0.3), overwatered (0.0). Defaults 0.5 if no feedback.
 
 Weights configurable via `shared.py`.
 
 ## Care Event
-An enriched **Watering Event** moved from staging (**events_raw**) to the analytics table (**care_events**) by the **Transform** pipeline stage. Includes computed **days_overdue** and **was_on_time** flag.
+Enriched **Watering Event** moved from staging (**events_raw**) → analytics table (**care_events**) by **Transform** pipeline stage. Includes computed **days_overdue** + **was_on_time** flag.
 
 ## Species
-A predefined plant type from the species database (32 entries). Provides default **emoji**, **interval**, **light** requirement, **humidity** preference, **difficulty** rating, and a care **tip**. Selecting a species auto-fills the plant form.
+Predefined plant type from species DB (32 entries). Provides default **emoji**, **interval**, **light** requirement, **humidity** preference, **difficulty** rating, care **tip**. Selecting species → auto-fills plant form.
 
 ## Memorial
-A record of a plant that died. Stores **cause of death** (overwatering, underwatering, unknown), the **last interval** used, and a **suggested interval** for the next plant of the same species. When the same species is added again, the app shows a **Revival** warning with the adjusted schedule.
+Record of plant that died. Stores **cause of death** (overwatering, underwatering, unknown), **last interval** used, **suggested interval** for next plant of same species. When same species added again → app shows **Revival** warning with adjusted schedule.
 
 ## Revival
-The flow when a user adds a plant whose species matches a **Memorial** entry. Shows the old interval, the recommended new interval, and asks whether this is a replacement (use protection) or a different plant (start fresh).
+Flow when user adds plant whose species matches **Memorial** entry. Shows old interval, recommended new interval, asks whether replacement (use protection) or different plant (start fresh).
 
 ## Pipeline
-The backend ETL process running every 5 minutes. Three stages:
+Backend ETL process running every 5 minutes. Three stages:
 
-- **Ingestion** — upserts raw plant and event data from the frontend into staging tables. Validates each item; skips invalid ones.
-- **Transform** — moves completed events from staging to **care_events**, computing **days_overdue** (capped at ±365).
-- **Aggregation** — computes a **Health Score** for every plant with care events.
+- **Ingestion** — upserts raw plant + event data from frontend → staging tables. Validates each item; skips invalid ones.
+- **Transform** — moves completed events from staging → **care_events**, computing **days_overdue** (capped at ±365).
+- **Aggregation** — computes **Health Score** for every plant with care events.
 
 ## Plant Doctor
-A symptom checker with 6 symptom categories (yellow leaves, brown tips, drooping, spots, pests, no growth), each mapping to 3 possible causes with treatment guidance. Species-specific tips shown when available.
+Symptom checker with 6 symptom categories (yellow leaves, brown tips, drooping, spots, pests, no growth), each mapping to 3 possible causes with treatment guidance. Species-specific tips shown when available.
