@@ -659,7 +659,32 @@
             transition: width 0.5s ease;
         }
 
-        /* Actions */
+        /* Card details — hidden by default */
+        .card-details {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-100);
+            animation: fadeIn 0.2s ease;
+        }
+        .card-details.open { display: block; }
+
+        .card-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            width: 100%;
+            padding: 8px;
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+
+        /* Actions — compact menu */
         .actions-row {
             display: flex;
             justify-content: space-between;
@@ -688,6 +713,8 @@
             color: var(--gray-600);
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 36px;
+            min-height: 36px;
         }
 
         .action-btn.danger {
@@ -698,6 +725,86 @@
             background: var(--gray-200);
             transform: scale(0.95);
         }
+
+        .action-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .action-menu-btn {
+            padding: 8px 14px;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            color: var(--gray-600);
+            cursor: pointer;
+            min-width: 44px;
+            min-height: 44px;
+            letter-spacing: 1px;
+        }
+
+        .action-menu-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 6px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            z-index: 50;
+            min-width: 170px;
+            overflow: hidden;
+            padding: 4px;
+        }
+
+        .action-menu-dropdown.open { display: block; animation: fadeIn 0.15s ease; }
+
+        .action-menu-dropdown button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 14px;
+            background: none;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .action-menu-dropdown button:active { background: var(--gray-100); }
+        .action-menu-dropdown button.danger { color: var(--danger); }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: calc(100px + var(--safe-bottom));
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            z-index: 90;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .fab:active {
+            transform: scale(0.92);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+        }
+        .fab.hidden { display: none; }
 
         /* Empty State */
         .empty-state {
@@ -1524,6 +1631,15 @@
         body.dark-mode .week-day-num { color: #e2e8f0; }
         body.dark-mode .week-day-name { color: #94a3b8; }
 
+        /* Dark mode — new components */
+        body.dark-mode .card-details { border-color: #334155; }
+        body.dark-mode .card-toggle { color: #64748b; }
+        body.dark-mode .action-menu-btn { background: #334155; color: #e2e8f0; }
+        body.dark-mode .action-menu-dropdown { background: #1e293b; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        body.dark-mode .action-menu-dropdown button { color: #e2e8f0; }
+        body.dark-mode .action-menu-dropdown button:active { background: #334155; }
+        body.dark-mode .action-menu-dropdown button.danger { color: #fca5a5; }
+
         /* About */
         .about-card {
             background: white;
@@ -1692,8 +1808,11 @@
             </div>
 
             <!-- Add Plant Section -->
-            <div class="add-section">
-                <h2>🪴 Add a New Plant</h2>
+            <div id="addPlantSection" class="add-section" style="position:relative;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <h2 style="margin-bottom:0;">🪴 Add a New Plant</h2>
+                    <button onclick="toggleAddForm()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--gray-400);padding:4px 8px;" aria-label="Close add form">✕</button>
+                </div>
                 <div class="input-row">
                     <div class="input-group">
                         <label>Plant Species (Quick Setup)</label>
@@ -2116,6 +2235,9 @@
     </div>
 
     <!-- Bottom Navigation -->
+    <!-- FAB: Add Plant -->
+    <button id="addPlantFab" class="fab hidden" onclick="toggleAddForm()" aria-label="Add a new plant">+</button>
+
     <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
         <button class="nav-item active" onclick="showTab('home')" data-tab="home">
             <span class="nav-icon">🏠</span>
@@ -3334,7 +3456,7 @@
         let _renderTimer = null;
         let _lastRenderError = null;
         function render(immediate = false) {
-            const run = () => { renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid(); };
+            const run = () => { renderPlants(); renderMemorial(); renderSchedule(); renderYearGrid(); updateAddFormVisibility(); };
             if (immediate) {
                 clearTimeout(_renderTimer);
                 try { run(); } catch (e) { console.error('Render failed:', e); _lastRenderError = e; showErrorBoundary(e); }
@@ -3381,7 +3503,7 @@
             initOnboarding();
             if (state.plants.length === 0) {
                 if (searchBar) searchBar.style.display = 'none';
-                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above or pick a popular one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${[{label:'Monstera',key:'monstera deliciosa'},{label:'Pothos',key:'pothos'},{label:'Snake Plant',key:'snake plant'},{label:'Spider Plant',key:'spider plant'},{label:'Aloe Vera',key:'aloe vera'}].map(p => `<button onclick="document.getElementById('plantSpecies').value='${p.key}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(p.label)} ${p.label}</button>`).join('')}</div></div>`;
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Tap + to add a plant or pick one:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px;">${[{label:'Monstera',key:'monstera deliciosa'},{label:'Pothos',key:'pothos'},{label:'Snake Plant',key:'snake plant'},{label:'Spider Plant',key:'spider plant'},{label:'Aloe Vera',key:'aloe vera'}].map(p => `<button onclick="document.getElementById('plantSpecies').value='${p.key}';onSpeciesSelect();addPlant()" style="padding:8px 16px;background:white;border:2px solid var(--gray-200);border-radius:20px;cursor:pointer;font-size:14px;">${getPlantEmoji(p.label)} ${p.label}</button>`).join('')}</div></div>`;
                 return;
             }
             if (searchBar) searchBar.style.display = 'block';
@@ -3398,29 +3520,28 @@
                 const interval = getAdjustedInterval(plant.id, plant.interval);
                 const waterings = getPlantHistory(plant.id).length;
                 const canWater = canWaterPlant(plant.id);
-                let countdownClass = '', countdownText = `${daysUntil} days`, subtext = 'Looking good! 🌿';
-                if (daysUntil === 0) { countdownClass = 'today'; countdownText = 'Today!'; subtext = 'Time to water 💧'; }
-                else if (daysUntil < 0) { countdownClass = 'overdue'; countdownText = 'Overdue!'; subtext = 'Water me please! 🥺'; }
-                else if (daysUntil === 1) { countdownClass = 'urgent'; countdownText = 'Tomorrow'; subtext = 'Get ready! 🌱'; }
+                let countdownClass = '', subtext = 'Looking good! 🌿';
+                if (daysUntil === 0) { countdownClass = 'today'; subtext = 'Time to water 💧'; }
+                else if (daysUntil < 0) { countdownClass = 'overdue'; subtext = 'Water me please! 🥺'; }
+                else if (daysUntil === 1) { countdownClass = 'urgent'; subtext = 'Get ready! 🌱'; }
                 const lastWateredText = daysSince === null ? 'Never watered' :
                     daysSince === 0 ? (hoursSince < 1 ? 'Just now' : `${Math.floor(hoursSince)}h ago`) : `${daysSince} days ago`;
                 const daysUntilRepot = getDaysUntilRepot(plant);
                 const repotBadge = daysUntilRepot !== null && daysUntilRepot <= 60
                     ? `<div class="repot-badge ${daysUntilRepot <= 0 ? 'overdue' : 'soon'}">
-                           <span>🪴 ${daysUntilRepot <= 0 ? 'Repotting overdue' : `Repot in ${daysUntilRepot}d`}</span>
+                           <span>🪴 ${daysUntilRepot <= 0 ? 'Repot overdue' : `Repot in ${daysUntilRepot}d`}</span>
                            <button onclick="showRepotModal(${plant.id})">Repot now</button>
                        </div>` : '';
                 const history = getPlantHistory(plant.id);
                 const historyHTML = history.length > 0 ? `
-                    <details style="margin-top:12px;">
+                    <details style="margin-top:8px;">
                         <summary style="cursor:pointer;font-size:13px;color:var(--gray-500);font-weight:500;">💧 Watering History (last ${Math.min(10,history.length)})</summary>
-                        <div style="margin-top:8px;max-height:200px;overflow-y:auto;">
+                        <div style="margin-top:8px;max-height:160px;overflow-y:auto;">
                             ${history.slice(-10).reverse().map((h, i) => {
                                 const d = new Date(h.date);
                                 const prev = history.length - 1 - i > 1 ? history[history.length - 2 - i] : null;
                                 const gap = prev ? Math.round((new Date(h.date) - new Date(prev.date))/86400000) : null;
                                 const dateStr = d.toLocaleDateString('en-US', {month:'short',day:'numeric'});
-                                const interval = getAdjustedInterval(plant.id, plant.interval);
                                 const since = Math.floor((Date.now() - d)/86400000);
                                 const onTime = since <= interval;
                                 return `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--gray-100);">
@@ -3431,18 +3552,26 @@
                         </div>
                     </details>` : '';
                 const speciesTip = plant.species ? `
-                    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;padding:12px;margin-top:12px;font-size:13px;color:#166534;">
-                        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+                    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;padding:10px;margin-top:8px;font-size:12px;color:#166534;">
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;">
                             <span>☀️ ${plant.species.light}</span>
                             <span>💧 ${plant.species.humidity}</span>
                             <span>📊 ${plant.species.difficulty}</span>
                         </div>
-                        ${plant.species.soil ? `<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;font-size:12px;">
+                        ${plant.species.soil ? `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;font-size:11px;">
                             <span>🪴 ${plant.species.soil}</span>
                             ${plant.species.fertilizer ? `<span>🧪 Fertilize every ${Math.round(plant.species.fertilizer/30)}mo</span>` : ''}
                             ${plant.species.petSafe !== undefined ? `<span>${plant.species.petSafe ? '🐾 Pet-safe' : '⚠️ Toxic to pets'}</span>` : ''}
                         </div>` : ''}
                         <div style="color:#14532d;font-style:italic;">💡 ${plant.species.tip}</div>
+                    </div>` : '';
+                const fs = getFertilizerStatus(plant);
+                const fertHTML = fs ? `<div style="background:${fs.overdue?'#fee2e2':'#ede9fe'};color:${fs.overdue?'#991b1b':'#7c3aed'};padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;margin-top:6px;">🧪 ${fs.text}</div>` : '';
+                const notesHTML = plant.notes ? `<div style="background:#f9fafb;border-radius:10px;padding:10px;margin-top:8px;font-size:13px;color:var(--gray-600);font-style:italic;">📝 ${plant.notes}</div>` : '';
+                const photosHTML = (plant.photoCount > 0) ? `
+                    <div style="margin-top:8px;">
+                        <div style="font-size:12px;color:var(--gray-500);margin-bottom:4px;cursor:pointer;" onclick="loadAndShowPhotos(${plant.id})" id="photoBadge-${plant.id}">📸 ${plant.photoCount} photo${plant.photoCount!==1?'s':''} — tap to view</div>
+                        <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;" id="photoGallery-${plant.id}"></div>
                     </div>` : '';
                 return `
                     <div class="plant-card ${plant.isProtected ? 'protected' : ''} ${daysUntil <= 0 ? 'needs-water' : ''} ${daysUntil < 0 ? 'overdue-water' : ''}">
@@ -3451,7 +3580,6 @@
                             <div class="plant-info">
                                 <div class="plant-name">${plant.name}${plant.isProtected ? ' <span class="badge">🛡️</span>' : ''}</div>
                                 ${plant.location ? `<div class="plant-location">📍 ${plant.location}</div>` : ''}
-                                <div style="font-size:11px;color:var(--gray-400);">Added ${(() => { const days = Math.floor((Date.now() - new Date(plant.created))/86400000); return days < 1 ? 'today' : days < 30 ? `${days}d ago` : days < 365 ? `${Math.floor(days/30)}mo ago` : `${Math.floor(days/365)}y ago`; })()}</div>
                             </div>
                         </div>
                         <div class="plant-stats">
@@ -3473,33 +3601,33 @@
                             <span>💧</span>${canWater.allowed ? 'I Watered This' : `Wait ${canWater.hoursLeft}h`}
                         </button>
                         ${!canWater.allowed ? `<div class="cooldown-warning"><span>⏳</span> Soil still absorbing water</div>` : ''}
-                        <button class="water-btn" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);box-shadow:0 4px 15px rgba(139,92,246,0.4);margin-top:8px;" onclick="fertilizePlant(${plant.id})">
-                            <span>🧪</span> I Fertilized This
-                        </button>
-                        ${(() => { const fs = getFertilizerStatus(plant); return fs ? `<div style="background:${fs.overdue?'#fee2e2':'#ede9fe'};color:${fs.overdue?'#991b1b':'#7c3aed'};padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;margin-top:6px;">🧪 ${fs.text}</div>` : ''; })()}
-                        ${repotBadge}
-                        ${historyHTML}
-                        ${plant.notes ? `<div style="background:#f9fafb;border-radius:10px;padding:10px;margin-top:10px;font-size:13px;color:var(--gray-600);font-style:italic;">📝 ${plant.notes}</div>` : ''}
-                        ${speciesTip}
-                        ${(plant.photoCount > 0) ? `
-                            <div style="margin-top:12px;">
-                                <div style="font-size:12px;color:var(--gray-500);margin-bottom:6px;cursor:pointer;" onclick="loadAndShowPhotos(${plant.id})" id="photoBadge-${plant.id}">📸 ${plant.photoCount} photo${plant.photoCount!==1?'s':''} — tap to view</div>
-                                <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;" id="photoGallery-${plant.id}"></div>
-                            </div>
-                        ` : ''}
                         <div class="actions-row">
                             <span class="last-watered">Last: ${lastWateredText}</span>
-                            <div class="action-btns">
-                                <button class="action-btn" title="Take photo" aria-label="Take photo of ${plant.name}" onclick="startPhotoCapture(${plant.id})">📸</button>
-                                <button class="action-btn" title="Diagnose problem" aria-label="Diagnose ${plant.name}" onclick="showDiagnosisModal(${plant.id})">🩺</button>
-                                <button class="action-btn" title="Log repotting" aria-label="Log repotting for ${plant.name}" onclick="showRepotModal(${plant.id})">🪴</button>
-                                <button class="action-btn danger" aria-label="Mark ${plant.name} as dead" onclick="showDeathModal(${plant.id})">💀</button>
-                                <button class="action-btn" title="Edit notes" aria-label="Edit notes for ${plant.name}" onclick="editPlantNotes(${plant.id})">📝</button>
-                                <button class="action-btn" aria-label="Delete ${plant.name}" onclick="deletePlant(${plant.id})">🗑️</button>
+                            <div class="action-menu">
+                                <button class="action-menu-btn" onclick="toggleActionMenu(${plant.id},event)" aria-label="More actions">•••</button>
+                                <div class="action-menu-dropdown" id="menu-${plant.id}">
+                                    <button onclick="startPhotoCapture(${plant.id});toggleActionMenu(${plant.id})">📸 Photo</button>
+                                    <button onclick="fertilizePlant(${plant.id});toggleActionMenu(${plant.id})">🧪 Fertilize</button>
+                                    <button onclick="showDiagnosisModal(${plant.id});toggleActionMenu(${plant.id})">🩺 Diagnose</button>
+                                    <button onclick="showRepotModal(${plant.id});toggleActionMenu(${plant.id})">🪴 Repot</button>
+                                    ${plant.notes ? '<button onclick="editPlantNotes(' + plant.id + ');toggleActionMenu(' + plant.id + ')">📝 Edit Notes</button>' : '<button onclick="editPlantNotes(' + plant.id + ');toggleActionMenu(' + plant.id + ')">📝 Add Notes</button>'}
+                                    <button onclick="showDeathModal(${plant.id});toggleActionMenu(${plant.id})" class="danger">💀 Died</button>
+                                    <button onclick="deletePlant(${plant.id});toggleActionMenu(${plant.id})" class="danger">🗑️ Delete</button>
+                                </div>
                             </div>
                         </div>
+                        <button class="card-toggle" onclick="toggleCardDetails(${plant.id})">
+                            <span id="toggleIcon-${plant.id}">▸</span> <span id="toggleLabel-${plant.id}">Show details</span>
+                        </button>
+                        <div class="card-details" id="details-${plant.id}">
+                            ${fertHTML}
+                            ${repotBadge}
+                            ${historyHTML}
+                            ${notesHTML}
+                            ${speciesTip}
+                            ${photosHTML}
+                        </div>
                     </div>`;
-            }).join('');
         }
 
         function renderMemorial() {
@@ -3550,6 +3678,66 @@
                         </div>
                     </div>`;
             }).join('');
+        }
+
+        function toggleCardDetails(plantId) {
+            const el = document.getElementById('details-' + plantId);
+            const icon = document.getElementById('toggleIcon-' + plantId);
+            const label = document.getElementById('toggleLabel-' + plantId);
+            if (!el || !icon || !label) return;
+            if (el.classList.contains('open')) {
+                el.classList.remove('open');
+                icon.textContent = '▸';
+                label.textContent = 'Show details';
+            } else {
+                el.classList.add('open');
+                icon.textContent = '▾';
+                label.textContent = 'Hide details';
+            }
+        }
+
+        function toggleActionMenu(plantId, event) {
+            if (event) event.stopPropagation();
+            const menu = document.getElementById('menu-' + plantId);
+            if (!menu) return;
+            document.querySelectorAll('.action-menu-dropdown.open').forEach(m => {
+                if (m !== menu) m.classList.remove('open');
+            });
+            menu.classList.toggle('open');
+        }
+
+        // Close action menus when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.action-menu')) {
+                document.querySelectorAll('.action-menu-dropdown.open').forEach(m => m.classList.remove('open'));
+            }
+        });
+
+        function toggleAddForm() {
+            const section = document.getElementById('addPlantSection');
+            const fab = document.getElementById('addPlantFab');
+            if (!section || !fab) return;
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                fab.classList.add('hidden');
+                section.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                section.style.display = 'none';
+                fab.classList.remove('hidden');
+            }
+        }
+
+        function updateAddFormVisibility() {
+            const section = document.getElementById('addPlantSection');
+            const fab = document.getElementById('addPlantFab');
+            if (!section || !fab) return;
+            if (state.plants.length === 0) {
+                section.style.display = 'block';
+                fab.classList.add('hidden');
+            } else {
+                section.style.display = 'none';
+                fab.classList.remove('hidden');
+            }
         }
 
         function renderYearGrid() {
