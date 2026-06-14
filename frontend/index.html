@@ -232,55 +232,20 @@
 
         /* Header */
         .header {
-            background: var(--gradient-header);
-            border-bottom: 1px solid rgba(34, 197, 94, 0.15);
-            padding: 16px 16px 14px;
-            padding-top: calc(16px + env(safe-area-inset-top, 20px));
+            background: var(--surface-raised);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 2px solid var(--primary);
+            padding: 14px 16px 12px;
+            padding-top: calc(14px + env(safe-area-inset-top, 20px));
             color: var(--text-primary);
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.3);
-            transition: background 0.8s ease, box-shadow 0.8s ease;
+            z-index: 10;
         }
-        .header.spring { border-bottom-color: rgba(34,197,94,0.3); }
-        .header.summer { border-bottom-color: rgba(251,191,36,0.3); }
-        .header.fall   { border-bottom-color: rgba(251,146,60,0.3); }
-        .header.winter { border-bottom-color: rgba(56,189,248,0.3); }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -60%;
-            right: -20%;
-            width: 320px;
-            height: 320px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 50%;
-            animation: headerOrb1 20s ease-in-out infinite;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -50%;
-            left: -15%;
-            width: 220px;
-            height: 220px;
-            background: rgba(255,255,255,0.04);
-            border-radius: 50%;
-            animation: headerOrb2 25s ease-in-out infinite;
-        }
-
-        @keyframes headerOrb1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(10px, -10px) scale(1.05); }
-            66% { transform: translate(-5px, 5px) scale(0.97); }
-        }
-
-        @keyframes headerOrb2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-8px, -8px) scale(1.08); }
-        }
+        .header.spring { border-bottom-color: var(--primary); }
+        .header.summer { border-bottom-color: var(--warning); }
+        .header.fall   { border-bottom-color: #fb923c; }
+        .header.winter { border-bottom-color: var(--water-blue); }
 
         .header-content {
             position: relative;
@@ -290,32 +255,8 @@
         .header h1 {
             font-size: 22px;
             font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.12);
             letter-spacing: -0.5px;
             line-height: 1.1;
-        }
-
-        .header h1 span {
-            display: inline-block;
-            animation: wave 2s ease-in-out infinite;
-            font-size: 22px;
-        }
-
-        @keyframes wave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            75% { transform: rotate(-10deg); }
-        }
-
-        .header-sub {
-            font-size: 12px;
-            opacity: 0.85;
-            margin-top: 2px;
-            font-weight: 500;
-            letter-spacing: 0.2px;
         }
 
         .header-row {
@@ -2112,11 +2053,7 @@
         <div class="header-content">
             <div class="header-row">
                 <div class="header-left">
-                    <h1><span>🌱</span> Planty</h1>
-                    <p class="header-sub">Smart plant care for indoor plants</p>
-                </div>
-                <div id="streakBadge" style="display:none;background:rgba(255,255,255,0.2);border-radius:20px;padding:6px 14px;font-size:14px;font-weight:600;text-align:center;margin-right:10px;">
-                    🔥 <span id="streakCount">0</span> day streak
+                    <h1>🌱 Planty</h1>
                 </div>
                 <div class="header-weather" id="headerWeather">
                     <div class="weather-loading">
@@ -3030,40 +2967,6 @@
         function save() {
             _saveState();
             syncToBackend();
-            updateStreak();
-        }
-
-        // ── Streak Counter ──────────────────────────────────────────
-        function updateStreak() {
-            if (state.plants.length === 0) { updateStreakDisplay(0); return; }
-            let stored = parseInt(localStorage.getItem('planty_streak') || '0');
-            const today = new Date().toISOString().split('T')[0];
-            const lastChecked = localStorage.getItem('planty_streak_date') || '';
-            if (lastChecked === today) { updateStreakDisplay(stored); return; } // Already counted today
-            // Check yesterday's standing
-            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-            const yStr = yesterday.toISOString().split('T')[0];
-            const overdue = state.plants.filter(p => getDaysUntilNextWater(p.id, p.interval) < 0);
-            if (overdue.length === 0) {
-                stored++; // All plants on track — extend streak
-            } else {
-                stored = 0; // Something overdue — streak broken
-            }
-            localStorage.setItem('planty_streak', stored);
-            localStorage.setItem('planty_streak_date', today);
-            updateStreakDisplay(stored);
-        }
-
-        function updateStreakDisplay(count) {
-            const badge = document.getElementById('streakBadge');
-            const countEl = document.getElementById('streakCount');
-            if (!badge || !countEl) return;
-            if (count > 0) {
-                badge.style.display = 'block';
-                countEl.textContent = count;
-            } else {
-                badge.style.display = 'none';
-            }
         }
 
         // ── Daily Care Tips ─────────────────────────────────────────
