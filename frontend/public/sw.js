@@ -1,4 +1,4 @@
-const CACHE = 'planty-v4.2';
+const CACHE = 'planty-v4.3';
 const SHELL = ['/manifest.json', '/icon-512.png', '/favicon.svg'];
 
 // Install — pre-cache static assets (NOT index.html — always network-first)

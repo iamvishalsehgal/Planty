@@ -1,6 +1,6 @@
 # Planty
 
-**Live app:** https://planty-26os.onrender.com
+**Live app:** https://planty-fsyt.onrender.com
 
 Planty help remember to water plants. Add plants → tap Water when water → app figures schedule. No manual tweaking.
 
