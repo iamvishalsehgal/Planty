@@ -93,44 +93,6 @@
     <!-- Tab: Home -->
     <div id="tab-home" class="tab-content active" role="main" aria-label="Home">
         <div class="content">
-            <!-- Bottom Watering Info - Collapsible -->
-            <div class="tip-card" style="background: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(99,102,241,0.08) 100%); border: 1px solid rgba(59,130,246,0.15); margin-bottom: 20px; padding: 0; overflow: hidden;">
-                <button onclick="toggleBottomWaterInfo()" style="width: 100%; padding: 16px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
-                    <span style="color: var(--water-blue); font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                        💧 About Bottom Watering
-                    </span>
-                    <span id="bottomWaterArrow" style="color: var(--water-blue); font-size: 18px; transition: transform 0.3s;">▼</span>
-                </button>
-                <div id="bottomWaterContent" style="display: none; padding: 0 16px 16px 16px;">
-                    <div style="background: rgba(59,130,246,0.1); border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1px solid rgba(59,130,246,0.12);">
-                        <p style="color: var(--water-blue); font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">🪴 How it works</p>
-                        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin: 0;">
-                            Place your pot (with drainage holes) in a tray filled with 1-2 inches of water. The soil absorbs moisture from below.
-                        </p>
-                    </div>
-                    <div style="background: rgba(59,130,246,0.1); border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1px solid rgba(59,130,246,0.12);">
-                        <p style="color: var(--water-blue); font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">⏱️ Takes 15-30 minutes</p>
-                        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin: 0;">
-                            Let your plant sit until the top soil feels damp. Then remove and let drain.
-                        </p>
-                    </div>
-                    <div style="background: rgba(59,130,246,0.1); border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1px solid rgba(59,130,246,0.12);">
-                        <p style="color: var(--water-blue); font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">✨ Benefits</p>
-                        <ul style="color: var(--text-secondary); font-size: 13px; margin: 0; padding-left: 18px; line-height: 1.8;">
-                            <li>Deeper, stronger root growth</li>
-                            <li>Prevents overwatering & root rot</li>
-                            <li>Even moisture distribution</li>
-                        </ul>
-                    </div>
-                    <div style="background: rgba(245,158,11,0.15); border-radius: 12px; padding: 14px; border-left: 4px solid #f59e0b;">
-                        <p style="color: var(--warning); font-size: 13px; font-weight: 600; margin: 0 0 6px 0;">⚠️ 24-Hour Cooldown</p>
-                        <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin: 0;">
-                            To prevent overwatering, Planty blocks watering for 24 hours after each session.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             <!-- Add Plant Section -->
             <div id="addPlantSection" class="add-section" style="position:relative;">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1790,18 +1752,6 @@
             document.getElementById('onboardingCard').style.display = 'none';
         }
 
-        function toggleBottomWaterInfo() {
-            const content = document.getElementById('bottomWaterContent');
-            const arrow = document.getElementById('bottomWaterArrow');
-            if (!content || !arrow) return;
-            if (content.style.display === 'none' || !content.style.display) {
-                content.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                content.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
 
         function toggleSearchBar() {
             const bar = document.getElementById('searchBar');
