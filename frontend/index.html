@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <!-- FOUC prevention: set dark-mode before first paint -->
+    <script>
+    (function(){
+      var p = localStorage.getItem('planty_dark_mode');
+      if (p === 'dark' || (p !== 'light' && window.matchMedia('(prefers-color-scheme:dark)').matches)) {
+        document.documentElement.classList.add('dark-mode');
+      }
+    })();
+    </script>
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -102,31 +112,31 @@
             --radius-lg: 24px;
             --radius-xl: 32px;
             --radius-full: 36px;
-            /* Shadows — softer, deeper */
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
-            --shadow: 0 2px 12px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.06);
-            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-card: 0 0 0 0.5px rgba(255,255,255,0.06), 0 2px 8px rgba(0,0,0,0.12), 0 8px 32px rgba(0,0,0,0.1);
-            --shadow-glow: 0 0 40px var(--glow-green), 0 0 80px rgba(16,185,129,0.08);
-            /* Semantic surfaces — dark glassmorphism */
-            --surface: rgba(20, 26, 32, 0.85);
-            --surface-subtle: rgba(20, 26, 32, 0.5);
-            --surface-raised: rgba(26, 32, 40, 0.9);
-            --bg: #0a0e17;
+            /* Shadows — light mode */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-card: 0 0 0 0.5px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.05);
+            --shadow-glow: 0 0 40px var(--glow-green), 0 0 80px rgba(34,197,94,0.06);
+            /* Semantic surfaces — light glassmorphism */
+            --surface: rgba(255, 255, 255, 0.80);
+            --surface-subtle: rgba(255, 255, 255, 0.50);
+            --surface-raised: rgba(255, 255, 255, 0.92);
+            --bg: #f8fafc;
             /* Semantic text */
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --text-muted: #78869a;
-            --text-inverse: #0a0e17;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --text-inverse: #ffffff;
             /* Borders */
-            --border-default: rgba(255,255,255,0.12);
-            --border-subtle: rgba(255,255,255,0.04);
+            --border-default: rgba(0,0,0,0.08);
+            --border-subtle: rgba(0,0,0,0.04);
             /* Gradients */
-            --gradient-water-normal: linear-gradient(135deg, rgba(56,189,248,0.12) 0%, rgba(56,189,248,0.06) 100%);
-            --gradient-water-today: linear-gradient(135deg, rgba(56,189,248,0.25) 0%, rgba(34,197,94,0.12) 100%);
-            --gradient-water-urgent: linear-gradient(135deg, rgba(251,191,36,0.25) 0%, rgba(251,191,36,0.08) 100%);
-            --gradient-water-overdue: linear-gradient(135deg, rgba(248,113,113,0.25) 0%, rgba(248,113,113,0.08) 100%);
-            --gradient-header: linear-gradient(135deg, #0a0e17 0%, #0d1117 40%, #0a0e17 100%);
+            --gradient-water-normal: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            --gradient-water-today: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            --gradient-water-urgent: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            --gradient-water-overdue: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            --gradient-header: linear-gradient(135deg, #f8fafc 0%, #ffffff 40%, #f8fafc 100%);
             --gradient-btn-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             --gradient-btn-water: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
             /* Accent bar colors */
@@ -165,7 +175,7 @@
         }
 
         body {
-            background: linear-gradient(170deg, #0a0e17 0%, #111827 30%, #0d1117 60%, #0a0e17 100%);
+            background: linear-gradient(170deg, var(--gray-50) 0%, #ffffff 30%, var(--gray-100) 60%, var(--gray-50) 100%);
             background-attachment: fixed;
             min-height: 100vh;
             min-height: -webkit-fill-available;
@@ -221,11 +231,11 @@
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, #0a0e17 0%, #111827 40%, #0a0e17 100%);
-            border-bottom: 1px solid rgba(16, 185, 129, 0.15);
+            background: var(--gradient-header);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.15);
             padding: 16px 16px 14px;
             padding-top: calc(16px + env(safe-area-inset-top, 20px));
-            color: white;
+            color: var(--text-primary);
             position: relative;
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(5, 150, 105, 0.3);
@@ -359,12 +369,12 @@
         .weather-temp {
             font-size: 18px;
             font-weight: 700;
-            color: white;
+            color: var(--text-primary);
         }
 
         .weather-season {
             font-size: 11px;
-            color: rgba(255,255,255,0.85);
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 500;
@@ -1117,7 +1127,7 @@
             transform: translateX(-50%);
             width: calc(100% - 24px);
             max-width: 420px;
-            background: rgba(15, 20, 28, 0.88);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid var(--border-default);
@@ -1125,7 +1135,7 @@
             display: flex;
             padding: 4px;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .nav-item {
@@ -1860,8 +1870,8 @@
         /* ── Dark Mode ──────────────────────────────────────────── */
         [data-theme="dark"] body,
         /* ── Dark Mode ──────────────────────────────────────────── */
-        body.dark-mode {
-            /* Token swap — reassign semantic variables */
+        /* Token reassignment — works on html (FOUC) or body (JS toggle) */
+        html.dark-mode, body.dark-mode {
             --surface: #141a20;
             --surface-subtle: #1a2028;
             --surface-raised: #1e293b;
@@ -1869,7 +1879,7 @@
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
             --text-muted: #78869a;
-            --border-default: rgba(255,255,255,0.06);
+            --border-default: rgba(255,255,255,0.08);
             --border-subtle: rgba(255,255,255,0.04);
             --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
             --shadow: 0 2px 8px rgba(0,0,0,0.4);
@@ -1879,6 +1889,10 @@
             --gradient-water-today: linear-gradient(135deg, #1e3a5f, #1e40af);
             --gradient-water-urgent: linear-gradient(135deg, #78350f, #92400e);
             --gradient-water-overdue: linear-gradient(135deg, #7f1d1d, #991b1b);
+            --gradient-header: linear-gradient(135deg, #0a0e17 0%, #111827 40%, #0a0e17 100%);
+            color-scheme: dark;
+        }
+        body.dark-mode {
             background: linear-gradient(170deg, #0a0e17 0%, #111827 30%, #0d1117 60%, #0a0e17 100%);
             background-attachment: fixed;
             color: var(--text-primary);
@@ -4452,11 +4466,17 @@
         }
 
         function applyDarkMode() {
-            if (isDarkMode()) {
+            const dark = isDarkMode();
+            if (dark) {
                 document.body.classList.add('dark-mode');
             } else {
                 document.body.classList.remove('dark-mode');
             }
+            // Sync html class (FOUC prevention also sets this)
+            document.documentElement.classList.toggle('dark-mode', dark);
+            // Dynamic theme-color for PWA status bar
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.content = dark ? '#0a0f14' : '#f8fafc';
             updateDarkModeLabel();
         }
 
