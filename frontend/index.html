@@ -10,6 +10,7 @@
       var p = localStorage.getItem('planty_dark_mode');
       if (p === 'dark' || (p !== 'light' && window.matchMedia('(prefers-color-scheme:dark)').matches)) {
         document.documentElement.classList.add('dark-mode');
+        document.body.classList.add('dark-mode');
       }
     })();
     </script>
@@ -175,7 +176,7 @@
         }
 
         body {
-            background: linear-gradient(170deg, var(--gray-50) 0%, #ffffff 30%, var(--gray-100) 60%, var(--gray-50) 100%);
+            background: linear-gradient(170deg, #f0fdf4 0%, #f8fafc 25%, #ffffff 50%, #f0f9ff 75%, #f8fafc 100%);
             background-attachment: fixed;
             min-height: 100vh;
             min-height: -webkit-fill-available;
@@ -1076,14 +1077,13 @@
             z-index: 90;
             box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .fab:hover {
             transform: scale(1.08);
             box-shadow: 0 8px 28px rgba(16, 185, 129, 0.5);
-        }
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .fab:active {
             transform: scale(0.92);
@@ -1193,7 +1193,7 @@
         @media (max-width: 400px) {
             .content { padding: 12px; }
             .header { padding: 16px 14px; padding-top: calc(16px + env(safe-area-inset-top, 20px)); }
-            .header h1 { font-size: 26px; }
+            .header h1 { font-size: 20px; }
             .plant-card { padding: 14px; }
             .add-section { padding: 14px; }
             .water-btn { padding: 14px; font-size: 16px; }
@@ -1763,10 +1763,11 @@
         }
 
         .settings-list {
-            background: white;
-            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-card);
         }
 
         .settings-item {
@@ -1784,7 +1785,10 @@
         }
 
         .settings-item:active {
-            background: rgba(255,255,255,0.04);
+            background: rgba(0, 0, 0, 0.04);
+        }
+        body.dark-mode .settings-item:active {
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .settings-icon {
@@ -1872,9 +1876,9 @@
         /* ── Dark Mode ──────────────────────────────────────────── */
         /* Token reassignment — works on html (FOUC) or body (JS toggle) */
         html.dark-mode, body.dark-mode {
-            --surface: #141a20;
-            --surface-subtle: #1a2028;
-            --surface-raised: #1e293b;
+            --surface: rgba(20, 26, 32, 0.80);
+            --surface-subtle: rgba(26, 32, 40, 0.55);
+            --surface-raised: rgba(30, 41, 59, 0.90);
             --bg: #0a0f14;
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
@@ -1897,8 +1901,14 @@
             background-attachment: fixed;
             color: var(--text-primary);
         }
-        body.dark-mode::before { background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%); }
-        body.dark-mode::after  { background: radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%); }
+        body.dark-mode::before { background: radial-gradient(circle, rgba(34, 197, 94, 0.12) 0%, transparent 70%); }
+        body.dark-mode::after  { background: radial-gradient(circle, rgba(56, 189, 248, 0.10) 0%, transparent 70%); }
+        body.dark-mode .grid-overlay {
+            background:
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
         /* Transitions for smooth theme switch */
         body.dark-mode,
         body.dark-mode .plant-card,
