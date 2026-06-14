@@ -2,65 +2,64 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
         :root {
-            /* Brand palette — biophilic emerald */
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --primary-light: #d1fae5;
-            --primary-glow: rgba(16, 185, 129, 0.3);
+            /* Brand — teal meets emerald: smart nature */
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #ccfbf1;
+            --primary-glow: rgba(13, 148, 136, 0.2);
             --water-blue: #3b82f6;
             --water-dark: #2563eb;
-            --danger: #f87171;
-            --danger-light: #fee2e2;
-            --warning: #fbbf24;
-            --warning-light: #fef3c7;
-            /* Glow accent colors */
-            --glow-green: rgba(16, 185, 129, 0.2);
-            --glow-amber: rgba(245, 158, 11, 0.10);
-            --glow-blue: rgba(59, 130, 246, 0.14);
-            --glow-terracotta: rgba(251, 146, 60, 0.12);
-            --glow-fuchsia: rgba(232, 121, 249, 0.1);
-            --glow-cyan: rgba(34, 211, 238, 0.12);
-            /* Grays */
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-850: #1a1f2e;
-            --gray-900: #111827;
-            --gray-950: #0a0e17;
+            --danger: #ef4444;
+            --danger-light: #fef2f2;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            /* Accent — indigo for intelligence signals */
+            --accent: #6366f1;
+            /* Warm stone grays */
+            --gray-50: #fafaf9;
+            --gray-100: #f5f5f4;
+            --gray-200: #e7e5e4;
+            --gray-300: #d6d3d1;
+            --gray-400: #a8a29e;
+            --gray-500: #78716c;
+            --gray-600: #57534e;
+            --gray-700: #44403c;
+            --gray-800: #292524;
+            --gray-850: #1c1917;
+            --gray-900: #131310;
+            --gray-950: #0c0a09;
+            /* Type scale — 4 sizes only */
+            --text-xs: 0.6875rem;
+            --text-sm: 0.8125rem;
+            --text-base: 0.9375rem;
+            --text-md: 1.125rem;
+            --text-lg: 1.5rem;
+            --text-xl: 1.75rem;
             /* Radii */
-            --radius-sm: 12px;
-            --radius: 18px;
-            --radius-lg: 24px;
-            --radius-xl: 32px;
-            --radius-full: 36px;
-            /* Shadows — emerald-tinted futuristic */
-            --shadow-sm: 0 1px 2px rgba(5,150,105,0.06);
-            --shadow: 0 2px 12px rgba(5,150,105,0.08), 0 1px 3px rgba(5,150,105,0.04);
-            --shadow-lg: 0 8px 40px rgba(5,150,105,0.10), 0 2px 12px rgba(5,150,105,0.05);
-            --shadow-card: 0 0 0 1px rgba(5,150,105,0.06), 0 2px 8px rgba(5,150,105,0.05), 0 8px 24px rgba(5,150,105,0.04);
-            --shadow-glow: 0 0 40px rgba(16,185,129,0.25), 0 0 80px rgba(16,185,129,0.08);
-            /* Semantic surfaces — solid white */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius: 16px;
+        --radius-nav: 28px;
+            /* Shadows — neutral */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 6px 20px rgba(0,0,0,0.06);
+            --shadow-glow: 0 0 24px rgba(13,148,136,0.15);
+            /* Surfaces — warm stone */
             --surface: #ffffff;
-            --surface-subtle: #f9fafb;
+            --surface-subtle: #fafaf9;
             --surface-raised: #ffffff;
-            --bg: #f0fdf4;
-            /* Semantic text */
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
+            --bg: #fafaf9;
+            /* Text */
+            --text-primary: #1c1917;
+            --text-secondary: #78716c;
+            --text-muted: #a8a29e;
             --text-inverse: #ffffff;
             /* Borders */
             --border-default: rgba(0,0,0,0.06);
@@ -68,18 +67,21 @@
             /* Gradients */
             --gradient-water-normal: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             --gradient-water-today: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            --gradient-water-urgent: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            --gradient-water-overdue: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            --gradient-header: linear-gradient(135deg, #059669 0%, #047857 40%, #065f46 100%);
-            --gradient-btn-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --gradient-water-urgent: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            --gradient-water-overdue: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            --gradient-header: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+            --gradient-btn-primary: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
             --gradient-btn-water: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             /* Accent bar colors */
-            --accent-healthy: #10b981;
+            --accent-healthy: #0d9488;
             --accent-water: #3b82f6;
-            --accent-overdue: #f87171;
+            --accent-overdue: #ef4444;
+            /* Typography */
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
             /* Misc */
             --safe-bottom: env(safe-area-inset-bottom, 20px);
-            --focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.5);
+            --focus-ring: 0 0 0 3px rgba(13, 148, 136, 0.4);
         }
 
         /* ── Accessibility ────────────────────────────────────── */
@@ -107,59 +109,57 @@
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
             box-shadow: var(--focus-ring);
         }
+        /* Interactive hover — consistent lift */
+        .add-btn:hover:not(:disabled),
+        .interval-btn:hover,
+        .pot-btn:hover,
+        .option-card:hover,
+        .settings-item:hover,
+        .filter-btn:hover,
+        .quick-action:hover,
+        .nav-item:hover:not(.active),
+        .modal-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .add-btn:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(13,148,136,0.35); }
+        .nav-item:hover:not(.active) { color: var(--primary); }
+        .quick-action:hover { transform: scale(1.08); }
+        .settings-item:hover { background: var(--surface-subtle); }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* Filter buttons */
+        .filter-btn {
+            padding: 10px 16px;
+            min-height: 44px;
+            border: 2px solid var(--gray-200);
+            border-radius: 22px;
+            background: var(--surface);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--gray-600);
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
 
         body {
-            background: linear-gradient(170deg, #f0fdf4 0%, #ecfdf5 30%, #f8fafc 60%, #f0fdf4 100%);
-            background-attachment: fixed;
+            background: var(--bg);
             min-height: 100vh;
             min-height: -webkit-fill-available;
             padding-bottom: calc(84px + var(--safe-bottom));
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             color: var(--text-primary);
-            position: relative;
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            -webkit-font-smoothing: antialiased;
         }
-        /* Grid pattern overlay — futuristic dot grid */
-        .grid-overlay {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            background-image: radial-gradient(circle, rgba(5,150,105,0.06) 1px, transparent 1px);
-            background-size: 32px 32px;
-        }
-        /* Multi-color glow orbs */
-        body::before, body::after {
-            content: '';
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            will-change: transform;
-            filter: blur(100px);
-            opacity: 0.45;
-        }
-        body::before {
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, var(--glow-green) 0%, transparent 70%);
-            top: -100px; right: -60px;
-            animation: bgOrb1 20s ease-in-out infinite;
-        }
-        body::after {
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, var(--glow-amber) 0%, transparent 70%);
-            bottom: -80px; left: -50px;
-            animation: bgOrb2 25s ease-in-out infinite;
-        }
-        @keyframes bgOrb1 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(-30px, 40px) rotate(120deg); }
-            66% { transform: translate(20px, -20px) rotate(240deg); }
-        }
-        @keyframes bgOrb2 {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(40px, -30px) rotate(180deg); }
-        }
+        .grid-overlay { display: none; }
 
         /* Header */
         .header {
@@ -396,7 +396,6 @@
             position: relative;
             overflow: hidden;
             border: 1px solid var(--border-default);
-            border-top: 2px solid rgba(16,185,129,0.15);
             animation: cardEnter 0.4s ease-out both;
             opacity: 0;
         }
@@ -414,17 +413,16 @@
             from { opacity: 0; transform: translateY(12px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        /* Left-edge accent bar — glowing, color = plant state */
+        /* Left-edge accent bar — clean, color = plant state */
         .plant-card::before {
             content: '';
             position: absolute;
-            top: 12px; bottom: 12px;
+            top: 14px; bottom: 14px;
             left: 0;
-            width: 4px;
-            border-radius: 0 4px 4px 0;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
             background: var(--accent-healthy);
-            box-shadow: 0 0 8px var(--accent-healthy);
-            transition: background 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease;
         }
         .plant-card:active {
             transform: scale(0.99);
@@ -1004,7 +1002,7 @@
             max-width: 420px;
             background: var(--surface);
             border: 1px solid var(--border-default);
-            border-radius: var(--radius-full);
+            border-radius: var(--radius-nav);
             display: flex;
             padding: 4px;
             z-index: 100;

@@ -46,6 +46,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/icon-512.png">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <title>Planty - Smart Plant Care</title>
 
@@ -174,10 +177,10 @@
             <div id="searchBar" style="display:none;margin-bottom:12px;position:sticky;top:0;z-index:10;background:var(--bg);padding-bottom:8px;">
                 <input type="text" id="plantSearch" placeholder="🔍 Search plants..." oninput="scheduleSearchRender()" style="width:100%;padding:12px 16px;border:2px solid var(--border-default);border-radius:14px;font-size:16px;outline:none;background:rgba(255,255,255,0.06);color:var(--text-primary);">
                 <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;" id="filterButtons">
-                    <button class="filter-btn" data-filter="all" onclick="setFilter('all')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">All</button>
-                    <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Needs Water</button>
-                    <button class="filter-btn" data-filter="healthy" onclick="setFilter('healthy')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Healthy</button>
-                    <button class="filter-btn" data-filter="protected" onclick="setFilter('protected')" style="padding:10px 16px;min-height:44px;border:2px solid var(--gray-200);border-radius:22px;background:white;font-size:14px;font-weight:500;cursor:pointer;">Protected</button>
+                    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+                    <button class="filter-btn" data-filter="needs_water" onclick="setFilter('needs_water')">Needs Water</button>
+                    <button class="filter-btn" data-filter="healthy" onclick="setFilter('healthy')">Healthy</button>
+                    <button class="filter-btn" data-filter="protected" onclick="setFilter('protected')">Protected</button>
                 </div>
                 <div id="filterCount" style="font-size:12px;color:var(--gray-500);margin-top:6px;"></div>
             </div>
@@ -925,8 +928,7 @@
         let _filter = 'all';
         function setFilter(f) {
             _filter = f;
-            document.querySelectorAll('.filter-btn').forEach(b => b.style.background = b.dataset.filter === f ? 'var(--primary)' : 'white');
-            document.querySelectorAll('.filter-btn').forEach(b => b.style.color = b.dataset.filter === f ? 'white' : 'var(--gray-600)');
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
             document.getElementById('plantSearch').value = '';
             render();
         }
