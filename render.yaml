@@ -1,25 +1,25 @@
+# Render Blueprint — Planty v2
+# Backend: FastAPI web service with auto-deploy on master push
+
 services:
   - type: web
-    name: planty
+    name: planty-api
     runtime: python
-    buildCommand: cd frontend && npm ci && npm run build && cd .. && pip install -r backend/requirements.txt
-    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     plan: free
-    healthCheckPath: /api/health
+    region: oregon
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: yes
     envVars:
-      - key: PYTHONUNBUFFERED
-        value: "true"
-      - key: PLANTY_DB_PATH
-        value: /var/data/planty.db
-      - key: PLANTY_BACKUP_DIR
-        value: /var/data/backups
-      - key: PLANTY_BACKUP_TOKEN
-        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.12"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: planty-db
+          property: connectionString
 
-  - type: cron
-    name: planty-db-backup
-    runtime: python
-    schedule: "47 3 * * *"
-    buildCommand: pip install -r backend/requirements.txt
-    startCommand: python backend/cron_backup.py
+databases:
+  - name: planty-db
     plan: free
+    region: oregon

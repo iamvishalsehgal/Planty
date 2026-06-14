@@ -1,24 +1,63 @@
+# Dependencies
 node_modules/
-*.db
-*.db-shm
-*.db-wal
-dist/
-.DS_Store
-.claude/
-__pycache__/
-*.pyc
-.venv/
-venv/
-*.egg-info/
-graphify-out/
-*.bak
-llm-council/.env
-llm-council/data/
-llm-council/.venv/
-llm-council/frontend/node_modules/
+.pnp
+.pnp.js
 
-# Agent & intelligence runtime artifacts
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native
+ios/
+android/
+*.jks
+*.keystore
+
+# Env
+.env
+.env.local
+.env.production
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python backend
+backend/__pycache__/
+backend/**/__pycache__/
+*.pyc
+*.pyo
+backend/.venv/
+backend/venv/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Backups
+backups/
+
+# Graphify
+graphify-out/
+
+# Claude
 .claude-flow/
 .swarm/
+.claude/scheduled_tasks.lock
+
+# Testing
+.pytest_cache/
+coverage/
+
+# Misc
+*.bak
+llm-council/
 agents/
 ONBOARDING.md

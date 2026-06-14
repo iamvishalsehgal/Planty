@@ -1,47 +1,77 @@
 # CLAUDE.md
 
-Planty — smart plant care PWA. Adaptive watering schedule, weather-aware, offline-first. Single `index.html` frontend + FastAPI backend.
+Planty v2 — smart plant care mobile app. Expo React Native + FastAPI backend.
+Beautiful UI, native-first, haptic feedback, offline-capable.
+
+## Stack
+
+- **Mobile**: Expo SDK 53, React Native 0.76, Expo Router v4, TypeScript strict
+- **Styling**: NativeWind v4 (Tailwind), design tokens in `src/design/`
+- **Animation**: Reanimated 3, Skia, Gesture Handler, @gorhom/bottom-sheet
+- **State**: Zustand v5 + MMKV persistence
+- **Backend**: FastAPI + PostgreSQL (Render managed)
+- **Deploy**: EAS for mobile builds, Render for backend
 
 ## Session Start
 
-**Always run `/graphify` at the start of every session** to load the knowledge graph from `graphify-out/graph.json`. This provides full project context without needing to re-read all files. Use `/graphify query "<question>"` to answer codebase questions from the graph.
+Run `/graphify` at session start. Then `/clear`.
 
 ## Build & Run
 
 ```bash
-npm run install:frontend   # npm install in frontend/
-npm run install:backend    # pip install backend requirements
-npm start                  # concurrently: vite dev + uvicorn backend
+npm install                      # Frontend deps
+cd backend && pip install -r requirements.txt  # Backend deps
+npx expo start                   # Dev server (scan QR with Expo Go)
+npx expo start --ios             # iOS simulator
+npm start                        # Same as above
 ```
 
 ## Test
 
 ```bash
-python3 -m pytest backend/tests/test_routes.py -q
+cd backend && python3 -m pytest tests/ -q
 ```
 
-## Deploy
+## Project Structure
 
-Push to `master` → Render auto-deploys from GitHub. Live: https://planty-fsyt.onrender.com
+```
+planty/
+├── app/                    # Expo Router file-based routes
+│   ├── (tabs)/            # Tab navigator
+│   │   ├── index.tsx      # Plant dashboard
+│   │   ├── add.tsx        # Add plant flow
+│   │   ├── diagnose.tsx   # Plant doctor (camera + AI)
+│   │   └── profile.tsx    # Settings & stats
+│   ├── plant/[id].tsx     # Plant detail + history
+│   └── _layout.tsx        # Root layout shell
+├── src/
+│   ├── components/ui/     # Design system primitives
+│   ├── components/plants/ # Plant domain components
+│   ├── components/shared/ # Cross-feature components
+│   ├── hooks/             # Custom hooks
+│   ├── stores/            # Zustand stores
+│   ├── lib/               # API client, weather, utils
+│   └── design/            # Colors, typography, spacing tokens
+├── backend/               # FastAPI server
+├── assets/                # Images, fonts, Lottie
+└── graphify-out/          # Knowledge graph
+```
 
-## Architecture
+## Design System
 
-- **frontend/** — 3200-line `index.html` PWA, vanilla JS, localStorage state, external `species.js` + `diagnosis.js`
-- **backend/** — FastAPI + SQLite (WAL mode), APScheduler ETL every 5 min
-- **pipelines/** — ingestion → transform → aggregation
-- **routes/** — plants, events, analytics, health
-- **models.py** — Pydantic v2 with field validators
+Nature palette: sage greens, soil browns, sky blues, clay terracotta, cream.
+Glass-morphism cards, min 16px radius, spring-physics animations.
+Full tokens in `tailwind.config.js` and `src/design/tokens.ts`.
 
-## Agent skills
+## Architecture Decisions
 
-### Issue tracker
+- **MMKV over AsyncStorage**: Sub-ms reads, synchronous, typed. Plants state persisted.
+- **Zustand over Redux**: Tiny API, no providers, works outside React.
+- **Expo Router over React Navigation**: File-based, deep linking free, typed routes.
+- **NativeWind over StyleSheet**: Faster iteration, design tokens in Tailwind config.
+- **Postgres over SQLite**: Render managed, backups included, better for sync.
 
-GitHub Issues on `iamvishalsehgal/Planty`. Uses `gh` CLI. See `docs/agents/issue-tracker.md`.
+## Agent Skills
 
-### Triage labels
-
-Default canonical names: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
-
-### Domain docs
-
-Single-context: `CONTEXT.md` + `docs/adr/` at repo root. See `docs/agents/domain.md`.
+- Issue tracker: GitHub Issues on `iamvishalsehgal/Planty`, use `gh` CLI
+- Triage: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`

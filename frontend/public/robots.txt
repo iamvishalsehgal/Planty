@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://planty-fsyt.onrender.com/sitemap.xml

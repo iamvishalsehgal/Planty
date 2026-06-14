@@ -1,54 +1,74 @@
-# Planty
+# Planty v2 🌱
 
-**Live app:** https://planty-fsyt.onrender.com
+Smart plant care, beautifully designed. Native mobile app (iOS + Android) with intelligent watering schedules, weather awareness, and plant health diagnosis.
 
-Planty help remember to water plants. Add plants → tap Water when water → app figures schedule. No manual tweaking.
+## What is Planty?
 
----
+Planty helps you keep your plants alive and thriving:
 
-## What makes it different
+- **Adaptive watering schedule** — adjusts based on weather (skip when rainy, increase when hot)
+- **Plant Doctor** — photo-based health diagnosis with confidence scores and treatment plans
+- **Beautiful UI** — glass-morphism design, spring animations, haptic feedback
+- **Offline-first** — works without internet, syncs when connected
+- **Push notifications** — never forget to water again
 
-Most plant apps remind on fixed schedule. Planty watches actual watering → adjusts. Water Monstera every 9 days instead of set 7 → shifts schedule to match. Checks weather + season → summer heat = sooner reminders, winter = backs off.
+## Tech Stack
 
-Plant dies → tell why (overwatered, underwatered, unknown). Next time add same plant → Planty shows what went wrong + suggests corrected starting schedule.
+| Layer | Technology |
+|-------|-----------|
+| Mobile | Expo SDK 53, React Native 0.76 |
+| Navigation | Expo Router v4 (file-based) |
+| Styling | NativeWind v4 (Tailwind CSS) |
+| Animation | Reanimated 3, Skia, Gesture Handler |
+| State | Zustand v5 + MMKV |
+| Backend | FastAPI + PostgreSQL |
+| Deploy | EAS (mobile) + Render (backend) |
 
----
+## Getting Started
 
-## Features
+```bash
+# Install dependencies
+npm install
+cd backend && pip install -r requirements.txt
 
-- **Species presets** — 30+ common houseplants with pre-filled care settings, light/humidity/difficulty guides, species-specific tips
-- **Automatic schedule** — learns from actual watering history, not just initial setting
-- **Fertilizer tracking** — separate reminders for fertilizing, adaptive schedule
-- **Plant Doctor** — symptom checker: yellow leaves, brown tips, drooping, pests, more with treatment guides
-- **Photo journal** — capture plant growth over time, stored locally on device
-- **Weather-aware** — pulls live weather, adjusts for temperature + season
-- **Dark mode** — follows system theme or manual toggle, full component coverage
-- **48-hour cooldown** — blocks accidental double-waterings
-- **Death + revival system** — records cause of death, protects future plants
-- **Notifications** — browser alerts when plant due or overdue, tab in background
-- **Memorial tab** — record of every plant that didn't make it
-- **Calendar export** — download `.ics` file, add watering reminders to any calendar app
-- **Backup and restore** — export plant data as JSON, import on any device
-- **Analytics** — health scores per plant based on watering consistency (backend needed for full analytics)
+# Start development
+npx expo start          # Mobile app (scan QR with Expo Go)
+npm run start:backend   # API server (http://localhost:8000)
+```
 
----
+## Project Structure
 
-## How it's built
+```
+planty/
+├── app/                    # Expo Router — file-based routes
+│   ├── (tabs)/            # Tab navigation (Plants, Add, Doctor, Profile)
+│   ├── plant/[id].tsx     # Plant detail page
+│   └── _layout.tsx        # Root layout
+├── src/
+│   ├── components/        # Design system + domain components
+│   ├── hooks/             # usePlants, useWeather, useWatering
+│   ├── stores/            # Zustand stores (plant, settings, UI)
+│   ├── lib/               # API client, haptics, date utils
+│   └── design/            # Design tokens, colors, typography
+├── backend/               # FastAPI server
+│   ├── routes/            # plants, diagnosis, weather, health
+│   ├── services/          # Weather API, diagnosis engine
+│   └── models.py          # Pydantic v2 schemas
+└── graphify-out/          # Knowledge graph
+```
 
-Two parts:
+## Testing
 
-**App (frontend)** — UI. Runs in browser, stores plant data locally. Works offline, no account needed.
+```bash
+# Backend tests
+cd backend && python3 -m pytest tests/ -q
+```
 
-**Data backend** — small server. Receives watering history, processes every 5 min, computes health score per plant. Powers analytics.
+## Deployment
 
----
+- **Backend**: Push to `master` → Render auto-deploys
+- **Mobile**: `eas build --platform ios --profile production`
 
-## Folders
+## License
 
-| Folder | What's in it |
-|---|---|
-| `frontend/` | App — entire UI in one HTML file |
-| `backend/` | Python server for data processing |
-| `.github/workflows/` | Auto-deploy to GitHub Pages |
-
-Technical docs for each part → `docs.md` inside each folder.
+MIT

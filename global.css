@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-surface-primary: #FEFDFB;
+    --color-surface-secondary: #F5F1EB;
+    --color-text-primary: #2D4127;
+    --color-text-secondary: #69432A;
+    --glass-blur: 20px;
+    --glass-opacity: 0.72;
+  }
+
+  .dark {
+    --color-surface-primary: #152312;
+    --color-surface-secondary: #1A2F1A;
+    --color-text-primary: #E5EDE0;
+    --color-text-secondary: #EDC0B0;
+  }
+}

@@ -1,112 +1,108 @@
-import re
-from pydantic import BaseModel, field_validator
-from typing import Optional
-from shared import MIN_INTERVAL, MAX_INTERVAL
+"""Pydantic v2 models for Planty API."""
 
-# ── XSS sanitization ────────────────────────────────────────────────
-_SCRIPT_PATTERN = re.compile(r"<\s*script[\s/>]", re.IGNORECASE)
-_HTML_TAG_PATTERN = re.compile(r"<[^>]*>")
+from datetime import datetime
+from typing import Optional, Literal
+from uuid import uuid4
 
-def _sanitize_text(v: str) -> str:
-    """Strip HTML tags and script injection attempts from user text."""
-    if not v:
-        return v
-    # Remove script tags and their contents
-    v = _SCRIPT_PATTERN.sub("", v)
-    # Remove remaining HTML tags
-    v = _HTML_TAG_PATTERN.sub("", v)
-    return v.strip()
+from pydantic import BaseModel, Field, field_validator
 
 
-class PlantIn(BaseModel):
+# ── Plant ──
+
+class PlantCreate(BaseModel):
+    """Request to create a plant."""
+    name: str = Field(..., min_length=1, max_length=100)
+    species: str = Field(..., min_length=1, max_length=100)
+    room: str = Field(..., min_length=1, max_length=100)
+    photo_url: Optional[str] = None
+    watering_interval_days: int = Field(default=3, ge=1, le=30)
+
+    @field_validator("name", "species", "room")
+    @classmethod
+    def strip_whitespace(cls, v: str) -> str:
+        return v.strip()
+
+
+class PlantUpdate(BaseModel):
+    """Partial update for a plant."""
+    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    species: Optional[str] = Field(None, min_length=1, max_length=100)
+    room: Optional[str] = Field(None, min_length=1, max_length=100)
+    photo_url: Optional[str] = None
+    watering_interval_days: Optional[int] = Field(None, ge=1, le=30)
+
+
+class PlantResponse(BaseModel):
+    """Plant as returned by the API."""
     id: str
     name: str
-    location: Optional[str] = None
-    interval: int
-    lastWatered: Optional[str] = None
-    isDead: Optional[bool] = False
-
-    @field_validator("name")
-    @classmethod
-    def name_not_empty(cls, v: str) -> str:
-        v = _sanitize_text(v)
-        if not v:
-            raise ValueError("name must not be empty")
-        if len(v) > 50:
-            raise ValueError("name must be 50 characters or fewer")
-        return v
-
-    @field_validator("location")
-    @classmethod
-    def location_sanitize(cls, v: Optional[str]) -> Optional[str]:
-        if v is None:
-            return None
-        v = _sanitize_text(v)
-        if len(v) > 50:
-            raise ValueError("location must be 50 characters or fewer")
-        return v if v else None
-
-    @field_validator("interval")
-    @classmethod
-    def interval_in_range(cls, v: int) -> int:
-        if not (MIN_INTERVAL <= v <= MAX_INTERVAL):
-            raise ValueError(f"interval must be between {MIN_INTERVAL} and {MAX_INTERVAL} days")
-        return v
-
-    @field_validator("id")
-    @classmethod
-    def id_sanitize(cls, v: str) -> str:
-        v = v.strip()
-        if not v:
-            raise ValueError("id must not be empty")
-        if len(v) > 100:
-            raise ValueError("id must be 100 characters or fewer")
-        # Only allow alphanumeric, dash, underscore
-        if not re.match(r'^[a-zA-Z0-9\-_]+$', v):
-            raise ValueError("id must only contain letters, numbers, dashes, and underscores")
-        return v
+    species: str
+    room: str
+    photo_url: Optional[str] = None
+    watering_interval_days: int
+    last_watered: str
+    next_watering: str
+    health_status: Literal["healthy", "warning", "dry", "overdue"]
+    created_at: str
 
 
-class EventIn(BaseModel):
+# ── Watering ──
+
+class WateringCreate(BaseModel):
+    """Log a watering event."""
+    amount_ml: Optional[int] = Field(None, ge=0, le=10000)
+    notes: Optional[str] = Field(None, max_length=500)
+
+
+class WateringResponse(BaseModel):
+    """Watering event as returned by the API."""
     id: str
-    plantId: str
-    eventType: str
-    scheduled: str
-    completed: Optional[str] = None
-    feedback: Optional[str] = None
+    plant_id: str
+    timestamp: str
+    amount_ml: Optional[int] = None
+    notes: Optional[str] = None
 
-    @field_validator("eventType")
-    @classmethod
-    def event_type_valid(cls, v: str) -> str:
-        allowed = {"water", "fertilize", "repot", "prune", "note"}
-        if v.lower() not in allowed:
-            raise ValueError(f"eventType must be one of: {', '.join(sorted(allowed))}")
-        return v.lower()
 
-    @field_validator("feedback")
-    @classmethod
-    def feedback_valid(cls, v: Optional[str]) -> Optional[str]:
-        if v is None:
-            return None
-        allowed = {"happy", "sad", "overwatered"}
-        if v.lower() not in allowed:
-            return None  # Silently drop invalid feedback
-        return v.lower()
+# ── Diagnosis ──
 
-    @field_validator("id", "plantId")
+class DiagnosisRequest(BaseModel):
+    """Request to diagnose a plant from a photo."""
+    image: str = Field(..., description="Base64-encoded image data")
+
+    @field_validator("image")
     @classmethod
-    def ids_sanitize(cls, v: str) -> str:
-        v = v.strip()
-        if not v:
-            raise ValueError("id must not be empty")
-        if len(v) > 200:
-            raise ValueError("id must be 200 characters or fewer")
+    def validate_base64(cls, v: str) -> str:
+        if len(v) < 100:
+            raise ValueError("Image data too short")
+        # Strip data URL prefix if present
+        if v.startswith("data:"):
+            v = v.split(",", 1)[1]
         return v
 
 
-class SyncPlantsRequest(BaseModel):
-    plants: list[PlantIn]
+class DiagnosisResponse(BaseModel):
+    """Diagnosis result."""
+    condition: str
+    confidence: int = Field(ge=0, le=100)
+    description: str
+    treatment: str
 
 
-class SyncEventsRequest(BaseModel):
-    events: list[EventIn]
+# ── Weather ──
+
+class WeatherResponse(BaseModel):
+    """Current weather relevant to plant care."""
+    temp_c: float
+    humidity: int
+    condition: str
+    icon: str
+    is_rainy: bool
+
+
+# ── Health ──
+
+class HealthResponse(BaseModel):
+    """API health check."""
+    status: Literal["healthy"]
+    request_count: int
+    uptime_seconds: float
