@@ -37,7 +37,6 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-haptics",
       "expo-camera",
       "expo-notifications",
       "expo-localization"
