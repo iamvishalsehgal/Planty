@@ -2394,13 +2394,13 @@
             <div class="about-card">
                 <div class="about-logo">🌱</div>
                 <div class="about-name">Planty</div>
-                <div class="about-version">v2.0</div>
+                <div class="about-version">v4.0</div>
                 <div class="about-desc">
                     Smart plant care that learns your patterns and adapts to weather conditions.<br><br>
                     Made with 💚 for indoor plant lovers.
                 </div>
-                <div style="margin-top:12px;font-size:12px;color:var(--gray-400);">
-                    v3.7 · <span id="syncFooter"></span>
+                <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+                    v4.0 · <span id="syncFooter"></span>
                 </div>
             </div>
         </div>
@@ -3972,9 +3972,9 @@
                         ${speciesCompact ? `<div class="species-bar">${speciesCompact}</div>` : ''}
                         ${fertHTML || repotBadge ? `<div class="status-row">${fertHTML}${repotBadge}</div>` : ''}
                         <div class="quick-actions">
-                            <button class="quick-action primary" onclick="startPhotoCapture(${plant.id})" title="Photo">📸</button>
-                            <button class="quick-action primary" onclick="fertilizePlant(${plant.id})" title="Fertilize">🧪</button>
-                            <button class="quick-action primary" onclick="showDiagnosisModal(${plant.id})" title="Diagnose">🩺</button>
+                            <button class="quick-action primary" onclick="startPhotoCapture(${plant.id})" title="Photo" aria-label="Take photo of ${plant.name}">📸</button>
+                            <button class="quick-action primary" onclick="fertilizePlant(${plant.id})" title="Fertilize" aria-label="Fertilize ${plant.name}">🧪</button>
+                            <button class="quick-action primary" onclick="showDiagnosisModal(${plant.id})" title="Diagnose" aria-label="Diagnose ${plant.name}">🩺</button>
                         </div>
                         <button class="card-toggle" onclick="toggleCardDetails(${plant.id})">
                             <span id="toggleIcon-${plant.id}">▸</span> <span id="toggleLabel-${plant.id}">More</span>
@@ -3984,9 +3984,9 @@
                             ${notesHTML}
                             ${photosHTML}
                             <div class="secondary-actions">
-                                <button class="quick-action" onclick="showRepotModal(${plant.id})" title="Repot">🪴</button>
-                                <button class="quick-action" onclick="showDeathModal(${plant.id})" title="Died">💀</button>
-                                <button class="quick-action danger" onclick="deletePlant(${plant.id})" title="Delete">🗑️</button>
+                                <button class="quick-action" onclick="showRepotModal(${plant.id})" title="Repot" aria-label="Repot ${plant.name}">🪴</button>
+                                <button class="quick-action" onclick="showDeathModal(${plant.id})" title="Died" aria-label="Mark ${plant.name} as dead">💀</button>
+                                <button class="quick-action danger" onclick="deletePlant(${plant.id})" title="Delete" aria-label="Delete ${plant.name}">🗑️</button>
                             </div>
                         </div>
                     </div>`;
