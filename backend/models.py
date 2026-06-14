@@ -1,6 +1,7 @@
 import re
 from pydantic import BaseModel, field_validator
 from typing import Optional
+from shared import MIN_INTERVAL, MAX_INTERVAL
 
 # ── XSS sanitization ────────────────────────────────────────────────
 _SCRIPT_PATTERN = re.compile(r"<\s*script[\s/>]", re.IGNORECASE)
@@ -48,8 +49,8 @@ class PlantIn(BaseModel):
     @field_validator("interval")
     @classmethod
     def interval_in_range(cls, v: int) -> int:
-        if not (2 <= v <= 30):
-            raise ValueError("interval must be between 2 and 30 days")
+        if not (MIN_INTERVAL <= v <= MAX_INTERVAL):
+            raise ValueError(f"interval must be between {MIN_INTERVAL} and {MAX_INTERVAL} days")
         return v
 
     @field_validator("id")

@@ -6,6 +6,7 @@ valid items are committed. One bad item no longer kills the entire batch."""
 import logging
 from datetime import datetime, timezone
 from db import get_conn
+from shared import MIN_INTERVAL, MAX_INTERVAL
 
 logger = logging.getLogger("planty.ingestion")
 
@@ -27,8 +28,8 @@ def _validate_plant(p: dict) -> bool:
     if not isinstance(p["name"], str) or not p["name"].strip():
         logger.warning("Skipping plant — empty name")
         return False
-    if not isinstance(p["interval"], (int, float)) or not (2 <= p["interval"] <= 30):
-        logger.warning(f"Skipping plant — interval {p.get('interval')} out of range 2-30")
+    if not isinstance(p["interval"], (int, float)) or not (MIN_INTERVAL <= p["interval"] <= MAX_INTERVAL):
+        logger.warning(f"Skipping plant — interval {p.get('interval')} out of range {MIN_INTERVAL}-{MAX_INTERVAL}")
         return False
     return True
 
