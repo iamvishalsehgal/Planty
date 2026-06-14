@@ -1,6 +1,6 @@
 import React from "react";
 import { View, type ViewProps } from "react-native";
-import { cn } from "nativewind";
+import { cn } from "@lib/cn";
 
 interface GlassCardProps extends ViewProps {
   variant?: "sm" | "md" | "lg";

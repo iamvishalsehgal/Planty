@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { cn } from "nativewind";
+import { cn } from "@lib/cn";
 
 interface SkeletonProps {
   width?: number | string;

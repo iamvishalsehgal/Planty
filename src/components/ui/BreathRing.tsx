@@ -1,25 +1,16 @@
 import React, { useEffect } from "react";
 import { View, Text } from "react-native";
-import {
-  Canvas,
-  Circle,
-  Path,
-  Skia,
-  useValue,
-  useDerivedValue,
-  interpolate,
-  type PathCommand,
-} from "@shopify/react-native-skia";
-import {
+import Svg, { Circle } from "react-native-svg";
+import Animated, {
   useSharedValue,
-  useDerivedValue as useReanimatedDerivedValue,
+  useAnimatedProps,
   withTiming,
   withRepeat,
+  withSequence,
   Easing,
 } from "react-native-reanimated";
 
-// ── Animated breathing ring showing plant hydration status ──
-// Inner circle pulses gently; outer ring tracks days until watering
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 interface BreathRingProps {
   size?: number;
@@ -30,7 +21,7 @@ interface BreathRingProps {
   daysLeft?: number;
 }
 
-const STATUS_COLORS = {
+const STATUS_COLORS: Record<string, [string, string]> = {
   healthy: ["#669955", "#84B075"],
   warning: ["#BA9450", "#D4B37A"],
   dry: ["#D67B5B", "#E29C82"],
@@ -48,69 +39,108 @@ export function BreathRing({
   const [primaryColor, secondaryColor] = STATUS_COLORS[status];
   const radius = (size - strokeWidth) / 2;
   const center = size / 2;
+  const circumference = 2 * Math.PI * radius;
 
-  // Animate progress
-  const animProgress = useValue(0);
+  // Animate progress with spring-like easing
+  const animProgress = useSharedValue(0);
+
   useEffect(() => {
-    animProgress.current = withTiming(progress, {
+    animProgress.value = withTiming(progress, {
       duration: 1200,
-      easing: Easing.inOut(Easing.cubic),
+      easing: Easing.out(Easing.cubic),
     });
   }, [progress]);
 
-  const path = useDerivedValue(() => {
-    const p = Skia.Path.Make();
-    const circ = 2 * Math.PI * radius;
+  // Dash offset: higher = less filled
+  const strokeDashoffset = useSharedValue(circumference);
 
-    p.addCircle(center, center, radius);
-    // We're using circle with trim via strokeDasharray
-    return p;
-  }, []);
+  useEffect(() => {
+    strokeDashoffset.value = withTiming(
+      circumference * (1 - progress),
+      { duration: 1200, easing: Easing.out(Easing.cubic) }
+    );
+  }, [progress, circumference]);
 
-  const strokeDashOffset = useDerivedValue(() => {
-    const circumference = 2 * Math.PI * radius;
-    return circumference * (1 - animProgress.current);
-  }, [animProgress]);
+  // Pulse animation for overdue/dry status
+  const pulseOpacity = useSharedValue(1);
 
-  const breathScale = useReanimatedDerivedValue(() =>
-    withRepeat(
-      withTiming(1.06, { duration: 2000, easing: Easing.inOut(Easing.sin) }),
-      -1,
-      true
-    )
-  );
+  useEffect(() => {
+    if (status === "overdue" || status === "dry") {
+      pulseOpacity.value = withRepeat(
+        withSequence(
+          withTiming(0.6, { duration: 600 }),
+          withTiming(1, { duration: 600 })
+        ),
+        -1,
+        true
+      );
+    } else {
+      pulseOpacity.value = 1;
+    }
+  }, [status]);
 
   return (
-    <View style={{ width: size, height: size }} className="relative items-center justify-center">
+    <View
+      style={{ width: size, height: size }}
+      className="items-center justify-center"
+    >
       {/* Background ring */}
-      <Canvas style={{ width: size, height: size, position: "absolute" }}>
+      <Svg
+        width={size}
+        height={size}
+        style={{ position: "absolute", transform: [{ rotate: "-90deg" }] }}
+      >
         <Circle
           cx={center}
           cy={center}
           r={radius}
-          color="rgba(240, 232, 216, 0.4)"
-          style="stroke"
+          fill="none"
+          stroke="rgba(240, 232, 216, 0.4)"
           strokeWidth={strokeWidth}
         />
-      </Canvas>
+      </Svg>
 
       {/* Progress ring */}
-      <Canvas style={{ width: size, height: size, position: "absolute" }}>
+      <Svg
+        width={size}
+        height={size}
+        style={{ position: "absolute", transform: [{ rotate: "-90deg" }] }}
+      >
         <Circle
           cx={center}
           cy={center}
           r={radius}
-          color={primaryColor}
-          style="stroke"
+          fill="none"
+          stroke={primaryColor}
           strokeWidth={strokeWidth}
-          strokeCap="round"
-          transform={[{ rotate: -Math.PI / 2 }, { translateX: center }, { translateY: center }]}
-          // Animate progress via dash offset
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference * (1 - progress)}
         />
-      </Canvas>
+      </Svg>
+
+      {/* Pulse overlay for urgent status */}
+      {(status === "overdue" || status === "dry") && (
+        <Svg
+          width={size}
+          height={size}
+          style={{ position: "absolute", transform: [{ rotate: "-90deg" }], opacity: 0.3 }}
+        >
+          <Circle
+            cx={center}
+            cy={center}
+            r={radius + 4}
+            fill="none"
+            stroke={primaryColor}
+            strokeWidth={2}
+            strokeDasharray={circumference}
+            strokeDashoffset={circumference * (1 - progress)}
+          />
+        </Svg>
+      )}
 
       {/* Center content */}
-      <View className="items-center justify-center">
+      <View className="items-center justify-center z-10">
         {showDays && daysLeft !== undefined ? (
           <>
             <Text
@@ -119,8 +149,17 @@ export function BreathRing({
             >
               {daysLeft < 0 ? "!" : daysLeft}
             </Text>
-            <Text className="text-label-sm text-text-tertiary">
-              {daysLeft < 0 ? "overdue" : daysLeft === 0 ? "today" : daysLeft === 1 ? "day" : "days"}
+            <Text
+              className="text-label-sm"
+              style={{ color: "#826435" }}
+            >
+              {daysLeft < 0
+                ? "overdue"
+                : daysLeft === 0
+                ? "today"
+                : daysLeft === 1
+                ? "day"
+                : "days"}
             </Text>
           </>
         ) : (

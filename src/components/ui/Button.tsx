@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   type TouchableOpacityProps,
 } from "react-native";
-import { cn } from "nativewind";
+import { cn } from "@lib/cn";
 import { haptics } from "@lib/haptics";
 
 interface ButtonProps extends TouchableOpacityProps {
