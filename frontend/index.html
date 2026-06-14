@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Planty">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#10b981">
+    <meta name="theme-color" content="#22c55e">
     <meta name="description" content="Smart plant care PWA — adaptive watering schedules, weather-aware reminders, plant doctor diagnostics, and memorial tracking. Keep your plants thriving.">
 
     <!-- Open Graph -->
@@ -65,24 +65,24 @@
         }
 
         :root {
-            /* Brand palette — loggd-inspired multi-color glow */
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --primary-light: #d1fae5;
-            --primary-glow: rgba(16, 185, 129, 0.3);
-            --water-blue: #3b82f6;
-            --water-dark: #2563eb;
-            --danger: #ef4444;
+            /* Brand palette — biophilic: leaf green + sunlight + water */
+            --primary: #22c55e;
+            --primary-dark: #16a34a;
+            --primary-light: #bbf7d0;
+            --primary-glow: rgba(34, 197, 94, 0.3);
+            --water-blue: #38bdf8;
+            --water-dark: #0ea5e9;
+            --danger: #f87171;
             --danger-light: #fee2e2;
-            --warning: #f59e0b;
+            --warning: #fbbf24;
             --warning-light: #fef3c7;
-            /* Glow accent colors */
-            --glow-green: rgba(16, 185, 129, 0.25);
-            --glow-cyan: rgba(6, 182, 212, 0.22);
-            --glow-violet: rgba(139, 92, 246, 0.2);
-            --glow-amber: rgba(245, 158, 11, 0.2);
-            --glow-fuchsia: rgba(217, 70, 239, 0.18);
-            --glow-blue: rgba(59, 130, 246, 0.22);
+            /* Glow accent colors — multi-color like loggd */
+            --glow-green: rgba(34, 197, 94, 0.2);
+            --glow-amber: rgba(245, 158, 11, 0.10);
+            --glow-blue: rgba(56, 189, 248, 0.14);
+            --glow-terracotta: rgba(251, 146, 60, 0.12);
+            --glow-fuchsia: rgba(232, 121, 249, 0.1);
+            --glow-cyan: rgba(34, 211, 238, 0.12);
             /* Grays — dark-first */
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
@@ -116,23 +116,23 @@
             /* Semantic text */
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --text-muted: #78869a;
             --text-inverse: #0a0e17;
             /* Borders */
-            --border-default: rgba(255,255,255,0.08);
+            --border-default: rgba(255,255,255,0.12);
             --border-subtle: rgba(255,255,255,0.04);
             /* Gradients */
-            --gradient-water-normal: linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(59,130,246,0.06) 100%);
-            --gradient-water-today: linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(99,102,241,0.12) 100%);
-            --gradient-water-urgent: linear-gradient(135deg, rgba(245,158,11,0.2) 0%, rgba(245,158,11,0.08) 100%);
-            --gradient-water-overdue: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(239,68,68,0.08) 100%);
-            --gradient-header: linear-gradient(135deg, #0a0e17 0%, #111827 40%, #0a0e17 100%);
-            --gradient-btn-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --gradient-btn-water: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            --gradient-water-normal: linear-gradient(135deg, rgba(56,189,248,0.12) 0%, rgba(56,189,248,0.06) 100%);
+            --gradient-water-today: linear-gradient(135deg, rgba(56,189,248,0.25) 0%, rgba(34,197,94,0.12) 100%);
+            --gradient-water-urgent: linear-gradient(135deg, rgba(251,191,36,0.25) 0%, rgba(251,191,36,0.08) 100%);
+            --gradient-water-overdue: linear-gradient(135deg, rgba(248,113,113,0.25) 0%, rgba(248,113,113,0.08) 100%);
+            --gradient-header: linear-gradient(135deg, #0a0e17 0%, #0d1117 40%, #0a0e17 100%);
+            --gradient-btn-primary: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            --gradient-btn-water: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
             /* Accent bar colors */
-            --accent-healthy: #10b981;
-            --accent-water: #3b82f6;
-            --accent-overdue: #ef4444;
+            --accent-healthy: #22c55e;
+            --accent-water: #38bdf8;
+            --accent-overdue: #f87171;
             /* Misc */
             --safe-bottom: env(safe-area-inset-bottom, 20px);
             --focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.5);
@@ -199,13 +199,13 @@
         }
         body::before {
             width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--glow-green) 0%, transparent 70%);
             top: -100px; right: -60px;
             animation: bgOrb1 20s ease-in-out infinite;
         }
         body::after {
             width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--glow-amber) 0%, transparent 70%);
             bottom: -80px; left: -50px;
             animation: bgOrb2 25s ease-in-out infinite;
         }
@@ -231,10 +231,10 @@
             box-shadow: 0 8px 32px rgba(5, 150, 105, 0.3);
             transition: background 0.8s ease, box-shadow 0.8s ease;
         }
-        .header.spring { background: linear-gradient(135deg, #059669, #047857, #065f46); box-shadow: 0 8px 32px rgba(5,150,105,0.3); }
-        .header.summer { background: linear-gradient(135deg, #d97706, #b45309, #92400e); box-shadow: 0 8px 32px rgba(217,119,6,0.3); }
-        .header.fall   { background: linear-gradient(135deg, #b45309, #92400e, #78350f); box-shadow: 0 8px 32px rgba(180,83,9,0.3); }
-        .header.winter { background: linear-gradient(135deg, #1d4ed8, #1e40af, #1e3a8a); box-shadow: 0 8px 32px rgba(29,78,216,0.3); }
+        .header.spring { border-bottom-color: rgba(34,197,94,0.3); }
+        .header.summer { border-bottom-color: rgba(251,191,36,0.3); }
+        .header.fall   { border-bottom-color: rgba(251,146,60,0.3); }
+        .header.winter { border-bottom-color: rgba(56,189,248,0.3); }
 
         .header::before {
             content: '';
@@ -814,12 +814,12 @@
         /* Water confirmation animation */
         @keyframes waterConfirm {
             0% { transform: scale(1); }
-            30% { transform: scale(1.06); background: linear-gradient(135deg, #059669, #047857); }
+            30% { transform: scale(1.06); background: linear-gradient(135deg, #16a34a, #15803d); }
             100% { transform: scale(1); }
         }
         .water-btn.watered {
             animation: waterConfirm 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #22c55e, #16a34a);
         }
 
         .cooldown-warning {
@@ -1152,8 +1152,8 @@
         }
 
         .nav-item.active {
-            color: var(--primary);
-            background: rgba(16, 185, 129, 0.08);
+            color: #4ade80;
+            background: rgba(34, 197, 94, 0.12);
         }
 
         .nav-item .nav-icon {
@@ -1868,7 +1868,7 @@
             --bg: #0a0f14;
             --text-primary: #e2e8f0;
             --text-secondary: #94a3b8;
-            --text-muted: #64748b;
+            --text-muted: #78869a;
             --border-default: rgba(255,255,255,0.06);
             --border-subtle: rgba(255,255,255,0.04);
             --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
@@ -1879,11 +1879,7 @@
             --gradient-water-today: linear-gradient(135deg, #1e3a5f, #1e40af);
             --gradient-water-urgent: linear-gradient(135deg, #78350f, #92400e);
             --gradient-water-overdue: linear-gradient(135deg, #7f1d1d, #991b1b);
-            --gradient-header: linear-gradient(135deg, #064e3b, #065f46, #064e3b);
-            --accent-healthy: #34d399;
-            --accent-water: #3b82f6;
-            --accent-overdue: #ef4444;
-            background: linear-gradient(170deg, #0a0f14 0%, #0f1720 30%, #0a1018 60%, #0a0f14 100%);
+            background: linear-gradient(170deg, #0a0e17 0%, #111827 30%, #0d1117 60%, #0a0e17 100%);
             background-attachment: fixed;
             color: var(--text-primary);
         }
@@ -2315,7 +2311,7 @@
     <div id="tab-settings" class="tab-content">
         <div class="content">
             <div class="tip-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
-                <h4 style="color: #059669;">📱 Install on Your Phone</h4>
+                <h4 style="color: #4ade80;">📱 Install on Your Phone</h4>
                 <p style="color: #047857;">
                     <strong>iPhone:</strong> Tap Share → "Add to Home Screen"<br>
                     <strong>Android:</strong> Tap Menu → "Add to Home Screen"
@@ -2376,7 +2372,7 @@
                         <span class="settings-arrow">›</span>
                     </div>
                     <div class="settings-item" onclick="document.getElementById('importFile').click()">
-                        <div class="settings-icon" style="background: #d1fae5; color: #059669;">📥</div>
+                        <div class="settings-icon" style="background: rgba(34,197,94,0.15); color: #4ade80;">📥</div>
                         <div class="settings-text">
                             <div class="settings-title">Import Backup</div>
                             <div class="settings-subtitle">Restore from file</div>
@@ -3656,7 +3652,7 @@
                 </div>
                 ${speciesTip}
                 ${causes.map((c, i) => `
-                    <div style="background:${i===0?'#fef2f2':'#f9fafb'};border-left:4px solid ${c.urgency==='high'?'#ef4444':c.urgency==='medium'?'#f59e0b':'#10b981'};padding:14px;margin-bottom:10px;border-radius:0 10px 10px 0;">
+                    <div style="background:${i===0?'#fef2f2':'#f9fafb'};border-left:4px solid ${c.urgency==='high'?'#ef4444':c.urgency==='medium'?'#f59e0b':'#22c55e'};padding:14px;margin-bottom:10px;border-radius:0 10px 10px 0;">
                         <div style="font-weight:600;color:var(--gray-800);margin-bottom:4px;">${c.cause} <span style="font-size:12px;color:var(--gray-500);">— ${c.prob}</span></div>
                         <div style="font-size:13px;color:var(--gray-600);">🩹 ${c.fix}</div>
                     </div>
