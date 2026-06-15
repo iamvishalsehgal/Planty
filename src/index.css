@@ -54,15 +54,19 @@ html.dark .border-sage-300\/60 { border-color: rgba(102, 153, 85, 0.4); }
 html.dark .text-text-primary { color: #F4F7F2; }
 html.dark .text-text-secondary { color: #E5EDE0; }
 html.dark .text-text-tertiary { color: #CCDBC2; }
+html.dark .text-sage-500 { color: #669955; }
 html.dark .text-sage-600 { color: #A8C79B; }
 html.dark .text-sage-700 { color: #CCDBC2; }
 html.dark .text-sage-800 { color: #E5EDE0; }
+html.dark .text-soil-500 { color: #BD935C; }
 html.dark .text-soil-600 { color: #CDB080; }
 html.dark .text-soil-700 { color: #E0CFB0; }
 html.dark .text-soil-800 { color: #E0CFB0; }
+html.dark .text-clay-500 { color: #D67B5B; }
 html.dark .text-clay-600 { color: #E29C82; }
 html.dark .text-clay-700 { color: #EDC0B0; }
 html.dark .text-clay-500 { color: #D67B5B; }
+html.dark .text-sky-500 { color: #549DD8; }
 html.dark .text-sky-600 { color: #8DBDE7; }
 html.dark .text-sky-700 { color: #C0D9F2; }
 
