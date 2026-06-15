@@ -1,28 +1,37 @@
 """Database setup — PostgreSQL via SQLAlchemy with connection pooling."""
 
-import os
+import logging
 from contextlib import contextmanager
-from datetime import datetime
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import event
 
-# Use SQLite for local dev, PostgreSQL in production (Render)
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
-    "sqlite:///planty.db",
-)
+from config import config
 
-# SQLAlchemy setup
+logger = logging.getLogger("planty.db")
+
+# ── Engine creation ──
 connect_args = {}
-if DATABASE_URL.startswith("sqlite"):
+if config.DATABASE_URL.startswith("sqlite"):
     connect_args = {"check_same_thread": False}
-    engine = create_engine(DATABASE_URL, connect_args=connect_args)
-    # Enable WAL mode for SQLite
-    import sqlite3
-    # WAL is enabled via connection events
+    engine = create_engine(config.DATABASE_URL, connect_args=connect_args)
+
+    # Enable WAL mode for SQLite (better concurrent read/write)
+    @event.listens_for(engine, "connect")
+    def _set_sqlite_pragma(dbapi_connection, _connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+        logger.debug("SQLite: WAL mode + foreign keys enabled")
+
 else:
-    engine = create_engine(DATABASE_URL, pool_size=5, pool_recycle=300)
+    engine = create_engine(
+        config.DATABASE_URL,
+        pool_size=5,
+        pool_recycle=300,
+    )
 
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
@@ -59,10 +68,22 @@ def init_db():
             ON watering_events(plant_id, timestamp DESC)
         """))
         conn.commit()
+        logger.info("Database tables initialised")
+
+
+def check_db_health() -> bool:
+    """Verify database connectivity. Returns True if healthy."""
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return True
+    except Exception:
+        logger.exception("Database health check failed")
+        return False
 
 
 def get_db() -> Session:
-    """Get a database session."""
+    """Get a database session (FastAPI dependency)."""
     db = SessionLocal()
     try:
         yield db

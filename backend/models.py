@@ -103,6 +103,7 @@ class WeatherResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     """API health check."""
-    status: Literal["healthy"]
+    status: Literal["healthy", "degraded"]
+    database: Literal["connected", "disconnected"]
     request_count: int
     uptime_seconds: float
