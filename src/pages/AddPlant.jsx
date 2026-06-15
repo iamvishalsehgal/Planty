@@ -128,6 +128,7 @@ export default function AddPlant() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Big Monstera"
+            maxLength={100}
             className="w-full bg-cream-50 border border-cream-400 rounded-md px-4 py-3 text-body-md text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-sage-400"
           />
         </div>
@@ -166,6 +167,7 @@ export default function AddPlant() {
               value={customSpecies}
               onChange={(e) => setCustomSpecies(e.target.value)}
               placeholder="Enter species name"
+              maxLength={100}
               className="mt-2 w-full bg-cream-50 border border-cream-400 rounded-md px-4 py-3 text-body-md text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-sage-400"
               autoFocus
             />
