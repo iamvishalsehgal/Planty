@@ -37,6 +37,15 @@ html.dark .bg-clay-100 { background-color: #3D1C15; }
 html.dark .bg-sky-50 { background-color: #13273E; }
 html.dark .bg-sky-100 { background-color: #1D3C5E; }
 html.dark .bg-clay-100\/80 { background-color: rgba(61, 28, 21, 0.8); }
+html.dark .bg-sage-50 { background-color: rgba(45, 65, 39, 0.5); }
+html.dark .bg-soil-50 { background-color: rgba(51, 30, 19, 0.5); }
+html.dark .bg-clay-50 { background-color: rgba(61, 28, 21, 0.5); }
+html.dark .bg-sky-50 { background-color: rgba(19, 39, 62, 0.5); }
+html.dark .border-sage-200\/30 { border-color: rgba(79, 122, 66, 0.3); }
+html.dark .border-soil-200\/30 { border-color: rgba(105, 67, 42, 0.3); }
+html.dark .border-clay-200\/30 { border-color: rgba(137, 68, 48, 0.3); }
+html.dark .border-sky-200\/30 { border-color: rgba(30, 82, 136, 0.3); }
+html.dark .bg-sage-50\/30 { background-color: rgba(45, 65, 39, 0.3); }
 
 html.dark .text-text-primary { color: #F4F7F2; }
 html.dark .text-text-secondary { color: #E5EDE0; }
@@ -180,6 +189,14 @@ html.dark ::-webkit-scrollbar-thumb { background: #3F6135; }
 html.dark .bg-cream-50\/60 { background-color: rgba(31, 51, 27, 0.6); }
 html.dark .border-cream-200\/30 { border-color: rgba(63, 97, 53, 0.3); }
 html.dark .before\:from-white\/20::before { background-image: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent); }
+
+/* ── Background pattern ── */
+body {
+  background-image: radial-gradient(circle at 50% 0%, rgba(102,153,85,0.06) 0%, transparent 60%);
+}
+html.dark body {
+  background-image: radial-gradient(circle at 50% 0%, rgba(132,176,117,0.08) 0%, transparent 60%);
+}
 
 /* ── Focus ring ── */
 input:focus-visible, button:focus-visible, select:focus-visible {

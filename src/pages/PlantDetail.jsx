@@ -54,16 +54,20 @@ export default function PlantDetail() {
       <div className="flex-1 overflow-auto px-4 pb-6 space-y-4">
         {/* Hero card */}
         <GlassCard variant="lg" className="flex flex-col items-center py-8">
-          {plant.photoUri ? (
-            <img src={plant.photoUri} alt={plant.name} className="w-24 h-24 rounded-full object-cover mb-4" />
-          ) : (
-            <div className="w-24 h-24 rounded-full bg-cream-200 flex items-center justify-center mb-4">
-              <span className="text-4xl">🪴</span>
-            </div>
-          )}
-          <BreathRing progress={progress} size={140} strokeWidth={10} status={plant.healthStatus} />
-          <h2 className="text-title-lg text-text-primary mt-3">{plant.name}</h2>
-          <SpeciesBadge species={plant.species} room={plant.room} />
+          <div className="relative mb-2">
+            {plant.photoUri ? (
+              <img src={plant.photoUri} alt={plant.name} className="w-28 h-28 rounded-full object-cover ring-4 ring-cream-200/50 shadow-card" />
+            ) : (
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-sage-200 to-sage-400 flex items-center justify-center ring-4 ring-cream-200/50 shadow-card">
+                <span className="text-5xl">🪴</span>
+              </div>
+            )}
+          </div>
+          <BreathRing progress={progress} size={150} strokeWidth={10} status={plant.healthStatus} />
+          <h2 className="text-title-lg text-text-primary mt-4">{plant.name}</h2>
+          <div className="mt-1">
+            <SpeciesBadge species={plant.species} room={plant.room} />
+          </div>
         </GlassCard>
 
         {/* Watering status */}

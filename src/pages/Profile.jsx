@@ -60,23 +60,23 @@ export default function Profile() {
       <div className="flex-1 overflow-auto px-4 pb-6 space-y-4">
         {/* Garden stats */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-text-primary mb-3">🌿 Garden</h3>
+          <h3 className="text-title-sm text-text-primary mb-4">🌿 Garden</h3>
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 bg-sage-100 rounded-md text-center">
-              <div className="text-display-md text-sage-700">{plants.length}</div>
-              <div className="text-label-sm text-sage-600">Total</div>
+            <div className="p-4 bg-sage-50 rounded-xl text-center border border-sage-200/30">
+              <div className="text-display-xl text-sage-600 font-bold">{plants.length}</div>
+              <div className="text-label-sm text-sage-500 mt-1 flex items-center justify-center gap-1">🪴 Total</div>
             </div>
-            <div className="p-3 bg-soil-100 rounded-md text-center">
-              <div className="text-display-md text-soil-700">{healthyPlants.length}</div>
-              <div className="text-label-sm text-soil-600">Healthy</div>
+            <div className="p-4 bg-soil-50 rounded-xl text-center border border-soil-200/30">
+              <div className="text-display-xl text-soil-600 font-bold">{healthyPlants.length}</div>
+              <div className="text-label-sm text-soil-500 mt-1 flex items-center justify-center gap-1">💚 Healthy</div>
             </div>
-            <div className="p-3 bg-clay-100 rounded-md text-center">
-              <div className="text-display-md text-clay-700">{thirstyPlants.length}</div>
-              <div className="text-label-sm text-clay-600">Need water</div>
+            <div className="p-4 bg-clay-50 rounded-xl text-center border border-clay-200/30">
+              <div className="text-display-xl text-clay-600 font-bold">{thirstyPlants.length}</div>
+              <div className="text-label-sm text-clay-500 mt-1 flex items-center justify-center gap-1">💧 Need water</div>
             </div>
-            <div className="p-3 bg-sky-100 rounded-md text-center">
-              <div className="text-display-md text-sky-700">{rooms.length}</div>
-              <div className="text-label-sm text-sky-600">Rooms</div>
+            <div className="p-4 bg-sky-50 rounded-xl text-center border border-sky-200/30">
+              <div className="text-display-xl text-sky-600 font-bold">{rooms.length}</div>
+              <div className="text-label-sm text-sky-500 mt-1 flex items-center justify-center gap-1">🏠 Rooms</div>
             </div>
           </div>
         </GlassCard>

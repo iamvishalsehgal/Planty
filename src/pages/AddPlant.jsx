@@ -79,16 +79,7 @@ export default function AddPlant() {
 
       <div className="flex-1 overflow-auto px-4 pb-6 space-y-5">
         {/* Photo */}
-        <GlassCard variant="md" className="flex flex-col items-center justify-center py-8">
-          {photoUri ? (
-            <img src={photoUri} alt="Plant" className="w-32 h-32 rounded-2xl object-cover" />
-          ) : (
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-3xl">📸</span>
-              <span className="text-label-md text-text-secondary">Add photo</span>
-              <span className="text-label-sm text-text-tertiary">Tap to choose a photo</span>
-            </div>
-          )}
+        <GlassCard variant="md">
           <input
             type="file"
             accept="image/*"
@@ -96,13 +87,30 @@ export default function AddPlant() {
             onChange={handlePhotoPick}
             className="hidden"
           />
-          <Button
-            label={photoUri ? "Change photo" : "Choose photo"}
-            variant="ghost"
-            size="sm"
-            onClick={() => fileRef.current?.click()}
-            className="mt-3"
-          />
+          {photoUri ? (
+            <div className="flex flex-col items-center gap-3">
+              <img src={photoUri} alt="Plant" className="w-40 h-40 rounded-2xl object-cover shadow-card" />
+              <Button
+                label="Change photo"
+                variant="ghost"
+                size="sm"
+                onClick={() => fileRef.current?.click()}
+              />
+            </div>
+          ) : (
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="w-full py-10 border-2 border-dashed border-cream-400 rounded-xl flex flex-col items-center gap-3 hover:border-sage-400 hover:bg-sage-50/30 transition-all cursor-pointer"
+            >
+              <div className="w-14 h-14 rounded-full bg-sage-100 flex items-center justify-center">
+                <span className="text-2xl">📸</span>
+              </div>
+              <div className="text-center">
+                <span className="text-label-md text-text-secondary block">Add a photo</span>
+                <span className="text-label-sm text-text-tertiary">JPG or PNG, any size</span>
+              </div>
+            </button>
+          )}
         </GlassCard>
 
         {/* Name */}
