@@ -111,7 +111,7 @@ export default function PlantDetail() {
             variant={daysLeft <= 0 ? "primary" : "secondary"}
             size="lg"
             onClick={handleWater}
-            className="w-full"
+            className={`w-full ${daysLeft <= 0 ? "animate-pulse shadow-[0_0_24px_rgba(79,122,66,0.4)]" : ""}`}
           />
         )}
 

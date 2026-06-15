@@ -3,6 +3,7 @@ import { usePlants } from "@/hooks/usePlants";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
+import { CountUp } from "@/components/CountUp";
 
 export default function Profile() {
   const { plants, thirstyPlants, healthyPlants, removePlant } = usePlants();
@@ -63,19 +64,19 @@ export default function Profile() {
           <h3 className="text-title-sm text-text-primary mb-4">🌿 Garden</h3>
           <div className="grid grid-cols-2 gap-3">
             <div className="p-4 bg-sage-50 rounded-xl text-center border border-sage-200/30">
-              <div className="text-display-xl text-sage-600 font-bold">{plants.length}</div>
+              <div className="text-display-xl text-sage-600 font-bold"><CountUp end={plants.length} /></div>
               <div className="text-label-sm text-sage-500 mt-1 flex items-center justify-center gap-1">🪴 Total</div>
             </div>
             <div className="p-4 bg-soil-50 rounded-xl text-center border border-soil-200/30">
-              <div className="text-display-xl text-soil-600 font-bold">{healthyPlants.length}</div>
+              <div className="text-display-xl text-soil-600 font-bold"><CountUp end={healthyPlants.length} /></div>
               <div className="text-label-sm text-soil-500 mt-1 flex items-center justify-center gap-1">💚 Healthy</div>
             </div>
             <div className="p-4 bg-clay-50 rounded-xl text-center border border-clay-200/30">
-              <div className="text-display-xl text-clay-600 font-bold">{thirstyPlants.length}</div>
+              <div className="text-display-xl text-clay-600 font-bold"><CountUp end={thirstyPlants.length} /></div>
               <div className="text-label-sm text-clay-500 mt-1 flex items-center justify-center gap-1">💧 Need water</div>
             </div>
             <div className="p-4 bg-sky-50 rounded-xl text-center border border-sky-200/30">
-              <div className="text-display-xl text-sky-600 font-bold">{rooms.length}</div>
+              <div className="text-display-xl text-sky-600 font-bold"><CountUp end={rooms.length} /></div>
               <div className="text-label-sm text-sky-500 mt-1 flex items-center justify-center gap-1">🏠 Rooms</div>
             </div>
           </div>
