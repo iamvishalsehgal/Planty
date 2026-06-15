@@ -1,75 +1,82 @@
 # CLAUDE.md
 
-Planty v2 — smart plant care mobile app. Expo React Native + FastAPI backend.
-Beautiful UI, native-first, haptic feedback, offline-capable.
+Planty v3 — smart plant care web app. React + Vite + Tailwind CSS. FastAPI backend optional.
 
 ## Stack
 
-- **Mobile**: Expo SDK 53, React Native 0.76, Expo Router v4, TypeScript strict
-- **Styling**: NativeWind v4 (Tailwind), design tokens in `src/design/`
-- **Animation**: Reanimated 3, Skia, Gesture Handler, @gorhom/bottom-sheet
-- **State**: Zustand v5 + MMKV persistence
-- **Backend**: FastAPI + PostgreSQL (Render managed)
-- **Deploy**: EAS for mobile builds, Render for backend
-
-## Session Start
-
-Run `/graphify` at session start. Then `/clear`.
+- **Frontend**: React 19, Vite 6, Tailwind CSS, React Router v7
+- **State**: Zustand v5 + localStorage
+- **Styling**: Tailwind with custom design tokens (sage, soil, sky, clay, cream)
+- **Backend**: FastAPI + SQLite (local) / PostgreSQL (production)
+- **Deploy**: GitHub Pages (frontend), Render optional (backend)
+- **Weather**: Open-Meteo free API (no key)
 
 ## Build & Run
 
 ```bash
-npm install                      # Frontend deps
-cd backend && pip install -r requirements.txt  # Backend deps
-npx expo start                   # Dev server (scan QR with Expo Go)
-npx expo start --ios             # iOS simulator
-npm start                        # Same as above
+npm install                     # Frontend deps
+npm run dev                     # Vite dev server → localhost:5173
+npm run build                   # Production build → dist/
+
+# Backend (optional)
+cd backend
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload       # API → localhost:8000
 ```
 
 ## Test
 
 ```bash
-cd backend && python3 -m pytest tests/ -q
+# Frontend build check
+npm run build
+
+# Backend (29 tests)
+cd backend && source .venv/bin/activate && python3 -m pytest tests/ -v
 ```
 
 ## Project Structure
 
 ```
 planty/
-├── app/                    # Expo Router file-based routes
-│   ├── (tabs)/            # Tab navigator
-│   │   ├── index.tsx      # Plant dashboard
-│   │   ├── add.tsx        # Add plant flow
-│   │   ├── diagnose.tsx   # Plant doctor (camera + AI)
-│   │   └── profile.tsx    # Settings & stats
-│   ├── plant/[id].tsx     # Plant detail + history
-│   └── _layout.tsx        # Root layout shell
+├── index.html              # SPA entry
+├── vite.config.js          # Vite config + path aliases
+├── tailwind.config.js      # Design tokens
 ├── src/
-│   ├── components/ui/     # Design system primitives
-│   ├── components/plants/ # Plant domain components
-│   ├── components/shared/ # Cross-feature components
-│   ├── hooks/             # Custom hooks
-│   ├── stores/            # Zustand stores
-│   ├── lib/               # API client, weather, utils
-│   └── design/            # Colors, typography, spacing tokens
-├── backend/               # FastAPI server
-├── assets/                # Images, fonts, Lottie
-└── graphify-out/          # Knowledge graph
+│   ├── main.jsx            # React entry + SW registration
+│   ├── App.jsx             # Router (HashRouter)
+│   ├── index.css           # Tailwind + custom CSS + dark mode
+│   ├── pages/              # Dashboard, AddPlant, Diagnose, Profile, PlantDetail
+│   ├── components/         # Button, GlassCard, BreathRing, PlantCard, etc.
+│   ├── stores/             # plantStore, settingsStore (Zustand + localStorage)
+│   ├── hooks/              # usePlants, useWatering, useWeather
+│   └── lib/                # weather (Open-Meteo), date utils, notifications, cn
+├── public/                 # PWA manifest, service worker, SVG icon
+├── backend/                # FastAPI server (optional)
+│   ├── main.py             # App entry, middleware, scheduler
+│   ├── config.py           # Environment config
+│   ├── db.py               # SQLAlchemy + SQLite WAL mode
+│   ├── models.py           # Pydantic v2 schemas
+│   ├── routes/             # plants, diagnosis, weather, health
+│   ├── services/           # weather (Open-Meteo), diagnosis (mock)
+│   └── tests/              # 29 pytest tests
+└── .github/workflows/      # GitHub Pages deploy
 ```
 
 ## Design System
 
 Nature palette: sage greens, soil browns, sky blues, clay terracotta, cream.
-Glass-morphism cards, min 16px radius, spring-physics animations.
-Full tokens in `tailwind.config.js` and `src/design/tokens.ts`.
+Glass-morphism cards with multi-layer shadows, floating pill tab bar.
+Full tokens in `tailwind.config.js` and `src/index.css`.
+Dark mode via `html.dark` class with per-component color overrides.
 
 ## Architecture Decisions
 
-- **MMKV over AsyncStorage**: Sub-ms reads, synchronous, typed. Plants state persisted.
-- **Zustand over Redux**: Tiny API, no providers, works outside React.
-- **Expo Router over React Navigation**: File-based, deep linking free, typed routes.
-- **NativeWind over StyleSheet**: Faster iteration, design tokens in Tailwind config.
-- **Postgres over SQLite**: Render managed, backups included, better for sync.
+- **localStorage over backend DB**: Zero server costs, instant reads, import/export
+- **Zustand over Redux**: Tiny API, no providers, works outside React
+- **HashRouter over BrowserRouter**: GitHub Pages compatible, no 404 config
+- **Tailwind over CSS-in-JS**: Design tokens in config, utility-first
+- **SQLite over PostgreSQL (dev)**: Zero setup, WAL mode for concurrency
 
 ## Agent Skills
 
