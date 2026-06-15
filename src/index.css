@@ -71,6 +71,10 @@ html.dark .border-cream-200 { border-color: #3F6135; }
 html.dark .border-cream-400 { border-color: #4F7A42; }
 html.dark .border-clay-200 { border-color: #894430; }
 html.dark .border-sage-200 { border-color: #4F7A42; }
+html.dark .border-l-sky-400 { border-left-color: #549DD8; }
+html.dark .border-l-soil-400 { border-left-color: #BD935C; }
+html.dark .border-l-clay-400 { border-left-color: #E29C82; }
+html.dark .border-l-sage-400 { border-left-color: #84B075; }
 html.dark .border-sky-200 { border-color: #1E5288; }
 
 html.dark .shadow-glass-sm { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); }

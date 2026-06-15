@@ -104,15 +104,21 @@ export default function Diagnose() {
           <img src={imageUri} alt="Plant" className="w-full h-56 object-cover" />
         </GlassCard>
 
-        <GlassCard variant="lg" className="flex flex-col items-center py-6 gap-3">
-          <span className="text-4xl">🛠️</span>
-          <h3 className="text-title-sm text-text-secondary text-center">
-            AI diagnosis offline
-          </h3>
-          <p className="text-body-sm text-text-tertiary text-center px-2">
-            Compare your leaf against the common issues on the previous screen. AI-powered diagnosis requires the Planty backend server.
-          </p>
-        </GlassCard>
+        <div className="space-y-2">
+          <h3 className="text-title-sm text-text-secondary px-1">Compare with common issues</h3>
+          {TIPS.map((tip) => (
+            <div
+              key={tip.problem}
+              className={`p-3 rounded-lg border-l-4 ${SEVERITY_COLORS[tip.severity]} border border-cream-200/30 flex items-center gap-3`}
+            >
+              <span className="text-xl flex-shrink-0">{tip.emoji}</span>
+              <div>
+                <span className="text-label-md text-text-primary block">{tip.problem}</span>
+                <span className="text-body-sm text-text-tertiary">{tip.cause}</span>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <Button
           label="Choose different photo"
