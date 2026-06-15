@@ -8,7 +8,7 @@ Planty v3 — smart plant care web app. React + Vite + Tailwind CSS. FastAPI bac
 - **State**: Zustand v5 + localStorage
 - **Styling**: Tailwind with custom design tokens (sage, soil, sky, clay, cream)
 - **Backend**: FastAPI + SQLite (local) / PostgreSQL (production)
-- **Deploy**: GitHub Pages (frontend), Render optional (backend)
+- **Deploy**: GitHub Pages (frontend), any PostgreSQL host (backend optional)
 - **Weather**: Open-Meteo free API (no key)
 
 ## Build & Run

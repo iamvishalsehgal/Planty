@@ -24,7 +24,7 @@ Key settings:
 
 | Variable | Default | Notes |
 |----------|---------|-------|
-| `DATABASE_URL` | `sqlite:///planty.db` | PostgreSQL URL for Render |
+| `DATABASE_URL` | `sqlite:///planty.db` | PostgreSQL URL for production |
 | `PLANTY_TESTING` | `false` | Disables scheduler + rate limiter |
 | `PLANTY_LOG_LEVEL` | `INFO` | `DEBUG` for verbose request logging |
 | `PLANTY_DEBUG` | `false` | Include error details in 500 responses |
@@ -70,6 +70,6 @@ services/        Business logic
 tests/           29 pytest tests
 ```
 
-## Production (Render)
+## Production
 
-Uncomment `psycopg2-binary` in `requirements.txt` and set `DATABASE_URL` to your Render PostgreSQL URL. The `render.yaml` blueprint handles auto-deploy.
+Uncomment `psycopg2-binary` in `requirements.txt` and set `DATABASE_URL` to your PostgreSQL URL. Deploy to any host that supports Python/FastAPI (Railway, Fly.io, Render, etc.).

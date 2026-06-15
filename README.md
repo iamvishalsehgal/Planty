@@ -20,7 +20,7 @@ Smart plant care web app. Track watering schedules, diagnose issues, and get wea
 | State | Zustand v5 + localStorage |
 | Backend | FastAPI + SQLite / PostgreSQL |
 | Weather | Open-Meteo (free, no API key) |
-| Deploy | GitHub Pages (frontend), Render (backend optional) |
+| Deploy | GitHub Pages (frontend), any PostgreSQL host (backend optional) |
 
 ## Getting Started
 
