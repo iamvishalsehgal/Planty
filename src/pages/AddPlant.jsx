@@ -5,8 +5,14 @@ import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
 
 const COMMON_SPECIES = [
-  "Monstera", "Fiddle Leaf Fig", "Snake Plant", "Pothos",
-  "Spider Plant", "Orchid", "Cactus", "Succulent",
+  { name: "Monstera", emoji: "🌿" },
+  { name: "Fiddle Leaf Fig", emoji: "🎻" },
+  { name: "Snake Plant", emoji: "🐍" },
+  { name: "Pothos", emoji: "🌱" },
+  { name: "Spider Plant", emoji: "🕷️" },
+  { name: "Orchid", emoji: "🌸" },
+  { name: "Cactus", emoji: "🌵" },
+  { name: "Succulent", emoji: "🪴" },
 ];
 
 const ROOMS = [
@@ -131,15 +137,15 @@ export default function AddPlant() {
           <div className="flex flex-wrap gap-2">
             {COMMON_SPECIES.map((s) => (
               <button
-                key={s}
-                onClick={() => { setSpecies(s); setCustomSpecies(""); }}
-                className={`px-3 py-1.5 rounded-md text-label-sm font-medium transition-all ${
-                  species === s
-                    ? "bg-sage-500 text-white"
+                key={s.name}
+                onClick={() => { setSpecies(s.name); setCustomSpecies(""); }}
+                className={`px-3 py-1.5 rounded-full text-label-sm font-medium transition-all ${
+                  species === s.name
+                    ? "bg-sage-500 text-white shadow-card"
                     : "bg-cream-200 text-text-secondary hover:bg-cream-400"
                 }`}
               >
-                {s}
+                {s.emoji} {s.name}
               </button>
             ))}
             <button

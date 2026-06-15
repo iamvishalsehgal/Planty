@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { usePlants } from "@/hooks/usePlants";
 import { useWatering } from "@/hooks/useWatering";
@@ -15,6 +16,7 @@ export default function PlantDetail() {
   const { removePlant, getPlant } = usePlants();
   const { plant, daysLeft, nextWatering, lastWatered, waterPlant } = useWatering(id);
   const fullPlant = getPlant(id);
+  const [justWatered, setJustWatered] = useState(false);
 
   if (!plant || !fullPlant) {
     return (
@@ -26,6 +28,12 @@ export default function PlantDetail() {
       />
     );
   }
+
+  const handleWater = () => {
+    waterPlant();
+    setJustWatered(true);
+    setTimeout(() => setJustWatered(false), 2000);
+  };
 
   const handleDelete = () => {
     if (confirm(`Remove ${plant.name}? This cannot be undone.`)) {
@@ -74,13 +82,19 @@ export default function PlantDetail() {
         <WateringStatus plant={plant} daysLeft={daysLeft} />
 
         {/* Water button */}
-        <Button
-          label={daysLeft <= 0 ? "Water now! 💧" : `Water early? (${daysLeft}d left)`}
-          variant={daysLeft <= 0 ? "primary" : "secondary"}
-          size="lg"
-          onClick={waterPlant}
-          className="w-full"
-        />
+        {justWatered ? (
+          <div className="p-4 bg-sage-100 border border-sage-300 rounded-xl text-center animate-page-in">
+            <span className="text-label-md text-sage-700">✅ Watered! {plant.name} is happy 🌱</span>
+          </div>
+        ) : (
+          <Button
+            label={daysLeft <= 0 ? "Water now! 💧" : `Water early? (${daysLeft}d left)`}
+            variant={daysLeft <= 0 ? "primary" : "secondary"}
+            size="lg"
+            onClick={handleWater}
+            className="w-full"
+          />
+        )}
 
         {/* Details */}
         <GlassCard variant="md">
