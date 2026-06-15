@@ -13,10 +13,13 @@ const loadFromStorage = () => {
 };
 
 const persistSettings = (partial) => {
-  // Merge with existing stored data to avoid clobbering other keys
-  const existing = loadFromStorage();
-  const merged = { ...existing, ...partial };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+  try {
+    const existing = loadFromStorage();
+    const merged = { ...existing, ...partial };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+  } catch (e) {
+    console.error("Failed to save settings:", e.message);
+  }
 };
 
 export const useSettingsStore = create((set, get) => ({

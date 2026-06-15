@@ -150,9 +150,9 @@ export default function AddPlant() {
             ))}
             <button
               onClick={() => { setSpecies("Other"); setCustomSpecies(""); }}
-              className={`px-3 py-1.5 rounded-md text-label-sm font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-full text-label-sm font-medium transition-all ${
                 species === "Other"
-                  ? "bg-sage-500 text-white"
+                  ? "bg-sage-500 text-white shadow-card"
                   : "bg-cream-200 text-text-secondary hover:bg-cream-400"
               }`}
             >

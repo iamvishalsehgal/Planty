@@ -7,7 +7,12 @@ import { adjustWateringInterval } from "@/lib/date";
 const STORAGE_KEY = "planty-plants";
 
 const persistPlants = (plants) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+  } catch (e) {
+    console.error("Failed to save plants:", e.message);
+    // Storage full — data lives in memory until next action
+  }
 };
 
 const loadPlants = () => {
