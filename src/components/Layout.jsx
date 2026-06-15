@@ -1,6 +1,8 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { usePlantStore } from "@/stores/plantStore";
+import { requestPermission, scheduleReminders, stopReminders } from "@/lib/notifications";
 
 const TABS = [
   { path: "/", emoji: "🪴", label: "Plants" },
@@ -13,12 +15,31 @@ export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const darkMode = useSettingsStore((s) => s.darkMode);
+  const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled);
+  const reminderHour = useSettingsStore((s) => s.wateringReminderHour);
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const tabRefs = useRef([]);
 
+  // Dark mode
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
+
+  // Notifications
+  useEffect(() => {
+    if (notificationsEnabled) {
+      requestPermission().then((granted) => {
+        if (granted) {
+          scheduleReminders(reminderHour, () =>
+            usePlantStore.getState().getPlantsNeedingWater().length
+          );
+        }
+      });
+    } else {
+      stopReminders();
+    }
+    return () => stopReminders();
+  }, [notificationsEnabled, reminderHour]);
 
   const isActive = (path) => {
     if (path === "/") return location.pathname === "/" || location.pathname === "/#/";

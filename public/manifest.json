@@ -1,0 +1,19 @@
+{
+  "name": "Planty — Smart Plant Care",
+  "short_name": "Planty",
+  "description": "Track watering schedules, diagnose plant issues, and get weather-aware reminders.",
+  "start_url": "/Planty/",
+  "scope": "/Planty/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#F5F1EB",
+  "background_color": "#F5F1EB",
+  "icons": [
+    {
+      "src": "/Planty/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
