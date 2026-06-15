@@ -1,7 +1,19 @@
 import { useWeather } from "@/hooks/useWeather";
 
 export function WeatherStrip() {
-  const { weather, isLoading } = useWeather();
+  const { weather, isLoading, error, refresh } = useWeather();
+
+  if (error) {
+    return (
+      <button
+        onClick={refresh}
+        className="w-full px-4 py-2.5 bg-soil-50/80 border border-soil-200/50 rounded-lg text-label-sm text-text-tertiary hover:bg-soil-100 transition-colors flex items-center justify-center gap-2"
+      >
+        <span>⚠️</span>
+        <span>Weather unavailable — tap to retry</span>
+      </button>
+    );
+  }
 
   if (isLoading || !weather) {
     return (

@@ -13,10 +13,29 @@ import { formatDate, formatTime } from "@/lib/date";
 export default function PlantDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { removePlant, getPlant } = usePlants();
+  const { removePlant, getPlant, isLoading } = usePlants();
   const { plant, daysLeft, nextWatering, lastWatered, waterPlant } = useWatering(id);
   const fullPlant = getPlant(id);
   const [justWatered, setJustWatered] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="px-4 pt-4 pb-3 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-cream-200 animate-pulse" />
+          <div className="h-8 bg-cream-200 rounded w-40 animate-pulse" />
+        </div>
+        <div className="flex-1 overflow-auto px-4 pb-6 space-y-4">
+          <div className="p-6 rounded-2xl bg-cream-50/50 animate-pulse">
+            <div className="w-28 h-28 rounded-full bg-cream-200 mx-auto mb-4" />
+            <div className="w-32 h-32 rounded-full bg-cream-200 mx-auto" />
+          </div>
+          <div className="h-32 bg-cream-50/50 rounded-xl animate-pulse" />
+          <div className="h-14 bg-cream-50/50 rounded-lg animate-pulse" />
+        </div>
+      </div>
+    );
+  }
 
   if (!plant || !fullPlant) {
     return (

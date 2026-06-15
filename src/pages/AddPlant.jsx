@@ -76,7 +76,7 @@ export default function AddPlant() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-4 pt-4 pb-3">
+      <div className="px-4 pt-6 pb-4">
         <h1 className="text-display-lg text-text-primary">New plant</h1>
         <p className="text-body-md text-text-tertiary mt-1">
           Add a plant to start tracking its care
