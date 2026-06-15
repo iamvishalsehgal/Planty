@@ -93,6 +93,7 @@ export default {
         "display-lg": ["36px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
         "display-md": ["28px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
         "title-lg": ["22px", { lineHeight: "28px", fontWeight: "600" }],
+        "title-sm": ["16px", { lineHeight: "22px", fontWeight: "600" }],
         "title-md": ["18px", { lineHeight: "24px", fontWeight: "600" }],
         "body-lg": ["17px", { lineHeight: "24px", fontWeight: "400" }],
         "body-md": ["15px", { lineHeight: "22px", fontWeight: "400" }],

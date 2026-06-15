@@ -25,7 +25,7 @@ export function adjustWateringInterval(baseDays, weather) {
 }
 
 export function daysUntil(date) {
-  const d = typeof date === "string" ? new Date(date) : date;
+  const d = new Date(date); // always copy — avoids mutating caller's Date
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   d.setHours(0, 0, 0, 0);

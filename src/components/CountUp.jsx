@@ -4,6 +4,15 @@ export function CountUp({ end, duration = 800 }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const counted = useRef(false);
+  const prevEnd = useRef(end);
+
+  // Reset when `end` changes so the animation re-runs
+  useEffect(() => {
+    if (prevEnd.current !== end) {
+      counted.current = false;
+      prevEnd.current = end;
+    }
+  }, [end]);
 
   useEffect(() => {
     const el = ref.current;
@@ -13,7 +22,6 @@ export function CountUp({ end, duration = 800 }) {
       ([entry]) => {
         if (entry.isIntersecting) {
           counted.current = true;
-          let start = 0;
           const startTime = performance.now();
 
           const tick = (now) => {

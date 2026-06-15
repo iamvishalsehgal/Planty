@@ -16,7 +16,8 @@ function weatherCodeToCondition(code) {
 }
 
 function isRainyCode(code) {
-  return code >= 51 && code <= 82;
+  // 51-55 drizzle, 61-67 rain, 80-82 rain showers (excludes 71-77 snow)
+  return (code >= 51 && code <= 67) || (code >= 80 && code <= 82);
 }
 
 /** Sync read of cached weather — null if stale or missing */

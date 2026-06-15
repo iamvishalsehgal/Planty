@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { getWeather } from "@/lib/weather";
-import { adjustWateringInterval } from "@/lib/date";
+import { adjustWateringInterval, daysUntil } from "@/lib/date";
 
 // ── Core Plant type ──
 
@@ -34,13 +34,10 @@ function computeNextWatering(intervalDays, fromDate) {
 }
 
 function computeHealthStatus(nextWatering) {
-  const now = new Date();
-  const next = new Date(nextWatering);
-  const daysUntil = Math.ceil((next.getTime() - now.getTime()) / 86400000);
-
-  if (daysUntil < 0) return "overdue";
-  if (daysUntil === 0) return "dry";
-  if (daysUntil <= 2) return "warning";
+  const d = daysUntil(nextWatering);
+  if (d < 0) return "overdue";
+  if (d === 0) return "dry";
+  if (d <= 2) return "warning";
   return "healthy";
 }
 

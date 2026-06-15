@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlants } from "@/hooks/usePlants";
 import { WeatherStrip } from "@/components/WeatherStrip";
@@ -12,13 +12,17 @@ export default function Dashboard() {
   const { plants, thirstyPlants, healthyPlants, isLoading, waterPlant } = usePlants();
   const [refreshing, setRefreshing] = useState(false);
   const [wateredCount, setWateredCount] = useState(0);
+  const waterTimer = useRef(null);
 
-  const handleWaterAll = async () => {
+  // Cleanup timeout on unmount
+  useEffect(() => () => clearTimeout(waterTimer.current), []);
+
+  const handleWaterAll = () => {
     setRefreshing(true);
     const count = thirstyPlants.length;
     thirstyPlants.forEach((p) => waterPlant(p.id));
     setWateredCount(count);
-    setTimeout(() => {
+    waterTimer.current = setTimeout(() => {
       setRefreshing(false);
       setWateredCount(0);
     }, 1500);

@@ -62,7 +62,6 @@ html.dark .text-soil-500 { color: #BD935C; }
 html.dark .text-soil-600 { color: #CDB080; }
 html.dark .text-soil-700 { color: #E0CFB0; }
 html.dark .text-soil-800 { color: #E0CFB0; }
-html.dark .text-clay-500 { color: #D67B5B; }
 html.dark .text-clay-600 { color: #E29C82; }
 html.dark .text-clay-700 { color: #EDC0B0; }
 html.dark .text-clay-500 { color: #D67B5B; }
@@ -128,6 +127,23 @@ html.dark .ring-clay-400 { --tw-ring-color: #723B2C; }
 html.dark .ring-cream-200 { --tw-ring-color: #3F6135; }
 html.dark .ring-sage-300 { --tw-ring-color: #4F7A42; }
 html.dark .ring-soil-300 { --tw-ring-color: #69432A; }
+html.dark .ring-cream-200\/50 { --tw-ring-color: rgba(63, 97, 53, 0.6); }
+
+/* Missing dark gradient rules */
+html.dark .from-cream-200 { --tw-gradient-from: #354E2D var(--tw-gradient-from-position); }
+html.dark .via-cream-100 { --tw-gradient-via: #3F6135 var(--tw-gradient-via-position); }
+html.dark .to-cream-200 { --tw-gradient-to: #354E2D var(--tw-gradient-to-position); }
+html.dark .from-sage-200 { --tw-gradient-from: #354E2D var(--tw-gradient-from-position); }
+html.dark .to-sage-400 { --tw-gradient-to: #4F7A42 var(--tw-gradient-to-position); }
+
+/* Missing dark accent + focus + placeholder */
+html.dark .accent-sage-600 { accent-color: #84B075; }
+html.dark .focus\:border-sage-400:focus { border-color: #A8C79B; }
+html.dark .placeholder\:text-text-tertiary::placeholder { color: rgba(204, 219, 194, 0.6); }
+
+/* Dark mode button contrast fix */
+html.dark .bg-sage-600 { background-color: #3F6135; }
+html.dark .bg-soil-500 { background-color: #CDB080; }
 
 /* ── Safe area ── */
 .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -209,6 +225,26 @@ html.dark input[type="range"] {
 html.dark input[type="range"]::-webkit-slider-thumb {
   background: #84B075;
 }
+/* Firefox range slider */
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #CCDBC2, #669955);
+}
+html.dark input[type="range"]::-moz-range-track {
+  background: linear-gradient(to right, #354E2D, #84B075);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #4F7A42;
+  border: none;
+  cursor: pointer;
+}
+html.dark input[type="range"]::-moz-range-thumb {
+  background: #84B075;
+}
 
 /* ── Shimmer animation ── */
 @keyframes shimmer {
@@ -232,6 +268,15 @@ html.dark .glass-bg {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #CCDBC2; border-radius: 2px; }
 html.dark ::-webkit-scrollbar-thumb { background: #3F6135; }
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #CCDBC2 transparent;
+}
+html.dark {
+  scrollbar-color: #3F6135 transparent;
+}
 
 /* ── Glass card dark mode ── */
 html.dark .bg-cream-50\/60 { background-color: rgba(31, 51, 27, 0.6); }

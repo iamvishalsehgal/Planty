@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { usePlants } from "@/hooks/usePlants";
 import { useWatering } from "@/hooks/useWatering";
@@ -17,6 +17,8 @@ export default function PlantDetail() {
   const { plant, daysLeft, nextWatering, lastWatered, waterPlant } = useWatering(id);
   const fullPlant = getPlant(id);
   const [justWatered, setJustWatered] = useState(false);
+  const waterTimer = useRef(null);
+  useEffect(() => () => clearTimeout(waterTimer.current), []);
 
   if (isLoading) {
     return (
@@ -51,7 +53,7 @@ export default function PlantDetail() {
   const handleWater = () => {
     waterPlant();
     setJustWatered(true);
-    setTimeout(() => setJustWatered(false), 2000);
+    waterTimer.current = setTimeout(() => setJustWatered(false), 2000);
   };
 
   const handleDelete = () => {

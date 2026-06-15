@@ -20,6 +20,10 @@ export default function Layout() {
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const tabRefs = useRef([]);
 
+  // Hydrate settings from localStorage on mount
+  const loadSettings = useSettingsStore((s) => s.loadSettings);
+  useEffect(() => { loadSettings(); }, [loadSettings]);
+
   // Dark mode
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
@@ -27,9 +31,10 @@ export default function Layout() {
 
   // Notifications
   useEffect(() => {
+    let cancelled = false;
     if (notificationsEnabled) {
       requestPermission().then((granted) => {
-        if (granted) {
+        if (granted && !cancelled) {
           scheduleReminders(reminderHour, () =>
             usePlantStore.getState().getPlantsNeedingWater().length
           );
@@ -38,12 +43,15 @@ export default function Layout() {
     } else {
       stopReminders();
     }
-    return () => stopReminders();
+    return () => {
+      cancelled = true;
+      stopReminders();
+    };
   }, [notificationsEnabled, reminderHour]);
 
   const isActive = (path) => {
     if (path === "/") return location.pathname === "/" || location.pathname === "/#/";
-    return location.pathname.includes(path);
+    return location.pathname === path || location.pathname.startsWith(path + "/");
   };
 
   useEffect(() => {

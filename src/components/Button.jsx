@@ -16,6 +16,7 @@ const sizes = {
 export function Button({ label, variant = "primary", size = "md", icon, loading, disabled, onClick, className }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled || loading}
       className={cn(

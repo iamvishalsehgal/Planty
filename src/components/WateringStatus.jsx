@@ -10,7 +10,7 @@ const STATUS_CONFIG = {
 export function WateringStatus({ plant, daysLeft }) {
   const config = STATUS_CONFIG[plant.healthStatus] || STATUS_CONFIG.healthy;
   const totalDays = plant.wateringIntervalDays;
-  const barProgress = Math.max(0, Math.min(100, ((totalDays - daysLeft) / totalDays) * 100));
+  const barProgress = totalDays <= 0 ? 0 : Math.max(0, Math.min(100, ((totalDays - daysLeft) / totalDays) * 100));
 
   return (
     <div className="p-4 bg-cream-50/70 backdrop-blur-xl border border-cream-200/50 rounded-lg shadow-glass-sm">

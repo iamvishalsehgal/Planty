@@ -26,7 +26,7 @@ export function PlantCard({ plant }) {
       {/* Status indicator + photo */}
       <div className={cn("relative w-12 h-12 rounded-full flex items-center justify-center text-xl ring-2 ring-offset-1 ring-offset-transparent", status.ring)}>
         {plant.photoUri ? (
-          <img src={plant.photoUri} alt={plant.name} className="w-full h-full rounded-full object-cover" />
+          <img src={plant.photoUri} alt="" role="presentation" className="w-full h-full rounded-full object-cover" />
         ) : (
           status.emoji
         )}
