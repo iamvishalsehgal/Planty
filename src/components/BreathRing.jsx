@@ -25,12 +25,15 @@ const PALETTE = {
   },
 };
 
-export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status = "healthy" }) {
+export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status = "healthy", totalDays }) {
   const colors = PALETTE[status] || PALETTE.healthy;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const clampedProgress = Math.min(Math.max(progress, 0), 1);
-  const offset = circumference * (1 - clampedProgress);
+  // If totalDays provided, progress is raw days → convert to ratio
+  const ratio = totalDays && totalDays > 0
+    ? Math.min(Math.max(progress / totalDays, 0), 1)
+    : Math.min(Math.max(progress, 0), 1);
+  const offset = circumference * (1 - ratio);
   const isPulsing = status === "dry" || status === "overdue";
   const days = Math.max(Math.round(progress), 0);
   const gradientId = `ring-grad-${status}`;
@@ -103,6 +106,6 @@ export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status =
   );
 }
 
-export function BreathRingSimple({ size = 56, progress = 1, status = "healthy" }) {
-  return <BreathRing progress={progress} size={size} strokeWidth={6} status={status} />;
+export function BreathRingSimple({ size = 56, progress = 1, status = "healthy", totalDays }) {
+  return <BreathRing progress={progress} size={size} strokeWidth={6} status={status} totalDays={totalDays} />;
 }

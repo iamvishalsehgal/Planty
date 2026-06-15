@@ -1,21 +1,24 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { fetchWeather } from "@/lib/weather";
 
 export function useWeather() {
   const [weather, setWeather] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const mounted = useRef(true);
+
+  useEffect(() => () => { mounted.current = false; }, []);
 
   const refresh = useCallback(async () => {
     try {
       setError(null);
-      setIsLoading(true);
+      if (mounted.current) setIsLoading(true);
       const data = await fetchWeather();
-      setWeather(data);
+      if (mounted.current) setWeather(data);
     } catch (err) {
-      setError(err.message || "Could not load weather");
+      if (mounted.current) setError(err.message || "Could not load weather");
     } finally {
-      setIsLoading(false);
+      if (mounted.current) setIsLoading(false);
     }
   }, []);
 

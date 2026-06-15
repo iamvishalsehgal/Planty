@@ -42,7 +42,7 @@ export function PlantCard({ plant }) {
 
       {/* Breath ring */}
       <div className="flex-shrink-0">
-        <BreathRingSimple progress={progress} status={plant.healthStatus} />
+        <BreathRingSimple progress={progress} status={plant.healthStatus} totalDays={plant.wateringIntervalDays} />
       </div>
     </button>
   );

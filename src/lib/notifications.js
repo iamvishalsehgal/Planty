@@ -17,18 +17,23 @@ export function scheduleReminders(hour, getThirstyCount) {
   stopReminders();
   if (!hasPermission()) return;
 
+  let lastNotifiedDate = null;
+
   const check = () => {
     const now = new Date();
-    if (now.getHours() === hour && now.getMinutes() === 0) {
+    const todayKey = now.toDateString();
+    // Fire if we've passed the target hour and haven't notified today
+    if (now.getHours() >= hour && lastNotifiedDate !== todayKey) {
       const count = getThirstyCount();
       if (count > 0) {
         new Notification("Planty \u{1F331}", {
           body: `${count} plant${count > 1 ? "s" : ""} need${count === 1 ? "s" : ""} water today.`,
-          icon: "/Planty/icon.svg", // absolute path for notification display
+          icon: "/Planty/icon.svg",
           tag: "planty-watering",
           requireInteraction: false,
         });
       }
+      lastNotifiedDate = todayKey;
     }
   };
 

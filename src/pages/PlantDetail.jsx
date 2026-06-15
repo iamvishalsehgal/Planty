@@ -93,7 +93,7 @@ export default function PlantDetail() {
               </div>
             )}
           </div>
-          <BreathRing progress={progress} size={150} strokeWidth={10} status={plant.healthStatus} />
+          <BreathRing progress={progress} size={150} strokeWidth={10} status={plant.healthStatus} totalDays={plant.wateringIntervalDays} />
           <h2 className="text-title-lg text-text-primary mt-4">{plant.name}</h2>
           <div className="mt-1">
             <SpeciesBadge species={plant.species} room={plant.room} />

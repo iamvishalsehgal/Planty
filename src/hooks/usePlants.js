@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { usePlantStore } from "@/stores/plantStore";
 
 export function usePlants() {
@@ -13,8 +13,11 @@ export function usePlants() {
     []
   );
 
-  const sortedPlants = [...store.plants].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  const sortedPlants = useMemo(
+    () => [...store.plants].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    ),
+    [store.plants]
   );
 
   const thirstyPlants = store.getPlantsNeedingWater();

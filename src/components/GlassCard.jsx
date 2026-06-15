@@ -11,6 +11,7 @@ export function GlassCard({ variant = "md", className, children, onClick }) {
 
   return (
     <Component
+      type={onClick ? "button" : undefined}
       onClick={onClick}
       className={cn(
         "relative bg-cream-50/60 backdrop-blur-xl border border-cream-200/30 shadow-glass-md transition-all duration-200 overflow-hidden",
