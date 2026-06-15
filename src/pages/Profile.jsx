@@ -86,23 +86,23 @@ export default function Profile() {
           <h3 className="text-title-sm text-text-primary mb-3">⚙️ Settings</h3>
 
           <div className="space-y-3">
-            <label className="flex items-center justify-between py-1 cursor-pointer">
+            <label className="flex items-center justify-between py-2 cursor-pointer">
               <span className="text-body-md text-text-secondary">Dark mode</span>
               <input
                 type="checkbox"
                 checked={settings.darkMode}
                 onChange={settings.toggleDarkMode}
-                className="w-10 h-6 rounded-full bg-cream-400 checked:bg-sage-500 appearance-none cursor-pointer relative before:absolute before:inset-0.5 before:rounded-full before:bg-white before:w-5 before:h-5 before:transition-transform checked:before:translate-x-4"
+                className="toggle-switch"
               />
             </label>
 
-            <label className="flex items-center justify-between py-1 cursor-pointer">
+            <label className="flex items-center justify-between py-2 cursor-pointer">
               <span className="text-body-md text-text-secondary">Notifications</span>
               <input
                 type="checkbox"
                 checked={settings.notificationsEnabled}
                 onChange={settings.toggleNotifications}
-                className="w-10 h-6 rounded-full bg-cream-400 checked:bg-sage-500 appearance-none cursor-pointer relative before:absolute before:inset-0.5 before:rounded-full before:bg-white before:w-5 before:h-5 before:transition-transform checked:before:translate-x-4"
+                className="toggle-switch"
               />
             </label>
 

@@ -1,10 +1,10 @@
 import { formatDate } from "@/lib/date";
 
 const STATUS_CONFIG = {
-  healthy: { emoji: "✅", label: "Healthy", color: "bg-sage-500" },
-  warning: { emoji: "💧", label: "Water soon", color: "bg-soil-500" },
-  dry: { emoji: "🥀", label: "Needs water", color: "bg-clay-500" },
-  overdue: { emoji: "🆘", label: "Overdue", color: "bg-clay-600" },
+  healthy: { emoji: "✅", label: "Healthy", colors: "from-sage-400 to-sage-600" },
+  warning: { emoji: "💧", label: "Water soon", colors: "from-soil-400 to-soil-600" },
+  dry: { emoji: "🥀", label: "Needs water", colors: "from-clay-400 to-clay-500" },
+  overdue: { emoji: "🆘", label: "Overdue", colors: "from-clay-500 to-clay-600" },
 };
 
 export function WateringStatus({ plant, daysLeft }) {
@@ -23,18 +23,19 @@ export function WateringStatus({ plant, daysLeft }) {
         </span>
       </div>
 
-      {/* Progress bar */}
-      <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden mb-3">
+      {/* Gradient progress bar */}
+      <div className="w-full h-2.5 bg-cream-200 rounded-full overflow-hidden mb-3 shadow-inner">
         <div
-          className={`h-full rounded-full transition-all duration-700 ${config.color}`}
+          className={`h-full rounded-full bg-gradient-to-r ${config.colors} transition-all duration-700 ease-out`}
           style={{ width: `${barProgress}%` }}
         />
       </div>
 
       {/* Weather-adjusted notice */}
       {plant.adjustedInterval && plant.adjustedInterval !== plant.wateringIntervalDays && (
-        <div className="mb-2 px-3 py-1.5 bg-sky-50 border border-sky-200 rounded-md text-label-sm text-sky-700">
-          🌤️ Weather-adjusted: every {plant.adjustedInterval}d (base: {plant.wateringIntervalDays}d)
+        <div className="mb-3 px-3 py-2 bg-sky-50/80 border border-sky-200 rounded-md text-label-sm text-sky-700 flex items-center gap-2">
+          <span>🌤️</span>
+          <span>Weather-adjusted: every <strong>{plant.adjustedInterval}d</strong> (base: {plant.wateringIntervalDays}d)</span>
         </div>
       )}
 

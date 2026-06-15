@@ -2,16 +2,16 @@ import { Button } from "@/components/Button";
 
 export function EmptyState({ emoji = "🌱", title, description, action }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-      <div className="w-20 h-20 rounded-full bg-cream-200 flex items-center justify-center mb-4">
-        <span className="text-3xl">{emoji}</span>
+    <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
+      <div className="w-24 h-24 rounded-full bg-cream-200/60 flex items-center justify-center mb-6 shadow-glass-sm">
+        <span className="text-5xl">{emoji}</span>
       </div>
-      <h3 className="text-title-md text-text-primary mb-1">{title}</h3>
+      <h3 className="text-title-lg text-text-primary mb-2">{title}</h3>
       {description && (
-        <p className="text-body-md text-text-tertiary mb-6 max-w-xs">{description}</p>
+        <p className="text-body-md text-text-tertiary mb-6 max-w-xs leading-relaxed">{description}</p>
       )}
       {action && (
-        <Button label={action.label} onClick={action.onClick} variant="primary" />
+        <Button label={action.label} onClick={action.onClick} variant="primary" size="md" />
       )}
     </div>
   );

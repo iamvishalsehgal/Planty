@@ -18,7 +18,6 @@ export default function Dashboard() {
     setTimeout(() => setRefreshing(false), 500);
   };
 
-  // Loading
   if (isLoading) {
     return (
       <div className="p-4 space-y-4">
@@ -28,7 +27,6 @@ export default function Dashboard() {
     );
   }
 
-  // Empty
   if (plants.length === 0) {
     return (
       <EmptyState
@@ -43,25 +41,33 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-4 pt-4 pb-3">
-        <h1 className="text-display-lg text-text-primary">My Plants</h1>
-        <p className="text-body-md text-text-tertiary mt-1">
-          {healthyPlants.length} healthy · {thirstyPlants.length} need water
+      <div className="px-4 pt-6 pb-4">
+        <h1 className="text-display-xl text-text-primary tracking-tight">My Plants</h1>
+        <p className="text-body-md text-text-tertiary mt-1.5 flex items-center gap-3">
+          <span className="inline-flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-sage-500" />
+            {healthyPlants.length} healthy
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-clay-500" />
+            {thirstyPlants.length} need water
+          </span>
         </p>
       </div>
 
       {/* Weather */}
-      <div className="px-4 mb-3">
+      <div className="px-4 mb-4">
         <WeatherStrip />
       </div>
 
       {/* Thirsty alert */}
       {thirstyPlants.length > 0 && (
-        <div className="px-4 mb-3">
-          <div className="p-4 bg-clay-100/80 border border-clay-200 rounded-lg flex items-center justify-between">
-            <div>
+        <div className="px-4 mb-4">
+          <div className="p-4 bg-clay-100/80 border border-clay-200/60 rounded-xl flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🚨</span>
               <span className="text-label-md text-clay-700">
-                🚨 {thirstyPlants.length} plant{thirstyPlants.length > 1 ? "s" : ""} need{thirstyPlants.length === 1 ? "s" : ""} water
+                {thirstyPlants.length} plant{thirstyPlants.length > 1 ? "s" : ""} need{thirstyPlants.length === 1 ? "s" : ""} water
               </span>
             </div>
             <Button
