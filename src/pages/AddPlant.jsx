@@ -74,7 +74,7 @@ export default function AddPlant() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full animate-page-in">
       {/* Header */}
       <div className="px-4 pt-6 pb-4">
         <h1 className="text-display-lg text-text-primary">New plant</h1>

@@ -20,7 +20,7 @@ export default function PlantDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full animate-page-in">
         <div className="px-4 pt-4 pb-3 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-cream-200 animate-pulse" />
           <div className="h-8 bg-cream-200 rounded w-40 animate-pulse" />
@@ -64,7 +64,7 @@ export default function PlantDetail() {
   const progress = Math.max(daysLeft, 0);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full animate-page-in">
       {/* Header with back */}
       <div className="px-4 pt-4 pb-3 flex items-center gap-3">
         <button

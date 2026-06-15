@@ -36,7 +36,7 @@ export default function Diagnose() {
   // Empty state
   if (!imageUri) {
     return (
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full animate-page-in">
         <div className="px-4 pt-6 pb-4">
           <h1 className="text-display-lg text-text-primary">Plant Doctor</h1>
           <p className="text-body-md text-text-tertiary mt-1">
@@ -94,7 +94,7 @@ export default function Diagnose() {
 
   // Image preview
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full animate-page-in">
       <div className="px-4 pt-6 pb-4">
         <h1 className="text-display-lg text-text-primary">Plant Doctor</h1>
       </div>

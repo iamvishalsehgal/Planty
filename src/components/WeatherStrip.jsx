@@ -1,4 +1,5 @@
 import { useWeather } from "@/hooks/useWeather";
+import WeatherIcon from "@/components/WeatherIcon";
 
 export function WeatherStrip() {
   const { weather, isLoading, error, refresh } = useWeather();
@@ -7,9 +8,9 @@ export function WeatherStrip() {
     return (
       <button
         onClick={refresh}
-        className="w-full px-4 py-2.5 bg-soil-50/80 border border-soil-200/50 rounded-lg text-label-sm text-text-tertiary hover:bg-soil-100 transition-colors flex items-center justify-center gap-2"
+        className="w-full px-4 py-2.5 bg-soil-50/80 border border-soil-200/50 rounded-2xl text-label-sm text-text-tertiary hover:bg-soil-100 transition-colors flex items-center justify-center gap-2"
       >
-        <span>⚠️</span>
+        <span className="text-sm">⚠️</span>
         <span>Weather unavailable — tap to retry</span>
       </button>
     );
@@ -17,17 +18,15 @@ export function WeatherStrip() {
 
   if (isLoading || !weather) {
     return (
-      <div className="px-4 py-3 bg-cream-50/50 rounded-lg animate-pulse">
+      <div className="p-4 bg-cream-50/50 rounded-2xl animate-pulse">
         <div className="h-6 bg-cream-200 rounded w-32" />
       </div>
     );
   }
 
-  const emoji = weather.is_rainy ? "🌧️" : weather.condition?.toLowerCase().includes("cloud") ? "⛅" : "☀️";
-
   return (
-    <div className="px-4 py-3 bg-cream-50/70 backdrop-blur-xl border border-cream-200/50 rounded-lg shadow-glass-sm flex items-center gap-3">
-      <span className="text-2xl">{emoji}</span>
+    <div className="p-4 bg-cream-50/70 backdrop-blur-xl border border-cream-200/50 rounded-2xl shadow-glass-sm flex items-center gap-3">
+      <WeatherIcon condition={weather.condition} size={32} />
       <div className="flex-1">
         <div className="flex items-baseline gap-2">
           <span className="text-title-md text-text-primary">{weather.temp_c}°C</span>

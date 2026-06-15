@@ -1,8 +1,8 @@
 import { cn } from "@/lib/cn";
 
 const variants = {
-  sm: "p-4 rounded-lg",
-  md: "p-5 rounded-xl",
+  sm: "p-4 rounded-2xl",
+  md: "p-5 rounded-2xl",
   lg: "p-6 rounded-2xl",
 };
 
