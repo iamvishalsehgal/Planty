@@ -121,7 +121,14 @@ export default function PlantDetail() {
           <div className="space-y-2">
             <DetailRow label="Species" value={plant.species} />
             <DetailRow label="Room" value={plant.room} />
-            <DetailRow label="Water every" value={`${plant.wateringIntervalDays} days`} />
+            <DetailRow
+              label="Water every"
+              value={
+                plant.adjustedInterval && plant.adjustedInterval !== plant.wateringIntervalDays
+                  ? `${plant.adjustedInterval} days (weather-adjusted from ${plant.wateringIntervalDays}d)`
+                  : `${plant.wateringIntervalDays} days`
+              }
+            />
             <DetailRow label="Last watered" value={`${formatDate(lastWatered)} at ${formatTime(lastWatered)}`} />
             <DetailRow label="Added" value={formatDate(fullPlant.createdAt)} />
           </div>
