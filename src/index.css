@@ -19,11 +19,11 @@ html.dark {
 }
 
 html.dark body {
-  background-color: #152312;
+  background-color: #0f1a0c;
   color: #F4F7F2;
 }
 
-html.dark .bg-cream-300 { background-color: #152312; }
+html.dark .bg-cream-300 { background-color: #0f1a0c; }
 html.dark .bg-cream-50\/70 { background-color: rgba(21, 35, 18, 0.7); }
 html.dark .bg-cream-50\/80 { background-color: rgba(21, 35, 18, 0.8); }
 html.dark .bg-cream-50\/50 { background-color: rgba(21, 35, 18, 0.5); }
@@ -81,10 +81,11 @@ html.dark .border-l-clay-400 { border-left-color: #E29C82; }
 html.dark .border-l-sage-400 { border-left-color: #84B075; }
 html.dark .border-sky-200 { border-color: #1E5288; }
 
-html.dark .shadow-glass-sm { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); }
-html.dark .shadow-glass-md { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
-html.dark .shadow-glass-lg { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
-html.dark .shadow-card { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
+html.dark .shadow-glass-sm { box-shadow: 0 1px 4px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.3); }
+html.dark .shadow-glass-md { box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05) inset; }
+html.dark .shadow-glass-lg { box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset; }
+html.dark .shadow-card { box-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2); }
+html.dark .shadow-elevated { box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 16px 40px rgba(0,0,0,0.5); }
 
 html.dark .hover\:bg-cream-200:hover { background-color: #354E2D; }
 html.dark .hover\:bg-cream-400:hover { background-color: #3F6135; }

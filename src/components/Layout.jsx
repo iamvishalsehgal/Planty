@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSettingsStore } from "@/stores/settingsStore";
 
 const TABS = [
@@ -13,6 +13,8 @@ export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const darkMode = useSettingsStore((s) => s.darkMode);
+  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const tabRefs = useRef([]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
@@ -23,40 +25,59 @@ export default function Layout() {
     return location.pathname.includes(path);
   };
 
+  useEffect(() => {
+    const idx = TABS.findIndex((t) => isActive(t.path));
+    const el = tabRefs.current[idx];
+    if (el) {
+      const { offsetLeft, offsetWidth } = el;
+      setIndicatorStyle({
+        left: `${offsetLeft}px`,
+        width: `${offsetWidth}px`,
+      });
+    }
+  }, [location.pathname]);
+
   return (
-    <div className="h-dvh flex flex-col bg-cream-300 max-w-lg mx-auto relative overflow-hidden transition-colors duration-300">
-      {/* Content area */}
+    <div className="h-dvh flex flex-col bg-cream-300 max-w-lg mx-auto relative overflow-hidden transition-colors duration-500">
+      {/* Content */}
       <div className="flex-1 overflow-hidden">
         <Outlet />
       </div>
 
-      {/* Bottom tab bar */}
-      <nav className="flex-shrink-0 bg-cream-50/80 backdrop-blur-xl border-t border-cream-200/50 px-3 pb-safe">
-        <div className="flex items-end">
-          {TABS.map((tab) => {
+      {/* Floating pill tab bar */}
+      <div className="flex-shrink-0 flex justify-center pb-4 pt-2 px-4 pointer-events-none">
+        <nav className="pointer-events-auto relative flex items-center bg-cream-50/70 backdrop-blur-2xl rounded-full px-1.5 py-1.5 shadow-[0_8px_32px_rgba(45,65,39,0.12),0_2px_8px_rgba(45,65,39,0.06),inset_0_0_0_1px_rgba(255,255,255,0.5)]">
+          {/* Sliding indicator */}
+          <div
+            className="absolute top-1.5 bottom-1.5 bg-sage-500/20 rounded-full transition-all duration-300 ease-out"
+            style={indicatorStyle}
+          />
+          {TABS.map((tab, i) => {
             const active = isActive(tab.path);
             return (
               <button
                 key={tab.path}
+                ref={(el) => (tabRefs.current[i] = el)}
                 onClick={() => navigate(tab.path)}
-                className={`flex-1 flex flex-col items-center justify-center py-2.5 transition-all active:scale-90 relative ${
-                  active ? "text-sage-700" : "text-text-tertiary hover:text-text-secondary"
+                className={`relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 active:scale-90 ${
+                  active
+                    ? "text-sage-700"
+                    : "text-text-tertiary hover:text-text-secondary"
                 }`}
               >
-                <span className={`text-xl mb-1 transition-transform duration-200 ${active ? "scale-110" : ""}`}>
+                <span className={`text-lg transition-transform duration-300 ${active ? "scale-110" : ""}`}>
                   {tab.emoji}
                 </span>
-                <span className={`text-label-sm transition-all ${active ? "font-semibold" : "font-normal"}`}>
+                <span className={`text-label-sm font-medium transition-all duration-300 ${
+                  active ? "opacity-100" : "opacity-70"
+                }`}>
                   {tab.label}
                 </span>
-                {active && (
-                  <span className="absolute -bottom-0 w-8 h-0.5 bg-sage-500 rounded-full" />
-                )}
               </button>
             );
           })}
-        </div>
-      </nav>
+        </nav>
+      </div>
     </div>
   );
 }
