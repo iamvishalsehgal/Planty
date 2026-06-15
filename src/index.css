@@ -30,11 +30,9 @@ html.dark .bg-cream-50\/50 { background-color: rgba(21, 35, 18, 0.5); }
 html.dark .bg-cream-200 { background-color: #2D4127; }
 html.dark .bg-cream-100 { background-color: #354E2D; }
 html.dark .bg-cream-400 { background-color: #3F6135; }
-html.dark .bg-sage-50 { background-color: #1a2e14; }
 html.dark .bg-sage-100 { background-color: #2D4127; }
 html.dark .bg-soil-100 { background-color: #331E13; }
 html.dark .bg-clay-100 { background-color: #3D1C15; }
-html.dark .bg-sky-50 { background-color: #13273E; }
 html.dark .bg-sky-100 { background-color: #1D3C5E; }
 html.dark .bg-clay-100\/80 { background-color: rgba(61, 28, 21, 0.8); }
 html.dark .bg-sage-50 { background-color: rgba(45, 65, 39, 0.5); }
@@ -84,8 +82,42 @@ html.dark .hover\:bg-cream-200:hover { background-color: #354E2D; }
 html.dark .hover\:bg-cream-400:hover { background-color: #3F6135; }
 html.dark .hover\:bg-sage-200:hover { background-color: #3F6135; }
 html.dark .hover\:bg-soil-200:hover { background-color: #5A3926; }
+html.dark .hover\:bg-soil-100:hover { background-color: #3D1C15; }
+html.dark .hover\:bg-sage-700:hover { background-color: #84B075; }
+html.dark .hover\:bg-sage-50\/30:hover { background-color: rgba(31, 51, 27, 0.5); }
+html.dark .hover\:bg-clay-600:hover { background-color: #A44F35; }
+html.dark .hover\:border-sage-400:hover { border-color: #84B075; }
 html.dark .hover\:shadow-glass-md:hover { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); }
 html.dark .hover\:shadow-glass-lg:hover { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
+
+/* Missing bg */
+html.dark .bg-cream-50 { background-color: #1f331b; }
+html.dark .bg-cream-200\/60 { background-color: rgba(45, 65, 39, 0.6); }
+html.dark .bg-sage-200 { background-color: #354E2D; }
+html.dark .bg-sage-500 { background-color: #4F7A42; }
+html.dark .bg-sage-600 { background-color: #669955; }
+html.dark .bg-sage-700 { background-color: #84B075; }
+html.dark .bg-sage-100\/80 { background-color: rgba(45, 65, 39, 0.8); }
+html.dark .bg-soil-200 { background-color: #5A3926; }
+html.dark .bg-soil-500 { background-color: #B08041; }
+html.dark .bg-soil-50\/80 { background-color: rgba(51, 30, 19, 0.8); }
+html.dark .bg-clay-500 { background-color: #C46240; }
+html.dark .bg-clay-600 { background-color: #A44F35; }
+html.dark .bg-sky-50\/80 { background-color: rgba(19, 39, 62, 0.8); }
+
+/* Missing border */
+html.dark .border-sage-300 { border-color: #4F7A42; }
+html.dark .border-sage-400 { border-color: #669955; }
+html.dark .border-clay-200\/60 { border-color: rgba(137, 68, 48, 0.6); }
+html.dark .border-soil-200 { border-color: #69432A; }
+html.dark .border-soil-200\/50 { border-color: rgba(105, 67, 42, 0.5); }
+
+/* Missing ring */
+html.dark .ring-clay-300 { --tw-ring-color: #894430; }
+html.dark .ring-clay-400 { --tw-ring-color: #723B2C; }
+html.dark .ring-cream-200 { --tw-ring-color: #3F6135; }
+html.dark .ring-sage-300 { --tw-ring-color: #4F7A42; }
+html.dark .ring-soil-300 { --tw-ring-color: #69432A; }
 
 /* ── Safe area ── */
 .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -209,4 +241,15 @@ input:focus-visible, button:focus-visible, select:focus-visible {
   outline: 2px solid #669955;
   outline-offset: 2px;
   border-radius: 4px;
+}
+html.dark input:focus-visible, html.dark button:focus-visible, html.dark select:focus-visible {
+  outline-color: #84B075;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
