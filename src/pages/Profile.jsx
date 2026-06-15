@@ -165,10 +165,22 @@ export default function Profile() {
 
         {/* About */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-text-primary mb-2">📱 About</h3>
-          <p className="text-body-md text-text-secondary">
-            Planty v3.0 — Smart plant care web app. Keep your plants thriving with watering schedules, AI diagnosis, and weather-aware reminders.
+          <h3 className="text-title-sm text-text-primary mb-3">📱 About</h3>
+          <p className="text-body-md text-text-secondary mb-3">
+            Planty v3.0 — smart plant care, beautifully designed. Weather-aware watering, plant diagnosis, and zero server costs.
           </p>
+          <div className="flex items-center gap-2 text-body-sm text-text-tertiary">
+            <span>🪴 v3.0.0</span>
+            <span>·</span>
+            <a
+              href="https://github.com/iamvishalsehgal/Planty"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sage-600 hover:underline"
+            >
+              GitHub →
+            </a>
+          </div>
         </GlassCard>
 
         {/* Danger zone */}
