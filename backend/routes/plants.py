@@ -1,6 +1,6 @@
 """Plant CRUD + watering events."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 from typing import List
 
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/api", tags=["plants"])
 def _compute_health_status(next_watering: str) -> str:
     """Determine plant health status based on watering schedule."""
     next_dt = datetime.fromisoformat(next_watering)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     days_until = (next_dt - now).days
 
     if days_until < 0:
@@ -64,7 +64,7 @@ def get_plant(plant_id: str, db: Session = Depends(get_db)):
 
 @router.post("/plants", response_model=PlantResponse, status_code=201)
 def create_plant(data: PlantCreate, db: Session = Depends(get_db)):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     plant_id = str(uuid4())
 
     # Compute initial watering dates
@@ -152,7 +152,7 @@ def water_plant(plant_id: str, data: WateringCreate, db: Session = Depends(get_d
     if not plant:
         raise HTTPException(status_code=404, detail="Plant not found")
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     event_id = str(uuid4())
 
     # Update plant watering dates

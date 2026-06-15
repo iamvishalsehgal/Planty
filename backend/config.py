@@ -45,4 +45,4 @@ class _Config:
 config = _Config()
 
 
-config = Config()
+config = _Config()

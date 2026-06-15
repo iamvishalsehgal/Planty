@@ -4,14 +4,13 @@ import logging
 import time
 import uuid
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import defaultdict
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from config import config
@@ -43,7 +42,7 @@ def recompute_health_statuses():
     db = SessionLocal()
     try:
         plants = db.execute(text("SELECT id, next_watering FROM plants")).fetchall()
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
         updated = 0
         for plant in plants:
             next_dt = datetime.fromisoformat(plant.next_watering)
@@ -110,16 +109,29 @@ app = FastAPI(
 )
 
 
-# ── Security headers ──
-class SecurityHeadersMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        response = await call_next(request)
-        response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
-        response.headers["X-XSS-Protection"] = "1; mode=block"
-        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=self"
-        return response
+# ── Security headers (pure ASGI, avoids BaseHTTPMiddleware issues) ──
+from starlette.types import ASGIApp, Scope, Receive, Send
+
+
+class SecurityHeadersMiddleware:
+    def __init__(self, app: ASGIApp):
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+        async def set_headers(message):
+            if message["type"] == "http.response.start":
+                headers = dict(message.get("headers", []))
+                headers.update({
+                    b"x-content-type-options": b"nosniff",
+                    b"x-frame-options": b"DENY",
+                    b"x-xss-protection": b"1; mode=block",
+                    b"referrer-policy": b"strict-origin-when-cross-origin",
+                    b"permissions-policy": b"camera=(), microphone=(), geolocation=self",
+                })
+                message["headers"] = list(headers.items())
+            await send(message)
+
+        await self.app(scope, receive, set_headers)
 
 
 app.add_middleware(SecurityHeadersMiddleware)
