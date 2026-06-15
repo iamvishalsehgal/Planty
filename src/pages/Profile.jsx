@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { usePlants } from "@/hooks/usePlants";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { GlassCard } from "@/components/GlassCard";
@@ -6,6 +7,7 @@ import { Button } from "@/components/Button";
 export default function Profile() {
   const { plants, thirstyPlants, healthyPlants, removePlant } = usePlants();
   const settings = useSettingsStore();
+  const importRef = useRef(null);
 
   const rooms = [...new Set(plants.map((p) => p.room))];
 
@@ -13,6 +15,37 @@ export default function Profile() {
     if (confirm("Remove all plants? This cannot be undone.")) {
       plants.forEach((p) => removePlant(p.id));
     }
+  };
+
+  const handleExport = () => {
+    const data = {
+      plants: localStorage.getItem("planty-plants"),
+      settings: localStorage.getItem("planty-settings"),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "planty-backup.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (data.plants) localStorage.setItem("planty-plants", data.plants);
+        if (data.settings) localStorage.setItem("planty-settings", data.settings);
+        window.location.reload();
+      } catch {
+        alert("Invalid backup file.");
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -96,6 +129,37 @@ export default function Profile() {
               </select>
             </div>
           </div>
+        </GlassCard>
+
+        {/* Import / Export */}
+        <GlassCard variant="md">
+          <h3 className="text-title-sm text-text-primary mb-3">💾 Data</h3>
+          <div className="flex gap-3">
+            <Button
+              label="Export backup"
+              variant="secondary"
+              size="sm"
+              onClick={handleExport}
+              className="flex-1"
+            />
+            <input
+              type="file"
+              accept=".json"
+              ref={importRef}
+              onChange={handleImport}
+              className="hidden"
+            />
+            <Button
+              label="Import backup"
+              variant="secondary"
+              size="sm"
+              onClick={() => importRef.current?.click()}
+              className="flex-1"
+            />
+          </div>
+          <p className="text-label-sm text-text-tertiary mt-2">
+            Export your plant data as JSON, or restore from a backup.
+          </p>
         </GlassCard>
 
         {/* About */}
