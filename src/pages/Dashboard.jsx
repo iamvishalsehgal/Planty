@@ -11,11 +11,17 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { plants, thirstyPlants, healthyPlants, isLoading, waterPlant } = usePlants();
   const [refreshing, setRefreshing] = useState(false);
+  const [wateredCount, setWateredCount] = useState(0);
 
   const handleWaterAll = async () => {
     setRefreshing(true);
+    const count = thirstyPlants.length;
     thirstyPlants.forEach((p) => waterPlant(p.id));
-    setTimeout(() => setRefreshing(false), 500);
+    setWateredCount(count);
+    setTimeout(() => {
+      setRefreshing(false);
+      setWateredCount(0);
+    }, 1500);
   };
 
   if (isLoading) {
@@ -77,6 +83,18 @@ export default function Dashboard() {
               onClick={handleWaterAll}
               loading={refreshing}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Watered success */}
+      {wateredCount > 0 && (
+        <div className="px-4 mb-4">
+          <div className="p-4 bg-sage-100/80 border border-sage-300/60 rounded-xl flex items-center gap-2 animate-page-in">
+            <span className="text-xl">✅</span>
+            <span className="text-label-md text-sage-700">
+              {wateredCount} plant{wateredCount > 1 ? "s" : ""} watered!
+            </span>
           </div>
         </div>
       )}

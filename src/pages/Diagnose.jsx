@@ -3,13 +3,21 @@ import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
 
 const TIPS = [
-  { emoji: "🟡", problem: "Yellow leaves", cause: "Overwatering or poor drainage" },
-  { emoji: "🟤", problem: "Brown edges", cause: "Low humidity or too much sun" },
-  { emoji: "🥀", problem: "Wilting", cause: "Underwatering or root rot" },
-  { emoji: "⬜", problem: "White spots", cause: "Powdery mildew — improve airflow" },
-  { emoji: "🐛", problem: "Holes in leaves", cause: "Pests — check underside of leaves" },
-  { emoji: "📏", problem: "Leggy growth", cause: "Not enough light — move closer to window" },
+  { emoji: "🟡", problem: "Yellow leaves", cause: "Overwatering or poor drainage", severity: "water" },
+  { emoji: "🟤", problem: "Brown edges", cause: "Low humidity or too much sun", severity: "sun" },
+  { emoji: "🥀", problem: "Wilting", cause: "Underwatering or root rot", severity: "critical" },
+  { emoji: "⬜", problem: "White spots", cause: "Powdery mildew — improve airflow", severity: "disease" },
+  { emoji: "🐛", problem: "Holes in leaves", cause: "Pests — check underside of leaves", severity: "critical" },
+  { emoji: "📏", problem: "Leggy growth", cause: "Not enough light — move closer to window", severity: "light" },
 ];
+
+const SEVERITY_COLORS = {
+  water: "border-l-sky-400 bg-sky-50/50",
+  sun: "border-l-soil-400 bg-soil-50/50",
+  critical: "border-l-clay-400 bg-clay-50/50",
+  disease: "border-l-sage-400 bg-sage-50/50",
+  light: "border-l-soil-400 bg-soil-50/50",
+};
 
 export default function Diagnose() {
   const [imageUri, setImageUri] = useState(null);
@@ -67,13 +75,16 @@ export default function Diagnose() {
           <div className="space-y-2">
             <h3 className="text-title-sm text-text-secondary px-1">Common issues</h3>
             {TIPS.map((tip) => (
-              <GlassCard key={tip.problem} variant="sm" className="flex items-center gap-3">
-                <span className="text-2xl">{tip.emoji}</span>
+              <div
+                key={tip.problem}
+                className={`p-4 rounded-lg border-l-4 ${SEVERITY_COLORS[tip.severity]} border border-cream-200/30 flex items-center gap-3`}
+              >
+                <span className="text-2xl flex-shrink-0">{tip.emoji}</span>
                 <div>
-                  <span className="text-label-md text-text-primary">{tip.problem}</span>
-                  <span className="text-body-sm text-text-tertiary ml-2">{tip.cause}</span>
+                  <span className="text-label-md text-text-primary block">{tip.problem}</span>
+                  <span className="text-body-sm text-text-tertiary">{tip.cause}</span>
                 </div>
-              </GlassCard>
+              </div>
             ))}
           </div>
         </div>

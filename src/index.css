@@ -46,6 +46,12 @@ html.dark .border-soil-200\/30 { border-color: rgba(105, 67, 42, 0.3); }
 html.dark .border-clay-200\/30 { border-color: rgba(137, 68, 48, 0.3); }
 html.dark .border-sky-200\/30 { border-color: rgba(30, 82, 136, 0.3); }
 html.dark .bg-sage-50\/30 { background-color: rgba(45, 65, 39, 0.3); }
+html.dark .bg-sky-50\/50 { background-color: rgba(19, 39, 62, 0.5); }
+html.dark .bg-soil-50\/50 { background-color: rgba(51, 30, 19, 0.5); }
+html.dark .bg-clay-50\/50 { background-color: rgba(61, 28, 21, 0.5); }
+html.dark .bg-sage-50\/50 { background-color: rgba(45, 65, 39, 0.5); }
+html.dark .divide-cream-200\/50 > * + * { border-color: rgba(63, 97, 53, 0.4); }
+html.dark .border-sage-300\/60 { border-color: rgba(102, 153, 85, 0.4); }
 
 html.dark .text-text-primary { color: #F4F7F2; }
 html.dark .text-text-secondary { color: #E5EDE0; }
@@ -89,8 +95,8 @@ html.dark .hover\:shadow-glass-lg:hover { box-shadow: 0 8px 32px rgba(0, 0, 0, 0
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.page-enter {
-  animation: page-in 0.25s ease-out;
+.animate-page-in {
+  animation: page-in 0.3s ease-out;
 }
 
 /* ── Toggle switch ── */

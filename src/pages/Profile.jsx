@@ -85,9 +85,9 @@ export default function Profile() {
         <GlassCard variant="md">
           <h3 className="text-title-sm text-text-primary mb-3">⚙️ Settings</h3>
 
-          <div className="space-y-3">
-            <label className="flex items-center justify-between py-2 cursor-pointer">
-              <span className="text-body-md text-text-secondary">Dark mode</span>
+          <div className="divide-y divide-cream-200/50">
+            <label className="flex items-center justify-between py-3 cursor-pointer">
+              <span className="text-body-md text-text-secondary">🌙 Dark mode</span>
               <input
                 type="checkbox"
                 checked={settings.darkMode}
@@ -96,8 +96,8 @@ export default function Profile() {
               />
             </label>
 
-            <label className="flex items-center justify-between py-2 cursor-pointer">
-              <span className="text-body-md text-text-secondary">Notifications</span>
+            <label className="flex items-center justify-between py-3 cursor-pointer">
+              <span className="text-body-md text-text-secondary">🔔 Notifications</span>
               <input
                 type="checkbox"
                 checked={settings.notificationsEnabled}
@@ -106,22 +106,22 @@ export default function Profile() {
               />
             </label>
 
-            <div className="flex items-center justify-between py-1">
-              <span className="text-body-md text-text-secondary">Temperature</span>
+            <div className="flex items-center justify-between py-3">
+              <span className="text-body-md text-text-secondary">🌡️ Temperature</span>
               <button
                 onClick={settings.toggleTemperatureUnit}
-                className="text-label-md font-medium text-sage-600 bg-sage-100 px-3 py-1 rounded-md hover:bg-sage-200 transition-colors"
+                className="text-label-md font-semibold text-sage-600 bg-sage-100 px-3 py-1.5 rounded-full hover:bg-sage-200 transition-colors"
               >
                 {settings.useCelsius ? "°C" : "°F"}
               </button>
             </div>
 
-            <div className="flex items-center justify-between py-1">
-              <span className="text-body-md text-text-secondary">Reminder hour</span>
+            <div className="flex items-center justify-between py-3">
+              <span className="text-body-md text-text-secondary">⏰ Reminder hour</span>
               <select
                 value={settings.wateringReminderHour}
                 onChange={(e) => settings.setWateringReminderHour(Number(e.target.value))}
-                className="bg-cream-200 border border-cream-400 rounded-md px-3 py-1.5 text-body-md text-text-primary"
+                className="bg-cream-200 border border-cream-400 rounded-lg px-3 py-1.5 text-body-md text-text-primary focus:outline-none focus:border-sage-400"
               >
                 {Array.from({ length: 24 }, (_, i) => (
                   <option key={i} value={i}>{i}:00</option>
