@@ -20,6 +20,7 @@ export function PlantCard({ plant }) {
   return (
     <button
       onClick={() => navigate(`/plant/${plant.id}`)}
+      aria-label={`View ${plant.name}`}
       className="w-full text-left p-4 bg-cream-50/70 backdrop-blur-xl border border-cream-200/50 rounded-xl shadow-glass-sm hover:shadow-glass-md hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 ease-out flex items-center gap-4"
     >
       {/* Status indicator + photo */}

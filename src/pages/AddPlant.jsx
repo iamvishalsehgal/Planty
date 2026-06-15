@@ -106,6 +106,7 @@ export default function AddPlant() {
           ) : (
             <button
               onClick={() => fileRef.current?.click()}
+              aria-label="Choose a plant photo"
               className="w-full py-10 border-2 border-dashed border-cream-400 rounded-xl flex flex-col items-center gap-3 hover:border-sage-400 hover:bg-sage-50/30 transition-all cursor-pointer"
             >
               <div className="w-14 h-14 rounded-full bg-sage-100 flex items-center justify-center">

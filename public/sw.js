@@ -1,15 +1,7 @@
-// Planty service worker — offline caching
+// Planty service worker — stale-while-revalidate
 const CACHE = "planty-v3";
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches.open(CACHE).then((cache) =>
-      cache.addAll([
-        "/Planty/",
-        "/Planty/index.html",
-      ])
-    )
-  );
   self.skipWaiting();
 });
 
@@ -23,7 +15,22 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
+  // Only handle GET requests
+  if (e.request.method !== "GET") return;
+
   e.respondWith(
-    caches.match(e.request).then((cached) => cached || fetch(e.request))
+    caches.open(CACHE).then((cache) =>
+      cache.match(e.request).then((cached) => {
+        const fetchPromise = fetch(e.request)
+          .then((response) => {
+            if (response.ok) cache.put(e.request, response.clone());
+            return response;
+          })
+          .catch(() => cached);
+
+        // Return cached immediately, update in background
+        return cached || fetchPromise;
+      })
+    )
   );
 });

@@ -80,6 +80,8 @@ export default function Layout() {
                 key={tab.path}
                 ref={(el) => (tabRefs.current[i] = el)}
                 onClick={() => navigate(tab.path)}
+                aria-label={tab.label}
+                aria-current={active ? "page" : undefined}
                 className={`relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 active:scale-90 ${
                   active
                     ? "text-sage-700"
