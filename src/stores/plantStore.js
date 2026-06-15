@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { getWeather } from "@/lib/weather";
+import { adjustWateringInterval } from "@/lib/date";
 
 // ── Core Plant type ──
 
@@ -54,11 +56,14 @@ export const usePlantStore = create((set, get) => ({
 
   addPlant: (data) => {
     const now = new Date().toISOString();
+    const weather = getWeather();
+    const adjustedInterval = adjustWateringInterval(data.wateringIntervalDays, weather);
     const plant = {
       id: `local-${Date.now()}-${nextId++}`,
       ...data,
-      lastWatered: now,
-      nextWatering: computeNextWatering(data.wateringIntervalDays),
+      wateringIntervalDays: data.wateringIntervalDays, // keep original
+      nextWatering: computeNextWatering(adjustedInterval, now),
+      adjustedInterval,
       healthStatus: "healthy",
       createdAt: now,
       synced: false,
@@ -87,11 +92,14 @@ export const usePlantStore = create((set, get) => ({
     const plants = get().plants.map((p) => {
       if (p.id !== id) return p;
       const now = new Date().toISOString();
-      const nextWatering = computeNextWatering(p.wateringIntervalDays, now);
+      const weather = getWeather();
+      const adjustedInterval = adjustWateringInterval(p.wateringIntervalDays, weather);
+      const nextWatering = computeNextWatering(adjustedInterval, now);
       return {
         ...p,
         lastWatered: now,
         nextWatering,
+        adjustedInterval, // store for display
         healthStatus: "healthy",
         synced: false,
       };

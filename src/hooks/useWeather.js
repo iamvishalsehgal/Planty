@@ -1,16 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
-import { api } from "@/lib/api";
+import { fetchWeather } from "@/lib/weather";
 
 export function useWeather() {
   const [weather, setWeather] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchWeather = useCallback(async () => {
+  const refresh = useCallback(async () => {
     try {
       setError(null);
       setIsLoading(true);
-      const data = await api.getWeather();
+      const data = await fetchWeather();
       setWeather(data);
     } catch (err) {
       setError(err.message || "Could not load weather");
@@ -20,10 +20,10 @@ export function useWeather() {
   }, []);
 
   useEffect(() => {
-    fetchWeather();
-    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
+    refresh();
+    const interval = setInterval(refresh, 30 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [fetchWeather]);
+  }, [refresh]);
 
-  return { weather, isLoading, error, refresh: fetchWeather };
+  return { weather, isLoading, error, refresh };
 }

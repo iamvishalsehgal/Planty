@@ -31,6 +31,13 @@ export function WateringStatus({ plant, daysLeft }) {
         />
       </div>
 
+      {/* Weather-adjusted notice */}
+      {plant.adjustedInterval && plant.adjustedInterval !== plant.wateringIntervalDays && (
+        <div className="mb-2 px-3 py-1.5 bg-sky-50 border border-sky-200 rounded-md text-label-sm text-sky-700">
+          🌤️ Weather-adjusted: every {plant.adjustedInterval}d (base: {plant.wateringIntervalDays}d)
+        </div>
+      )}
+
       <div className="flex justify-between text-body-sm text-text-tertiary">
         <span>Last watered: {formatDate(plant.lastWatered)}</span>
         <span>Next: {formatDate(plant.nextWatering)}</span>
