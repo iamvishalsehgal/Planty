@@ -1,14 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    "./app/**/*.{js,jsx,ts,tsx}",
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,jsx}",
   ],
-  presets: [require("nativewind/preset")],
   theme: {
     extend: {
       colors: {
-        // ── Nature palette ──
         sage: {
           50: "#F4F7F2",
           100: "#E5EDE0",
@@ -74,7 +72,6 @@ module.exports = {
           900: "#826435",
           950: "#46351C",
         },
-        // ── Semantic ──
         surface: {
           primary: "#FEFDFB",
           secondary: "#F5F1EB",
@@ -88,8 +85,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["Satoshi", "Inter", "sans-serif"],
-        display: ["Satoshi", "Inter", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
+        display: ["Inter", "sans-serif"],
       },
       fontSize: {
         "display-xl": ["48px", { lineHeight: "52px", letterSpacing: "-0.02em", fontWeight: "800" }],
