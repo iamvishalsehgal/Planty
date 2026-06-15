@@ -104,6 +104,7 @@ html.dark .bg-cream-50 { background-color: #1f331b; }
 html.dark .bg-cream-200\/60 { background-color: rgba(45, 65, 39, 0.6); }
 html.dark .bg-sage-200 { background-color: #354E2D; }
 html.dark .bg-sage-500 { background-color: #4F7A42; }
+html.dark .bg-sage-500\/20 { background-color: rgba(132, 176, 117, 0.25); }
 html.dark .bg-sage-600 { background-color: #669955; }
 html.dark .bg-sage-700 { background-color: #84B075; }
 html.dark .bg-sage-100\/80 { background-color: rgba(45, 65, 39, 0.8); }
