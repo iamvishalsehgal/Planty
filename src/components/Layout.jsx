@@ -45,7 +45,7 @@ export default function Layout() {
       </div>
 
       {/* Floating pill tab bar */}
-      <div className="flex-shrink-0 flex justify-center pb-4 pt-2 px-4 pointer-events-none">
+      <div className="flex-shrink-0 flex justify-center pb-safe pt-2 px-4 pointer-events-none" style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom, 0px))" }}>
         <nav className="pointer-events-auto relative flex items-center bg-cream-50/70 backdrop-blur-2xl rounded-full px-1.5 py-1.5 shadow-[0_8px_32px_rgba(45,65,39,0.12),0_2px_8px_rgba(45,65,39,0.06),inset_0_0_0_1px_rgba(255,255,255,0.5)]">
           {/* Sliding indicator */}
           <div
