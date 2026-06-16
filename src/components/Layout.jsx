@@ -4,11 +4,54 @@ import { useSettingsStore } from "@/stores/settingsStore";
 import { usePlantStore } from "@/stores/plantStore";
 import { requestPermission, scheduleReminders, stopReminders } from "@/lib/notifications";
 
+/* ── SVG Tab Icons ── */
+function PlantsIcon({ active }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? "currentColor" : "currentColor"} strokeWidth={active ? 2 : 1.75} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3v2" />
+      <path d="M9 5c-3 1-5 4-5 7 0 4 3.5 7 8 7s8-3 8-7c0-3-2-6-5-7" />
+      <path d="M12 7c-2 0-4 2-4 4 0 2.5 2 4.5 4 4.5s4-2 4-4.5c0-2-2-4-4-4z" />
+      <line x1="12" y1="19" x2="12" y2="22" />
+    </svg>
+  );
+}
+
+function AddIcon({ active }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? "currentColor" : "currentColor"} strokeWidth={active ? 2 : 1.75} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <line x1="12" y1="8" x2="12" y2="16" />
+      <line x1="8" y1="12" x2="16" y2="12" />
+    </svg>
+  );
+}
+
+function DoctorIcon({ active }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? "currentColor" : "currentColor"} strokeWidth={active ? 2 : 1.75} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12h8" />
+      <path d="M12 8v8" />
+      <path d="M9 9l6 6" />
+      <path d="M15 9l-6 6" />
+    </svg>
+  );
+}
+
+function ProfileIcon({ active }) {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={active ? "currentColor" : "currentColor"} strokeWidth={active ? 2 : 1.75} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+    </svg>
+  );
+}
+
 const TABS = [
-  { path: "/", emoji: "🪴", label: "Plants" },
-  { path: "/add", emoji: "➕", label: "Add" },
-  { path: "/diagnose", emoji: "🔬", label: "Doctor" },
-  { path: "/profile", emoji: "👤", label: "Profile" },
+  { path: "/", Icon: PlantsIcon, label: "Plants" },
+  { path: "/add", Icon: AddIcon, label: "Add" },
+  { path: "/diagnose", Icon: DoctorIcon, label: "Doctor" },
+  { path: "/profile", Icon: ProfileIcon, label: "Profile" },
 ];
 
 export default function Layout() {
@@ -69,12 +112,18 @@ export default function Layout() {
         <Outlet />
       </div>
 
-      {/* Floating pill tab bar */}
-      <div className="flex-shrink-0 flex justify-center pb-safe pt-2 px-4 pointer-events-none" style={{ paddingBottom: "max(16px, env(safe-area-inset-bottom, 0px))" }}>
-        <nav className="pointer-events-auto relative flex items-center bg-cream-50/70 backdrop-blur-2xl rounded-full px-1.5 py-1.5 shadow-[0_8px_32px_rgba(45,65,39,0.12),0_2px_8px_rgba(45,65,39,0.06),inset_0_0_0_1px_rgba(255,255,255,0.5)]">
-          {/* Sliding indicator */}
+      {/* iOS-style Tab Bar */}
+      <div
+        className="flex-shrink-0 pb-safe"
+        style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom, 0px))" }}
+      >
+        <nav
+          className="relative flex items-center justify-around bg-cream-50/80 backdrop-blur-2xl border-t border-cream-200/60 shadow-tab-bar"
+          style={{ WebkitBackdropFilter: "blur(32px)" }}
+        >
+          {/* Sliding indicator — subtle pill under active tab */}
           <div
-            className="absolute top-1.5 bottom-1.5 bg-sage-500/20 rounded-full transition-all duration-300 ease-out"
+            className="absolute top-1.5 h-7 bg-sage-500/12 rounded-full transition-all duration-300 ease-out"
             style={indicatorStyle}
           />
           {TABS.map((tab, i) => {
@@ -86,17 +135,15 @@ export default function Layout() {
                 onClick={() => navigate(tab.path)}
                 aria-label={tab.label}
                 aria-current={active ? "page" : undefined}
-                className={`relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 active:scale-90 ${
+                className={`relative z-10 flex flex-col items-center justify-center gap-0.5 py-2 px-3 min-w-[64px] transition-all duration-200 active:scale-90 ${
                   active
                     ? "text-sage-700"
-                    : "text-text-tertiary hover:text-text-secondary"
+                    : "text-text-tertiary/60 hover:text-text-secondary"
                 }`}
               >
-                <span className={`text-lg transition-transform duration-300 ${active ? "scale-110" : ""}`}>
-                  {tab.emoji}
-                </span>
-                <span className={`text-label-sm font-medium transition-all duration-300 ${
-                  active ? "opacity-100" : "opacity-70"
+                <tab.Icon active={active} />
+                <span className={`text-[10px] font-semibold tracking-wide uppercase transition-all duration-200 ${
+                  active ? "opacity-100" : "opacity-60"
                 }`}>
                   {tab.label}
                 </span>

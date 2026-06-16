@@ -107,7 +107,8 @@ export default {
         md: "16px",
         lg: "20px",
         xl: "24px",
-        "2xl": "32px",
+        "2xl": "28px",
+        "3xl": "32px",
         full: "9999px",
       },
       spacing: {
@@ -131,11 +132,19 @@ export default {
         20: "80px",
       },
       boxShadow: {
-        "glass-sm": "0 1px 4px rgba(45,65,39,0.04), 0 4px 16px rgba(45,65,39,0.06)",
-        "glass-md": "0 2px 8px rgba(45,65,39,0.04), 0 8px 24px rgba(45,65,39,0.08), 0 0 0 1px rgba(255,255,255,0.6) inset",
-        "glass-lg": "0 4px 12px rgba(45,65,39,0.06), 0 12px 32px rgba(45,65,39,0.10), 0 0 0 1px rgba(255,255,255,0.6) inset",
-        "card": "0 1px 3px rgba(45,65,39,0.04), 0 4px 12px rgba(45,65,39,0.06), 0 8px 24px rgba(45,65,39,0.04)",
-        "elevated": "0 4px 16px rgba(45,65,39,0.08), 0 16px 40px rgba(45,65,39,0.12)",
+        /* Premium card shadows — deeper, more intentional */
+        "card-sm": "0 1px 2px rgba(45,65,39,0.06), 0 4px 16px rgba(45,65,39,0.08)",
+        "card": "0 2px 4px rgba(45,65,39,0.04), 0 8px 24px rgba(45,65,39,0.10), 0 16px 40px rgba(45,65,39,0.06)",
+        "card-lg": "0 4px 8px rgba(45,65,39,0.06), 0 12px 32px rgba(45,65,39,0.12), 0 24px 56px rgba(45,65,39,0.08)",
+        "elevated": "0 8px 16px rgba(45,65,39,0.08), 0 24px 48px rgba(45,65,39,0.14), 0 40px 80px rgba(45,65,39,0.06)",
+
+        /* Glass shadows — visible depth with inner highlight */
+        "glass-sm": "0 1px 3px rgba(45,65,39,0.06), 0 4px 16px rgba(45,65,39,0.08), inset 0 1px 0 rgba(255,255,255,0.7)",
+        "glass": "0 2px 8px rgba(45,65,39,0.06), 0 8px 24px rgba(45,65,39,0.10), 0 16px 40px rgba(45,65,39,0.04), inset 0 1px 0 rgba(255,255,255,0.8)",
+        "glass-lg": "0 4px 12px rgba(45,65,39,0.08), 0 12px 32px rgba(45,65,39,0.12), 0 24px 56px rgba(45,65,39,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+
+        /* Tab bar */
+        "tab-bar": "0 -1px 0 rgba(45,65,39,0.06), 0 -4px 16px rgba(45,65,39,0.04)",
       },
     },
   },

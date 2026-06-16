@@ -50,15 +50,10 @@ export default function Profile() {
         const raw = reader.result;
         if (!raw || typeof raw !== "string") throw new Error("Empty file");
         const data = JSON.parse(raw);
-
-        // Validate structure before overwriting
         const hasPlants = data.plants && (Array.isArray(data.plants) || typeof data.plants === "string");
         const hasSettings = data.settings && typeof data.settings === "object";
-
         if (!hasPlants && !hasSettings) throw new Error("No valid plant or settings data found");
-
         if (!confirm("This will replace all current data. Continue?")) return;
-
         if (hasPlants) {
           const plantsStr = Array.isArray(data.plants) ? JSON.stringify(data.plants) : data.plants;
           localStorage.setItem(PLANTS_STORAGE_KEY, plantsStr);
@@ -80,44 +75,31 @@ export default function Profile() {
 
   return (
     <div className="flex flex-col h-full animate-page-in">
-      <div className="px-4 pt-6 pb-4">
-        <h1 className="text-display-lg text-text-primary">Profile</h1>
-        <p className="text-body-md text-text-tertiary mt-1">
-          Garden stats & settings
+      <div className="px-5 pt-8 pb-4">
+        <h1 className="text-display-lg text-text-primary tracking-tight leading-none">Profile</h1>
+        <p className="text-[15px] text-text-tertiary mt-1.5">
+          Garden stats &amp; settings
         </p>
       </div>
 
-      <div className="flex-1 overflow-auto px-4 pb-6 space-y-4">
+      <div className="flex-1 overflow-auto px-5 pb-8 space-y-4">
         {/* Garden stats */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-text-primary mb-4">🌿 Garden</h3>
+          <h3 className="text-title-sm text-text-primary mb-4">Garden</h3>
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-4 bg-sage-50 rounded-xl text-center border border-sage-200/30">
-              <div className="text-display-xl text-sage-600 font-bold"><CountUp end={plants.length} /></div>
-              <div className="text-label-sm text-sage-500 mt-1 flex items-center justify-center gap-1">🪴 Total</div>
-            </div>
-            <div className="p-4 bg-soil-50 rounded-xl text-center border border-soil-200/30">
-              <div className="text-display-xl text-soil-600 font-bold"><CountUp end={healthyPlants.length} /></div>
-              <div className="text-label-sm text-soil-500 mt-1 flex items-center justify-center gap-1">💚 Healthy</div>
-            </div>
-            <div className="p-4 bg-clay-50 rounded-xl text-center border border-clay-200/30">
-              <div className="text-display-xl text-clay-600 font-bold"><CountUp end={thirstyPlants.length} /></div>
-              <div className="text-label-sm text-clay-500 mt-1 flex items-center justify-center gap-1">💧 Need water</div>
-            </div>
-            <div className="p-4 bg-sky-50 rounded-xl text-center border border-sky-200/30">
-              <div className="text-display-xl text-sky-600 font-bold"><CountUp end={rooms.length} /></div>
-              <div className="text-label-sm text-sky-500 mt-1 flex items-center justify-center gap-1">🏠 Rooms</div>
-            </div>
+            <StatBox value={plants.length} label="Total" color="sage" />
+            <StatBox value={healthyPlants.length} label="Healthy" color="soil" />
+            <StatBox value={thirstyPlants.length} label="Need water" color="clay" />
+            <StatBox value={rooms.length} label="Rooms" color="sky" />
           </div>
         </GlassCard>
 
         {/* Settings */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-text-primary mb-3">⚙️ Settings</h3>
-
+          <h3 className="text-title-sm text-text-primary mb-3">Settings</h3>
           <div className="divide-y divide-cream-200/50">
             <label className="flex items-center justify-between py-3 cursor-pointer">
-              <span className="text-body-md text-text-secondary">🌙 Dark mode</span>
+              <span className="text-[15px] text-text-secondary">Dark mode</span>
               <input
                 type="checkbox"
                 checked={settings.darkMode}
@@ -127,7 +109,7 @@ export default function Profile() {
             </label>
 
             <label className="flex items-center justify-between py-3 cursor-pointer">
-              <span className="text-body-md text-text-secondary">🔔 Notifications</span>
+              <span className="text-[15px] text-text-secondary">Notifications</span>
               <input
                 type="checkbox"
                 checked={settings.notificationsEnabled}
@@ -137,21 +119,21 @@ export default function Profile() {
             </label>
 
             <div className="flex items-center justify-between py-3">
-              <span className="text-body-md text-text-secondary">🌡️ Temperature</span>
+              <span className="text-[15px] text-text-secondary">Temperature</span>
               <button
                 onClick={settings.toggleTemperatureUnit}
-                className="text-label-md font-semibold text-sage-600 bg-sage-100 px-3 py-1.5 rounded-full hover:bg-sage-200 transition-colors"
+                className="text-[14px] font-semibold text-sage-600 bg-sage-100 px-3 py-1.5 rounded-full hover:bg-sage-200 transition-colors"
               >
                 {settings.useCelsius ? "°C" : "°F"}
               </button>
             </div>
 
             <div className="flex items-center justify-between py-3">
-              <span className="text-body-md text-text-secondary">⏰ Reminder hour</span>
+              <span className="text-[15px] text-text-secondary">Reminder hour</span>
               <select
                 value={settings.wateringReminderHour}
                 onChange={(e) => settings.setWateringReminderHour(Number(e.target.value))}
-                className="bg-cream-200 border border-cream-400 rounded-lg px-3 py-1.5 text-body-md text-text-primary focus:outline-none focus:border-sage-400"
+                className="bg-cream-200 border border-cream-400 rounded-lg px-3 py-1.5 text-[15px] text-text-primary focus:outline-none focus:border-sage-400"
               >
                 {Array.from({ length: 24 }, (_, i) => (
                   <option key={i} value={i}>{i}:00</option>
@@ -161,9 +143,9 @@ export default function Profile() {
           </div>
         </GlassCard>
 
-        {/* Import / Export */}
+        {/* Data */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-text-primary mb-3">💾 Data</h3>
+          <h3 className="text-title-sm text-text-primary mb-3">Data</h3>
           <div className="flex gap-3">
             <Button
               label="Export backup"
@@ -187,34 +169,34 @@ export default function Profile() {
               className="flex-1"
             />
           </div>
-          <p className="text-label-sm text-text-tertiary mt-2">
+          <p className="text-[12px] text-text-tertiary mt-2">
             Export your plant data as JSON, or restore from a backup.
           </p>
         </GlassCard>
 
         {/* About */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-text-primary mb-3">📱 About</h3>
-          <p className="text-body-md text-text-secondary mb-3">
-            Planty v3.0 — smart plant care, beautifully designed. Weather-aware watering, plant diagnosis, and zero server costs.
+          <h3 className="text-title-sm text-text-primary mb-3">About</h3>
+          <p className="text-[15px] text-text-secondary mb-3 leading-relaxed">
+            Planty v3.0 -- smart plant care, beautifully designed. Weather-aware watering, plant diagnosis, and zero server costs.
           </p>
-          <div className="flex items-center gap-2 text-body-sm text-text-tertiary">
-            <span>🪴 v3.0.0</span>
-            <span>·</span>
+          <div className="flex items-center gap-2 text-[13px] text-text-tertiary">
+            <span>v3.0.0</span>
+            <span>&middot;</span>
             <a
               href="https://github.com/iamvishalsehgal/Planty"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sage-600 hover:underline"
+              className="text-sage-600 font-medium hover:underline"
             >
-              GitHub →
+              GitHub &rarr;
             </a>
           </div>
         </GlassCard>
 
         {/* Danger zone */}
         <GlassCard variant="md">
-          <h3 className="text-title-sm text-clay-600 mb-2">⚠️ Danger zone</h3>
+          <h3 className="text-title-sm text-clay-600 mb-2">Danger zone</h3>
           <Button
             label="Remove all plants"
             variant="destructive"
@@ -223,6 +205,27 @@ export default function Profile() {
             className="w-full"
           />
         </GlassCard>
+      </div>
+    </div>
+  );
+}
+
+function StatBox({ value, label, color }) {
+  const colorMap = {
+    sage: { bg: "bg-sage-50", border: "border-sage-200/40", text: "text-sage-600", subtext: "text-sage-500" },
+    soil: { bg: "bg-soil-50", border: "border-soil-200/40", text: "text-soil-600", subtext: "text-soil-500" },
+    clay: { bg: "bg-clay-50", border: "border-clay-200/40", text: "text-clay-600", subtext: "text-clay-500" },
+    sky: { bg: "bg-sky-50", border: "border-sky-200/40", text: "text-sky-600", subtext: "text-sky-500" },
+  };
+  const c = colorMap[color] || colorMap.sage;
+
+  return (
+    <div className={`p-4 ${c.bg} rounded-2xl text-center border ${c.border}`}>
+      <div className={`text-display-xl ${c.text} font-extrabold tracking-tighter leading-none tabular-nums`}>
+        <CountUp end={value} />
+      </div>
+      <div className={`text-[12px] font-semibold ${c.subtext} mt-1.5 tracking-wide uppercase`}>
+        {label}
       </div>
     </div>
   );

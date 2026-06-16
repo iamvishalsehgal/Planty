@@ -14,7 +14,6 @@ export default function Dashboard() {
   const [wateredCount, setWateredCount] = useState(0);
   const waterTimer = useRef(null);
 
-  // Cleanup timeout on unmount
   useEffect(() => () => clearTimeout(waterTimer.current), []);
 
   const handleWaterAll = () => {
@@ -30,8 +29,8 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="p-4 space-y-4">
-        <div className="h-20 bg-cream-50/50 rounded-lg animate-pulse" />
+      <div className="p-5 space-y-5">
+        <div className="h-24 bg-cream-50/50 rounded-2xl animate-pulse" />
         <DashboardSkeleton />
       </div>
     );
@@ -40,9 +39,8 @@ export default function Dashboard() {
   if (plants.length === 0) {
     return (
       <EmptyState
-        emoji="🪴"
-        title="No plants yet"
-        description="Add your first plant to start tracking watering schedules and keeping them healthy."
+        title="Your garden awaits"
+        description="Add your first plant to start tracking watering schedules and keeping them thriving."
         action={{ label: "Add a plant", onClick: () => navigate("/add") }}
       />
     );
@@ -51,32 +49,34 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-full animate-page-in">
       {/* Header */}
-      <div className="px-4 pt-6 pb-4">
-        <h1 className="text-display-lg text-text-primary tracking-tight">Plants</h1>
-        <div className="flex items-center gap-3 mt-1">
-          <span className="inline-flex items-center gap-1.5 text-label-sm text-text-tertiary">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage-500" />
-            {healthyPlants.length}
+      <div className="px-5 pt-8 pb-3">
+        <h1 className="text-display-lg text-text-primary tracking-tight leading-none">
+          Plants
+        </h1>
+        <div className="flex items-center gap-4 mt-2">
+          <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-text-tertiary">
+            <span className="w-2 h-2 rounded-full bg-sage-500" />
+            {healthyPlants.length} healthy
           </span>
-          <span className="inline-flex items-center gap-1.5 text-label-sm text-text-tertiary">
-            <span className="w-1.5 h-1.5 rounded-full bg-clay-500" />
-            {thirstyPlants.length}
+          <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-text-tertiary">
+            <span className="w-2 h-2 rounded-full bg-clay-500" />
+            {thirstyPlants.length} thirsty
           </span>
         </div>
       </div>
 
       {/* Weather */}
-      <div className="px-4 mb-4">
+      <div className="px-5 mb-4">
         <WeatherStrip />
       </div>
 
       {/* Thirsty alert */}
       {thirstyPlants.length > 0 && (
-        <div className="px-4 mb-4">
-          <div className="p-4 bg-clay-100/80 border border-clay-200/60 rounded-xl flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">🚨</span>
-              <span className="text-label-md text-clay-700">
+        <div className="px-5 mb-4">
+          <div className="p-4 bg-clay-50/80 backdrop-blur-sm border border-clay-200/50 rounded-2xl flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-clay-500 animate-pulse flex-shrink-0" />
+              <span className="text-[14px] font-semibold text-clay-700">
                 {thirstyPlants.length} plant{thirstyPlants.length > 1 ? "s" : ""} need{thirstyPlants.length === 1 ? "s" : ""} water
               </span>
             </div>
@@ -93,19 +93,19 @@ export default function Dashboard() {
 
       {/* Watered success */}
       {wateredCount > 0 && (
-        <div className="px-4 mb-4">
-          <div className="p-4 bg-sage-100/80 border border-sage-300/60 rounded-xl flex items-center gap-2 animate-page-in">
-            <span className="text-xl">✅</span>
-            <span className="text-label-md text-sage-700">
-              {wateredCount} plant{wateredCount > 1 ? "s" : ""} watered!
+        <div className="px-5 mb-4">
+          <div className="p-4 bg-sage-50/80 backdrop-blur-sm border border-sage-200/50 rounded-2xl flex items-center gap-3 animate-page-in">
+            <span className="w-2.5 h-2.5 rounded-full bg-sage-500 flex-shrink-0" />
+            <span className="text-[14px] font-semibold text-sage-700">
+              {wateredCount} plant{wateredCount > 1 ? "s" : ""} watered
             </span>
           </div>
         </div>
       )}
 
-      {/* Plant grid */}
-      <div className="flex-1 overflow-auto px-4 pb-6">
-        <div className="space-y-3">
+      {/* Plant list */}
+      <div className="flex-1 overflow-auto px-5 pb-8">
+        <div className="space-y-3.5">
           {plants.map((plant) => (
             <PlantCard key={plant.id} plant={plant} />
           ))}

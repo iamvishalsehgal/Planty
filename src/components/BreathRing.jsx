@@ -1,18 +1,11 @@
 const PALETTE = {
-  healthy:  { stroke: "#4F7A42", strokeEnd: "#84B075", bg: "#E5EDE0", glow: "rgba(79,122,66,0.25)" },
-  warning:  { stroke: "#B08041", strokeEnd: "#CDB080", bg: "#F0E8D8", glow: "rgba(176,128,65,0.25)" },
-  dry:      { stroke: "#D67B5B", strokeEnd: "#E29C82", bg: "#F5DBD3", glow: "rgba(214,123,91,0.3)" },
-  overdue:  { stroke: "#C46240", strokeEnd: "#D67B5B", bg: "#F5DBD3", glow: "rgba(196,98,64,0.35)" },
+  healthy:  { stroke: "#4F7A42", strokeEnd: "#84B075", bg: "#E5EDE0" },
+  warning:  { stroke: "#B08041", strokeEnd: "#CDB080", bg: "#F0E8D8" },
+  dry:      { stroke: "#D67B5B", strokeEnd: "#E29C82", bg: "#F5DBD3" },
+  overdue:  { stroke: "#C46240", strokeEnd: "#D67B5B", bg: "#F5DBD3" },
 };
 
-const LABELS = {
-  healthy: "Healthy",
-  warning: "Soon",
-  dry: "Water me",
-  overdue: "Now!",
-};
-
-export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status = "healthy", totalDays }) {
+export function BreathRing({ progress = 1, size = 120, strokeWidth = 7, status = "healthy", totalDays }) {
   const colors = PALETTE[status] || PALETTE.healthy;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -20,8 +13,7 @@ export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status =
     ? Math.min(Math.max(progress / totalDays, 0), 1)
     : Math.min(Math.max(progress, 0), 1);
   const offset = circumference * (1 - ratio);
-  const isPulsing = status === "dry" || status === "overdue";
-  const gradientId = `rg-${status}`;
+  const gradientId = `rg-${status}-${size}`;
   const days = Math.max(Math.round(progress), 0);
   const percentage = Math.round(ratio * 100);
 
@@ -31,8 +23,7 @@ export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status =
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
-        className={`absolute inset-0 -rotate-90 ${isPulsing ? "animate-pulse" : ""}`}
-        style={{ filter: `drop-shadow(0 0 8px ${colors.glow})` }}
+        className="absolute inset-0 -rotate-90"
       >
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
@@ -40,34 +31,47 @@ export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status =
             <stop offset="100%" stopColor={colors.strokeEnd} />
           </linearGradient>
         </defs>
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={colors.bg} strokeWidth={strokeWidth} />
+        {/* Background track */}
         <circle
-          cx={size / 2} cy={size / 2} r={radius} fill="none"
-          stroke={`url(#${gradientId})`} strokeWidth={strokeWidth} strokeLinecap="round"
-          strokeDasharray={circumference} strokeDashoffset={offset}
-          style={{ transition: "stroke-dashoffset 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+          cx={size / 2} cy={size / 2} r={radius}
+          fill="none" stroke={colors.bg} strokeWidth={strokeWidth}
+          opacity="0.5"
+        />
+        {/* Progress arc */}
+        <circle
+          cx={size / 2} cy={size / 2} r={radius}
+          fill="none"
+          stroke={`url(#${gradientId})`}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          style={{ transition: "stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)" }}
         />
       </svg>
 
-      {/* Center — clean timer display */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+      {/* Center text */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
         {progress <= 0 ? (
-          <span className="text-xl font-bold tracking-tight" style={{ color: colors.stroke }}>
-            {LABELS[status]}
+          <span
+            className="text-[11px] font-bold tracking-tight leading-none"
+            style={{ color: colors.stroke }}
+          >
+            NOW
           </span>
         ) : (
           <>
             <span
               className="font-extrabold tracking-tighter leading-none tabular-nums"
-              style={{ color: colors.stroke, fontSize: size * 0.28 }}
+              style={{ color: colors.stroke, fontSize: size * 0.30 }}
             >
               {days}
             </span>
-            <span className="text-xs font-medium tracking-wide uppercase opacity-60 mt-0.5" style={{ color: colors.stroke }}>
-              {days === 1 ? "day left" : "days left"}
-            </span>
-            <span className="text-[10px] opacity-40 mt-0.5" style={{ color: colors.stroke }}>
-              {percentage}%
+            <span
+              className="text-[10px] font-medium tracking-wide uppercase opacity-50 mt-0.5 leading-none"
+              style={{ color: colors.stroke }}
+            >
+              {days === 1 ? "day" : "days"}
             </span>
           </>
         )}
@@ -77,5 +81,13 @@ export function BreathRing({ progress = 1, size = 120, strokeWidth = 8, status =
 }
 
 export function BreathRingSimple({ size = 56, progress = 1, status = "healthy", totalDays }) {
-  return <BreathRing progress={progress} size={size} strokeWidth={6} status={status} totalDays={totalDays} />;
+  return (
+    <BreathRing
+      progress={progress}
+      size={size}
+      strokeWidth={5}
+      status={status}
+      totalDays={totalDays}
+    />
+  );
 }
