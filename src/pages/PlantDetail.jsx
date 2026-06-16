@@ -14,7 +14,7 @@ export default function PlantDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { removePlant, getPlant, isLoading } = usePlants();
-  const { plant, daysLeft, nextWatering, lastWatered, waterPlant } = useWatering(id);
+  const { plant, daysLeft, nextWatering, lastWatered, waterPlant, cooldown } = useWatering(id);
   const fullPlant = getPlant(id);
   const [justWatered, setJustWatered] = useState(false);
   const waterTimer = useRef(null);
@@ -107,6 +107,10 @@ export default function PlantDetail() {
         {justWatered ? (
           <div className="p-4 bg-sage-100 border border-sage-300 rounded-xl text-center animate-page-in">
             <span className="text-label-md text-sage-700">✅ Watered! {plant.name} is happy 🌱</span>
+          </div>
+        ) : cooldown ? (
+          <div className="p-4 bg-soil-100 border border-soil-300 rounded-xl text-center">
+            <span className="text-label-md text-soil-700">⏳ 48h cooldown — {plant.name} was watered recently</span>
           </div>
         ) : (
           <Button

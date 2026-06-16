@@ -3,6 +3,7 @@ import { getWeather } from "@/lib/weather";
 import { adjustWateringInterval, daysUntil } from "@/lib/date";
 
 const STORAGE_KEY = "planty-plants";
+const WATERING_COOLDOWN_MS = 48 * 60 * 60 * 1000; // 48 hours
 
 const persistPlants = (plants) => {
   try {
@@ -102,23 +103,36 @@ export const usePlantStore = create((set, get) => ({
   },
 
   waterPlant: (id) => {
-    const plants = get().plants.map((p) => {
-      if (p.id !== id) return p;
-      const now = new Date().toISOString();
-      const weather = getWeather();
-      const adjustedInterval = adjustWateringInterval(p.wateringIntervalDays, weather);
-      const nextWatering = computeNextWatering(adjustedInterval, now);
-      return {
+    const plant = get().plants.find((p) => p.id === id);
+    if (!plant) return "notfound";
+
+    // 48-hour cooldown — prevent over-watering
+    const now = Date.now();
+    if (plant.lastWatered) {
+      const lastTime = new Date(plant.lastWatered).getTime();
+      if (now - lastTime < WATERING_COOLDOWN_MS) {
+        return "cooldown";
+      }
+    }
+
+    const nowISO = new Date().toISOString();
+    const weather = getWeather();
+    const adjustedInterval = adjustWateringInterval(plant.wateringIntervalDays, weather);
+    const nextWatering = computeNextWatering(adjustedInterval, nowISO);
+
+    const plants = get().plants.map((p) =>
+      p.id !== id ? p : {
         ...p,
-        lastWatered: now,
+        lastWatered: nowISO,
         nextWatering,
         adjustedInterval,
         healthStatus: "healthy",
         synced: false,
-      };
-    });
+      }
+    );
     persistPlants(plants);
     set({ plants });
+    return "ok";
   },
 
   markSynced: (id) => {
