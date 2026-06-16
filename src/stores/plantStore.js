@@ -50,6 +50,7 @@ export const usePlantStore = create((set, get) => ({
       const plants = loadPlants();
       const updated = plants.map((p) => ({
         ...p,
+        lastWatered: p.lastWatered || p.createdAt, // repair old plants missing this field
         healthStatus: computeHealthStatus(p.nextWatering),
       }));
       set({ plants: updated });

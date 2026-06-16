@@ -40,7 +40,7 @@ export function WateringStatus({ plant, daysLeft }) {
       )}
 
       <div className="flex justify-between text-body-sm text-text-tertiary">
-        <span>Last watered: {formatDate(plant.lastWatered)}</span>
+        <span>{plant.lastWatered ? `Last watered: ${formatDate(plant.lastWatered)}` : "Not watered yet"}</span>
         <span>Next: {formatDate(plant.nextWatering)}</span>
       </div>
     </div>

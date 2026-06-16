@@ -132,7 +132,7 @@ export default function PlantDetail() {
                   : `${plant.wateringIntervalDays} days`
               }
             />
-            <DetailRow label="Last watered" value={`${formatDate(lastWatered)} at ${formatTime(lastWatered)}`} />
+            <DetailRow label="Last watered" value={lastWatered ? `${formatDate(lastWatered)} at ${formatTime(lastWatered)}` : "Not yet"} />
             <DetailRow label="Added" value={formatDate(fullPlant.createdAt)} />
           </div>
         </GlassCard>
