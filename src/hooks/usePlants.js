@@ -10,22 +10,25 @@ export function usePlants() {
     []
   );
 
+  // ISO strings are lexicographically sortable — no Date allocation needed
   const sortedPlants = useMemo(
-    () => [...plants].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ),
+    () => [...plants].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     [plants]
   );
 
-  const thirstyPlants = useMemo(
-    () => plants.filter((p) => p.healthStatus === "dry" || p.healthStatus === "overdue"),
-    [plants]
-  );
+  // Single-pass partition — avoids two separate filter passes
+  const { thirstyPlants, healthyPlants } = useMemo(() => {
+    const thirsty = [];
+    const healthy = [];
+    for (const p of plants) {
+      if (p.healthStatus === "dry" || p.healthStatus === "overdue") thirsty.push(p);
+      else if (p.healthStatus === "healthy") healthy.push(p);
+    }
+    return { thirstyPlants: thirsty, healthyPlants: healthy };
+  }, [plants]);
 
-  const healthyPlants = useMemo(
-    () => plants.filter((p) => p.healthStatus === "healthy"),
-    [plants]
-  );
+  // Store actions are stable references — safe to pull once
+  const store = usePlantStore.getState();
 
   return {
     plants: sortedPlants,
@@ -33,9 +36,9 @@ export function usePlants() {
     healthyPlants,
     isLoading,
     addPlant,
-    updatePlant: usePlantStore.getState().updatePlant,
-    removePlant: usePlantStore.getState().removePlant,
-    waterPlant: usePlantStore.getState().waterPlant,
-    getPlant: usePlantStore.getState().getPlant,
+    updatePlant: store.updatePlant,
+    removePlant: store.removePlant,
+    waterPlant: store.waterPlant,
+    getPlant: store.getPlant,
   };
 }

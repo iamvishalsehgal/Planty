@@ -1,18 +1,16 @@
-import { useCallback, useState } from "react";
-import { usePlantStore } from "@/stores/plantStore";
+import { useCallback, useState, useMemo } from "react";
+import { usePlantStore, WATERING_COOLDOWN_MS } from "@/stores/plantStore";
 import { daysUntil } from "@/lib/date";
-
-const COOLDOWN_HOURS = 48;
 
 export function useWatering(plantId) {
   const plant = usePlantStore((s) => s.plants.find((p) => p.id === plantId));
-  const [cooldown, setCooldown] = useState(false);
+  const [justWatered, setJustWatered] = useState(false);
 
   const handleWater = useCallback(() => {
     const result = usePlantStore.getState().waterPlant(plantId);
     if (result === "cooldown") {
-      setCooldown(true);
-      setTimeout(() => setCooldown(false), 3000);
+      setJustWatered(true);
+      setTimeout(() => setJustWatered(false), 3000);
     }
     return result;
   }, [plantId]);
@@ -21,10 +19,11 @@ export function useWatering(plantId) {
   const nextWatering = plant?.nextWatering ?? null;
   const lastWatered = plant?.lastWatered ?? null;
 
-  // Check if currently in cooldown
-  const inCooldown = plant?.lastWatered
-    ? Date.now() - new Date(plant.lastWatered).getTime() < COOLDOWN_HOURS * 60 * 60 * 1000
-    : false;
+  // Cooldown status — single source of truth from store constant
+  const inCooldown = useMemo(() => {
+    if (!plant?.lastWatered) return false;
+    return Date.now() - new Date(plant.lastWatered).getTime() < WATERING_COOLDOWN_MS;
+  }, [plant?.lastWatered]);
 
   return {
     plant,
@@ -32,6 +31,6 @@ export function useWatering(plantId) {
     nextWatering,
     lastWatered,
     waterPlant: handleWater,
-    cooldown: cooldown || inCooldown,
+    cooldown: justWatered || inCooldown,
   };
 }

@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
-const STORAGE_KEY = "planty-settings";
+export const SETTINGS_STORAGE_KEY = "planty-settings";
 
 const loadFromStorage = () => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
     if (!raw) return {};
     return JSON.parse(raw);
   } catch {
@@ -16,7 +16,7 @@ const persistSettings = (partial) => {
   try {
     const existing = loadFromStorage();
     const merged = { ...existing, ...partial };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(merged));
   } catch (e) {
     console.error("Failed to save settings:", e.message);
   }

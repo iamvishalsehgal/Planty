@@ -2,12 +2,12 @@ import { create } from "zustand";
 import { getWeather } from "@/lib/weather";
 import { adjustWateringInterval, daysUntil } from "@/lib/date";
 
-const STORAGE_KEY = "planty-plants";
-const WATERING_COOLDOWN_MS = 48 * 60 * 60 * 1000; // 48 hours
+export const PLANTS_STORAGE_KEY = "planty-plants";
+export const WATERING_COOLDOWN_MS = 48 * 60 * 60 * 1000; // 48 hours
 
 const persistPlants = (plants) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+    localStorage.setItem(PLANTS_STORAGE_KEY, JSON.stringify(plants));
     return true;
   } catch (e) {
     console.error("Failed to save plants:", e.message);
@@ -17,7 +17,7 @@ const persistPlants = (plants) => {
 
 const loadPlants = () => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(PLANTS_STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];

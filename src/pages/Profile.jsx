@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { usePlants } from "@/hooks/usePlants";
 import { useSettingsStore } from "@/stores/settingsStore";
+import { PLANTS_STORAGE_KEY } from "@/stores/plantStore";
+import { SETTINGS_STORAGE_KEY } from "@/stores/settingsStore";
 import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
 import { CountUp } from "@/components/CountUp";
@@ -20,8 +22,8 @@ export default function Profile() {
 
   const handleExport = () => {
     try {
-      const plantsRaw = localStorage.getItem("planty-plants");
-      const settingsRaw = localStorage.getItem("planty-settings");
+      const plantsRaw = localStorage.getItem(PLANTS_STORAGE_KEY);
+      const settingsRaw = localStorage.getItem(SETTINGS_STORAGE_KEY);
       const data = {
         plants: plantsRaw ? JSON.parse(plantsRaw) : [],
         settings: settingsRaw ? JSON.parse(settingsRaw) : {},
@@ -50,11 +52,11 @@ export default function Profile() {
         const data = JSON.parse(raw);
         if (data.plants) {
           const plantsStr = typeof data.plants === "string" ? data.plants : JSON.stringify(data.plants);
-          localStorage.setItem("planty-plants", plantsStr);
+          localStorage.setItem(PLANTS_STORAGE_KEY, plantsStr);
         }
         if (data.settings) {
           const settingsStr = typeof data.settings === "string" ? data.settings : JSON.stringify(data.settings);
-          localStorage.setItem("planty-settings", settingsStr);
+          localStorage.setItem(SETTINGS_STORAGE_KEY, settingsStr);
         }
         window.location.reload();
       } catch (e) {
