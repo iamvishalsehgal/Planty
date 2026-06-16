@@ -84,11 +84,11 @@ export const usePlantStore = create((set, get) => ({
     const plants = [...get().plants, plant];
     const saved = persistPlants(plants);
     set({ plants });
-    if (!saved && data.photoUri) {
-      // Photo likely caused quota error — plant is in memory but not on disk
-      console.warn("Plant saved in memory only — storage may be full (photo too large?)");
+    if (!saved) {
+      // Quota exceeded — plant in memory only, will be lost on refresh
+      console.warn("Plant saved in memory only — storage may be full");
     }
-    return plant;
+    return { plant, persisted: saved };
   },
 
   updatePlant: (id, data) => {

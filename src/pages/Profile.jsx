@@ -50,11 +50,20 @@ export default function Profile() {
         const raw = reader.result;
         if (!raw || typeof raw !== "string") throw new Error("Empty file");
         const data = JSON.parse(raw);
-        if (data.plants) {
-          const plantsStr = typeof data.plants === "string" ? data.plants : JSON.stringify(data.plants);
+
+        // Validate structure before overwriting
+        const hasPlants = data.plants && (Array.isArray(data.plants) || typeof data.plants === "string");
+        const hasSettings = data.settings && typeof data.settings === "object";
+
+        if (!hasPlants && !hasSettings) throw new Error("No valid plant or settings data found");
+
+        if (!confirm("This will replace all current data. Continue?")) return;
+
+        if (hasPlants) {
+          const plantsStr = Array.isArray(data.plants) ? JSON.stringify(data.plants) : data.plants;
           localStorage.setItem(PLANTS_STORAGE_KEY, plantsStr);
         }
-        if (data.settings) {
+        if (hasSettings) {
           const settingsStr = typeof data.settings === "string" ? data.settings : JSON.stringify(data.settings);
           localStorage.setItem(SETTINGS_STORAGE_KEY, settingsStr);
         }

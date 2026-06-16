@@ -58,20 +58,22 @@ export default function AddPlant() {
     setError(null);
     setSaving(true);
 
-    try {
-      addPlant({
-        name: name.trim(),
-        species: displaySpecies.trim(),
-        room,
-        photoUri,
-        wateringIntervalDays: intervalDays,
-      });
-      navigate("/");
-    } catch (err) {
-      setError(err.message || "Could not save plant");
-    } finally {
+    setSaving(true);
+    const result = addPlant({
+      name: name.trim(),
+      species: displaySpecies.trim(),
+      room,
+      photoUri,
+      wateringIntervalDays: intervalDays,
+    });
+    if (result && !result.persisted) {
+      setError("Plant saved for this session only — storage may be full. Try a smaller photo.");
       setSaving(false);
+      setTimeout(() => navigate("/"), 2000);
+      return;
     }
+    navigate("/");
+    setSaving(false);
   };
 
   return (
