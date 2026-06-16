@@ -72,4 +72,4 @@ tests/           29 pytest tests
 
 ## Production
 
-Uncomment `psycopg2-binary` in `requirements.txt` and set `DATABASE_URL` to your PostgreSQL URL. Deploy to any host that supports Python/FastAPI (Railway, Fly.io, Render, etc.).
+Uncomment `psycopg2-binary` in `requirements.txt` and set `DATABASE_URL` to your PostgreSQL URL. Deploy to any host that supports Python/FastAPI.

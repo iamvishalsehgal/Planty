@@ -1,5 +1,5 @@
 // Planty service worker — stale-while-revalidate
-const CACHE = "planty-v3";
+const CACHE = "planty-v3.0.1";
 
 self.addEventListener("install", (e) => {
   self.skipWaiting();
