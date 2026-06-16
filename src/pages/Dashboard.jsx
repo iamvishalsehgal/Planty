@@ -51,18 +51,18 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-full animate-page-in">
       {/* Header */}
-      <div className="px-4 pt-6 pb-4">
-        <h1 className="text-display-xl text-text-primary tracking-tight">My Plants</h1>
-        <p className="text-body-md text-text-tertiary mt-1.5 flex items-center gap-3">
-          <span className="inline-flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-sage-500" />
-            {healthyPlants.length} healthy
+      <div className="px-4 pt-6 pb-3">
+        <h1 className="text-display-lg text-text-primary tracking-tight">Plants</h1>
+        <div className="flex items-center gap-3 mt-1">
+          <span className="inline-flex items-center gap-1.5 text-label-sm text-text-tertiary">
+            <span className="w-1.5 h-1.5 rounded-full bg-sage-500" />
+            {healthyPlants.length}
           </span>
-          <span className="inline-flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-clay-500" />
-            {thirstyPlants.length} need water
+          <span className="inline-flex items-center gap-1.5 text-label-sm text-text-tertiary">
+            <span className="w-1.5 h-1.5 rounded-full bg-clay-500" />
+            {thirstyPlants.length}
           </span>
-        </p>
+        </div>
       </div>
 
       {/* Weather */}
