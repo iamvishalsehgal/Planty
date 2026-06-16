@@ -33,7 +33,9 @@ export function daysUntil(date) {
 }
 
 export function formatDate(date) {
+  if (date == null) return "—";
   const d = typeof date === "string" ? new Date(date) : date;
+  if (isNaN(d.getTime())) return "—";
   return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -42,7 +44,9 @@ export function formatDate(date) {
 }
 
 export function formatTime(date) {
+  if (date == null) return "";
   const d = typeof date === "string" ? new Date(date) : date;
+  if (isNaN(d.getTime())) return "";
   return d.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",

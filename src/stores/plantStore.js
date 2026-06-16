@@ -69,6 +69,7 @@ export const usePlantStore = create((set, get) => ({
       id: `local-${Date.now()}-${nextId++}`,
       ...data,
       wateringIntervalDays: data.wateringIntervalDays,
+      lastWatered: now,
       nextWatering: computeNextWatering(adjustedInterval, now),
       adjustedInterval,
       healthStatus: "healthy",
