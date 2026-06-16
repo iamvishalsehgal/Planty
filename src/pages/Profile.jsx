@@ -19,17 +19,24 @@ export default function Profile() {
   };
 
   const handleExport = () => {
-    const data = {
-      plants: localStorage.getItem("planty-plants"),
-      settings: localStorage.getItem("planty-settings"),
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "planty-backup.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    try {
+      const plantsRaw = localStorage.getItem("planty-plants");
+      const settingsRaw = localStorage.getItem("planty-settings");
+      const data = {
+        plants: plantsRaw ? JSON.parse(plantsRaw) : [],
+        settings: settingsRaw ? JSON.parse(settingsRaw) : {},
+        exportedAt: new Date().toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "planty-backup.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("Export failed: " + e.message);
+    }
   };
 
   const handleImport = (e) => {
@@ -38,13 +45,24 @@ export default function Profile() {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const data = JSON.parse(reader.result);
-        if (data.plants) localStorage.setItem("planty-plants", data.plants);
-        if (data.settings) localStorage.setItem("planty-settings", data.settings);
+        const raw = reader.result;
+        if (!raw || typeof raw !== "string") throw new Error("Empty file");
+        const data = JSON.parse(raw);
+        if (data.plants) {
+          const plantsStr = typeof data.plants === "string" ? data.plants : JSON.stringify(data.plants);
+          localStorage.setItem("planty-plants", plantsStr);
+        }
+        if (data.settings) {
+          const settingsStr = typeof data.settings === "string" ? data.settings : JSON.stringify(data.settings);
+          localStorage.setItem("planty-settings", settingsStr);
+        }
         window.location.reload();
-      } catch {
-        alert("Invalid backup file.");
+      } catch (e) {
+        alert("Invalid backup file: " + e.message);
       }
+    };
+    reader.onerror = () => {
+      alert("Could not read file. Please try again.");
     };
     reader.readAsText(file);
   };
@@ -148,7 +166,7 @@ export default function Profile() {
               accept=".json"
               ref={importRef}
               onChange={handleImport}
-              className="hidden"
+              className="absolute w-0 h-0 opacity-0 pointer-events-none"
             />
             <Button
               label="Import backup"

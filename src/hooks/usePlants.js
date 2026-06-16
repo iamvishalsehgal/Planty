@@ -1,37 +1,41 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { usePlantStore } from "@/stores/plantStore";
 
 export function usePlants() {
-  const store = usePlantStore();
-
-  useEffect(() => {
-    store.loadFromDisk();
-  }, []);
+  const plants = usePlantStore((s) => s.plants);
+  const isLoading = usePlantStore((s) => s.isLoading);
 
   const addPlant = useCallback(
-    (data) => store.addPlant(data),
+    (data) => usePlantStore.getState().addPlant(data),
     []
   );
 
   const sortedPlants = useMemo(
-    () => [...store.plants].sort(
+    () => [...plants].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     ),
-    [store.plants]
+    [plants]
   );
 
-  const thirstyPlants = store.getPlantsNeedingWater();
-  const healthyPlants = store.plants.filter((p) => p.healthStatus === "healthy");
+  const thirstyPlants = useMemo(
+    () => plants.filter((p) => p.healthStatus === "dry" || p.healthStatus === "overdue"),
+    [plants]
+  );
+
+  const healthyPlants = useMemo(
+    () => plants.filter((p) => p.healthStatus === "healthy"),
+    [plants]
+  );
 
   return {
     plants: sortedPlants,
     thirstyPlants,
     healthyPlants,
-    isLoading: store.isLoading,
+    isLoading,
     addPlant,
-    updatePlant: store.updatePlant,
-    removePlant: store.removePlant,
-    waterPlant: store.waterPlant,
-    getPlant: store.getPlant,
+    updatePlant: usePlantStore.getState().updatePlant,
+    removePlant: usePlantStore.getState().removePlant,
+    waterPlant: usePlantStore.getState().waterPlant,
+    getPlant: usePlantStore.getState().getPlant,
   };
 }

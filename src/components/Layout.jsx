@@ -20,10 +20,6 @@ export default function Layout() {
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const tabRefs = useRef([]);
 
-  // Hydrate settings from localStorage on mount
-  const loadSettings = useSettingsStore((s) => s.loadSettings);
-  useEffect(() => { loadSettings(); }, [loadSettings]);
-
   // Dark mode
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);

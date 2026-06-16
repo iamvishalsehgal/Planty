@@ -2,30 +2,28 @@ import { create } from "zustand";
 import { getWeather } from "@/lib/weather";
 import { adjustWateringInterval, daysUntil } from "@/lib/date";
 
-// ── Core Plant type ──
-
 const STORAGE_KEY = "planty-plants";
 
 const persistPlants = (plants) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plants));
+    return true;
   } catch (e) {
     console.error("Failed to save plants:", e.message);
-    // Storage full — data lives in memory until next action
+    return false;
   }
 };
 
 const loadPlants = () => {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return [];
   try {
-    return JSON.parse(raw);
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 };
-
-// ── Store ──
 
 function computeNextWatering(intervalDays, fromDate) {
   const base = fromDate ? new Date(fromDate) : new Date();
@@ -48,12 +46,19 @@ export const usePlantStore = create((set, get) => ({
   isLoading: true,
 
   loadFromDisk: () => {
-    const plants = loadPlants();
-    const updated = plants.map((p) => ({
-      ...p,
-      healthStatus: computeHealthStatus(p.nextWatering),
-    }));
-    set({ plants: updated, isLoading: false });
+    try {
+      const plants = loadPlants();
+      const updated = plants.map((p) => ({
+        ...p,
+        healthStatus: computeHealthStatus(p.nextWatering),
+      }));
+      set({ plants: updated });
+    } catch (e) {
+      console.error("Failed to load plants:", e);
+      set({ plants: [] });
+    } finally {
+      set({ isLoading: false });
+    }
   },
 
   addPlant: (data) => {
@@ -63,7 +68,7 @@ export const usePlantStore = create((set, get) => ({
     const plant = {
       id: `local-${Date.now()}-${nextId++}`,
       ...data,
-      wateringIntervalDays: data.wateringIntervalDays, // keep original
+      wateringIntervalDays: data.wateringIntervalDays,
       nextWatering: computeNextWatering(adjustedInterval, now),
       adjustedInterval,
       healthStatus: "healthy",
@@ -71,8 +76,12 @@ export const usePlantStore = create((set, get) => ({
       synced: false,
     };
     const plants = [...get().plants, plant];
-    persistPlants(plants);
+    const saved = persistPlants(plants);
     set({ plants });
+    if (!saved && data.photoUri) {
+      // Photo likely caused quota error — plant is in memory but not on disk
+      console.warn("Plant saved in memory only — storage may be full (photo too large?)");
+    }
     return plant;
   },
 
@@ -101,7 +110,7 @@ export const usePlantStore = create((set, get) => ({
         ...p,
         lastWatered: now,
         nextWatering,
-        adjustedInterval, // store for display
+        adjustedInterval,
         healthStatus: "healthy",
         synced: false,
       };

@@ -91,7 +91,7 @@ export default function AddPlant() {
             accept="image/*"
             ref={fileRef}
             onChange={handlePhotoPick}
-            className="hidden"
+            className="absolute w-0 h-0 opacity-0 pointer-events-none"
           />
           {photoUri ? (
             <div className="flex flex-col items-center gap-3">

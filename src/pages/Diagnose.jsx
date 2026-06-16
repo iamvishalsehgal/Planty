@@ -60,7 +60,7 @@ export default function Diagnose() {
             accept="image/*"
             ref={fileRef}
             onChange={handlePickImage}
-            className="hidden"
+            className="absolute w-0 h-0 opacity-0 pointer-events-none"
           />
           <Button
             label="Choose photo"
