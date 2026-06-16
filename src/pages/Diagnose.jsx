@@ -28,6 +28,7 @@ export default function Diagnose() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => setImageUri(reader.result);
+    reader.onerror = () => alert("Could not read this image file.");
     reader.readAsDataURL(file);
   };
 

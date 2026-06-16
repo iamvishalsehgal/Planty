@@ -41,6 +41,7 @@ export default function AddPlant() {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => setPhotoUri(reader.result);
+      reader.onerror = () => setError("Could not read this photo. Try a different image.");
       reader.readAsDataURL(file);
     }
   };

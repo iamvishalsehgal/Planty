@@ -19,11 +19,10 @@ export function useWatering(plantId) {
   const nextWatering = plant?.nextWatering ?? null;
   const lastWatered = plant?.lastWatered ?? null;
 
-  // Cooldown status — single source of truth from store constant
-  const inCooldown = useMemo(() => {
-    if (!plant?.lastWatered) return false;
-    return Date.now() - new Date(plant.lastWatered).getTime() < WATERING_COOLDOWN_MS;
-  }, [plant?.lastWatered]);
+  // Cooldown status — cheap computation, recalculates each render
+  const inCooldown = plant?.lastWatered
+    ? Date.now() - new Date(plant.lastWatered).getTime() < WATERING_COOLDOWN_MS
+    : false;
 
   return {
     plant,

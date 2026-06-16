@@ -49,10 +49,13 @@ export const usePlantStore = create((set, get) => ({
   loadFromDisk: () => {
     try {
       const plants = loadPlants();
+      const now = new Date().toISOString();
       const updated = plants.map((p) => ({
         ...p,
-        lastWatered: p.lastWatered || p.createdAt, // repair old plants missing this field
-        healthStatus: computeHealthStatus(p.nextWatering),
+        lastWatered: p.lastWatered || p.createdAt || now,
+        nextWatering: p.nextWatering || p.createdAt || now,
+        createdAt: p.createdAt || p.lastWatered || now,
+        healthStatus: computeHealthStatus(p.nextWatering || p.createdAt || now),
       }));
       set({ plants: updated });
     } catch (e) {
@@ -92,13 +95,13 @@ export const usePlantStore = create((set, get) => ({
     const plants = get().plants.map((p) =>
       p.id === id ? { ...p, ...data, synced: false } : p
     );
-    persistPlants(plants);
+    if (!persistPlants(plants)) console.warn("Failed to persist plant update");
     set({ plants });
   },
 
   removePlant: (id) => {
     const plants = get().plants.filter((p) => p.id !== id);
-    persistPlants(plants);
+    if (!persistPlants(plants)) console.warn("Failed to persist plant removal");
     set({ plants });
   },
 

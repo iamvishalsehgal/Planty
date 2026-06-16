@@ -104,11 +104,11 @@ html.dark .bg-cream-200\/60 { background-color: rgba(45, 65, 39, 0.6); }
 html.dark .bg-sage-200 { background-color: #354E2D; }
 html.dark .bg-sage-500 { background-color: #4F7A42; }
 html.dark .bg-sage-500\/20 { background-color: rgba(132, 176, 117, 0.25); }
-html.dark .bg-sage-600 { background-color: #669955; }
+/* bg-sage-600 overridden below in button contrast fix */
 html.dark .bg-sage-700 { background-color: #84B075; }
 html.dark .bg-sage-100\/80 { background-color: rgba(45, 65, 39, 0.8); }
 html.dark .bg-soil-200 { background-color: #5A3926; }
-html.dark .bg-soil-500 { background-color: #B08041; }
+/* bg-soil-500 overridden below in button contrast fix */
 html.dark .bg-soil-50\/80 { background-color: rgba(51, 30, 19, 0.8); }
 html.dark .bg-clay-500 { background-color: #C46240; }
 html.dark .bg-clay-600 { background-color: #A44F35; }
@@ -135,6 +135,14 @@ html.dark .via-cream-100 { --tw-gradient-via: #3F6135 var(--tw-gradient-via-posi
 html.dark .to-cream-200 { --tw-gradient-to: #354E2D var(--tw-gradient-to-position); }
 html.dark .from-sage-200 { --tw-gradient-from: #354E2D var(--tw-gradient-from-position); }
 html.dark .to-sage-400 { --tw-gradient-to: #4F7A42 var(--tw-gradient-to-position); }
+html.dark .from-sage-400 { --tw-gradient-from: #4F7A42 var(--tw-gradient-from-position); }
+html.dark .to-sage-600 { --tw-gradient-to: #3F6135 var(--tw-gradient-to-position); }
+html.dark .from-soil-400 { --tw-gradient-from: #976835 var(--tw-gradient-from-position); }
+html.dark .to-soil-600 { --tw-gradient-to: #69432A var(--tw-gradient-to-position); }
+html.dark .from-clay-400 { --tw-gradient-from: #A44F35 var(--tw-gradient-from-position); }
+html.dark .to-clay-500 { --tw-gradient-to: #894430 var(--tw-gradient-to-position); }
+html.dark .from-clay-500 { --tw-gradient-from: #894430 var(--tw-gradient-from-position); }
+html.dark .to-clay-600 { --tw-gradient-to: #723B2C var(--tw-gradient-to-position); }
 
 /* Missing dark accent + focus + placeholder */
 html.dark .accent-sage-600 { accent-color: #84B075; }
@@ -306,5 +314,6 @@ html.dark input:focus-visible, html.dark button:focus-visible, html.dark select:
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto;
   }
 }
