@@ -110,7 +110,7 @@ export default function Diagnose() {
           {TIPS.map((tip) => (
             <div
               key={tip.problem}
-              className={`p-3 rounded-lg border-l-4 ${SEVERITY_COLORS[tip.severity]} border border-cream-200/30 flex items-center gap-3`}
+              className={`p-4 rounded-lg border-l-4 ${SEVERITY_COLORS[tip.severity]} border border-cream-200/30 flex items-center gap-3`}
             >
               <span className="text-xl flex-shrink-0">{tip.emoji}</span>
               <div>

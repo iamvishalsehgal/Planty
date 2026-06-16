@@ -19,7 +19,7 @@ export function WeatherStrip() {
   if (isLoading || !weather) {
     return (
       <div className="p-4 bg-cream-50/50 rounded-2xl animate-pulse">
-        <div className="h-6 bg-cream-200 rounded w-32" />
+        <div className="h-8 bg-cream-200 rounded w-32" />
       </div>
     );
   }

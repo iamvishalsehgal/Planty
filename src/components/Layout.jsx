@@ -17,7 +17,7 @@ export default function Layout() {
   const darkMode = useSettingsStore((s) => s.darkMode);
   const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled);
   const reminderHour = useSettingsStore((s) => s.wateringReminderHour);
-  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: "0px", width: "0px" });
   const tabRefs = useRef([]);
 
   // Dark mode

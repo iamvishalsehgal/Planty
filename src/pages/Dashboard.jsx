@@ -51,7 +51,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col h-full animate-page-in">
       {/* Header */}
-      <div className="px-4 pt-6 pb-3">
+      <div className="px-4 pt-6 pb-4">
         <h1 className="text-display-lg text-text-primary tracking-tight">Plants</h1>
         <div className="flex items-center gap-3 mt-1">
           <span className="inline-flex items-center gap-1.5 text-label-sm text-text-tertiary">
@@ -104,7 +104,7 @@ export default function Dashboard() {
       )}
 
       {/* Plant grid */}
-      <div className="flex-1 overflow-auto px-4 pb-24">
+      <div className="flex-1 overflow-auto px-4 pb-6">
         <div className="space-y-3">
           {plants.map((plant) => (
             <PlantCard key={plant.id} plant={plant} />
