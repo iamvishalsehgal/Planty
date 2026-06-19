@@ -11,11 +11,12 @@ import { formatDate } from "@/lib/date";
 export default function PlantDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { removePlant, getPlant, isLoading } = usePlants();
+  const { removePlant, getPlant, isLoading, updatePlant } = usePlants();
   const { plant, daysLeft, nextWatering, lastWatered, waterPlant, cooldown } = useWatering(id);
   const fullPlant = getPlant(id);
   const [justWatered, setJustWatered] = useState(false);
   const waterTimer = useRef(null);
+  const fileInputRef = useRef(null);
   useEffect(() => () => clearTimeout(waterTimer.current), []);
 
   if (isLoading) {
@@ -60,6 +61,21 @@ export default function PlantDetail() {
   const intervalLabel = plant.adjustedInterval && plant.adjustedInterval !== totalDays
     ? `${plant.adjustedInterval}d (base: ${totalDays}d)`
     : `${totalDays} days`;
+  const healthPercent = totalDays > 0 ? Math.round((progress / totalDays) * 100) : 0;
+
+  const handleFertilize = () => {
+    updatePlant(id, { lastFertilized: new Date().toISOString() });
+  };
+  const handleRepot = () => {
+    updatePlant(id, { lastRepotted: new Date().toISOString() });
+  };
+  const handleAddPhoto = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => updatePlant(id, { photoUri: reader.result });
+    reader.readAsDataURL(file);
+  };
 
   return (
     <div className="flex flex-col h-full animate-page-in">
@@ -90,13 +106,26 @@ export default function PlantDetail() {
           )}
           {/* Ring — 130px (agent-recommended sweet spot) */}
           <BreathRing progress={progress} size={130} strokeWidth={8} status={plant.healthStatus} totalDays={totalDays} />
-          {/* Status */}
-          <div className="mt-2 flex items-center gap-1.5">
-            <span className={`w-2.5 h-2.5 rounded-full ${
-              plant.healthStatus === "healthy" ? "bg-sage-500" :
-              plant.healthStatus === "warning" ? "bg-soil-500" : "bg-clay-500"
-            }`} />
-            <span className="text-sm font-semibold text-text-secondary capitalize">{plant.healthStatus}</span>
+          {/* Health Score — prominent labeled indicator */}
+          <div className="mt-3 flex flex-col items-center">
+            <span className="text-[10px] font-semibold text-text-tertiary uppercase tracking-widest mb-1.5">Health Score</span>
+            <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full border ${
+              plant.healthStatus === "healthy"
+                ? "bg-sage-50/60 border-sage-200/50"
+                : plant.healthStatus === "warning"
+                  ? "bg-soil-50/60 border-soil-200/50"
+                  : "bg-clay-50/60 border-clay-200/50"
+            }`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${
+                plant.healthStatus === "healthy" ? "bg-sage-500" :
+                plant.healthStatus === "warning" ? "bg-soil-500" : "bg-clay-500"
+              }`} />
+              <span className={`text-sm font-bold capitalize ${
+                plant.healthStatus === "healthy" ? "text-sage-700" :
+                plant.healthStatus === "warning" ? "text-soil-700" : "text-clay-700"
+              }`}>{plant.healthStatus}</span>
+              <span className="text-xs font-medium text-text-tertiary">· {healthPercent}%</span>
+            </div>
           </div>
           {/* Weather note */}
           {plant.adjustedInterval && plant.adjustedInterval !== totalDays && (
@@ -125,6 +154,100 @@ export default function PlantDetail() {
           </div>
         </div>
 
+        {/* Care needs — water, light, humidity */}
+        <div className="grid grid-cols-3 gap-3">
+          <CareNeedCard
+            label="Water"
+            value={`Every ${totalDays}d`}
+            icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+              </svg>
+            }
+            color="sky"
+          />
+          <CareNeedCard
+            label="Light"
+            value={plant.lightNeeds || "Bright indirect"}
+            icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            }
+            color="soil"
+          />
+          <CareNeedCard
+            label="Humidity"
+            value={plant.humidity || "Moderate"}
+            icon={
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 8c2-1 4-1 6 0 2 1 4 1 6 0 2-1 4-1 5 0" />
+                <path d="M4 13c2-1 4-1 6 0 2 1 4 1 6 0 2-1 4-1 5 0" />
+                <path d="M4 18c2-1 4-1 6 0 2 1 4 1 6 0 2-1 4-1 5 0" />
+              </svg>
+            }
+            color="sage"
+          />
+        </div>
+
+        {/* Quick actions */}
+        <div className="grid grid-cols-4 gap-3">
+          <QuickActionButton
+            label={justWatered ? "Done!" : "Watered"}
+            onClick={!cooldown && !justWatered ? handleWater : undefined}
+            disabled={cooldown || justWatered}
+            active={justWatered}
+            icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill={justWatered ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+              </svg>
+            }
+          />
+          <QuickActionButton
+            label="Fertilized"
+            onClick={handleFertilize}
+            icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 13a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-5z" />
+                <line x1="12" y1="9" x2="12" y2="3" />
+                <line x1="8" y1="6" x2="16" y2="6" />
+              </svg>
+            }
+          />
+          <QuickActionButton
+            label="Repotted"
+            onClick={handleRepot}
+            icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 10h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V10z" />
+                <path d="M5 10V6a2 2 0 0 1 2-2h4l2 2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+            }
+          />
+          <QuickActionButton
+            label="Add photo"
+            onClick={() => fileInputRef.current?.click()}
+            icon={
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="5" width="20" height="16" rx="2" />
+                <circle cx="8.5" cy="10.5" r="1.5" />
+                <path d="M22 15l-5-4-4 3-3-3-8 6" />
+              </svg>
+            }
+          />
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleAddPhoto}
+            className="hidden"
+          />
+        </div>
+
         {/* Stats — prioritized hierarchy */}
         <div className="grid grid-cols-2 gap-3">
           <StatBox label="Last watered" value={lastWatered ? formatDate(lastWatered) : "—"} primary />
@@ -149,5 +272,48 @@ function StatBox({ label, value, primary }) {
       <div className={`${primary ? "text-xs" : "text-[11px]"} text-text-tertiary mb-1`}>{label}</div>
       <div className={`${primary ? "text-base font-bold" : "text-sm font-semibold"} text-text-primary leading-snug`}>{value}</div>
     </div>
+  );
+}
+
+function CareNeedCard({ label, value, icon, color }) {
+  const colors = {
+    sky: { bg: "bg-sky-50/60", border: "border-sky-200/40", text: "text-sky-700", icon: "text-sky-500" },
+    soil: { bg: "bg-soil-50/60", border: "border-soil-200/40", text: "text-soil-700", icon: "text-soil-500" },
+    sage: { bg: "bg-sage-50/60", border: "border-sage-200/40", text: "text-sage-700", icon: "text-sage-500" },
+  };
+  const c = colors[color] || colors.sage;
+
+  return (
+    <div className={`flex flex-col items-center gap-2 p-4 ${c.bg} backdrop-blur-sm border ${c.border} rounded-2xl`}>
+      <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${c.icon}`}>
+        {icon}
+      </div>
+      <div>
+        <div className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wide text-center">{label}</div>
+        <div className={`text-[13px] font-bold ${c.text} text-center leading-tight mt-0.5`}>{value}</div>
+      </div>
+    </div>
+  );
+}
+
+function QuickActionButton({ label, onClick, disabled, active, icon }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl transition-all duration-200 pressable ${
+        active
+          ? "bg-sage-100/80 border border-sage-300/50 shadow-card-sm"
+          : disabled
+            ? "bg-cream-50/30 border border-cream-200/20 opacity-40 cursor-not-allowed"
+            : "bg-cream-50/40 backdrop-blur-sm border border-cream-200/30 hover:bg-sage-50/60 hover:border-sage-200/50 hover:shadow-card-sm"
+      }`}
+    >
+      <span className={active ? "text-sage-600" : "text-text-secondary"}>{icon}</span>
+      <span className={`text-[11px] font-semibold leading-tight ${
+        active ? "text-sage-700" : "text-text-tertiary"
+      }`}>{label}</span>
+    </button>
   );
 }
