@@ -99,16 +99,6 @@ export default function Profile() {
           <h3 className="text-title-sm text-gray-800 mb-3">Settings</h3>
           <div className="divide-y divide-gray-200">
             <label className="flex items-center justify-between py-3 cursor-pointer">
-              <span className="text-[15px] text-gray-600">Dark mode</span>
-              <input
-                type="checkbox"
-                checked={settings.darkMode}
-                onChange={settings.toggleDarkMode}
-                className="toggle-switch"
-              />
-            </label>
-
-            <label className="flex items-center justify-between py-3 cursor-pointer">
               <span className="text-[15px] text-gray-600">Notifications</span>
               <input
                 type="checkbox"

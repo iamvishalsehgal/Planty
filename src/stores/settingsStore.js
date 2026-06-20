@@ -23,17 +23,10 @@ const persistSettings = (partial) => {
 };
 
 export const useSettingsStore = create((set, get) => ({
-  darkMode: false,
   notificationsEnabled: true,
   wateringReminderHour: 8,
   useCelsius: true,
   hasOnboarded: false,
-
-  toggleDarkMode: () => {
-    const next = !get().darkMode;
-    set({ darkMode: next });
-    persistSettings({ darkMode: next });
-  },
 
   toggleNotifications: () => {
     const next = !get().notificationsEnabled;

@@ -40,13 +40,10 @@ const TABS = [
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const darkMode = useSettingsStore((s) => s.darkMode);
   const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled);
   const reminderHour = useSettingsStore((s) => s.wateringReminderHour);
   const useCelsius = useSettingsStore((s) => s.useCelsius);
   const { weather } = useWeather();
-
-  useEffect(() => { document.documentElement.classList.toggle("dark", darkMode); }, [darkMode]);
 
   useEffect(() => {
     let cancelled = false;
