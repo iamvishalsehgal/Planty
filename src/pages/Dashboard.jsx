@@ -1,13 +1,13 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlants } from "@/hooks/usePlants";
-import { WeatherStrip } from "@/components/WeatherStrip";
+import { useWeather } from "@/hooks/useWeather";
 import { PlantCard } from "@/components/PlantCard";
-import { GlassCard } from "@/components/GlassCard";
 import { DashboardSkeleton } from "@/components/Skeleton";
 import { EmptyState } from "@/components/EmptyState";
 import { Button } from "@/components/Button";
-import { cn } from "@/lib/cn";
+import WeatherIcon from "@/components/WeatherIcon";
+import { useSettingsStore } from "@/stores/settingsStore";
 
 /* -------------------------------------------------------------------------- */
 /*  Time-aware greeting                                                        */
@@ -26,6 +26,8 @@ function getGreetingSubtitle() {
   if (hour < 17) return "Midday check-in for your garden";
   return "Let's get your plants settled for the night";
 }
+
+function toF(c) { return Math.round(c * 9 / 5 + 32); }
 
 /* -------------------------------------------------------------------------- */
 /*  Quick-action icon SVGs — simple, consistent, 24×24 viewBox                 */
@@ -57,50 +59,20 @@ const DIAGNOSE_ICON = (
 );
 
 /* -------------------------------------------------------------------------- */
-/*  Health bar segment — re-used inside the summary card                       */
-/* -------------------------------------------------------------------------- */
-
-function HealthBarSegment({ count, total, color, label }) {
-  const pct = total === 0 ? 0 : Math.round((count / total) * 100);
-  return (
-    <div className="flex items-center gap-2.5">
-      <span className="text-[13px] font-medium text-text-tertiary w-16 flex-shrink-0">{label}</span>
-      <div className="flex-1 h-2.5 bg-soil-100/60 rounded-full overflow-hidden">
-        <div
-          className={cn("h-full rounded-full transition-all duration-700 ease-out", color)}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <span className="text-[13px] font-semibold text-text-primary tabular-nums w-8 text-right">{count}</span>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
 /*  Main Dashboard                                                             */
 /* -------------------------------------------------------------------------- */
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { plants, thirstyPlants, healthyPlants, isLoading, waterPlant } = usePlants();
+  const { plants, thirstyPlants, isLoading, waterPlant } = usePlants();
+  const { weather } = useWeather();
+  const useCelsius = useSettingsStore((s) => s.useCelsius);
   const [refreshing, setRefreshing] = useState(false);
   const [wateredCount, setWateredCount] = useState(0);
   const [skippedCount, setSkippedCount] = useState(0);
   const waterTimer = useRef(null);
 
-  /* Partition plants into three buckets */
-  const { warningPlants, dryPlants } = useMemo(() => {
-    const warning = [];
-    const dry = [];
-    for (const p of plants) {
-      if (p.healthStatus === "warning") warning.push(p);
-      else if (p.healthStatus === "dry" || p.healthStatus === "overdue") dry.push(p);
-    }
-    return { warningPlants: warning, dryPlants: dry };
-  }, [plants]);
-
-  const allHealthy = plants.length > 0 && healthyPlants.length === plants.length;
-  const needsWaterToday = dryPlants.length;
+  const needsWaterToday = thirstyPlants.length;
 
   useEffect(() => () => clearTimeout(waterTimer.current), []);
 
@@ -148,60 +120,34 @@ export default function Dashboard() {
     <div className="flex flex-col h-full animate-page-in">
 
       {/* ================================================================== */}
-      {/*  GREETING HEADER                                                    */}
+      {/*  GREETING HEADER + COMPACT WEATHER                                   */}
       {/* ================================================================== */}
-      <div className="px-5 pt-8 pb-2">
-        <h1 className="text-display-lg text-text-primary tracking-tight leading-none">
-          {getGreeting()}
-        </h1>
-        <p className="text-[15px] text-text-tertiary mt-1.5 leading-relaxed">
-          {getGreetingSubtitle()}
-          {needsWaterToday > 0 && (
-            <span className="text-clay-500 font-medium"> — {needsWaterToday} {needsWaterToday === 1 ? "plant needs" : "plants need"} water today</span>
-          )}
-        </p>
-      </div>
-
-      {/* ================================================================== */}
-      {/*  PLANT HEALTH SUMMARY CARD                                          */}
-      {/* ================================================================== */}
-      <div className="px-5 mb-4">
-        <GlassCard variant="sm">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[13px] font-semibold text-text-secondary uppercase tracking-wider">
-              Plant Health
-            </h3>
-            <span className="text-[13px] font-medium text-text-tertiary tabular-nums">
-              {plants.length} total
+      <div className="px-5 pt-8 pb-2 flex items-start justify-between">
+        <div>
+          <h1 className="text-display-lg text-text-primary tracking-tight leading-none">
+            {getGreeting()}
+          </h1>
+          <p className="text-[15px] text-text-tertiary mt-1.5 leading-relaxed">
+            {getGreetingSubtitle()}
+            {needsWaterToday > 0 && (
+              <span className="text-clay-500 font-medium"> — {needsWaterToday} {needsWaterToday === 1 ? "plant needs" : "plants need"} water today</span>
+            )}
+          </p>
+        </div>
+        {weather && (
+          <div className="flex items-center gap-1.5 flex-shrink-0 pt-0.5 text-text-primary">
+            <WeatherIcon condition={weather.condition} size={22} />
+            <span className="text-[18px] font-bold tracking-tight tabular-nums">
+              {useCelsius ? weather.temp_c : toF(weather.temp_c)}&deg;
             </span>
           </div>
-          <div className="space-y-2">
-            <HealthBarSegment
-              count={healthyPlants.length}
-              total={plants.length}
-              color="bg-sage-500"
-              label="Healthy"
-            />
-            <HealthBarSegment
-              count={warningPlants.length}
-              total={plants.length}
-              color="bg-soil-500"
-              label="Water soon"
-            />
-            <HealthBarSegment
-              count={dryPlants.length}
-              total={plants.length}
-              color="bg-clay-500"
-              label="Needs water"
-            />
-          </div>
-        </GlassCard>
+        )}
       </div>
 
       {/* ================================================================== */}
       {/*  QUICK ACTIONS ROW                                                  */}
       {/* ================================================================== */}
-      <div className="px-5 mb-4">
+      <div className="px-5 mb-4 mt-3">
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={() => navigate("/diagnose")}
@@ -228,34 +174,6 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-
-      {/* ================================================================== */}
-      {/*  WEATHER                                                            */}
-      {/* ================================================================== */}
-      <div className="px-5 mb-4">
-        <WeatherStrip />
-      </div>
-
-      {/* ================================================================== */}
-      {/*  ACHIEVEMENT BADGE — all plants healthy                             */}
-      {/* ================================================================== */}
-      {allHealthy && (
-        <div className="px-5 mb-4">
-          <div className="p-4 bg-gradient-to-r from-sage-100/90 to-sage-200/70 border border-sage-300/50 rounded-2xl flex items-center gap-3 shadow-card-sm animate-page-in">
-            <span className="text-2xl" role="img" aria-label="Sparkles">
-              🌟
-            </span>
-            <div>
-              <p className="text-[14px] font-bold text-sage-800 tracking-tight leading-tight">
-                Perfect garden!
-              </p>
-              <p className="text-[12px] text-sage-700/70 mt-0.5">
-                All {plants.length} plants are thriving — great care pays off
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ================================================================== */}
       {/*  THIRSTY ALERT                                                      */}
