@@ -7,7 +7,10 @@ export function useWeather() {
   const [error, setError] = useState(null);
   const mounted = useRef(true);
 
-  useEffect(() => () => { mounted.current = false; }, []);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
 
   const refresh = useCallback(async () => {
     try {

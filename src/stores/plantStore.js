@@ -3,6 +3,7 @@ import { getWeather } from "@/lib/weather";
 import { adjustWateringInterval, daysUntil } from "@/lib/date";
 
 export const PLANTS_STORAGE_KEY = "planty-plants";
+export const PLANTS_BACKUP_KEY = "planty-plants-backup";
 export const WATERING_COOLDOWN_MS = 48 * 60 * 60 * 1000; // 48 hours
 
 const persistPlants = (plants) => {
@@ -16,13 +17,18 @@ const persistPlants = (plants) => {
 };
 
 const loadPlants = () => {
+  const raw = localStorage.getItem(PLANTS_STORAGE_KEY);
+  if (!raw) return [];
+  if (!raw.startsWith("[")) {
+    try { localStorage.setItem(PLANTS_BACKUP_KEY, raw); } catch {}
+    throw new Error("Corrupted plant data — backup saved. Check planty-plants-backup in localStorage.");
+  }
   try {
-    const raw = localStorage.getItem(PLANTS_STORAGE_KEY);
-    if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
+  } catch (e) {
+    try { localStorage.setItem(PLANTS_BACKUP_KEY, raw); } catch {}
+    throw new Error("Failed to parse plant data — backup saved. Check planty-plants-backup in localStorage.");
   }
 };
 
@@ -45,6 +51,7 @@ let nextId = 0;
 export const usePlantStore = create((set, get) => ({
   plants: [],
   isLoading: true,
+  loadError: null,
 
   loadFromDisk: () => {
     try {
@@ -55,12 +62,14 @@ export const usePlantStore = create((set, get) => ({
         lastWatered: p.lastWatered || p.createdAt || now,
         nextWatering: p.nextWatering || p.createdAt || now,
         createdAt: p.createdAt || p.lastWatered || now,
-        healthStatus: computeHealthStatus(p.nextWatering || p.createdAt || now),
+        get healthStatus() { return computeHealthStatus(this.nextWatering); },
       }));
-      set({ plants: updated });
+      set({ plants: updated, loadError: null });
     } catch (e) {
       console.error("Failed to load plants:", e);
-      set({ plants: [] });
+      set({ loadError: e.message || "Failed to load plant data" });
+      // Do NOT overwrite plants — corrupted blob preserved,
+      // backup saved under planty-plants-backup.
     } finally {
       set({ isLoading: false });
     }
@@ -77,7 +86,7 @@ export const usePlantStore = create((set, get) => ({
       lastWatered: now,
       nextWatering: computeNextWatering(adjustedInterval, now),
       adjustedInterval,
-      healthStatus: "healthy",
+      get healthStatus() { return computeHealthStatus(this.nextWatering); },
       createdAt: now,
       synced: false,
     };
@@ -93,7 +102,7 @@ export const usePlantStore = create((set, get) => ({
 
   updatePlant: (id, data) => {
     const plants = get().plants.map((p) =>
-      p.id === id ? { ...p, ...data, synced: false } : p
+      p.id === id ? { ...p, ...data, synced: false, get healthStatus() { return computeHealthStatus(this.nextWatering); } } : p
     );
     if (!persistPlants(plants)) console.warn("Failed to persist plant update");
     set({ plants });
@@ -129,7 +138,7 @@ export const usePlantStore = create((set, get) => ({
         lastWatered: nowISO,
         nextWatering,
         adjustedInterval,
-        healthStatus: "healthy",
+        get healthStatus() { return computeHealthStatus(this.nextWatering); },
         synced: false,
       }
     );

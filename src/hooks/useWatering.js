@@ -3,7 +3,10 @@ import { usePlantStore, WATERING_COOLDOWN_MS } from "@/stores/plantStore";
 import { daysUntil } from "@/lib/date";
 
 export function useWatering(plantId) {
-  const plant = usePlantStore((s) => s.plants.find((p) => p.id === plantId));
+  const plant = usePlantStore((s) => {
+    if (!plantId) return undefined;
+    return s.plants.find((p) => p.id === plantId);
+  });
   const [justWatered, setJustWatered] = useState(false);
 
   const handleWater = useCallback(() => {

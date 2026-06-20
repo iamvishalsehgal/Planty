@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 const PALETTE = {
   healthy:  { stroke: "#4F7A42", strokeEnd: "#84B075", bg: "#E5EDE0" },
   warning:  { stroke: "#B08041", strokeEnd: "#CDB080", bg: "#F0E8D8" },
@@ -13,7 +15,7 @@ export function BreathRing({ progress = 1, size = 120, strokeWidth = 7, status =
     ? Math.min(Math.max(progress / totalDays, 0), 1)
     : Math.min(Math.max(progress, 0), 1);
   const offset = circumference * (1 - ratio);
-  const gradientId = `rg-${status}-${size}`;
+  const gradientId = useId() + `-rg-${status}-${size}`;
   const days = Math.max(Math.round(progress), 0);
   const percentage = Math.round(ratio * 100);
 

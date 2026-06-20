@@ -85,6 +85,7 @@ export default function Dashboard() {
   const { plants, thirstyPlants, healthyPlants, isLoading, waterPlant } = usePlants();
   const [refreshing, setRefreshing] = useState(false);
   const [wateredCount, setWateredCount] = useState(0);
+  const [skippedCount, setSkippedCount] = useState(0);
   const waterTimer = useRef(null);
 
   /* Partition plants into three buckets */
@@ -105,12 +106,19 @@ export default function Dashboard() {
 
   const handleWaterAll = () => {
     setRefreshing(true);
-    const count = thirstyPlants.length;
-    thirstyPlants.forEach((p) => waterPlant(p.id));
-    setWateredCount(count);
+    let ok = 0;
+    let skipped = 0;
+    thirstyPlants.forEach((p) => {
+      const result = waterPlant(p.id);
+      if (result === "ok") ok++;
+      else if (result === "cooldown") skipped++;
+    });
+    setWateredCount(ok);
+    setSkippedCount(skipped);
     waterTimer.current = setTimeout(() => {
       setRefreshing(false);
       setWateredCount(0);
+      setSkippedCount(0);
     }, 1500);
   };
 
@@ -280,7 +288,7 @@ export default function Dashboard() {
           <div className="p-4 bg-sage-50/80 backdrop-blur-sm border border-sage-200/50 rounded-2xl flex items-center gap-3 animate-page-in shadow-card-sm">
             <span className="w-2.5 h-2.5 rounded-full bg-sage-500 flex-shrink-0" />
             <span className="text-[14px] font-semibold text-sage-700">
-              {wateredCount} plant{wateredCount > 1 ? "s" : ""} watered
+              {wateredCount} plant{wateredCount > 1 ? "s" : ""} watered{skippedCount > 0 && ` — ${skippedCount} skipped (cooldown)`}
             </span>
           </div>
         </div>

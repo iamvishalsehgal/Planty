@@ -11,9 +11,8 @@ import { formatDate } from "@/lib/date";
 export default function PlantDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { removePlant, getPlant, isLoading, updatePlant } = usePlants();
+  const { removePlant, updatePlant, isLoading } = usePlants();
   const { plant, daysLeft, nextWatering, lastWatered, waterPlant, cooldown } = useWatering(id);
-  const fullPlant = getPlant(id);
   const [justWatered, setJustWatered] = useState(false);
   const waterTimer = useRef(null);
   const fileInputRef = useRef(null);
@@ -36,7 +35,7 @@ export default function PlantDetail() {
     );
   }
 
-  if (!plant || !fullPlant) {
+  if (!plant) {
     return (
       <EmptyState title="Plant not found" description="This plant may have been removed."
         action={{ label: "Back to plants", onClick: () => navigate("/") }} />
@@ -44,9 +43,11 @@ export default function PlantDetail() {
   }
 
   const handleWater = () => {
-    waterPlant();
-    setJustWatered(true);
-    waterTimer.current = setTimeout(() => setJustWatered(false), 2000);
+    const result = waterPlant();
+    if (result === "ok") {
+      setJustWatered(true);
+      waterTimer.current = setTimeout(() => setJustWatered(false), 2000);
+    }
   };
 
   const handleDelete = () => {
@@ -253,7 +254,7 @@ export default function PlantDetail() {
           <StatBox label="Last watered" value={lastWatered ? formatDate(lastWatered) : "—"} primary />
           <StatBox label="Next watering" value={formatDate(nextWatering)} primary />
           <StatBox label="Water every" value={intervalLabel} />
-          <StatBox label="Added" value={formatDate(fullPlant.createdAt)} />
+          <StatBox label="Added" value={formatDate(plant.createdAt)} />
         </div>
 
         {/* Delete */}
