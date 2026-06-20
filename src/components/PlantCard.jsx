@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { BreathRingSimple } from "@/components/BreathRing";
+import { SpeciesBadge } from "@/components/SpeciesBadge";
 import { daysUntil } from "@/lib/date";
 
 const STATUS_COLORS = {
@@ -47,9 +48,9 @@ export function PlantCard({ plant }) {
         <h3 className="text-[17px] font-semibold text-text-primary truncate leading-tight tracking-tight">
           {plant.name}
         </h3>
-        <p className="text-[13px] text-text-tertiary/70 mt-0.5 truncate">
-          {plant.species}{plant.room ? ` · ${plant.room}` : ""}
-        </p>
+        <div className="mt-1">
+          <SpeciesBadge species={plant.species} room={plant.room} size="sm" />
+        </div>
         {/* Status dot + label */}
         <div className="flex items-center gap-1.5 mt-1.5">
           <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />

@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { usePlantStore } from "@/stores/plantStore";
 import { requestPermission, scheduleReminders, stopReminders } from "@/lib/notifications";
@@ -66,6 +66,37 @@ export default function Layout() {
     return () => { cancelled = true; stopReminders(); };
   }, [notificationsEnabled, reminderHour]);
 
+  /* PWA install prompt */
+  const [installEvent, setInstallEvent] = useState(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setInstallEvent(e);
+      setShowInstallBanner(true);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    // Also hide if app is already installed
+    window.addEventListener("appinstalled", () => {
+      setShowInstallBanner(false);
+      setInstallEvent(null);
+    });
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
+  }, []);
+
+  const handleInstall = useCallback(async () => {
+    if (!installEvent) return;
+    installEvent.prompt();
+    const { outcome } = await installEvent.userChoice;
+    if (outcome === "accepted") {
+      setShowInstallBanner(false);
+      setInstallEvent(null);
+    }
+  }, [installEvent]);
+
   const isActive = (path) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith("/" + path.replace(/^\//, ""));
@@ -73,6 +104,34 @@ export default function Layout() {
 
   return (
     <div className="h-dvh flex flex-col bg-cream-300 max-w-lg mx-auto relative overflow-hidden transition-colors duration-500">
+      {/* Install banner */}
+      {showInstallBanner && (
+        <div className="absolute top-0 left-0 right-0 z-50 px-4 pt-3 animate-page-in">
+          <div className="p-4 bg-sage-600 text-white rounded-2xl shadow-elevated flex items-center gap-3">
+            <span className="text-lg flex-shrink-0">📲</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-[14px] font-semibold leading-tight">Install Planty</p>
+              <p className="text-[12px] text-white/70 mt-0.5">Add to home screen for quick access</p>
+            </div>
+            <button
+              onClick={handleInstall}
+              className="flex-shrink-0 px-4 py-2 bg-white text-sage-700 rounded-xl text-[13px] font-semibold pressable"
+            >
+              Install
+            </button>
+            <button
+              onClick={() => setShowInstallBanner(false)}
+              aria-label="Dismiss"
+              className="flex-shrink-0 w-7 h-7 rounded-full bg-white/15 flex items-center justify-center text-white/70 hover:bg-white/25 transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="flex-1 overflow-hidden"><Outlet /></div>
 
       {/* iOS Tab Bar with floating center button */}

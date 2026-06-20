@@ -1,8 +1,14 @@
 import { useWeather } from "@/hooks/useWeather";
+import { useSettingsStore } from "@/stores/settingsStore";
 import WeatherIcon from "@/components/WeatherIcon";
+
+function toFahrenheit(celsius) {
+  return Math.round(celsius * 9 / 5 + 32);
+}
 
 export function WeatherStrip() {
   const { weather, isLoading, error, refresh } = useWeather();
+  const useCelsius = useSettingsStore((s) => s.useCelsius);
 
   if (error) {
     return (
@@ -29,7 +35,7 @@ export function WeatherStrip() {
       <WeatherIcon condition={weather.condition} size={32} />
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
-          <span className="text-title-md text-text-primary font-semibold tracking-tight">{weather.temp_c}&deg;C</span>
+          <span className="text-title-md text-text-primary font-semibold tracking-tight">{useCelsius ? weather.temp_c : toFahrenheit(weather.temp_c)}&deg;{useCelsius ? "C" : "F"}</span>
           <span className="text-[13px] text-text-tertiary truncate">{weather.condition}</span>
         </div>
       </div>
