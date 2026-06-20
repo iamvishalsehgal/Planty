@@ -1,10 +1,10 @@
 import { useId } from 'react';
 
 const PALETTE = {
-  healthy:  { stroke: "#4F7A42", strokeEnd: "#84B075", bg: "#E5EDE0" },
-  warning:  { stroke: "#B08041", strokeEnd: "#CDB080", bg: "#F0E8D8" },
-  dry:      { stroke: "#D67B5B", strokeEnd: "#E29C82", bg: "#F5DBD3" },
-  overdue:  { stroke: "#C46240", strokeEnd: "#D67B5B", bg: "#F5DBD3" },
+  healthy:  { stroke: "#059669", strokeEnd: "#34d399", bg: "#d1fae5" },
+  warning:  { stroke: "#d97706", strokeEnd: "#fbbf24", bg: "#fef3c7" },
+  dry:      { stroke: "#3b82f6", strokeEnd: "#60a5fa", bg: "#dbeafe" },
+  overdue:  { stroke: "#dc2626", strokeEnd: "#ef4444", bg: "#fee2e2" },
 };
 
 export function BreathRing({ progress = 1, size = 120, strokeWidth = 7, status = "healthy", totalDays }) {

@@ -22,13 +22,13 @@ export default function PlantDetail() {
     return (
       <div className="flex flex-col h-full animate-page-in">
         <div className="px-4 pt-4 pb-3 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-cream-200 animate-pulse" />
-          <div className="h-8 bg-cream-200 rounded w-40 animate-pulse" />
+          <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+          <div className="h-8 bg-gray-200 rounded w-40 animate-pulse" />
         </div>
         <div className="flex-1 overflow-auto px-4 pb-8 space-y-4">
-          <div className="p-8 rounded-2xl bg-cream-100/30 animate-pulse">
-            <div className="w-36 h-36 rounded-full bg-cream-200 mx-auto" />
-            <div className="w-32 h-6 bg-cream-200 rounded mx-auto mt-4" />
+          <div className="p-8 rounded-2xl bg-gray-100/30 animate-pulse">
+            <div className="w-36 h-36 rounded-full bg-gray-200 mx-auto" />
+            <div className="w-32 h-6 bg-gray-200 rounded mx-auto mt-4" />
           </div>
         </div>
       </div>
@@ -83,25 +83,25 @@ export default function PlantDetail() {
       {/* Header */}
       <div className="px-4 pt-4 pb-3 flex items-center gap-3">
         <button onClick={() => navigate("/")} aria-label="Back"
-          className="w-10 h-10 rounded-full bg-cream-200/80 flex items-center justify-center pressable flex-shrink-0">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-text-secondary">
+          className="w-10 h-10 rounded-full bg-gray-200/80 flex items-center justify-center pressable flex-shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
         <div>
-          <h1 className="text-display-md text-text-primary truncate">{plant.name}</h1>
-          <p className="text-sm text-text-tertiary">{plant.species} · {plant.room}</p>
+          <h1 className="text-display-md text-gray-900 truncate">{plant.name}</h1>
+          <p className="text-sm text-gray-500">{plant.species} · {plant.room}</p>
         </div>
       </div>
 
       <div className="flex-1 overflow-auto px-4 pb-8 space-y-4">
         {/* Hero — ring + action together */}
-        <div className="flex flex-col items-center py-6 px-4 bg-cream-50/40 backdrop-blur-xl border border-cream-200/30 rounded-3xl shadow-glass">
+        <div className="flex flex-col items-center py-6 px-4 bg-white/40 backdrop-blur-xl border border-gray-200/30 rounded-3xl shadow-card">
           {/* Photo */}
           {plant.photoUri ? (
-            <img src={plant.photoUri} alt="" className="w-16 h-16 rounded-full object-cover ring-2 ring-cream-200/50 mb-3" />
+            <img src={plant.photoUri} alt="" className="w-16 h-16 rounded-full object-cover ring-2 ring-gray-200/50 mb-3" />
           ) : (
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-sage-200 to-sage-400 flex items-center justify-center ring-2 ring-cream-200/50 mb-3 text-2xl">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-green-200 to-green-400 flex items-center justify-center ring-2 ring-gray-200/50 mb-3 text-2xl">
               🪴
             </div>
           )}
@@ -109,39 +109,39 @@ export default function PlantDetail() {
           <BreathRing progress={progress} size={130} strokeWidth={8} status={plant.healthStatus} totalDays={totalDays} />
           {/* Health Score — prominent labeled indicator */}
           <div className="mt-3 flex flex-col items-center">
-            <span className="text-[10px] font-semibold text-text-tertiary uppercase tracking-widest mb-1.5">Health Score</span>
+            <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest mb-1.5">Health Score</span>
             <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full border ${
               plant.healthStatus === "healthy"
-                ? "bg-sage-50/60 border-sage-200/50"
+                ? "bg-green-50/60 border-green-200/50"
                 : plant.healthStatus === "warning"
-                  ? "bg-soil-50/60 border-soil-200/50"
-                  : "bg-clay-50/60 border-clay-200/50"
+                  ? "bg-gray-50/60 border-gray-200/50"
+                  : "bg-blue-50/60 border-blue-200/50"
             }`}>
               <span className={`w-2.5 h-2.5 rounded-full ${
-                plant.healthStatus === "healthy" ? "bg-sage-500" :
-                plant.healthStatus === "warning" ? "bg-soil-500" : "bg-clay-500"
+                plant.healthStatus === "healthy" ? "bg-green-500" :
+                plant.healthStatus === "warning" ? "bg-gray-500" : "bg-blue-500"
               }`} />
               <span className={`text-sm font-bold capitalize ${
-                plant.healthStatus === "healthy" ? "text-sage-700" :
-                plant.healthStatus === "warning" ? "text-soil-700" : "text-clay-700"
+                plant.healthStatus === "healthy" ? "text-green-700" :
+                plant.healthStatus === "warning" ? "text-gray-700" : "text-blue-700"
               }`}>{plant.healthStatus}</span>
-              <span className="text-xs font-medium text-text-tertiary">· {healthPercent}%</span>
+              <span className="text-xs font-medium text-gray-500">· {healthPercent}%</span>
             </div>
           </div>
           {/* Weather note */}
           {plant.adjustedInterval && plant.adjustedInterval !== totalDays && (
-            <div className="mt-2 text-xs text-sky-600 font-medium">🌤️ Weather-adjusted: {plant.adjustedInterval}d</div>
+            <div className="mt-2 text-xs text-blue-600 font-medium">🌤️ Weather-adjusted: {plant.adjustedInterval}d</div>
           )}
 
           {/* Action button — INSIDE the hero card, visually connected to ring */}
           <div className="w-full mt-5">
             {justWatered ? (
-              <div className="p-3 bg-sage-100/80 border border-sage-300/50 rounded-2xl text-center animate-page-in">
-                <span className="text-sm font-semibold text-sage-700">Watered! 🌱</span>
+              <div className="p-3 bg-green-100/80 border border-green-300/50 rounded-2xl text-center animate-page-in">
+                <span className="text-sm font-semibold text-green-700">Watered! 🌱</span>
               </div>
             ) : cooldown ? (
-              <div className="p-3 bg-soil-100/80 border border-soil-300/50 rounded-2xl text-center">
-                <span className="text-sm font-semibold text-soil-700">48h cooldown — watered recently</span>
+              <div className="p-3 bg-gray-100/80 border border-gray-300/50 rounded-2xl text-center">
+                <span className="text-sm font-semibold text-gray-700">48h cooldown — watered recently</span>
               </div>
             ) : (
               <Button
@@ -165,7 +165,7 @@ export default function PlantDetail() {
                 <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
               </svg>
             }
-            color="sky"
+            color="blue"
           />
           <CareNeedCard
             label="Light"
@@ -179,7 +179,7 @@ export default function PlantDetail() {
                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
               </svg>
             }
-            color="soil"
+            color="gray"
           />
           <CareNeedCard
             label="Humidity"
@@ -191,7 +191,7 @@ export default function PlantDetail() {
                 <path d="M4 18c2-1 4-1 6 0 2 1 4 1 6 0 2-1 4-1 5 0" />
               </svg>
             }
-            color="sage"
+            color="green"
           />
         </div>
 
@@ -259,7 +259,7 @@ export default function PlantDetail() {
 
         {/* Delete */}
         <button onClick={handleDelete}
-          className="w-full py-3 text-sm font-medium text-clay-500 hover:text-clay-600 transition-colors">
+          className="w-full py-3 text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors">
           Remove plant
         </button>
       </div>
@@ -269,20 +269,20 @@ export default function PlantDetail() {
 
 function StatBox({ label, value, primary }) {
   return (
-    <div className={`${primary ? "p-4" : "p-3"} bg-cream-50/40 backdrop-blur-sm border border-cream-200/30 rounded-2xl`}>
-      <div className={`${primary ? "text-xs" : "text-[11px]"} text-text-tertiary mb-1`}>{label}</div>
-      <div className={`${primary ? "text-base font-bold" : "text-sm font-semibold"} text-text-primary leading-snug`}>{value}</div>
+    <div className={`${primary ? "p-4" : "p-3"} bg-white/40 backdrop-blur-sm border border-gray-200/30 rounded-2xl`}>
+      <div className={`${primary ? "text-xs" : "text-[11px]"} text-gray-500 mb-1`}>{label}</div>
+      <div className={`${primary ? "text-base font-bold" : "text-sm font-semibold"} text-gray-900 leading-snug`}>{value}</div>
     </div>
   );
 }
 
 function CareNeedCard({ label, value, icon, color }) {
   const colors = {
-    sky: { bg: "bg-sky-50/60", border: "border-sky-200/40", text: "text-sky-700", icon: "text-sky-500" },
-    soil: { bg: "bg-soil-50/60", border: "border-soil-200/40", text: "text-soil-700", icon: "text-soil-500" },
-    sage: { bg: "bg-sage-50/60", border: "border-sage-200/40", text: "text-sage-700", icon: "text-sage-500" },
+    blue: { bg: "bg-blue-50/60", border: "border-blue-200/40", text: "text-blue-700", icon: "text-blue-500" },
+    gray: { bg: "bg-gray-50/60", border: "border-gray-200/40", text: "text-gray-700", icon: "text-gray-500" },
+    green: { bg: "bg-green-50/60", border: "border-green-200/40", text: "text-green-700", icon: "text-green-500" },
   };
-  const c = colors[color] || colors.sage;
+  const c = colors[color] || colors.green;
 
   return (
     <div className={`flex flex-col items-center gap-2 p-4 ${c.bg} backdrop-blur-sm border ${c.border} rounded-2xl`}>
@@ -290,7 +290,7 @@ function CareNeedCard({ label, value, icon, color }) {
         {icon}
       </div>
       <div>
-        <div className="text-[11px] font-semibold text-text-tertiary uppercase tracking-wide text-center">{label}</div>
+        <div className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide text-center">{label}</div>
         <div className={`text-[13px] font-bold ${c.text} text-center leading-tight mt-0.5`}>{value}</div>
       </div>
     </div>
@@ -305,15 +305,15 @@ function QuickActionButton({ label, onClick, disabled, active, icon }) {
       disabled={disabled}
       className={`flex flex-col items-center gap-1.5 p-3 rounded-2xl transition-all duration-200 pressable ${
         active
-          ? "bg-sage-100/80 border border-sage-300/50 shadow-card-sm"
+          ? "bg-green-100/80 border border-green-300/50 shadow-card-sm"
           : disabled
-            ? "bg-cream-50/30 border border-cream-200/20 opacity-40 cursor-not-allowed"
-            : "bg-cream-50/40 backdrop-blur-sm border border-cream-200/30 hover:bg-sage-50/60 hover:border-sage-200/50 hover:shadow-card-sm"
+            ? "bg-gray-50/30 border border-gray-200/20 opacity-40 cursor-not-allowed"
+            : "bg-white/40 backdrop-blur-sm border border-gray-200/30 hover:bg-green-50/60 hover:border-green-200/50 hover:shadow-card-sm"
       }`}
     >
-      <span className={active ? "text-sage-600" : "text-text-secondary"}>{icon}</span>
+      <span className={active ? "text-green-600" : "text-gray-600"}>{icon}</span>
       <span className={`text-[11px] font-semibold leading-tight ${
-        active ? "text-sage-700" : "text-text-tertiary"
+        active ? "text-green-700" : "text-gray-500"
       }`}>{label}</span>
     </button>
   );

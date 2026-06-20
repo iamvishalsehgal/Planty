@@ -10,15 +10,8 @@ import WeatherIcon from "@/components/WeatherIcon";
 import { useSettingsStore } from "@/stores/settingsStore";
 
 /* -------------------------------------------------------------------------- */
-/*  Time-aware greeting                                                        */
+/*  Time-aware subtitle                                                         */
 /* -------------------------------------------------------------------------- */
-
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour < 12) return "Good morning";
-  if (hour < 17) return "Good afternoon";
-  return "Good evening";
-}
 
 function getGreetingSubtitle() {
   const hour = new Date().getHours();
@@ -98,7 +91,7 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="p-5 space-y-5">
-        <div className="h-24 bg-cream-50/50 rounded-2xl animate-pulse" />
+        <div className="h-24 bg-gray-100 rounded-2xl animate-pulse" />
         <DashboardSkeleton />
       </div>
     );
@@ -120,22 +113,19 @@ export default function Dashboard() {
     <div className="flex flex-col h-full animate-page-in">
 
       {/* ================================================================== */}
-      {/*  GREETING HEADER + COMPACT WEATHER                                   */}
+      {/*  SUBTITLE + COMPACT WEATHER                                          */}
       {/* ================================================================== */}
-      <div className="px-5 pt-8 pb-2 flex items-start justify-between">
+      <div className="px-5 pt-2 pb-2 flex items-start justify-between">
         <div>
-          <h1 className="text-display-lg text-text-primary tracking-tight leading-none">
-            {getGreeting()}
-          </h1>
-          <p className="text-[15px] text-text-tertiary mt-1.5 leading-relaxed">
+          <p className="text-[15px] text-gray-400 mt-1.5 leading-relaxed">
             {getGreetingSubtitle()}
             {needsWaterToday > 0 && (
-              <span className="text-clay-500 font-medium"> — {needsWaterToday} {needsWaterToday === 1 ? "plant needs" : "plants need"} water today</span>
+              <span className="text-blue-500 font-medium"> — {needsWaterToday} {needsWaterToday === 1 ? "plant needs" : "plants need"} water today</span>
             )}
           </p>
         </div>
         {weather && (
-          <div className="flex items-center gap-1.5 flex-shrink-0 pt-0.5 text-text-primary">
+          <div className="flex items-center gap-1.5 flex-shrink-0 pt-0.5 text-gray-800">
             <WeatherIcon condition={weather.condition} size={22} />
             <span className="text-[18px] font-bold tracking-tight tabular-nums">
               {useCelsius ? weather.temp_c : toF(weather.temp_c)}&deg;
@@ -151,26 +141,26 @@ export default function Dashboard() {
         <div className="grid grid-cols-3 gap-3">
           <button
             onClick={() => navigate("/diagnose")}
-            className="flex flex-col items-center justify-center gap-2 py-4 px-2 bg-cream-50/70 backdrop-blur-xl border border-white/40 rounded-2xl shadow-glass-sm pressable hover:shadow-glass transition-all duration-300"
+            className="flex flex-col items-center justify-center gap-2 py-4 px-2 bg-white backdrop-blur-xl border border-gray-200 rounded-2xl shadow-card-sm pressable hover:shadow-card transition-all duration-300"
           >
-            <span className="text-sage-600">{SCAN_ICON}</span>
-            <span className="text-[12px] font-semibold text-text-primary">Scan</span>
+            <span className="text-green-600">{SCAN_ICON}</span>
+            <span className="text-[12px] font-semibold text-gray-800">Scan</span>
           </button>
 
           <button
             onClick={() => navigate("/add")}
-            className="flex flex-col items-center justify-center gap-2 py-4 px-2 bg-cream-50/70 backdrop-blur-xl border border-white/40 rounded-2xl shadow-glass-sm pressable hover:shadow-glass transition-all duration-300"
+            className="flex flex-col items-center justify-center gap-2 py-4 px-2 bg-white backdrop-blur-xl border border-gray-200 rounded-2xl shadow-card-sm pressable hover:shadow-card transition-all duration-300"
           >
-            <span className="text-sage-600">{ADD_ICON}</span>
-            <span className="text-[12px] font-semibold text-text-primary">Add plant</span>
+            <span className="text-green-600">{ADD_ICON}</span>
+            <span className="text-[12px] font-semibold text-gray-800">Add plant</span>
           </button>
 
           <button
             onClick={() => navigate("/diagnose")}
-            className="flex flex-col items-center justify-center gap-2 py-4 px-2 bg-cream-50/70 backdrop-blur-xl border border-white/40 rounded-2xl shadow-glass-sm pressable hover:shadow-glass transition-all duration-300"
+            className="flex flex-col items-center justify-center gap-2 py-4 px-2 bg-white backdrop-blur-xl border border-gray-200 rounded-2xl shadow-card-sm pressable hover:shadow-card transition-all duration-300"
           >
-            <span className="text-sage-600">{DIAGNOSE_ICON}</span>
-            <span className="text-[12px] font-semibold text-text-primary">Diagnose</span>
+            <span className="text-green-600">{DIAGNOSE_ICON}</span>
+            <span className="text-[12px] font-semibold text-gray-800">Diagnose</span>
           </button>
         </div>
       </div>
@@ -180,10 +170,10 @@ export default function Dashboard() {
       {/* ================================================================== */}
       {thirstyPlants.length > 0 && (
         <div className="px-5 mb-4">
-          <div className="p-4 bg-clay-50/80 backdrop-blur-sm border border-clay-200/50 rounded-2xl flex items-center justify-between gap-3 shadow-card-sm">
+          <div className="p-4 bg-blue-50 backdrop-blur-sm border border-blue-200 rounded-2xl flex items-center justify-between gap-3 shadow-card-sm">
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-clay-500 animate-pulse flex-shrink-0" />
-              <span className="text-[14px] font-semibold text-clay-700">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse flex-shrink-0" />
+              <span className="text-[14px] font-semibold text-blue-700">
                 {thirstyPlants.length} plant{thirstyPlants.length > 1 ? "s" : ""} need{thirstyPlants.length === 1 ? "s" : ""} water
               </span>
             </div>
@@ -203,9 +193,9 @@ export default function Dashboard() {
       {/* ================================================================== */}
       {wateredCount > 0 && (
         <div className="px-5 mb-4">
-          <div className="p-4 bg-sage-50/80 backdrop-blur-sm border border-sage-200/50 rounded-2xl flex items-center gap-3 animate-page-in shadow-card-sm">
-            <span className="w-2.5 h-2.5 rounded-full bg-sage-500 flex-shrink-0" />
-            <span className="text-[14px] font-semibold text-sage-700">
+          <div className="p-4 bg-green-50 backdrop-blur-sm border border-green-200 rounded-2xl flex items-center gap-3 animate-page-in shadow-card-sm">
+            <span className="w-2.5 h-2.5 rounded-full bg-green-500 flex-shrink-0" />
+            <span className="text-[14px] font-semibold text-green-700">
               {wateredCount} plant{wateredCount > 1 ? "s" : ""} watered{skippedCount > 0 && ` — ${skippedCount} skipped (cooldown)`}
             </span>
           </div>

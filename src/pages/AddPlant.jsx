@@ -73,8 +73,8 @@ export default function AddPlant() {
     <div className="flex flex-col h-full animate-page-in">
       {/* Header */}
       <div className="px-5 pt-8 pb-4">
-        <h1 className="text-display-lg text-text-primary tracking-tight leading-none">New plant</h1>
-        <p className="text-[15px] text-text-tertiary mt-1.5">
+        <h1 className="text-display-lg text-gray-800 tracking-tight leading-none">New plant</h1>
+        <p className="text-[15px] text-gray-400 mt-1.5">
           Add a plant to start tracking its care
         </p>
       </div>
@@ -107,9 +107,9 @@ export default function AddPlant() {
             <button
               onClick={() => fileRef.current?.click()}
               aria-label="Choose a plant photo"
-              className="w-full py-12 border-2 border-dashed border-cream-400/60 rounded-2xl flex flex-col items-center gap-4 hover:border-sage-400 hover:bg-sage-50/20 transition-all cursor-pointer"
+              className="w-full py-12 border-2 border-dashed border-gray-300/60 rounded-2xl flex flex-col items-center gap-4 hover:border-green-400 hover:bg-green-50/20 transition-all cursor-pointer"
             >
-              <div className="w-16 h-16 rounded-2xl bg-sage-100 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-green-100 flex items-center justify-center">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4F7A42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="3" width="18" height="18" rx="3" />
                   <circle cx="8.5" cy="8.5" r="1.5" />
@@ -117,8 +117,8 @@ export default function AddPlant() {
                 </svg>
               </div>
               <div className="text-center">
-                <span className="text-[14px] font-semibold text-text-secondary block">Add a photo</span>
-                <span className="text-[12px] text-text-tertiary mt-0.5">JPG or PNG</span>
+                <span className="text-[14px] font-semibold text-gray-600 block">Add a photo</span>
+                <span className="text-[12px] text-gray-400 mt-0.5">JPG or PNG</span>
               </div>
             </button>
           )}
@@ -126,7 +126,7 @@ export default function AddPlant() {
 
         {/* Name */}
         <div>
-          <label className="text-[14px] font-semibold text-text-secondary block mb-2">
+          <label className="text-[14px] font-semibold text-gray-600 block mb-2">
             Name
           </label>
           <input
@@ -135,13 +135,13 @@ export default function AddPlant() {
             onChange={(e) => setName(e.target.value)}
             placeholder="e.g. Big Monstera"
             maxLength={100}
-            className="w-full bg-cream-50 border border-cream-400 rounded-xl px-4 py-3.5 text-[15px] text-text-primary placeholder:text-text-tertiary/50 focus:outline-none focus:border-sage-400 transition-colors"
+            className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3.5 text-[15px] text-gray-800 placeholder:text-gray-400/50 focus:outline-none focus:border-green-400 transition-colors"
           />
         </div>
 
         {/* Species */}
         <div>
-          <label className="text-[14px] font-semibold text-text-secondary block mb-2">
+          <label className="text-[14px] font-semibold text-gray-600 block mb-2">
             Species
           </label>
           <div className="flex flex-wrap gap-2">
@@ -151,8 +151,8 @@ export default function AddPlant() {
                 onClick={() => { setSpecies(s); setCustomSpecies(""); }}
                 className={`px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
                   species === s
-                    ? "bg-sage-600 text-white shadow-card"
-                    : "bg-cream-200 text-text-secondary hover:bg-cream-400"
+                    ? "bg-green-600 text-white shadow-card"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-300"
                 }`}
               >
                 {s}
@@ -162,8 +162,8 @@ export default function AddPlant() {
               onClick={() => { setSpecies("Other"); setCustomSpecies(""); }}
               className={`px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
                 species === "Other"
-                  ? "bg-sage-600 text-white shadow-card"
-                  : "bg-cream-200 text-text-secondary hover:bg-cream-400"
+                  ? "bg-green-600 text-white shadow-card"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-300"
               }`}
             >
               + Other
@@ -176,7 +176,7 @@ export default function AddPlant() {
               onChange={(e) => setCustomSpecies(e.target.value)}
               placeholder="Enter species name"
               maxLength={100}
-              className="mt-2.5 w-full bg-cream-50 border border-cream-400 rounded-xl px-4 py-3.5 text-[15px] text-text-primary placeholder:text-text-tertiary/50 focus:outline-none focus:border-sage-400 transition-colors"
+              className="mt-2.5 w-full bg-white border border-gray-300 rounded-xl px-4 py-3.5 text-[15px] text-gray-800 placeholder:text-gray-400/50 focus:outline-none focus:border-green-400 transition-colors"
               autoFocus
             />
           )}
@@ -184,7 +184,7 @@ export default function AddPlant() {
 
         {/* Room */}
         <div>
-          <label className="text-[14px] font-semibold text-text-secondary block mb-2">
+          <label className="text-[14px] font-semibold text-gray-600 block mb-2">
             Room
           </label>
           <div className="flex flex-wrap gap-2">
@@ -194,8 +194,8 @@ export default function AddPlant() {
                 onClick={() => setRoom(r)}
                 className={`px-4 py-2 rounded-xl text-[13px] font-semibold transition-all duration-200 ${
                   room === r
-                    ? "bg-soil-600 text-white shadow-card"
-                    : "bg-cream-200 text-text-secondary hover:bg-cream-400"
+                    ? "bg-gray-600 text-white shadow-card"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-300"
                 }`}
               >
                 {r}
@@ -206,7 +206,7 @@ export default function AddPlant() {
 
         {/* Watering interval */}
         <div>
-          <label className="text-[14px] font-semibold text-text-secondary block mb-2">
+          <label className="text-[14px] font-semibold text-gray-600 block mb-2">
             Water every {intervalDays} day{intervalDays !== 1 ? "s" : ""}
           </label>
           <input
@@ -215,9 +215,9 @@ export default function AddPlant() {
             max="14"
             value={intervalDays}
             onChange={(e) => setIntervalDays(Number(e.target.value))}
-            className="w-full accent-sage-600"
+            className="w-full accent-green-600"
           />
-          <div className="flex justify-between text-[12px] font-medium text-text-tertiary mt-1">
+          <div className="flex justify-between text-[12px] font-medium text-gray-400 mt-1">
             <span>1 day</span>
             <span>14 days</span>
           </div>
@@ -225,8 +225,8 @@ export default function AddPlant() {
 
         {/* Error */}
         {error && (
-          <div className="p-4 bg-clay-50/80 border border-clay-200/50 rounded-2xl">
-            <p className="text-[13px] font-medium text-clay-700">{error}</p>
+          <div className="p-4 bg-blue-50/80 border border-blue-200/50 rounded-2xl">
+            <p className="text-[13px] font-medium text-blue-700">{error}</p>
           </div>
         )}
 

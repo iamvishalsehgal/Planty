@@ -1,10 +1,10 @@
 import { formatDate } from "@/lib/date";
 
 const STATUS_CONFIG = {
-  healthy: { label: "Healthy", colors: "from-sage-400 to-sage-600", dot: "bg-sage-500" },
-  warning: { label: "Water soon", colors: "from-soil-400 to-soil-600", dot: "bg-soil-500" },
-  dry: { label: "Needs water", colors: "from-clay-400 to-clay-500", dot: "bg-clay-500" },
-  overdue: { label: "Overdue", colors: "from-clay-500 to-clay-600", dot: "bg-clay-600" },
+  healthy: { label: "Healthy", colors: "from-green-400 to-green-600", dot: "bg-green-500" },
+  warning: { label: "Water soon", colors: "from-amber-400 to-amber-600", dot: "bg-amber-500" },
+  dry: { label: "Needs water", colors: "from-blue-400 to-blue-500", dot: "bg-blue-500" },
+  overdue: { label: "Overdue", colors: "from-red-500 to-red-600", dot: "bg-red-600" },
 };
 
 export function WateringStatus({ plant, daysLeft }) {
@@ -13,7 +13,7 @@ export function WateringStatus({ plant, daysLeft }) {
   const barProgress = totalDays <= 0 ? 0 : Math.max(0, Math.min(100, ((totalDays - daysLeft) / totalDays) * 100));
 
   return (
-    <div className="p-4 bg-cream-50/60 backdrop-blur-lg border border-white/30 rounded-2xl shadow-card-sm">
+    <div className="p-4 bg-white/60 backdrop-blur-lg border border-white/30 rounded-2xl shadow-card-sm">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${config.dot}`} />
@@ -24,7 +24,7 @@ export function WateringStatus({ plant, daysLeft }) {
         </span>
       </div>
 
-      <div className="w-full h-2.5 bg-cream-200 rounded-full overflow-hidden mb-3">
+      <div className="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden mb-3">
         <div
           className={`h-full rounded-full bg-gradient-to-r ${config.colors} transition-all duration-700 ease-out`}
           style={{ width: `${barProgress}%` }}
@@ -32,8 +32,8 @@ export function WateringStatus({ plant, daysLeft }) {
       </div>
 
       {plant.adjustedInterval && plant.adjustedInterval !== plant.wateringIntervalDays && (
-        <div className="mb-3 px-3 py-2 bg-sky-50/80 border border-sky-200/50 rounded-xl text-[12px] font-medium text-sky-700 flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
+        <div className="mb-3 px-3 py-2 bg-blue-50/80 border border-blue-200/50 rounded-xl text-[12px] font-medium text-blue-700 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
           <span>Weather-adjusted: every <strong>{plant.adjustedInterval}d</strong> (base: {plant.wateringIntervalDays}d)</span>
         </div>
       )}

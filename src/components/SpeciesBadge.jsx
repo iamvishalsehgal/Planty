@@ -12,7 +12,7 @@ export function SpeciesBadge({ species, room, size = "md" }) {
     <span className="inline-flex items-center gap-1.5">
       {species && (
         <span className={cn(
-          "bg-sage-100 text-sage-700 inline-flex items-center font-semibold border border-sage-200/30",
+          "bg-green-100 text-green-700 inline-flex items-center font-semibold border border-green-200/30",
           SIZES[size]
         )}>
           {species}
@@ -20,7 +20,7 @@ export function SpeciesBadge({ species, room, size = "md" }) {
       )}
       {room && (
         <span className={cn(
-          "bg-soil-100 text-soil-700 inline-flex items-center font-semibold border border-soil-200/30",
+          "bg-gray-100 text-gray-700 inline-flex items-center font-semibold border border-gray-200/30",
           SIZES[size]
         )}>
           {room}

@@ -14,9 +14,9 @@ export function WeatherStrip() {
     return (
       <button
         onClick={refresh}
-        className="w-full px-4 py-3 bg-soil-50/60 backdrop-blur-sm border border-soil-200/40 rounded-2xl text-[13px] font-medium text-text-tertiary hover:bg-soil-100 transition-colors flex items-center justify-center gap-2"
+        className="w-full px-4 py-3 bg-gray-50/60 backdrop-blur-sm border border-gray-200/40 rounded-2xl text-[13px] font-medium text-text-tertiary hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
       >
-        <span className="w-2 h-2 rounded-full bg-soil-400" />
+        <span className="w-2 h-2 rounded-full bg-gray-400" />
         Weather unavailable -- tap to retry
       </button>
     );
@@ -24,14 +24,14 @@ export function WeatherStrip() {
 
   if (isLoading || !weather) {
     return (
-      <div className="p-4 bg-cream-50/40 rounded-2xl animate-pulse">
-        <div className="h-8 bg-cream-200 rounded w-32" />
+      <div className="p-4 bg-white/40 rounded-2xl animate-pulse">
+        <div className="h-8 bg-gray-200 rounded w-32" />
       </div>
     );
   }
 
   return (
-    <div className="p-4 bg-cream-50/60 backdrop-blur-xl border border-white/30 rounded-2xl shadow-card-sm flex items-center gap-3">
+    <div className="p-4 bg-white/60 backdrop-blur-xl border border-white/30 rounded-2xl shadow-card-sm flex items-center gap-3">
       <WeatherIcon condition={weather.condition} size={32} />
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
@@ -42,7 +42,7 @@ export function WeatherStrip() {
       <div className="flex items-center gap-3 flex-shrink-0">
         <span className="text-[13px] font-medium text-text-tertiary tabular-nums">{weather.humidity}%</span>
         {weather.is_rainy && (
-          <span className="text-[12px] font-semibold text-sky-600 bg-sky-100/80 px-3 py-1 rounded-full">
+          <span className="text-[12px] font-semibold text-blue-600 bg-blue-100/80 px-3 py-1 rounded-full">
             Skip
           </span>
         )}

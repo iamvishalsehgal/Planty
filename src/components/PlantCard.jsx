@@ -4,10 +4,10 @@ import { SpeciesBadge } from "@/components/SpeciesBadge";
 import { daysUntil } from "@/lib/date";
 
 const STATUS_COLORS = {
-  healthy: { accent: "border-l-sage-500", dot: "bg-sage-500", label: "Healthy" },
-  warning: { accent: "border-l-soil-500", dot: "bg-soil-500", label: "Water soon" },
-  dry: { accent: "border-l-clay-500", dot: "bg-clay-500", label: "Needs water" },
-  overdue: { accent: "border-l-clay-600", dot: "bg-clay-600", label: "Overdue" },
+  healthy: { accent: "border-l-green-500", dot: "bg-green-500", label: "Healthy" },
+  warning: { accent: "border-l-gray-500", dot: "bg-gray-500", label: "Water soon" },
+  dry: { accent: "border-l-blue-500", dot: "bg-blue-500", label: "Needs water" },
+  overdue: { accent: "border-l-blue-600", dot: "bg-blue-600", label: "Overdue" },
 };
 
 export function PlantCard({ plant }) {
@@ -21,10 +21,10 @@ export function PlantCard({ plant }) {
     <button
       onClick={() => navigate(`/plant/${plant.id}`)}
       aria-label={`View ${plant.name} — ${daysLeft > 0 ? `${daysLeft} days until water` : daysLeft === 0 ? "Water today" : `${Math.abs(daysLeft)} days overdue`}`}
-      className={`w-full text-left p-5 bg-cream-50/80 backdrop-blur-xl border border-white/30 border-l-4 ${status.accent} rounded-2xl shadow-card pressable hover:shadow-card-lg transition-all duration-300 flex items-center gap-4`}
+      className={`w-full text-left p-5 bg-white backdrop-blur-xl border border-gray-200 border-l-4 ${status.accent} rounded-2xl shadow-card pressable hover:shadow-card-lg transition-all duration-300 flex items-center gap-4`}
     >
       {/* Photo or placeholder */}
-      <div className="relative flex-shrink-0 w-14 h-14 rounded-2xl overflow-hidden bg-gradient-to-br from-sage-100 to-sage-200 ring-1 ring-black/5">
+      <div className="relative flex-shrink-0 w-14 h-14 rounded-2xl overflow-hidden bg-gradient-to-br from-green-100 to-green-200 ring-1 ring-black/5">
         {plant.photoUri ? (
           <img
             src={plant.photoUri}
@@ -45,7 +45,7 @@ export function PlantCard({ plant }) {
 
       {/* Name & species */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-[17px] font-semibold text-text-primary truncate leading-tight tracking-tight">
+        <h3 className="text-[17px] font-semibold text-gray-800 truncate leading-tight tracking-tight">
           {plant.name}
         </h3>
         <div className="mt-1">
@@ -54,7 +54,7 @@ export function PlantCard({ plant }) {
         {/* Status dot + label */}
         <div className="flex items-center gap-1.5 mt-1.5">
           <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
-          <span className="text-[11px] font-medium text-text-tertiary/60 tracking-wide uppercase">
+          <span className="text-[11px] font-medium text-gray-400 tracking-wide uppercase">
             {status.label}
           </span>
         </div>
@@ -68,13 +68,13 @@ export function PlantCard({ plant }) {
           totalDays={plant.wateringIntervalDays}
         />
         {daysLeft > 0 ? (
-          <span className={`text-[11px] font-semibold tabular-nums tracking-tight ${isUrgent ? "text-clay-500" : "text-text-tertiary/60"}`}>
+          <span className={`text-[11px] font-semibold tabular-nums tracking-tight ${isUrgent ? "text-blue-500" : "text-gray-400"}`}>
             {daysLeft}d
           </span>
         ) : daysLeft === 0 ? (
-          <span className="text-[11px] font-semibold text-clay-500 tracking-tight">Today</span>
+          <span className="text-[11px] font-semibold text-blue-500 tracking-tight">Today</span>
         ) : (
-          <span className="text-[11px] font-semibold text-clay-600 tracking-tight">{daysAbs}d over</span>
+          <span className="text-[11px] font-semibold text-blue-600 tracking-tight">{daysAbs}d over</span>
         )}
       </div>
     </button>

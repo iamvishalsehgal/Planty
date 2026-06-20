@@ -1,10 +1,10 @@
 import { cn } from "@/lib/cn";
 
 const variants = {
-  primary: "bg-sage-600 text-white hover:bg-sage-700 shadow-card active:shadow-card-sm",
-  secondary: "bg-soil-100 text-soil-800 hover:bg-soil-200",
-  ghost: "bg-transparent text-text-secondary hover:bg-cream-200/70",
-  destructive: "bg-clay-500 text-white hover:bg-clay-600 shadow-card active:shadow-card-sm",
+  primary: "bg-green-600 text-white hover:bg-green-700 shadow-card active:shadow-card-sm",
+  secondary: "bg-gray-100 text-gray-800 hover:bg-gray-200",
+  ghost: "bg-transparent text-text-secondary hover:bg-gray-200/70",
+  destructive: "bg-red-500 text-white hover:bg-red-600 shadow-card active:shadow-card-sm",
 };
 
 const sizes = {

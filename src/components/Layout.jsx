@@ -103,11 +103,29 @@ export default function Layout() {
   };
 
   return (
-    <div className="h-dvh flex flex-col bg-cream-300 max-w-lg mx-auto relative overflow-hidden transition-colors duration-500">
+    <div className="h-dvh flex flex-col bg-gray-100 max-w-lg mx-auto relative overflow-hidden transition-colors duration-500">
+      {/* Arena header */}
+      <header
+        className="flex-shrink-0 bg-gradient-to-br from-green-600 via-green-700 to-green-800 text-white px-5 pb-4 shadow-green-lg relative"
+        style={{ paddingTop: "max(0px, env(safe-area-inset-top, 16px))" }}
+      >
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-display-md font-extrabold tracking-tight">🌱 Planty</h1>
+            <p className="text-sm text-white/80 mt-1">Smart plant care</p>
+          </div>
+          {/* Weather widget pill */}
+          <div className="bg-white/15 backdrop-blur-lg rounded-2xl px-3 py-2 flex items-center gap-2">
+            <span className="text-lg">☀️</span>
+            <span className="text-sm font-semibold">72°</span>
+          </div>
+        </div>
+      </header>
+
       {/* Install banner */}
       {showInstallBanner && (
         <div className="absolute top-0 left-0 right-0 z-50 px-4 pt-3 animate-page-in">
-          <div className="p-4 bg-sage-600 text-white rounded-2xl shadow-elevated flex items-center gap-3">
+          <div className="p-4 bg-green-600 text-white rounded-2xl shadow-elevated flex items-center gap-3">
             <span className="text-lg flex-shrink-0">📲</span>
             <div className="flex-1 min-w-0">
               <p className="text-[14px] font-semibold leading-tight">Install Planty</p>
@@ -115,7 +133,7 @@ export default function Layout() {
             </div>
             <button
               onClick={handleInstall}
-              className="flex-shrink-0 px-4 py-2 bg-white text-sage-700 rounded-xl text-[13px] font-semibold pressable"
+              className="flex-shrink-0 px-4 py-2 bg-white text-green-600 rounded-xl text-[13px] font-semibold pressable"
             >
               Install
             </button>
@@ -134,9 +152,9 @@ export default function Layout() {
 
       <div className="flex-1 overflow-hidden"><Outlet /></div>
 
-      {/* iOS Tab Bar with floating center button */}
+      {/* Tab Bar */}
       <div className="flex-shrink-0 pb-safe relative" style={{ paddingBottom: "max(0px, env(safe-area-inset-bottom, 0px))" }}>
-        <nav className="relative flex items-end justify-around bg-cream-50/80 backdrop-blur-2xl border-t border-cream-200/60 shadow-tab-bar h-14">
+        <nav className="relative flex items-end justify-around bg-white/90 backdrop-blur-2xl border-t border-gray-200/60 shadow-tab-bar h-14">
           {TABS.map((tab) => {
             const active = isActive(tab.path);
             const Icon = Icons[tab.icon];
@@ -148,7 +166,7 @@ export default function Layout() {
                     onClick={() => navigate(tab.path)}
                     aria-label={tab.label}
                     className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 ${
-                      active ? "bg-sage-600 text-white shadow-[0_4px_24px_rgba(79,122,66,0.4)]" : "bg-sage-500 text-white shadow-[0_4px_16px_rgba(79,122,66,0.3)]"
+                      active ? "bg-green-600 text-white shadow-green-lg" : "bg-green-500 text-white shadow-green"
                     }`}
                   >
                     <Icon active={true} />
@@ -164,7 +182,7 @@ export default function Layout() {
                 aria-label={tab.label}
                 aria-current={active ? "page" : undefined}
                 className={`flex flex-col items-center justify-center gap-0.5 py-1.5 min-w-[64px] transition-all duration-200 active:scale-90 ${
-                  active ? "text-sage-700" : "text-text-tertiary/60 hover:text-text-secondary"
+                  active ? "text-green-600" : "text-gray-400 hover:text-gray-600"
                 }`}
               >
                 <Icon active={active} />

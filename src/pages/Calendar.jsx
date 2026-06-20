@@ -52,10 +52,10 @@ function getCalendarDays(year, month) {
 
 /* ── Status color helpers ── */
 const STATUS_STYLE = {
-  overdue: { dot: "bg-clay-600", text: "text-clay-700", ring: "ring-clay-400/50" },
-  dry: { dot: "bg-clay-500", text: "text-clay-600", ring: "ring-clay-400/40" },
-  warning: { dot: "bg-soil-500", text: "text-soil-600", ring: "ring-soil-300/40" },
-  healthy: { dot: "bg-sage-500", text: "text-sage-600", ring: "ring-sage-300/40" },
+  overdue: { dot: "bg-blue-600", text: "text-blue-700", ring: "ring-blue-400/50" },
+  dry: { dot: "bg-blue-500", text: "text-blue-600", ring: "ring-blue-400/40" },
+  warning: { dot: "bg-gray-500", text: "text-gray-600", ring: "ring-gray-300/40" },
+  healthy: { dot: "bg-green-500", text: "text-green-600", ring: "ring-green-300/40" },
 };
 
 export default function Calendar() {
@@ -146,10 +146,10 @@ export default function Calendar() {
     <div className="flex flex-col h-full animate-page-in">
       {/* Header */}
       <div className="px-5 pt-8 pb-3">
-        <h1 className="text-display-lg text-text-primary tracking-tight leading-none">
+        <h1 className="text-display-lg text-gray-800 tracking-tight leading-none">
           Calendar
         </h1>
-        <p className="text-[14px] text-text-tertiary mt-1.5">
+        <p className="text-[14px] text-gray-400 mt-1.5">
           Watering schedule at a glance
         </p>
       </div>
@@ -162,19 +162,19 @@ export default function Calendar() {
             <button
               onClick={goToPrevMonth}
               aria-label="Previous month"
-              className="w-9 h-9 flex items-center justify-center rounded-full text-text-tertiary hover:bg-cream-200/60 active:scale-90 transition-all"
+              className="w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100/60 active:scale-90 transition-all"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15,18 9,12 15,6" />
               </svg>
             </button>
-            <h2 className="text-[16px] font-semibold text-text-primary tracking-tight">
+            <h2 className="text-[16px] font-semibold text-gray-800 tracking-tight">
               {MONTH_NAMES[viewMonth]} {viewYear}
             </h2>
             <button
               onClick={goToNextMonth}
               aria-label="Next month"
-              className="w-9 h-9 flex items-center justify-center rounded-full text-text-tertiary hover:bg-cream-200/60 active:scale-90 transition-all"
+              className="w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100/60 active:scale-90 transition-all"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9,18 15,12 9,6" />
@@ -185,7 +185,7 @@ export default function Calendar() {
           {/* Day headers */}
           <div className="grid grid-cols-7 px-3 pb-2">
             {DAY_NAMES.map((name) => (
-              <div key={name} className="text-center text-[10px] font-semibold text-text-tertiary/50 uppercase tracking-widest py-1">
+              <div key={name} className="text-center text-[10px] font-semibold text-gray-400/50 uppercase tracking-widest py-1">
                 {name}
               </div>
             ))}
@@ -216,7 +216,7 @@ export default function Calendar() {
                   {/* Today ring */}
                   {_isToday && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-8 h-8 rounded-full bg-sage-500/15 ring-1 ring-sage-400/30" />
+                      <div className="w-8 h-8 rounded-full bg-green-500/15 ring-1 ring-green-400/30" />
                     </div>
                   )}
 
@@ -224,10 +224,10 @@ export default function Calendar() {
                   <span
                     className={`relative z-10 text-[13px] tabular-nums font-medium leading-none ${
                       _isToday
-                        ? "text-sage-700 font-semibold"
+                        ? "text-green-700 font-semibold"
                         : d.isOtherMonth
-                          ? "text-text-tertiary/30"
-                          : "text-text-primary/80"
+                          ? "text-gray-400/30"
+                          : "text-gray-800/80"
                     }`}
                   >
                     {d.day}
@@ -237,7 +237,7 @@ export default function Calendar() {
                   {hasWatering && (
                     <span
                       className={`relative z-10 mt-0.5 w-1 h-1 rounded-full ${
-                        urgent ? "bg-clay-500" : "bg-soil-400"
+                        urgent ? "bg-blue-500" : "bg-gray-400"
                       }`}
                     />
                   )}
@@ -250,22 +250,22 @@ export default function Calendar() {
         {/* ── Upcoming reminders ── */}
         {upcoming.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-sage-100 to-sage-200 flex items-center justify-center mb-4 shadow-card">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center mb-4 shadow-card">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4F7A42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                 <polyline points="22,4 12,14.01 9,11.01" />
               </svg>
             </div>
-            <h3 className="text-title-sm text-text-primary mb-1.5">
+            <h3 className="text-title-sm text-gray-800 mb-1.5">
               No upcoming watering
             </h3>
-            <p className="text-[14px] text-text-tertiary max-w-[240px] leading-relaxed">
+            <p className="text-[14px] text-gray-400 max-w-[240px] leading-relaxed">
               All plants are happy! Check back as watering dates approach.
             </p>
           </div>
         ) : (
           <div>
-            <h2 className="text-[14px] font-semibold text-text-secondary uppercase tracking-widest mb-3 px-1">
+            <h2 className="text-[14px] font-semibold text-gray-600 uppercase tracking-widest mb-3 px-1">
               Upcoming
             </h2>
             <div className="space-y-2.5">
@@ -288,7 +288,7 @@ export default function Calendar() {
                   >
                     <div className="flex items-center gap-3.5">
                       {/* Plant icon placeholder */}
-                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-sage-100 to-sage-200 ring-1 ring-black/5 flex items-center justify-center">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-green-100 to-green-200 ring-1 ring-black/5 flex items-center justify-center">
                         {plant.photoUri ? (
                           <img
                             src={plant.photoUri}
@@ -305,10 +305,10 @@ export default function Calendar() {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-[15px] font-semibold text-text-primary truncate leading-tight">
+                        <h3 className="text-[15px] font-semibold text-gray-800 truncate leading-tight">
                           {plant.name}
                         </h3>
-                        <p className="text-[12px] text-text-tertiary/70 truncate mt-0.5">
+                        <p className="text-[12px] text-gray-400/70 truncate mt-0.5">
                           {plant.species}
                         </p>
                       </div>
@@ -316,12 +316,12 @@ export default function Calendar() {
                       <div className="flex-shrink-0 text-right">
                         <span
                           className={`text-[13px] font-semibold tabular-nums ${
-                            isUrgent ? "text-clay-600" : "text-text-tertiary"
+                            isUrgent ? "text-blue-600" : "text-gray-400"
                           }`}
                         >
                           {label}
                         </span>
-                        <p className="text-[10px] text-text-tertiary/50 mt-0.5">
+                        <p className="text-[10px] text-gray-400/50 mt-0.5">
                           {formatDate(date)}
                         </p>
                       </div>

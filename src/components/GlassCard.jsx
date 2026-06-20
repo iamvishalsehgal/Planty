@@ -14,10 +14,9 @@ export function GlassCard({ variant = "md", className, children, onClick }) {
       type={onClick ? "button" : undefined}
       onClick={onClick}
       className={cn(
-        "relative bg-cream-50/70 backdrop-blur-2xl border border-white/40 shadow-glass transition-all duration-300 overflow-hidden",
-        "before:absolute before:inset-0 before:rounded-[inherit] before:bg-gradient-to-b before:from-white/30 before:via-white/10 before:to-transparent before:pointer-events-none",
+        "relative bg-white border border-gray-200/40 shadow-card transition-all duration-300 overflow-hidden rounded-2xl",
         variants[variant],
-        onClick && "cursor-pointer pressable hover:shadow-glass-lg",
+        onClick && "cursor-pointer pressable hover:shadow-card-lg",
         className
       )}
     >
