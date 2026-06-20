@@ -3,9 +3,31 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useSettingsStore } from "@/stores/settingsStore";
 import { usePlantStore } from "@/stores/plantStore";
 import { useWeather } from "@/hooks/useWeather";
+import { SeasonBanner } from "@/components/SeasonBanner";
 import { requestPermission, scheduleReminders, stopReminders } from "@/lib/notifications";
 
 function toF(c) { return Math.round(c * 9 / 5 + 32); }
+
+function getSeason(weather) {
+  if (!weather) return null;
+  const m = new Date().getMonth();
+  const t = weather.temp_c;
+  if (m >= 11 || m <= 1 || t < 5) return "winter";
+  if (m >= 2 && m <= 4 && t < 20) return "spring";
+  if (m >= 5 && m <= 8 && t > 20) return "summer";
+  return "fall";
+}
+
+function getAdjustment(weather) {
+  if (!weather) return 0;
+  let adj = 0;
+  if (weather.temp_c > 28) adj = -30;
+  else if (weather.temp_c > 24) adj = -20;
+  else if (weather.temp_c > 20) adj = -10;
+  if (weather.is_rainy) adj -= 10;
+  if (weather.temp_c < 10) adj += 15;
+  return adj;
+}
 
 /* ── Tab definitions ── */
 const TABS = [
@@ -98,6 +120,9 @@ export default function Layout() {
           )}
         </div>
       </header>
+
+      {/* Season banner */}
+      <SeasonBanner season={getSeason(weather)} adjustment={getAdjustment(weather)} />
 
       {/* Install banner */}
       {showInstallBanner && (
