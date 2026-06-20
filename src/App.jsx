@@ -5,6 +5,7 @@ import AddPlant from "@/pages/AddPlant";
 import Diagnose from "@/pages/Diagnose";
 import Calendar from "@/pages/Calendar";
 import Profile from "@/pages/Profile";
+import Memorial from "@/pages/Memorial";
 import PlantDetail from "@/pages/PlantDetail";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="memorial" element={<Memorial />} />
           <Route path="add" element={<AddPlant />} />
           <Route path="diagnose" element={<Diagnose />} />
           <Route path="profile" element={<Profile />} />

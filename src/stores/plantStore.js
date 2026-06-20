@@ -4,6 +4,7 @@ import { adjustWateringInterval, daysUntil } from "@/lib/date";
 
 export const PLANTS_STORAGE_KEY = "planty-plants";
 export const PLANTS_BACKUP_KEY = "planty-plants-backup";
+export const MEMORIAL_STORAGE_KEY = "planty-memorial";
 export const WATERING_COOLDOWN_MS = 48 * 60 * 60 * 1000; // 48 hours
 
 const persistPlants = (plants) => {
@@ -50,6 +51,7 @@ let nextId = 0;
 
 export const usePlantStore = create((set, get) => ({
   plants: [],
+  memorial: [],
   isLoading: true,
   loadError: null,
 
@@ -64,12 +66,16 @@ export const usePlantStore = create((set, get) => ({
         createdAt: p.createdAt || p.lastWatered || now,
         get healthStatus() { return computeHealthStatus(this.nextWatering); },
       }));
-      set({ plants: updated, loadError: null });
+      // Load memorial
+      let memorial = [];
+      try {
+        const raw = localStorage.getItem(MEMORIAL_STORAGE_KEY);
+        if (raw) memorial = JSON.parse(raw);
+      } catch {}
+      set({ plants: updated, memorial, loadError: null });
     } catch (e) {
       console.error("Failed to load plants:", e);
       set({ loadError: e.message || "Failed to load plant data" });
-      // Do NOT overwrite plants — corrupted blob preserved,
-      // backup saved under planty-plants-backup.
     } finally {
       set({ isLoading: false });
     }
@@ -109,9 +115,17 @@ export const usePlantStore = create((set, get) => ({
   },
 
   removePlant: (id) => {
+    const plant = get().plants.find((p) => p.id === id);
     const plants = get().plants.filter((p) => p.id !== id);
     if (!persistPlants(plants)) console.warn("Failed to persist plant removal");
-    set({ plants });
+    // Save to memorial
+    if (plant) {
+      const memorial = [...get().memorial, { ...plant, removedAt: new Date().toISOString() }];
+      try { localStorage.setItem(MEMORIAL_STORAGE_KEY, JSON.stringify(memorial)); } catch {}
+      set({ plants, memorial });
+    } else {
+      set({ plants });
+    }
   },
 
   waterPlant: (id) => {
