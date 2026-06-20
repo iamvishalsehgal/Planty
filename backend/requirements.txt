@@ -1,9 +1,9 @@
-fastapi==0.115.0
-uvicorn[standard]==0.30.0
-sqlalchemy==2.0.35
-pydantic==2.9.0
-httpx==0.27.0
-python-dotenv==1.0.1
-apscheduler==3.10.4
+fastapi==0.138.0
+uvicorn[standard]==0.34.2
+sqlalchemy==2.0.51
+pydantic==2.13.4
+httpx==0.28.1
+python-dotenv==1.2.2
+apscheduler==3.11.2
 # PostgreSQL (production only — uncomment for Render deploy)
 # psycopg2-binary==2.9.9
