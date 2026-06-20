@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { usePlants } from "@/hooks/usePlants";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { PLANTS_STORAGE_KEY } from "@/stores/plantStore";
+import { PLANTS_STORAGE_KEY, usePlantStore } from "@/stores/plantStore";
 import { SETTINGS_STORAGE_KEY } from "@/stores/settingsStore";
 import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
@@ -54,15 +54,31 @@ export default function Profile() {
         const hasSettings = data.settings && typeof data.settings === "object";
         if (!hasPlants && !hasSettings) throw new Error("No valid plant or settings data found");
         if (!confirm("This will replace all current data. Continue?")) return;
+
+        // Validate and normalize plants
         if (hasPlants) {
-          const plantsStr = Array.isArray(data.plants) ? JSON.stringify(data.plants) : data.plants;
-          localStorage.setItem(PLANTS_STORAGE_KEY, plantsStr);
+          let plants = Array.isArray(data.plants) ? data.plants : JSON.parse(data.plants);
+          if (!Array.isArray(plants)) throw new Error("Invalid plant data format");
+          // Ensure every plant has an id
+          plants = plants.filter(p => p && typeof p === "object").map((p, i) => ({
+            ...p,
+            id: p.id || `local-${Date.now()}-${i}`,
+          }));
+          localStorage.setItem(PLANTS_STORAGE_KEY, JSON.stringify(plants));
         }
         if (hasSettings) {
           const settingsStr = typeof data.settings === "string" ? data.settings : JSON.stringify(data.settings);
           localStorage.setItem(SETTINGS_STORAGE_KEY, settingsStr);
         }
-        window.location.reload();
+
+        // Use store reload instead of window.location.reload() — avoids timing gap
+        const plantStore = usePlantStore.getState();
+        const settingsStore = useSettingsStore.getState();
+        plantStore.loadFromDisk();
+        settingsStore.loadSettings();
+
+        // Navigate to home
+        window.location.hash = "#/";
       } catch (e) {
         alert("Invalid backup file: " + e.message);
       }
