@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState } from "react";
 import { usePlantStore, WATERING_COOLDOWN_MS } from "@/stores/plantStore";
 import { daysUntil } from "@/lib/date";
 

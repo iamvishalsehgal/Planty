@@ -1,7 +1,12 @@
-// Planty service worker — stale-while-revalidate
+// Planty service worker — precache shell + stale-while-revalidate
 const CACHE = "planty-v3.0.1";
+const PRECACHE_URLS = ["/", "/index.html", "/offline.html"];
 
+// Precache core app shell assets on install
 self.addEventListener("install", (e) => {
+  e.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
+  );
   self.skipWaiting();
 });
 
@@ -15,7 +20,6 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
-  // Only handle GET requests
   if (e.request.method !== "GET") return;
 
   e.respondWith(
@@ -30,6 +34,13 @@ self.addEventListener("fetch", (e) => {
 
         // Return cached immediately, update in background
         return cached || fetchPromise;
+      })
+      .catch(() => {
+        // If navigation request fails (offline, not cached), serve fallback
+        if (e.request.mode === "navigate") {
+          return cache.match("/offline.html");
+        }
+        throw new Error("offline");
       })
     )
   );

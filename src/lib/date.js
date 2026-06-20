@@ -43,13 +43,3 @@ export function formatDate(date) {
   });
 }
 
-export function formatTime(date) {
-  if (date == null) return "";
-  const d = typeof date === "string" ? new Date(date) : date;
-  if (isNaN(d.getTime())) return "";
-  return d.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-}

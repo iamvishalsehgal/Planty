@@ -26,8 +26,6 @@ export const useSettingsStore = create((set, get) => ({
   notificationsEnabled: true,
   wateringReminderHour: 8,
   useCelsius: true,
-  hasOnboarded: false,
-
   toggleNotifications: () => {
     const next = !get().notificationsEnabled;
     set({ notificationsEnabled: next });
@@ -43,11 +41,6 @@ export const useSettingsStore = create((set, get) => ({
     const next = !get().useCelsius;
     set({ useCelsius: next });
     persistSettings({ useCelsius: next });
-  },
-
-  completeOnboarding: () => {
-    set({ hasOnboarded: true });
-    persistSettings({ hasOnboarded: true });
   },
 
   loadSettings: () => {
