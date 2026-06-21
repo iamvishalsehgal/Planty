@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { usePlants } from "@/hooks/usePlants";
 import { useSettingsStore } from "@/stores/settingsStore";
-import { PLANTS_STORAGE_KEY, usePlantStore } from "@/stores/plantStore";
+import { PLANTS_STORAGE_KEY, MEMORIAL_STORAGE_KEY, usePlantStore } from "@/stores/plantStore";
 import { SETTINGS_STORAGE_KEY } from "@/stores/settingsStore";
 import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
@@ -41,6 +41,54 @@ export default function Profile() {
     }
   };
 
+  const migrateLegacyData = (data) => {
+    // Detect legacy format: has storeVersion, or plants have 'interval' instead of 'wateringIntervalDays'
+    const isLegacy = data.storeVersion !== undefined ||
+      (data.plants && data.plants[0] && data.plants[0].interval !== undefined);
+
+    if (!isLegacy) return data;
+
+    const plants = (data.plants || []).map((p) => {
+      // Find last watering from history
+      let lastWatered = p.created || new Date().toISOString();
+      if (data.history) {
+        const plantHistory = data.history
+          .filter((h) => h.plantId === p.id)
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+        if (plantHistory.length > 0) lastWatered = plantHistory[0].date;
+      }
+
+      const intervalDays = p.interval || 7;
+      const nextWatering = new Date(lastWatered);
+      nextWatering.setDate(nextWatering.getDate() + intervalDays);
+
+      return {
+        id: `import-${p.id}`,
+        name: p.name || "Unknown plant",
+        species: p.normalized || "Unknown",
+        room: p.location || "Living Room",
+        photoUri: p.photoCount > 0 ? null : null,
+        wateringIntervalDays: intervalDays,
+        lastWatered,
+        nextWatering: nextWatering.toISOString(),
+        adjustedInterval: intervalDays,
+        createdAt: p.created || new Date().toISOString(),
+        synced: false,
+      };
+    });
+
+    // Migrate dead plants to memorial
+    const memorial = (data.deadPlants || []).map((dp) => ({
+      id: `memorial-${dp.id}`,
+      name: dp.name || "Unknown",
+      species: dp.normalized || "Unknown",
+      room: dp.location || "",
+      removedAt: dp.deathDate || new Date().toISOString(),
+    }));
+
+    return { plants, memorial };
+  };
+
   const handleImport = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -50,34 +98,33 @@ export default function Profile() {
         const raw = reader.result;
         if (!raw || typeof raw !== "string") throw new Error("Empty file");
         const data = JSON.parse(raw);
-        const hasPlants = data.plants && (Array.isArray(data.plants) || typeof data.plants === "string");
+
+        // Check for valid data in either format
+        const hasPlants = data.plants && Array.isArray(data.plants);
         const hasSettings = data.settings && typeof data.settings === "object";
-        if (!hasPlants && !hasSettings) throw new Error("No valid plant or settings data found");
+        const isLegacy = data.storeVersion !== undefined;
+        if (!hasPlants && !hasSettings && !isLegacy) throw new Error("No valid plant or settings data found");
         if (!confirm("This will replace all current data. Continue?")) return;
 
-        // Validate and normalize plants
-        if (hasPlants) {
-          let plants = Array.isArray(data.plants) ? data.plants : JSON.parse(data.plants);
-          if (!Array.isArray(plants)) throw new Error("Invalid plant data format");
-          // Ensure every plant has an id
-          plants = plants.filter(p => p && typeof p === "object").map((p, i) => ({
-            ...p,
-            id: p.id || `local-${Date.now()}-${i}`,
-          }));
+        // Migrate legacy data
+        const migrated = migrateLegacyData(data);
+        const plants = migrated.plants;
+        const memorial = migrated.memorial || [];
+
+        if (plants && plants.length > 0) {
           localStorage.setItem(PLANTS_STORAGE_KEY, JSON.stringify(plants));
+        }
+        if (memorial.length > 0) {
+          localStorage.setItem(MEMORIAL_STORAGE_KEY, JSON.stringify(memorial));
         }
         if (hasSettings) {
           const settingsStr = typeof data.settings === "string" ? data.settings : JSON.stringify(data.settings);
           localStorage.setItem(SETTINGS_STORAGE_KEY, settingsStr);
         }
 
-        // Use store reload instead of window.location.reload() — avoids timing gap
-        const plantStore = usePlantStore.getState();
-        const settingsStore = useSettingsStore.getState();
-        plantStore.loadFromDisk();
-        settingsStore.loadSettings();
-
-        // Navigate to home
+        // Store reload + navigate to home
+        usePlantStore.getState().loadFromDisk();
+        useSettingsStore.getState().loadSettings();
         window.location.hash = "#/";
       } catch (e) {
         alert("Invalid backup file: " + e.message);
