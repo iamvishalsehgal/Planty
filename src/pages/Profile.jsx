@@ -122,10 +122,14 @@ export default function Profile() {
           localStorage.setItem(SETTINGS_STORAGE_KEY, settingsStr);
         }
 
-        // Store reload + navigate to home
+        // Store reload + navigate to home (defer nav until React re-renders)
         usePlantStore.getState().loadFromDisk();
         useSettingsStore.getState().loadSettings();
-        window.location.hash = "#/";
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.location.hash = "#/";
+          });
+        });
       } catch (e) {
         alert("Invalid backup file: " + e.message);
       }
