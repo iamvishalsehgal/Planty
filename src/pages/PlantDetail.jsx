@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { usePlants } from "@/hooks/usePlants";
 import { useWatering } from "@/hooks/useWatering";
+import { usePlantStore } from "@/stores/plantStore";
 import { BreathRing } from "@/components/BreathRing";
 import { GlassCard } from "@/components/GlassCard";
 import { Button } from "@/components/Button";
@@ -12,7 +13,15 @@ export default function PlantDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { removePlant, updatePlant, isLoading } = usePlants();
-  const { plant, daysLeft, nextWatering, lastWatered, waterPlant, cooldown } = useWatering(id);
+  const { plant: subPlant, daysLeft, nextWatering, lastWatered, waterPlant, cooldown } = useWatering(id);
+
+  // Fallback: direct synchronous lookup if subscription hasn't fired yet
+  const plant = useMemo(() => {
+    if (subPlant) return subPlant;
+    if (!id || isLoading) return undefined;
+    // Direct store read bypasses subscription timing
+    return usePlantStore.getState().plants.find((p) => p.id === id) || null;
+  }, [subPlant, id, isLoading]);
   const [justWatered, setJustWatered] = useState(false);
   const waterTimer = useRef(null);
   const fileInputRef = useRef(null);
@@ -35,7 +44,7 @@ export default function PlantDetail() {
     );
   }
 
-  if (!plant) {
+  if (!plant || plant === null) {
     return (
       <EmptyState title="Plant not found" description="This plant may have been removed."
         action={{ label: "Back to plants", onClick: () => navigate("/") }} />
