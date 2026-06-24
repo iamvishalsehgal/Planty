@@ -1,22 +1,22 @@
 # CLAUDE.md
 
-Planty v3 — smart plant care web app. React + Vite + Tailwind CSS. FastAPI backend optional.
+Planty v3 — smart plant care PWA. Vanilla HTML/CSS/JS, single-file app. No build dependencies needed to run.
 
 ## Stack
 
-- **Frontend**: React 19, Vite 6, Tailwind CSS, React Router v7
-- **State**: Zustand v5 + localStorage
-- **Styling**: Tailwind with custom design tokens (sage, soil, sky, clay, cream)
-- **Backend**: FastAPI + SQLite (local) / PostgreSQL (production)
-- **Deploy**: GitHub Pages (frontend), any PostgreSQL host (backend optional)
-- **Weather**: Open-Meteo free API (no key)
+- **Frontend**: Vanilla JS (ES2020+), CSS custom properties, single `index.html` (~1800 lines)
+- **State**: Plain object + localStorage persistence
+- **Styling**: Inline `<style>` with CSS custom properties (design tokens)
+- **Backend**: FastAPI + SQLite (local) / PostgreSQL (production) — optional
+- **Deploy**: GitHub Pages (static), any PostgreSQL host (backend optional)
+- **Weather**: Open-Meteo free API (no key), geolocation-based
 
 ## Build & Run
 
 ```bash
-npm install                     # Frontend deps
+npm install                     # Dev deps only (Vite, Playwright)
 npm run dev                     # Vite dev server → localhost:5173
-npm run build                   # Production build → dist/
+npm run build                   # Production build → dist/ (minifies index.html)
 
 # Backend (optional)
 cd backend
@@ -31,6 +31,9 @@ uvicorn main:app --reload       # API → localhost:8000
 # Frontend build check
 npm run build
 
+# E2E tests (Playwright, 36 tests)
+node e2e-full-test.mjs          # Requires dev server running on port 5169
+
 # Backend (29 tests)
 cd backend && source .venv/bin/activate && python3 -m pytest tests/ -v
 ```
@@ -39,19 +42,13 @@ cd backend && source .venv/bin/activate && python3 -m pytest tests/ -v
 
 ```
 planty/
-├── index.html              # SPA entry
-├── vite.config.js          # Vite config + path aliases
-├── tailwind.config.js      # Design tokens
-├── src/
-│   ├── main.jsx            # React entry + SW registration
-│   ├── App.jsx             # Router (HashRouter)
-│   ├── index.css           # Tailwind + custom CSS + dark mode
-│   ├── pages/              # Dashboard, AddPlant, Diagnose, Profile, PlantDetail
-│   ├── components/         # Button, GlassCard, BreathRing, PlantCard, etc.
-│   ├── stores/             # plantStore, settingsStore (Zustand + localStorage)
-│   ├── hooks/              # usePlants, useWatering, useWeather
-│   └── lib/                # weather (Open-Meteo), date utils, notifications, cn
-├── public/                 # PWA manifest, service worker, SVG icon
+├── index.html              # Entire app: HTML + CSS + JS (~1800 lines)
+├── vite.config.js          # Vite config for build/minify
+├── package.json            # Dev deps (Vite, Playwright, PostCSS)
+├── public/                 # PWA manifest, service worker, icons
+├── e2e-full-test.mjs       # Playwright E2E test suite (36 tests)
+├── src/                    # Legacy React source (v2, kept for reference)
+├── graphify-out/           # Knowledge graph analysis output
 ├── backend/                # FastAPI server (optional)
 │   ├── main.py             # App entry, middleware, scheduler
 │   ├── config.py           # Environment config
@@ -63,20 +60,58 @@ planty/
 └── .github/workflows/      # GitHub Pages deploy
 ```
 
+## Architecture (Vanilla JS)
+
+Single `index.html` with three sections:
+1. **`<style>`** — CSS custom properties, glass-morphism cards, tab bar, animations
+2. **`<body>`** — Semantic HTML: header, tabs (Home/Schedule/Memorial/Settings), modals
+3. **`<script>`** — IIFE-wrapped JS: state management, render engine, weather, ICS export
+
+### Core Patterns
+
+- **Derived state**: Health status, days-until-water, and adjusted intervals are computed at render time — never stored
+- **innerHTML rendering**: Plants/memorial/schedule rebuilt on every render call via template literals
+- **Debounced render**: `render()` uses `requestAnimationFrame` to batch rapid updates into one paint
+- **XSS protection**: `esc()` helper wraps all user-provided strings before innerHTML insertion
+- **IIFE encapsulation**: All internal functions private; only onclick-handler functions exposed to `window`
+- **Import validation**: `validatePlant()` + `normalizePlant()` sanitize imported data
+- **Error boundary**: `window.addEventListener('error', ...)` shows toast on unhandled exceptions
+
+### State Shape
+
+```js
+state = {
+  plants: [{ id, name, location, normalized, emoji, interval, isProtected, created }],
+  deadPlants: [{ id, name, emoji, location, normalized, cause, lastInterval, suggestedInterval, totalWaterings, deathDate }],
+  history: [{ plantId, date }],
+}
+environment = { temperature, season, hemisphere, latitude, longitude, lastFetch }
+```
+
+### Key Functions
+
+| Function | Role |
+|----------|------|
+| `getAdjustedInterval(pid, def)` | Base interval × environment multiplier (weather + season) |
+| `getBaseInterval(pid, def)` | Weighted moving average of historical watering intervals |
+| `getDaysUntilNextWater(pid, def)` | Days until plant needs water |
+| `combineDeathLearning(deadPlants)` | Computes adjusted interval for next plant from death data |
+| `render()` | Debounced dispatcher → renderPlants + renderMemorial + renderSchedule |
+
 ## Design System
 
-Nature palette: sage greens, soil browns, sky blues, clay terracotta, cream.
-Glass-morphism cards with multi-layer shadows, floating pill tab bar.
-Full tokens in `tailwind.config.js` and `src/index.css`.
-Dark mode via `html.dark` class with per-component color overrides.
+Nature palette via CSS custom properties: `--primary: #10b981`, `--water-blue: #3b82f6`, `--danger: #ef4444`, `--warning: #f59e0b`.
+Glass-morphism cards, floating pill tab bar, season-aware header gradient.
+No dark mode currently — would require `html.dark` class selector.
 
 ## Architecture Decisions
 
+- **Vanilla JS over React**: Zero dependencies, ~77KB total, instant load, no build step needed to run
 - **localStorage over backend DB**: Zero server costs, instant reads, import/export
-- **Zustand over Redux**: Tiny API, no providers, works outside React
-- **HashRouter over BrowserRouter**: GitHub Pages compatible, no 404 config
-- **Tailwind over CSS-in-JS**: Design tokens in config, utility-first
-- **SQLite over PostgreSQL (dev)**: Zero setup, WAL mode for concurrency
+- **innerHTML over virtual DOM**: Simpler mental model for single-page app, render ~0.3ms for 50 plants
+- **Derived state over stored state**: Health status, adjusted intervals computed at render — never stale
+- **Hash-free routing**: Tab-based navigation (`showTab()`) — no router, no URL state
+- **Open-Meteo over API-key services**: Free weather, no registration, no cost
 
 ## Agent Skills
 

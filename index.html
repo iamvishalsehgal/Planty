@@ -1686,6 +1686,8 @@
     <div class="toast" id="toast"><span class="icon" id="toastIcon">💧</span><div class="toast-text"><h4 id="toastTitle"></h4><p id="toastSubtitle"></p></div></div>
 
     <script>
+        (function() {
+        'use strict';
         const environment = { temperature: null, season: null, hemisphere: 'north', latitude: null, longitude: null, lastFetch: null };
 
         function detectSeason() {
@@ -1732,6 +1734,26 @@
         }
 
         const COOLDOWN_HOURS = 24;
+
+        // ── HTML escape — prevent XSS from user-provided strings ──
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+        function esc(str) { return escapeHtml(String(str)); }
+
+        // ── Debounced render — batch rapid updates into one paint ──
+        let _renderRaf = 0;
+        function render() {
+            cancelAnimationFrame(_renderRaf);
+            _renderRaf = requestAnimationFrame(() => {
+                renderPlants();
+                renderMemorial();
+                renderSchedule();
+            });
+        }
+
         const state = { plants: JSON.parse(localStorage.getItem('planty_plants')||'[]'), deadPlants: JSON.parse(localStorage.getItem('planty_dead')||'[]'), history: JSON.parse(localStorage.getItem('planty_history')||'[]'), pendingPlant: null, pendingRevival: null, selectedCause: 'unknown' };
 
         function save() { localStorage.setItem('planty_plants',JSON.stringify(state.plants)); localStorage.setItem('planty_dead',JSON.stringify(state.deadPlants)); localStorage.setItem('planty_history',JSON.stringify(state.history)); }
@@ -1779,19 +1801,41 @@
 
         function render() { renderPlants(); renderMemorial(); renderSchedule(); }
 
-        function renderPlants() { const c=document.getElementById('plantList'); if(!state.plants.length){c.innerHTML='<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above to get started.</p></div>';return;} c.innerHTML=state.plants.map(p=>{const du=getDaysUntilNextWater(p.id,p.interval),ds=getDaysSinceLastWater(p.id),hs=getHoursSinceLastWater(p.id),iv=getAdjustedInterval(p.id,p.interval),wc=getPlantHistory(p.id).length,cw=canWaterPlant(p.id);let cc='',ct=`${du} days`,st='Looking good! 🌿';if(du===0){cc='today';ct='Today!';st='Time to water 💧';}else if(du<0){cc='overdue';ct='Overdue!';st='Water me please! 🥺';}else if(du===1){cc='urgent';ct='Tomorrow';st='Get ready! 🌱';}const lt=ds===null?'Never watered':ds===0?(hs<1?'Just now':`${Math.floor(hs)}h ago`):`${ds} days ago`;return `<div class="plant-card ${p.isProtected?'protected':''} ${du<=0?'needs-water':''}"><div class="plant-header"><div class="plant-emoji">${p.emoji}</div><div class="plant-info"><div class="plant-name">${p.name}${p.isProtected?'<span class="badge">🛡️</span>':''}</div>${p.location?`<div class="plant-location">📍 ${p.location}</div>`:''}</div></div><div class="plant-stats"><div class="stat-pill"><div class="stat-value">${wc}</div><div class="stat-label">Waterings</div></div><div class="stat-pill"><div class="stat-value">${iv}d</div><div class="stat-label">Interval</div></div><div class="stat-pill"><div class="stat-value">${ds===null?'-':ds+'d'}</div><div class="stat-label">Since Last</div></div></div><div class="water-countdown ${cc}"><div class="countdown-label">Next watering</div><div class="countdown-value">${ct}</div><div class="countdown-subtext">${st}</div></div><button class="water-btn ${!cw.allowed?'water-btn-disabled':''}" onclick="waterPlant(${p.id})"><span>💧</span>${cw.allowed?'I Watered This':`Wait ${cw.hoursLeft}h`}</button>${!cw.allowed?`<div class="cooldown-warning"><span>⏳</span> Soil still absorbing water</div>`:''}<div class="actions-row"><span class="last-watered">Last: ${lt}</span><div class="action-btns"><button class="action-btn danger" onclick="showDeathModal(${p.id})">💀</button><button class="action-btn" onclick="deletePlant(${p.id})">🗑️</button></div></div></div>`;}).join('');}
+        function renderPlants() { const c=document.getElementById('plantList'); if(!state.plants.length){c.innerHTML='<div class="empty-state"><div class="empty-state-icon">🌱</div><h2>No plants yet!</h2><p>Add your first plant above to get started.</p></div>';return;} c.innerHTML=state.plants.map(p=>{const du=getDaysUntilNextWater(p.id,p.interval),ds=getDaysSinceLastWater(p.id),hs=getHoursSinceLastWater(p.id),iv=getAdjustedInterval(p.id,p.interval),wc=getPlantHistory(p.id).length,cw=canWaterPlant(p.id);let cc='',ct=`${du} days`,st='Looking good! 🌿';if(du===0){cc='today';ct='Today!';st='Time to water 💧';}else if(du<0){cc='overdue';ct='Overdue!';st='Water me please! 🥺';}else if(du===1){cc='urgent';ct='Tomorrow';st='Get ready! 🌱';}const lt=ds===null?'Never watered':ds===0?(hs<1?'Just now':`${Math.floor(hs)}h ago`):`${ds} days ago`;return `<div class="plant-card ${p.isProtected?'protected':''} ${du<=0?'needs-water':''}"><div class="plant-header"><div class="plant-emoji">${p.emoji}</div><div class="plant-info"><div class="plant-name">${esc(p.name)}${p.isProtected?'<span class="badge">🛡️</span>':''}</div>${p.location?`<div class="plant-location">📍 ${esc(p.location)}</div>`:''}</div></div><div class="plant-stats"><div class="stat-pill"><div class="stat-value">${wc}</div><div class="stat-label">Waterings</div></div><div class="stat-pill"><div class="stat-value">${iv}d</div><div class="stat-label">Interval</div></div><div class="stat-pill"><div class="stat-value">${ds===null?'-':ds+'d'}</div><div class="stat-label">Since Last</div></div></div><div class="water-countdown ${cc}"><div class="countdown-label">Next watering</div><div class="countdown-value">${ct}</div><div class="countdown-subtext">${st}</div></div><button class="water-btn ${!cw.allowed?'water-btn-disabled':''}" onclick="waterPlant(${p.id})"><span>💧</span>${cw.allowed?'I Watered This':`Wait ${cw.hoursLeft}h`}</button>${!cw.allowed?`<div class="cooldown-warning"><span>⏳</span> Soil still absorbing water</div>`:''}<div class="actions-row"><span class="last-watered">Last: ${lt}</span><div class="action-btns"><button class="action-btn danger" onclick="showDeathModal(${p.id})">💀</button><button class="action-btn" onclick="deletePlant(${p.id})">🗑️</button></div></div></div>`;}).join('');}
 
-        function renderMemorial() { const c=document.getElementById('memorialList'); if(!state.deadPlants.length){c.innerHTML='<div class="empty-state"><div class="empty-state-icon">🌿</div><h2>No plants here</h2><p>Let\'s keep it that way! 🙏</p></div>';return;} const g={}; state.deadPlants.forEach(p=>{if(!g[p.normalized])g[p.normalized]=[];g[p.normalized].push(p);}); c.innerHTML=Object.entries(g).map(([k,ps])=>{const f=ps[0],cd=combineDeathLearning(ps);return `<div class="memorial-card" style="${ps.length>1?'border-color:var(--warning);':''}"><div class="memorial-header"><div class="memorial-emoji">${f.emoji||'🌱'}</div><div><div class="memorial-name">${f.name}</div><div class="memorial-dates">${ps.length>1?`⚠️ ${ps.length} plants died`:new Date(f.deathDate).toLocaleDateString()}</div></div></div><div class="memorial-details">${ps.length>1?`<p><strong>Deaths:</strong> ${cd.overwaterCount}× overwatering, ${cd.underwaterCount}× underwatering</p>`:`<p><strong>Cause:</strong> ${f.cause==='overwatering'?'💧 Too much water':f.cause==='underwatering'?'🏜️ Not enough water':'❓ Unknown'}</p>`}<p><strong>Original interval:</strong> ${cd.originalInterval} days</p><p><strong>Next plant will use:</strong> ${cd.suggestedInterval} days 🛡️</p></div></div>`;}).join('');}
+        function renderMemorial() { const c=document.getElementById('memorialList'); if(!state.deadPlants.length){c.innerHTML='<div class="empty-state"><div class="empty-state-icon">🌿</div><h2>No plants here</h2><p>Let\'s keep it that way! 🙏</p></div>';return;} const g={}; state.deadPlants.forEach(p=>{if(!g[p.normalized])g[p.normalized]=[];g[p.normalized].push(p);}); c.innerHTML=Object.entries(g).map(([k,ps])=>{const f=ps[0],cd=combineDeathLearning(ps);return `<div class="memorial-card" style="${ps.length>1?'border-color:var(--warning);':''}"><div class="memorial-header"><div class="memorial-emoji">${f.emoji||'🌱'}</div><div><div class="memorial-name">${esc(f.name)}</div><div class="memorial-dates">${ps.length>1?`⚠️ ${ps.length} plants died`:new Date(f.deathDate).toLocaleDateString()}</div></div></div><div class="memorial-details">${ps.length>1?`<p><strong>Deaths:</strong> ${cd.overwaterCount}× overwatering, ${cd.underwaterCount}× underwatering</p>`:`<p><strong>Cause:</strong> ${f.cause==='overwatering'?'💧 Too much water':f.cause==='underwatering'?'🏜️ Not enough water':'❓ Unknown'}</p>`}<p><strong>Original interval:</strong> ${cd.originalInterval} days</p><p><strong>Next plant will use:</strong> ${cd.suggestedInterval} days 🛡️</p></div></div>`;}).join('');}
 
-        function renderSchedule() { document.getElementById('statTotalPlants').textContent=state.plants.length; document.getElementById('statTotalWaterings').textContent=state.history.length; if(state.plants.length){const ai=state.plants.reduce((s,p)=>s+getAdjustedInterval(p.id,p.interval),0)/state.plants.length;document.getElementById('statAvgInterval').textContent=Math.round(ai)+'d';document.getElementById('statOverdue').textContent=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)<0).length;} renderAnalytics(); const wc=document.getElementById('weeklySchedule'),td=new Date(),dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; wc.innerHTML=Array.from({length:7},(_,i)=>{const d=new Date(td);d.setDate(td.getDate()+i);const dp=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)===i),it=i===0,ht=dp.length>0;return `<div class="week-day ${it?'today':''} ${ht?'has-task':''}"><div class="week-day-name">${dn[d.getDay()]}</div><div class="week-day-num">${d.getDate()}</div><div class="week-day-plants">${dp.map(p=>p.emoji).join('')||'·'}</div></div>`;}).join(''); const uc=document.getElementById('upcomingList'),up=state.plants.map(p=>({plant:p,daysUntil:getDaysUntilNextWater(p.id,p.interval)})).sort((a,b)=>a.daysUntil-b.daysUntil); if(!up.length){uc.innerHTML='<div style="text-align:center;color:var(--gray-400);padding:20px;">No plants yet</div>';}else{const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; uc.innerHTML=up.slice(0,7).map(item=>{const d=new Date();d.setDate(d.getDate()+item.daysUntil);const b=item.daysUntil===0?'today':'soon',bt=item.daysUntil===0?'Today!':item.daysUntil===1?'Tomorrow':`${item.daysUntil} days`;return `<div class="upcoming-item ${item.daysUntil===0?'today':''}"><div class="upcoming-date"><div class="upcoming-date-day">${d.getDate()}</div><div class="upcoming-date-month">${ms[d.getMonth()]}</div></div><div class="upcoming-info"><div class="upcoming-plant">${item.plant.emoji} ${item.plant.name}</div></div><div class="upcoming-badge ${b}">${bt}</div></div>`;}).join('');} }
+        function renderSchedule() { document.getElementById('statTotalPlants').textContent=state.plants.length; document.getElementById('statTotalWaterings').textContent=state.history.length; if(state.plants.length){const ai=state.plants.reduce((s,p)=>s+getAdjustedInterval(p.id,p.interval),0)/state.plants.length;document.getElementById('statAvgInterval').textContent=Math.round(ai)+'d';document.getElementById('statOverdue').textContent=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)<0).length;} renderAnalytics(); const wc=document.getElementById('weeklySchedule'),td=new Date(),dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; wc.innerHTML=Array.from({length:7},(_,i)=>{const d=new Date(td);d.setDate(td.getDate()+i);const dp=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)===i),it=i===0,ht=dp.length>0;return `<div class="week-day ${it?'today':''} ${ht?'has-task':''}"><div class="week-day-name">${dn[d.getDay()]}</div><div class="week-day-num">${d.getDate()}</div><div class="week-day-plants">${dp.map(p=>p.emoji).join('')||'·'}</div></div>`;}).join(''); const uc=document.getElementById('upcomingList'),up=state.plants.map(p=>({plant:p,daysUntil:getDaysUntilNextWater(p.id,p.interval)})).sort((a,b)=>a.daysUntil-b.daysUntil); if(!up.length){uc.innerHTML='<div style="text-align:center;color:var(--gray-400);padding:20px;">No plants yet</div>';}else{const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; uc.innerHTML=up.slice(0,7).map(item=>{const d=new Date();d.setDate(d.getDate()+item.daysUntil);const b=item.daysUntil===0?'today':'soon',bt=item.daysUntil===0?'Today!':item.daysUntil===1?'Tomorrow':`${item.daysUntil} days`;return `<div class="upcoming-item ${item.daysUntil===0?'today':''}"><div class="upcoming-date"><div class="upcoming-date-day">${d.getDate()}</div><div class="upcoming-date-month">${ms[d.getMonth()]}</div></div><div class="upcoming-info"><div class="upcoming-plant">${item.plant.emoji} ${esc(item.plant.name)}</div></div><div class="upcoming-badge ${b}">${bt}</div></div>`;}).join('');} }
 
         function renderAnalytics() { const c=document.getElementById('analyticsContent'); if(!state.plants.length){c.innerHTML='<div style="text-align:center;color:var(--gray-400);padding:20px;">Add plants to see analytics</div>';return;} const tw=state.history.filter(h=>{const d=new Date(h.date),wa=new Date();wa.setDate(wa.getDate()-7);return d>=wa;}).length; const tm=state.history.filter(h=>{const d=new Date(h.date),ma=new Date();ma.setDate(ma.getDate()-30);return d>=ma;}).length; const nwt=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)===0).length; const nws=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)<=2).length; const ov=state.plants.filter(p=>getDaysUntilNextWater(p.id,p.interval)<0).length; const ai=state.plants.length?Math.round(state.plants.reduce((s,p)=>s+getAdjustedInterval(p.id,p.interval),0)/state.plants.length):0; c.innerHTML=`<div class="analytics-grid"><div class="analytics-item water"><div class="analytics-value">${tw}</div><div class="analytics-label">This Week</div><div class="analytics-sub">waterings</div></div><div class="analytics-item"><div class="analytics-value">${tm}</div><div class="analytics-label">This Month</div><div class="analytics-sub">waterings</div></div><div class="analytics-item ${nwt>0?'highlight':''}"><div class="analytics-value">${nwt}</div><div class="analytics-label">Due Today</div><div class="analytics-sub">${nws} due soon</div></div><div class="analytics-item ${ov>0?'highlight':''}"><div class="analytics-value">${ov}</div><div class="analytics-label">Overdue</div><div class="analytics-sub">need attention</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;"><div style="background:var(--gray-50);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--gray-800);">${ai}d</div><div style="font-size:11px;color:var(--gray-500);text-transform:uppercase;">Avg Interval</div></div><div style="background:var(--gray-50);border-radius:12px;padding:14px;text-align:center;"><div style="font-size:24px;font-weight:700;color:var(--gray-800);">${state.history.length}</div><div style="font-size:11px;color:var(--gray-500);text-transform:uppercase;">Total Waterings</div></div></div>`; }
 
-        function downloadICS() { if(!state.plants.length){showToast('❌ No plants','Add plants first');return;} let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Planty//Plant Watering Schedule//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:🌱 Planty Watering\nX-WR-TIMEZONE:UTC\n'; state.plants.forEach(p=>{const iv=getAdjustedInterval(p.id,p.interval),du=getDaysUntilNextWater(p.id,p.interval),nd=new Date();nd.setDate(nd.getDate()+du);const uid=`planty-${p.id}-${Date.now()}@planty.app`,now=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z',ed=nd.toISOString().split('T')[0].replace(/-/g,'');ics+=`BEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${now}\nDTSTART;VALUE=DATE:${ed}\nDTEND;VALUE=DATE:${ed}\nRRULE:FREQ=DAILY;INTERVAL=${iv}\nSUMMARY:💧 Water ${p.name}\nDESCRIPTION:Time to water your ${p.name}!\\nLocation: ${p.location||'Not set'}\nBEGIN:VALARM\nTRIGGER:-PT1H\nACTION:DISPLAY\nDESCRIPTION:Time to water ${p.name}!\nEND:VALARM\nEND:VEVENT\n`;});ics+='END:VCALENDAR';const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='planty-schedule.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('📥 Downloaded!','Open to add to calendar');}
+        function icsEscape(str) { return String(str).replace(/[\\;,]/g,'\\$&').replace(/\n/g,'\\n'); }
+
+        function downloadICS() { if(!state.plants.length){showToast('❌ No plants','Add plants first');return;} let ics='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Planty//Plant Watering Schedule//EN\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:🌱 Planty Watering\nX-WR-TIMEZONE:UTC\n'; state.plants.forEach(p=>{const iv=getAdjustedInterval(p.id,p.interval),du=getDaysUntilNextWater(p.id,p.interval),nd=new Date();nd.setDate(nd.getDate()+du);const uid=`planty-${p.id}-${Date.now()}@planty.app`,now=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z',ed=nd.toISOString().split('T')[0].replace(/-/g,'');const nameSafe=icsEscape(p.name),locSafe=icsEscape(p.location||'Not set');ics+=`BEGIN:VEVENT\nUID:${uid}\nDTSTAMP:${now}\nDTSTART;VALUE=DATE:${ed}\nDTEND;VALUE=DATE:${ed}\nRRULE:FREQ=DAILY;INTERVAL=${iv}\nSUMMARY:💧 Water ${nameSafe}\nDESCRIPTION:Time to water your ${nameSafe}!\\nLocation: ${locSafe}\nBEGIN:VALARM\nTRIGGER:-PT1H\nACTION:DISPLAY\nDESCRIPTION:Time to water ${nameSafe}!\nEND:VALARM\nEND:VEVENT\n`;});ics+='END:VCALENDAR';const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='planty-schedule.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('📥 Downloaded!','Open to add to calendar');}
 
         function exportData() { const data={plants:state.plants,deadPlants:state.deadPlants,history:state.history,exportDate:new Date().toISOString()},blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`planty-backup-${new Date().toISOString().split('T')[0]}.json`;a.click();URL.revokeObjectURL(url);showToast('📤 Exported!','Backup saved');}
 
-        function importData(event) { const f=event.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=function(e){try{const d=JSON.parse(e.target.result);if(d.plants)state.plants=d.plants;if(d.deadPlants)state.deadPlants=d.deadPlants;if(d.history)state.history=d.history;save();render();showToast('📥 Imported!',`${state.plants.length} plants restored`);}catch{showToast('❌ Error','Invalid backup file');}};r.readAsText(f);event.target.value='';}
+        function validatePlant(p) {
+            if (!p || typeof p !== 'object') return false;
+            if (!p.id && !p.created) return false; // need some identifier
+            if (!p.name || typeof p.name !== 'string') return false;
+            return true;
+        }
+        function normalizePlant(p) {
+            const now = new Date().toISOString();
+            return {
+                id: p.id || Date.now(),
+                name: String(p.name || 'Unknown plant').trim(),
+                location: String(p.location || p.room || '').trim(),
+                normalized: (p.normalized || p.name || 'unknown').toLowerCase().trim(),
+                emoji: p.emoji || getPlantEmoji(p.name || '🌱'),
+                interval: Number.isFinite(p.interval) ? p.interval : (Number.isFinite(p.wateringIntervalDays) ? p.wateringIntervalDays : 7),
+                isProtected: !!p.isProtected,
+                created: p.created || p.createdAt || now,
+            };
+        }
+
+        function importData(event) { const f=event.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=function(e){try{const d=JSON.parse(e.target.result); const plants=(d.plants||[]).filter(validatePlant).map(normalizePlant); const dead=(d.deadPlants||[]).filter(validatePlant).map(normalizePlant); if(plants.length) state.plants=plants; if(dead.length) state.deadPlants=dead; if(d.history&&Array.isArray(d.history)) state.history=d.history.filter(h=>h&&h.plantId&&h.date); save(); render(); showToast('📥 Imported!',`${state.plants.length} plants restored`);}catch{showToast('❌ Error','Invalid backup file');}};r.readAsText(f);event.target.value='';}
 
         function clearAllData() { if(!confirm('Delete ALL data?')) return; localStorage.clear(); location.reload(); }
 
@@ -1808,6 +1852,31 @@
         document.querySelectorAll('.interval-btn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.interval-btn').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');});});
 
         loadEnvironment(); updateWeatherDisplay(); fetchWeather(); setInterval(fetchWeather,3600000); render();
+
+        // ── Global error boundary — prevents silent crashes ──
+        window.addEventListener('error', function(e) {
+            console.error('Planty error:', e.error || e.message);
+            showToast('⚠️ Oops!', 'Something went wrong. Try refreshing.');
+        });
+
+        // ── Expose public API for onclick handlers ──
+        window.addPlant = addPlant;
+        window.addAsSecond = addAsSecond;
+        window.clearAllData = clearAllData;
+        window.closeModal = closeModal;
+        window.confirmDeath = confirmDeath;
+        window.confirmRevival = confirmRevival;
+        window.deletePlant = deletePlant;
+        window.downloadICS = downloadICS;
+        window.exportData = exportData;
+        window.importData = importData;
+        window.selectCause = selectCause;
+        window.showDeathModal = showDeathModal;
+        window.showModal = showModal;
+        window.showTab = showTab;
+        window.toggleBottomWaterInfo = toggleBottomWaterInfo;
+        window.waterPlant = waterPlant;
+        })();
     </script>
 </body>
 </html>
