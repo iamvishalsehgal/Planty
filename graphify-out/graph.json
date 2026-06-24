@@ -1,75 +1,14 @@
 {
   "directed": false,
   "multigraph": false,
-  "graph": {
-    "hyperedges": [
-      {
-        "id": "plant_lifecycle_management",
-        "label": "Plant Lifecycle Management",
-        "nodes": [
-          "index_html_state",
-          "index_html_death_learning",
-          "index_html_revival_system",
-          "index_html_duplicate_detection",
-          "index_html_addplant",
-          "index_html_createplant",
-          "index_html_confirmdeath",
-          "index_html_confirmrevival",
-          "index_html_rendermemorial"
-        ],
-        "relation": "participate_in",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
-        "source_file": "index.html"
-      },
-      {
-        "id": "watering_intelligence_feedback_loop",
-        "label": "Watering Intelligence Feedback Loop",
-        "nodes": [
-          "index_html_getadjustedinterval",
-          "index_html_getbaseinterval",
-          "index_html_getenvironmentmultiplier",
-          "index_html_getseasonalmultiplier",
-          "index_html_gettemperaturemultiplier",
-          "index_html_fetchweather",
-          "index_html_cooldown_enforcement",
-          "index_html_bottom_watering_education",
-          "index_html_weighted_moving_average",
-          "index_html_derived_state"
-        ],
-        "relation": "participate_in",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
-        "source_file": "index.html"
-      },
-      {
-        "id": "data_persistence_and_portability",
-        "label": "Data Persistence and Portability",
-        "nodes": [
-          "index_html_localstorage_persistence",
-          "index_html_state",
-          "index_html_save",
-          "index_html_exportdata",
-          "index_html_importdata",
-          "index_html_validateplant",
-          "index_html_normalizeplant",
-          "index_html_downloadics",
-          "index_html_import_validation"
-        ],
-        "relation": "participate_in",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
-        "source_file": "index.html"
-      }
-    ]
-  },
+  "graph": {},
   "nodes": [
     {
       "label": "tailwind.config.js",
       "file_type": "code",
       "source_file": "tailwind.config.js",
       "source_location": "L1",
-      "community": 32,
+      "community": 33,
       "norm_label": "tailwind.config.js",
       "id": "tailwind_config_js"
     },
@@ -78,7 +17,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L1",
-      "community": 15,
+      "community": 16,
       "norm_label": "e2e-full-test.mjs",
       "id": "e2e_full_test_mjs"
     },
@@ -87,7 +26,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L18",
-      "community": 15,
+      "community": 16,
       "norm_label": "ok()",
       "id": "e2e_full_test_ok"
     },
@@ -96,7 +35,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L22",
-      "community": 15,
+      "community": 16,
       "norm_label": "fail()",
       "id": "e2e_full_test_fail"
     },
@@ -105,7 +44,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L53",
-      "community": 15,
+      "community": 16,
       "norm_label": "preparecleanpage()",
       "id": "e2e_full_test_preparecleanpage"
     },
@@ -114,7 +53,7 @@
       "file_type": "code",
       "source_file": "vite.config.js",
       "source_location": "L1",
-      "community": 33,
+      "community": 34,
       "norm_label": "vite.config.js",
       "id": "vite_config_js"
     },
@@ -123,7 +62,7 @@
       "file_type": "code",
       "source_file": "postcss.config.js",
       "source_location": "L1",
-      "community": 34,
+      "community": 35,
       "norm_label": "postcss.config.js",
       "id": "postcss_config_js"
     },
@@ -564,7 +503,7 @@
       "file_type": "code",
       "source_file": "backend/tests/__init__.py",
       "source_location": "L1",
-      "community": 35,
+      "community": 36,
       "norm_label": "__init__.py",
       "id": "backend_tests_init_py"
     },
@@ -1158,7 +1097,7 @@
       "file_type": "code",
       "source_file": "backend/routes/__init__.py",
       "source_location": "L1",
-      "community": 36,
+      "community": 37,
       "norm_label": "__init__.py",
       "id": "backend_routes_init_py"
     },
@@ -1239,7 +1178,7 @@
       "file_type": "code",
       "source_file": "backend/services/__init__.py",
       "source_location": "L1",
-      "community": 37,
+      "community": 38,
       "norm_label": "__init__.py",
       "id": "backend_services_init_py"
     },
@@ -1275,7 +1214,7 @@
       "file_type": "code",
       "source_file": "public/sw.js",
       "source_location": "L1",
-      "community": 38,
+      "community": 39,
       "norm_label": "sw.js",
       "id": "public_sw_js"
     },
@@ -1284,7 +1223,7 @@
       "file_type": "code",
       "source_file": "src/main.jsx",
       "source_location": "L1",
-      "community": 39,
+      "community": 40,
       "norm_label": "main.jsx",
       "id": "src_main_jsx"
     },
@@ -1311,7 +1250,7 @@
       "file_type": "code",
       "source_file": "src/stores/settingsStore.js",
       "source_location": "L1",
-      "community": 20,
+      "community": 21,
       "norm_label": "settingsstore.js",
       "id": "src_stores_settingsstore_js"
     },
@@ -1320,7 +1259,7 @@
       "file_type": "code",
       "source_file": "src/stores/settingsStore.js",
       "source_location": "L5",
-      "community": 20,
+      "community": 21,
       "norm_label": "loadfromstorage()",
       "id": "settingsstore_loadfromstorage"
     },
@@ -1329,7 +1268,7 @@
       "file_type": "code",
       "source_file": "src/stores/settingsStore.js",
       "source_location": "L15",
-      "community": 20,
+      "community": 21,
       "norm_label": "persistsettings()",
       "id": "settingsstore_persistsettings"
     },
@@ -1383,7 +1322,7 @@
       "file_type": "code",
       "source_file": "src/components/BreathRing.jsx",
       "source_location": "L1",
-      "community": 21,
+      "community": 22,
       "norm_label": "breathring.jsx",
       "id": "src_components_breathring_jsx"
     },
@@ -1392,7 +1331,7 @@
       "file_type": "code",
       "source_file": "src/components/BreathRing.jsx",
       "source_location": "L10",
-      "community": 21,
+      "community": 22,
       "norm_label": "breathring()",
       "id": "breathring_breathring"
     },
@@ -1401,7 +1340,7 @@
       "file_type": "code",
       "source_file": "src/components/BreathRing.jsx",
       "source_location": "L85",
-      "community": 21,
+      "community": 22,
       "norm_label": "breathringsimple()",
       "id": "breathring_breathringsimple"
     },
@@ -1572,7 +1511,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L1",
-      "community": 7,
+      "community": 8,
       "norm_label": "skeleton.jsx",
       "id": "src_components_skeleton_jsx"
     },
@@ -1581,7 +1520,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L3",
-      "community": 7,
+      "community": 8,
       "norm_label": "skeleton()",
       "id": "skeleton_skeleton"
     },
@@ -1590,7 +1529,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L16",
-      "community": 7,
+      "community": 8,
       "norm_label": "plantcardskeleton()",
       "id": "skeleton_plantcardskeleton"
     },
@@ -1599,7 +1538,7 @@
       "file_type": "code",
       "source_file": "src/components/Skeleton.jsx",
       "source_location": "L29",
-      "community": 7,
+      "community": 8,
       "norm_label": "dashboardskeleton()",
       "id": "skeleton_dashboardskeleton"
     },
@@ -1608,7 +1547,7 @@
       "file_type": "code",
       "source_file": "src/components/EmptyState.jsx",
       "source_location": "L1",
-      "community": 24,
+      "community": 25,
       "norm_label": "emptystate.jsx",
       "id": "src_components_emptystate_jsx"
     },
@@ -1617,7 +1556,7 @@
       "file_type": "code",
       "source_file": "src/components/EmptyState.jsx",
       "source_location": "L3",
-      "community": 24,
+      "community": 25,
       "norm_label": "emptystate()",
       "id": "emptystate_emptystate"
     },
@@ -1626,7 +1565,7 @@
       "file_type": "code",
       "source_file": "src/components/Button.jsx",
       "source_location": "L1",
-      "community": 7,
+      "community": 8,
       "norm_label": "button.jsx",
       "id": "src_components_button_jsx"
     },
@@ -1635,7 +1574,7 @@
       "file_type": "code",
       "source_file": "src/components/Button.jsx",
       "source_location": "L16",
-      "community": 7,
+      "community": 8,
       "norm_label": "button()",
       "id": "button_button"
     },
@@ -1644,7 +1583,7 @@
       "file_type": "code",
       "source_file": "src/components/CountUp.jsx",
       "source_location": "L1",
-      "community": 25,
+      "community": 26,
       "norm_label": "countup.jsx",
       "id": "src_components_countup_jsx"
     },
@@ -1653,7 +1592,7 @@
       "file_type": "code",
       "source_file": "src/components/CountUp.jsx",
       "source_location": "L3",
-      "community": 25,
+      "community": 26,
       "norm_label": "countup()",
       "id": "countup_countup"
     },
@@ -1662,7 +1601,7 @@
       "file_type": "code",
       "source_file": "src/components/SeasonBanner.jsx",
       "source_location": "L1",
-      "community": 26,
+      "community": 27,
       "norm_label": "seasonbanner.jsx",
       "id": "src_components_seasonbanner_jsx"
     },
@@ -1671,7 +1610,7 @@
       "file_type": "code",
       "source_file": "src/components/SeasonBanner.jsx",
       "source_location": "L8",
-      "community": 26,
+      "community": 27,
       "norm_label": "seasonbanner()",
       "id": "seasonbanner_seasonbanner"
     },
@@ -1680,7 +1619,7 @@
       "file_type": "code",
       "source_file": "src/components/GlassCard.jsx",
       "source_location": "L1",
-      "community": 7,
+      "community": 8,
       "norm_label": "glasscard.jsx",
       "id": "src_components_glasscard_jsx"
     },
@@ -1689,7 +1628,7 @@
       "file_type": "code",
       "source_file": "src/components/GlassCard.jsx",
       "source_location": "L9",
-      "community": 7,
+      "community": 8,
       "norm_label": "glasscard()",
       "id": "glasscard_glasscard"
     },
@@ -1698,7 +1637,7 @@
       "file_type": "code",
       "source_file": "src/components/SpeciesBadge.jsx",
       "source_location": "L1",
-      "community": 7,
+      "community": 8,
       "norm_label": "speciesbadge.jsx",
       "id": "src_components_speciesbadge_jsx"
     },
@@ -1707,7 +1646,7 @@
       "file_type": "code",
       "source_file": "src/components/SpeciesBadge.jsx",
       "source_location": "L8",
-      "community": 7,
+      "community": 8,
       "norm_label": "speciesbadge()",
       "id": "speciesbadge_speciesbadge"
     },
@@ -1878,7 +1817,7 @@
       "file_type": "code",
       "source_file": "src/lib/cn.js",
       "source_location": "L1",
-      "community": 7,
+      "community": 8,
       "norm_label": "cn.js",
       "id": "src_lib_cn_js"
     },
@@ -1887,7 +1826,7 @@
       "file_type": "code",
       "source_file": "src/lib/cn.js",
       "source_location": "L2",
-      "community": 7,
+      "community": 8,
       "norm_label": "cn()",
       "id": "cn_cn"
     },
@@ -2013,7 +1952,7 @@
       "file_type": "code",
       "source_file": "src/pages/Memorial.jsx",
       "source_location": "L1",
-      "community": 27,
+      "community": 28,
       "norm_label": "memorial.jsx",
       "id": "src_pages_memorial_jsx"
     },
@@ -2022,7 +1961,7 @@
       "file_type": "code",
       "source_file": "src/pages/Memorial.jsx",
       "source_location": "L5",
-      "community": 27,
+      "community": 28,
       "norm_label": "memorial()",
       "id": "memorial_memorial"
     },
@@ -2058,7 +1997,7 @@
       "file_type": "code",
       "source_file": "src/pages/Diagnose.jsx",
       "source_location": "L1",
-      "community": 28,
+      "community": 29,
       "norm_label": "diagnose.jsx",
       "id": "src_pages_diagnose_jsx"
     },
@@ -2067,7 +2006,7 @@
       "file_type": "code",
       "source_file": "src/pages/Diagnose.jsx",
       "source_location": "L22",
-      "community": 28,
+      "community": 29,
       "norm_label": "diagnose()",
       "id": "diagnose_diagnose"
     },
@@ -2129,7 +2068,7 @@
       "label": "Planty SPA \u2014 vanilla JS app entry",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 22,
+      "community": 23,
       "norm_label": "planty spa \u2014 vanilla js app entry",
       "id": "index_html_planty_app"
     },
@@ -2176,7 +2115,7 @@
       "label": "Plant state management \u2014 plants, deadPlants, history",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 8,
+      "community": 0,
       "norm_label": "plant state management \u2014 plants, deadplants, history",
       "id": "index_html_plant_state"
     },
@@ -2184,7 +2123,7 @@
       "label": "localStorage Persistence Layer",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 8,
+      "community": 0,
       "norm_label": "localstorage persistence layer",
       "source_location": "line 1757",
       "source_url": null,
@@ -2244,7 +2183,7 @@
       "label": "ICS calendar export \u2014 RRULE-based watering schedule",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 40,
+      "community": 41,
       "norm_label": "ics calendar export \u2014 rrule-based watering schedule",
       "id": "index_html_ics_export"
     },
@@ -2252,7 +2191,7 @@
       "label": "Bottom watering education",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 41,
+      "community": 42,
       "norm_label": "bottom watering education",
       "id": "index_html_bottom_watering"
     },
@@ -2260,7 +2199,7 @@
       "label": "24-hour watering cooldown enforcement",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 42,
+      "community": 43,
       "norm_label": "24-hour watering cooldown enforcement",
       "id": "index_html_cooldown"
     },
@@ -2268,7 +2207,7 @@
       "label": "Four-tab SPA navigation \u2014 Home, Schedule, Memorial, Settings",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 43,
+      "community": 44,
       "norm_label": "four-tab spa navigation \u2014 home, schedule, memorial, settings",
       "id": "index_html_tab_navigation"
     },
@@ -2276,7 +2215,7 @@
       "label": "Glass-morphism UI",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 18,
+      "community": 17,
       "norm_label": "glass-morphism ui",
       "id": "index_html_glassmorphism_ui"
     },
@@ -2284,7 +2223,7 @@
       "label": "PWA meta tags",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 44,
+      "community": 45,
       "norm_label": "pwa meta tags",
       "id": "index_html_pwa_meta"
     },
@@ -2292,7 +2231,7 @@
       "label": "Planty v3 \u2014 smart plant care web app overview",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 22,
+      "community": 23,
       "norm_label": "planty v3 \u2014 smart plant care web app overview",
       "id": "readme_md_project_overview"
     },
@@ -2300,7 +2239,7 @@
       "label": "Tech stack \u2014 React 19, Vite 6, Tailwind, Zustand, FastAPI",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 16,
+      "community": 19,
       "norm_label": "tech stack \u2014 react 19, vite 6, tailwind, zustand, fastapi",
       "id": "readme_md_tech_stack"
     },
@@ -2308,7 +2247,7 @@
       "label": "API endpoints \u2014 plants CRUD, watering, diagnosis, weather",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 29,
+      "community": 30,
       "norm_label": "api endpoints \u2014 plants crud, watering, diagnosis, weather",
       "id": "readme_md_api_endpoints"
     },
@@ -2316,7 +2255,7 @@
       "label": "Zero server costs \u2014 static frontend + free weather API",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 8,
+      "community": 0,
       "norm_label": "zero server costs \u2014 static frontend + free weather api",
       "id": "readme_md_zero_server_costs"
     },
@@ -2324,7 +2263,7 @@
       "label": "Offline-first \u2014 localStorage + import/export backup",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 8,
+      "community": 0,
       "norm_label": "offline-first \u2014 localstorage + import/export backup",
       "id": "readme_md_offline_first"
     },
@@ -2332,7 +2271,7 @@
       "label": "Architecture decisions",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 8,
+      "community": 18,
       "norm_label": "architecture decisions",
       "id": "claude_md_architecture_decisions"
     },
@@ -2340,7 +2279,7 @@
       "label": "Design System \u2014 Nature Palette (CSS Custom Properties)",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 18,
+      "community": 17,
       "norm_label": "design system \u2014 nature palette (css custom properties)",
       "source_location": "line 103",
       "source_url": null,
@@ -2353,7 +2292,7 @@
       "label": "Project structure",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 22,
+      "community": 23,
       "norm_label": "project structure",
       "id": "claude_md_project_structure"
     },
@@ -2361,7 +2300,7 @@
       "label": "Agent skills \u2014 GitHub Issues triage workflow",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 45,
+      "community": 46,
       "norm_label": "agent skills \u2014 github issues triage workflow",
       "id": "claude_md_agent_skills"
     },
@@ -2369,7 +2308,7 @@
       "label": "FastAPI server \u2014 SQLite dev / PostgreSQL production",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 16,
+      "community": 19,
       "norm_label": "fastapi server \u2014 sqlite dev / postgresql production",
       "id": "backend_readme_fastapi"
     },
@@ -2377,7 +2316,7 @@
       "label": "Backend API overview \u2014 11 endpoints",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 29,
+      "community": 30,
       "norm_label": "backend api overview \u2014 11 endpoints",
       "id": "backend_readme_api_overview"
     },
@@ -2385,7 +2324,7 @@
       "label": "Backend architecture \u2014 main, config, db, models, routes",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 46,
+      "community": 47,
       "norm_label": "backend architecture \u2014 main, config, db, models, routes",
       "id": "backend_readme_architecture"
     },
@@ -2393,7 +2332,7 @@
       "label": "Production deployment",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 47,
+      "community": 48,
       "norm_label": "production deployment",
       "id": "backend_readme_production"
     },
@@ -2401,7 +2340,7 @@
       "label": "Python dependencies",
       "file_type": "code",
       "source_file": "backend/requirements.txt",
-      "community": 16,
+      "community": 19,
       "norm_label": "python dependencies",
       "id": "backend_requirements_deps"
     },
@@ -2409,7 +2348,7 @@
       "label": "Offline fallback page \u2014 PWA network-loss UI",
       "file_type": "code",
       "source_file": "public/offline.html",
-      "community": 48,
+      "community": 49,
       "norm_label": "offline fallback page \u2014 pwa network-loss ui",
       "id": "offline_html_pwa_fallback"
     },
@@ -2417,7 +2356,7 @@
       "label": "Rationale: localStorage chosen for zero server costs",
       "file_type": "document",
       "source_file": "index.html",
-      "community": 8,
+      "community": 18,
       "norm_label": "rationale: localstorage chosen for zero server costs",
       "id": "index_html_rationale_localstorage"
     },
@@ -2425,7 +2364,7 @@
       "label": "Rationale: localStorage over backend DB",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 8,
+      "community": 18,
       "norm_label": "rationale: localstorage over backend db",
       "id": "claude_md_rationale_localstorage"
     },
@@ -2433,7 +2372,7 @@
       "label": "Rationale: Zustand over Redux",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 8,
+      "community": 18,
       "norm_label": "rationale: zustand over redux",
       "id": "claude_md_rationale_zustand"
     },
@@ -2441,7 +2380,7 @@
       "label": "Rationale: HashRouter over BrowserRouter",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 49,
+      "community": 50,
       "norm_label": "rationale: hashrouter over browserrouter",
       "id": "claude_md_rationale_hashrouter"
     },
@@ -2449,7 +2388,7 @@
       "label": "Rationale: Tailwind over CSS-in-JS",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 50,
+      "community": 51,
       "norm_label": "rationale: tailwind over css-in-js",
       "id": "claude_md_rationale_tailwind"
     },
@@ -2457,7 +2396,7 @@
       "label": "Rationale: SQLite over PostgreSQL (dev)",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 16,
+      "community": 19,
       "norm_label": "rationale: sqlite over postgresql (dev)",
       "id": "claude_md_rationale_sqlite"
     },
@@ -2478,9 +2417,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_detectseason",
       "community": 6,
-      "norm_label": "detectseason()"
+      "norm_label": "detectseason()",
+      "id": "index_html_detectseason"
     },
     {
       "label": "getSeasonalMultiplier()",
@@ -2491,9 +2430,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getseasonalmultiplier",
       "community": 6,
-      "norm_label": "getseasonalmultiplier()"
+      "norm_label": "getseasonalmultiplier()",
+      "id": "index_html_getseasonalmultiplier"
     },
     {
       "label": "getTemperatureMultiplier()",
@@ -2504,9 +2443,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_gettemperaturemultiplier",
       "community": 6,
-      "norm_label": "gettemperaturemultiplier()"
+      "norm_label": "gettemperaturemultiplier()",
+      "id": "index_html_gettemperaturemultiplier"
     },
     {
       "label": "getEnvironmentMultiplier()",
@@ -2517,9 +2456,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getenvironmentmultiplier",
       "community": 6,
-      "norm_label": "getenvironmentmultiplier()"
+      "norm_label": "getenvironmentmultiplier()",
+      "id": "index_html_getenvironmentmultiplier"
     },
     {
       "label": "saveEnvironment()",
@@ -2530,9 +2469,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_saveenvironment",
       "community": 6,
-      "norm_label": "saveenvironment()"
+      "norm_label": "saveenvironment()",
+      "id": "index_html_saveenvironment"
     },
     {
       "label": "loadEnvironment()",
@@ -2543,9 +2482,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_loadenvironment",
       "community": 6,
-      "norm_label": "loadenvironment()"
+      "norm_label": "loadenvironment()",
+      "id": "index_html_loadenvironment"
     },
     {
       "label": "updateWeatherDisplay()",
@@ -2556,9 +2495,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_updateweatherdisplay",
       "community": 6,
-      "norm_label": "updateweatherdisplay()"
+      "norm_label": "updateweatherdisplay()",
+      "id": "index_html_updateweatherdisplay"
     },
     {
       "label": "COOLDOWN_HOURS (24h)",
@@ -2569,9 +2508,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_cooldown_hours",
       "community": 0,
-      "norm_label": "cooldown_hours (24h)"
+      "norm_label": "cooldown_hours (24h)",
+      "id": "index_html_cooldown_hours"
     },
     {
       "label": "escapeHtml()",
@@ -2582,9 +2521,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_escapehtml",
       "community": 0,
-      "norm_label": "escapehtml()"
+      "norm_label": "escapehtml()",
+      "id": "index_html_escapehtml"
     },
     {
       "label": "esc() - XSS protection wrapper",
@@ -2595,9 +2534,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_esc",
       "community": 0,
-      "norm_label": "esc() - xss protection wrapper"
+      "norm_label": "esc() - xss protection wrapper",
+      "id": "index_html_esc"
     },
     {
       "label": "render() - debounced dispatcher",
@@ -2608,9 +2547,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_render",
       "community": 0,
-      "norm_label": "render() - debounced dispatcher"
+      "norm_label": "render() - debounced dispatcher",
+      "id": "index_html_render"
     },
     {
       "label": "State Object (plants, deadPlants, history)",
@@ -2621,9 +2560,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_state",
       "community": 0,
-      "norm_label": "state object (plants, deadplants, history)"
+      "norm_label": "state object (plants, deadplants, history)",
+      "id": "index_html_state"
     },
     {
       "label": "save() - localStorage persistence",
@@ -2634,9 +2573,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_save",
       "community": 0,
-      "norm_label": "save() - localstorage persistence"
+      "norm_label": "save() - localstorage persistence",
+      "id": "index_html_save"
     },
     {
       "label": "getPlantEmoji()",
@@ -2647,9 +2586,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getplantemoji",
       "community": 0,
-      "norm_label": "getplantemoji()"
+      "norm_label": "getplantemoji()",
+      "id": "index_html_getplantemoji"
     },
     {
       "label": "getPlantHistory()",
@@ -2660,9 +2599,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getplanthistory",
       "community": 0,
-      "norm_label": "getplanthistory()"
+      "norm_label": "getplanthistory()",
+      "id": "index_html_getplanthistory"
     },
     {
       "label": "getBaseInterval() - weighted moving average",
@@ -2673,9 +2612,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getbaseinterval",
       "community": 0,
-      "norm_label": "getbaseinterval() - weighted moving average"
+      "norm_label": "getbaseinterval() - weighted moving average",
+      "id": "index_html_getbaseinterval"
     },
     {
       "label": "getAdjustedInterval()",
@@ -2686,9 +2625,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getadjustedinterval",
       "community": 0,
-      "norm_label": "getadjustedinterval()"
+      "norm_label": "getadjustedinterval()",
+      "id": "index_html_getadjustedinterval"
     },
     {
       "label": "getDaysSinceLastWater()",
@@ -2699,9 +2638,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getdayssincelastwater",
       "community": 0,
-      "norm_label": "getdayssincelastwater()"
+      "norm_label": "getdayssincelastwater()",
+      "id": "index_html_getdayssincelastwater"
     },
     {
       "label": "getHoursSinceLastWater()",
@@ -2712,9 +2651,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_gethourssincelastwater",
       "community": 0,
-      "norm_label": "gethourssincelastwater()"
+      "norm_label": "gethourssincelastwater()",
+      "id": "index_html_gethourssincelastwater"
     },
     {
       "label": "getDaysUntilNextWater()",
@@ -2725,9 +2664,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_getdaysuntilnextwater",
       "community": 0,
-      "norm_label": "getdaysuntilnextwater()"
+      "norm_label": "getdaysuntilnextwater()",
+      "id": "index_html_getdaysuntilnextwater"
     },
     {
       "label": "canWaterPlant() - cooldown check",
@@ -2738,9 +2677,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_canwaterplant",
       "community": 0,
-      "norm_label": "canwaterplant() - cooldown check"
+      "norm_label": "canwaterplant() - cooldown check",
+      "id": "index_html_canwaterplant"
     },
     {
       "label": "combineDeathLearning()",
@@ -2751,9 +2690,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_combinedeathlearning",
       "community": 0,
-      "norm_label": "combinedeathlearning()"
+      "norm_label": "combinedeathlearning()",
+      "id": "index_html_combinedeathlearning"
     },
     {
       "label": "addPlant()",
@@ -2764,9 +2703,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_addplant",
       "community": 0,
-      "norm_label": "addplant()"
+      "norm_label": "addplant()",
+      "id": "index_html_addplant"
     },
     {
       "label": "createPlant()",
@@ -2777,9 +2716,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_createplant",
       "community": 0,
-      "norm_label": "createplant()"
+      "norm_label": "createplant()",
+      "id": "index_html_createplant"
     },
     {
       "label": "addAsSecond()",
@@ -2790,9 +2729,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_addassecond",
       "community": 0,
-      "norm_label": "addassecond()"
+      "norm_label": "addassecond()",
+      "id": "index_html_addassecond"
     },
     {
       "label": "confirmRevival()",
@@ -2803,9 +2742,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_confirmrevival",
       "community": 0,
-      "norm_label": "confirmrevival()"
+      "norm_label": "confirmrevival()",
+      "id": "index_html_confirmrevival"
     },
     {
       "label": "clearInputs()",
@@ -2816,9 +2755,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_clearinputs",
-      "community": 51,
-      "norm_label": "clearinputs()"
+      "community": 52,
+      "norm_label": "clearinputs()",
+      "id": "index_html_clearinputs"
     },
     {
       "label": "waterPlant()",
@@ -2829,9 +2768,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_waterplant",
       "community": 0,
-      "norm_label": "waterplant()"
+      "norm_label": "waterplant()",
+      "id": "index_html_waterplant"
     },
     {
       "label": "showCooldownModal()",
@@ -2842,9 +2781,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_showcooldownmodal",
-      "community": 17,
-      "norm_label": "showcooldownmodal()"
+      "community": 15,
+      "norm_label": "showcooldownmodal()",
+      "id": "index_html_showcooldownmodal"
     },
     {
       "label": "showDeathModal()",
@@ -2855,9 +2794,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_showdeathmodal",
-      "community": 0,
-      "norm_label": "showdeathmodal()"
+      "community": 15,
+      "norm_label": "showdeathmodal()",
+      "id": "index_html_showdeathmodal"
     },
     {
       "label": "selectCause()",
@@ -2868,9 +2807,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_selectcause",
-      "community": 30,
-      "norm_label": "selectcause()"
+      "community": 31,
+      "norm_label": "selectcause()",
+      "id": "index_html_selectcause"
     },
     {
       "label": "updateCauseSelection()",
@@ -2881,9 +2820,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_updatecauseselection",
-      "community": 30,
-      "norm_label": "updatecauseselection()"
+      "community": 31,
+      "norm_label": "updatecauseselection()",
+      "id": "index_html_updatecauseselection"
     },
     {
       "label": "confirmDeath()",
@@ -2894,9 +2833,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_confirmdeath",
       "community": 0,
-      "norm_label": "confirmdeath()"
+      "norm_label": "confirmdeath()",
+      "id": "index_html_confirmdeath"
     },
     {
       "label": "deletePlant()",
@@ -2907,9 +2846,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_deleteplant",
       "community": 0,
-      "norm_label": "deleteplant()"
+      "norm_label": "deleteplant()",
+      "id": "index_html_deleteplant"
     },
     {
       "label": "renderPlants() - innerHTML card list",
@@ -2920,9 +2859,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_renderplants",
       "community": 0,
-      "norm_label": "renderplants() - innerhtml card list"
+      "norm_label": "renderplants() - innerhtml card list",
+      "id": "index_html_renderplants"
     },
     {
       "label": "renderMemorial()",
@@ -2933,9 +2872,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_rendermemorial",
       "community": 0,
-      "norm_label": "rendermemorial()"
+      "norm_label": "rendermemorial()",
+      "id": "index_html_rendermemorial"
     },
     {
       "label": "renderSchedule()",
@@ -2946,9 +2885,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_renderschedule",
       "community": 0,
-      "norm_label": "renderschedule()"
+      "norm_label": "renderschedule()",
+      "id": "index_html_renderschedule"
     },
     {
       "label": "renderAnalytics()",
@@ -2959,9 +2898,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_renderanalytics",
       "community": 0,
-      "norm_label": "renderanalytics()"
+      "norm_label": "renderanalytics()",
+      "id": "index_html_renderanalytics"
     },
     {
       "label": "icsEscape()",
@@ -2972,9 +2911,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_icsescape",
       "community": 0,
-      "norm_label": "icsescape()"
+      "norm_label": "icsescape()",
+      "id": "index_html_icsescape"
     },
     {
       "label": "downloadICS() - RRULE calendar export",
@@ -2985,9 +2924,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_downloadics",
       "community": 0,
-      "norm_label": "downloadics() - rrule calendar export"
+      "norm_label": "downloadics() - rrule calendar export",
+      "id": "index_html_downloadics"
     },
     {
       "label": "exportData()",
@@ -2998,9 +2937,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_exportdata",
       "community": 0,
-      "norm_label": "exportdata()"
+      "norm_label": "exportdata()",
+      "id": "index_html_exportdata"
     },
     {
       "label": "validatePlant() - import schema guard",
@@ -3011,9 +2950,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_validateplant",
       "community": 0,
-      "norm_label": "validateplant() - import schema guard"
+      "norm_label": "validateplant() - import schema guard",
+      "id": "index_html_validateplant"
     },
     {
       "label": "normalizePlant() - import sanitizer",
@@ -3024,9 +2963,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_normalizeplant",
       "community": 0,
-      "norm_label": "normalizeplant() - import sanitizer"
+      "norm_label": "normalizeplant() - import sanitizer",
+      "id": "index_html_normalizeplant"
     },
     {
       "label": "importData()",
@@ -3037,9 +2976,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_importdata",
       "community": 0,
-      "norm_label": "importdata()"
+      "norm_label": "importdata()",
+      "id": "index_html_importdata"
     },
     {
       "label": "clearAllData()",
@@ -3050,9 +2989,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_clearalldata",
-      "community": 8,
-      "norm_label": "clearalldata()"
+      "community": 0,
+      "norm_label": "clearalldata()",
+      "id": "index_html_clearalldata"
     },
     {
       "label": "showTab() - tab navigation",
@@ -3063,9 +3002,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_showtab",
-      "community": 23,
-      "norm_label": "showtab() - tab navigation"
+      "community": 0,
+      "norm_label": "showtab() - tab navigation",
+      "id": "index_html_showtab"
     },
     {
       "label": "showModal()",
@@ -3076,9 +3015,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_showmodal",
-      "community": 17,
-      "norm_label": "showmodal()"
+      "community": 15,
+      "norm_label": "showmodal()",
+      "id": "index_html_showmodal"
     },
     {
       "label": "closeModal()",
@@ -3089,9 +3028,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_closemodal",
-      "community": 17,
-      "norm_label": "closemodal()"
+      "community": 15,
+      "norm_label": "closemodal()",
+      "id": "index_html_closemodal"
     },
     {
       "label": "showToast()",
@@ -3102,9 +3041,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_showtoast",
       "community": 0,
-      "norm_label": "showtoast()"
+      "norm_label": "showtoast()",
+      "id": "index_html_showtoast"
     },
     {
       "label": "toggleBottomWaterInfo()",
@@ -3115,9 +3054,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_togglebottomwaterinfo",
-      "community": 31,
-      "norm_label": "togglebottomwaterinfo()"
+      "community": 32,
+      "norm_label": "togglebottomwaterinfo()",
+      "id": "index_html_togglebottomwaterinfo"
     },
     {
       "label": "Global Error Boundary (window error listener)",
@@ -3128,9 +3067,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_error_boundary",
       "community": 0,
-      "norm_label": "global error boundary (window error listener)"
+      "norm_label": "global error boundary (window error listener)",
+      "id": "index_html_error_boundary"
     },
     {
       "label": "Public API (window.* exposure)",
@@ -3141,9 +3080,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_public_api",
       "community": 0,
-      "norm_label": "public api (window.* exposure)"
+      "norm_label": "public api (window.* exposure)",
+      "id": "index_html_public_api"
     },
     {
       "label": "IIFE Encapsulation Pattern",
@@ -3154,9 +3093,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_iife_encapsulation",
       "community": 0,
-      "norm_label": "iife encapsulation pattern"
+      "norm_label": "iife encapsulation pattern",
+      "id": "index_html_iife_encapsulation"
     },
     {
       "label": "Debounced Render (requestAnimationFrame)",
@@ -3167,9 +3106,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_debounced_render",
       "community": 0,
-      "norm_label": "debounced render (requestanimationframe)"
+      "norm_label": "debounced render (requestanimationframe)",
+      "id": "index_html_debounced_render"
     },
     {
       "label": "CSS Custom Properties (Design Tokens)",
@@ -3180,9 +3119,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_css_custom_properties",
-      "community": 18,
-      "norm_label": "css custom properties (design tokens)"
+      "community": 17,
+      "norm_label": "css custom properties (design tokens)",
+      "id": "index_html_css_custom_properties"
     },
     {
       "label": "Glass-Morphism Card Design",
@@ -3193,9 +3132,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_glassmorphism_cards",
-      "community": 18,
-      "norm_label": "glass-morphism card design"
+      "community": 17,
+      "norm_label": "glass-morphism card design",
+      "id": "index_html_glassmorphism_cards"
     },
     {
       "label": "Four-Tab SPA Navigation (Home/Schedule/Memorial/Settings)",
@@ -3206,9 +3145,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_four_tab_navigation",
-      "community": 23,
-      "norm_label": "four-tab spa navigation (home/schedule/memorial/settings)"
+      "community": 0,
+      "norm_label": "four-tab spa navigation (home/schedule/memorial/settings)",
+      "id": "index_html_four_tab_navigation"
     },
     {
       "label": "PWA Meta Tags",
@@ -3219,9 +3158,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_pwa_meta_tags",
-      "community": 8,
-      "norm_label": "pwa meta tags"
+      "community": 0,
+      "norm_label": "pwa meta tags",
+      "id": "index_html_pwa_meta_tags"
     },
     {
       "label": "24-Hour Watering Cooldown Enforcement",
@@ -3232,9 +3171,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_cooldown_enforcement",
       "community": 0,
-      "norm_label": "24-hour watering cooldown enforcement"
+      "norm_label": "24-hour watering cooldown enforcement",
+      "id": "index_html_cooldown_enforcement"
     },
     {
       "label": "Bottom Watering Education",
@@ -3245,9 +3184,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_bottom_watering_education",
-      "community": 31,
-      "norm_label": "bottom watering education"
+      "community": 32,
+      "norm_label": "bottom watering education",
+      "id": "index_html_bottom_watering_education"
     },
     {
       "label": "Temperature Watering Multiplier",
@@ -3258,9 +3197,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_temperature_multiplier",
       "community": 6,
-      "norm_label": "temperature watering multiplier"
+      "norm_label": "temperature watering multiplier",
+      "id": "index_html_temperature_multiplier"
     },
     {
       "label": "Weighted Moving Average Interval Learning",
@@ -3271,9 +3210,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_weighted_moving_average",
       "community": 0,
-      "norm_label": "weighted moving average interval learning"
+      "norm_label": "weighted moving average interval learning",
+      "id": "index_html_weighted_moving_average"
     },
     {
       "label": "Derived State Pattern (computed at render, never stored)",
@@ -3284,9 +3223,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_derived_state",
       "community": 0,
-      "norm_label": "derived state pattern (computed at render, never stored)"
+      "norm_label": "derived state pattern (computed at render, never stored)",
+      "id": "index_html_derived_state"
     },
     {
       "label": "innerHTML Rendering (template literals)",
@@ -3297,9 +3236,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_innerhtml_rendering",
       "community": 0,
-      "norm_label": "innerhtml rendering (template literals)"
+      "norm_label": "innerhtml rendering (template literals)",
+      "id": "index_html_innerhtml_rendering"
     },
     {
       "label": "XSS Protection via esc()",
@@ -3310,9 +3249,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_xss_protection",
       "community": 0,
-      "norm_label": "xss protection via esc()"
+      "norm_label": "xss protection via esc()",
+      "id": "index_html_xss_protection"
     },
     {
       "label": "Import Validation (validatePlant + normalizePlant)",
@@ -3323,9 +3262,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_import_validation",
       "community": 0,
-      "norm_label": "import validation (validateplant + normalizeplant)"
+      "norm_label": "import validation (validateplant + normalizeplant)",
+      "id": "index_html_import_validation"
     },
     {
       "label": "Toast Notification System",
@@ -3336,9 +3275,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_toast_notification",
       "community": 0,
-      "norm_label": "toast notification system"
+      "norm_label": "toast notification system",
+      "id": "index_html_toast_notification"
     },
     {
       "label": "Modal System (death/revival/duplicate/cooldown)",
@@ -3349,9 +3288,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_modal_system",
-      "community": 17,
-      "norm_label": "modal system (death/revival/duplicate/cooldown)"
+      "community": 15,
+      "norm_label": "modal system (death/revival/duplicate/cooldown)",
+      "id": "index_html_modal_system"
     },
     {
       "label": "Rationale: Vanilla JS over React \u2014 zero deps, 77KB, instant load",
@@ -3362,9 +3301,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_vanilla_js_decision",
       "community": 0,
-      "norm_label": "rationale: vanilla js over react \u2014 zero deps, 77kb, instant load"
+      "norm_label": "rationale: vanilla js over react \u2014 zero deps, 77kb, instant load",
+      "id": "claude_md_vanilla_js_decision"
     },
     {
       "label": "Rationale: localStorage over backend DB \u2014 zero server costs",
@@ -3375,9 +3314,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_localstorage_decision",
-      "community": 8,
-      "norm_label": "rationale: localstorage over backend db \u2014 zero server costs"
+      "community": 0,
+      "norm_label": "rationale: localstorage over backend db \u2014 zero server costs",
+      "id": "claude_md_localstorage_decision"
     },
     {
       "label": "Rationale: innerHTML over virtual DOM \u2014 simpler mental model",
@@ -3388,9 +3327,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_innerhtml_decision",
       "community": 0,
-      "norm_label": "rationale: innerhtml over virtual dom \u2014 simpler mental model"
+      "norm_label": "rationale: innerhtml over virtual dom \u2014 simpler mental model",
+      "id": "claude_md_innerhtml_decision"
     },
     {
       "label": "Rationale: Derived state over stored state \u2014 never stale",
@@ -3401,9 +3340,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_derived_state_decision",
       "community": 0,
-      "norm_label": "rationale: derived state over stored state \u2014 never stale"
+      "norm_label": "rationale: derived state over stored state \u2014 never stale",
+      "id": "claude_md_derived_state_decision"
     },
     {
       "label": "Rationale: Hash-free routing \u2014 tab navigation, no URL state",
@@ -3414,9 +3353,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_hash_free_routing",
-      "community": 23,
-      "norm_label": "rationale: hash-free routing \u2014 tab navigation, no url state"
+      "community": 0,
+      "norm_label": "rationale: hash-free routing \u2014 tab navigation, no url state",
+      "id": "claude_md_hash_free_routing"
     },
     {
       "label": "Rationale: Open-Meteo over API-key services \u2014 free, no registration",
@@ -3427,9 +3366,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_open_meteo_decision",
       "community": 6,
-      "norm_label": "rationale: open-meteo over api-key services \u2014 free, no registration"
+      "norm_label": "rationale: open-meteo over api-key services \u2014 free, no registration",
+      "id": "claude_md_open_meteo_decision"
     },
     {
       "label": "State Shape (plants[], deadPlants[], history[])",
@@ -3440,9 +3379,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_state_shape",
       "community": 0,
-      "norm_label": "state shape (plants[], deadplants[], history[])"
+      "norm_label": "state shape (plants[], deadplants[], history[])",
+      "id": "claude_md_state_shape"
     },
     {
       "label": "Core Patterns (derived state, innerHTML rendering, debounced render, XSS, IIFE)",
@@ -3453,9 +3392,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_core_patterns",
       "community": 0,
-      "norm_label": "core patterns (derived state, innerhtml rendering, debounced render, xss, iife)"
+      "norm_label": "core patterns (derived state, innerhtml rendering, debounced render, xss, iife)",
+      "id": "claude_md_core_patterns"
     },
     {
       "label": "Key Functions Table (getAdjustedInterval, getBaseInterval, getDaysUntilNextWater, combineDeathLearning, render)",
@@ -3466,9 +3405,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_key_functions",
       "community": 0,
-      "norm_label": "key functions table (getadjustedinterval, getbaseinterval, getdaysuntilnextwater, combinedeathlearning, render)"
+      "norm_label": "key functions table (getadjustedinterval, getbaseinterval, getdaysuntilnextwater, combinedeathlearning, render)",
+      "id": "claude_md_key_functions"
     },
     {
       "label": "Edge Density 1.07 (target 1.5+) \u2014 codebase more colocated than connected",
@@ -3479,9 +3418,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "audit_md_edge_density",
-      "community": 19,
-      "norm_label": "edge density 1.07 (target 1.5+) \u2014 codebase more colocated than connected"
+      "community": 20,
+      "norm_label": "edge density 1.07 (target 1.5+) \u2014 codebase more colocated than connected",
+      "id": "audit_md_edge_density"
     },
     {
       "label": "Three Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence)",
@@ -3492,9 +3431,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "audit_md_hyperedges",
       "community": 0,
-      "norm_label": "three architectural pillars (plant lifecycle, watering intelligence, data persistence)"
+      "norm_label": "three architectural pillars (plant lifecycle, watering intelligence, data persistence)",
+      "id": "audit_md_hyperedges"
     },
     {
       "label": "51 Isolated Nodes (19% of graph)",
@@ -3505,9 +3444,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "audit_md_isolated_nodes",
-      "community": 52,
-      "norm_label": "51 isolated nodes (19% of graph)"
+      "community": 53,
+      "norm_label": "51 isolated nodes (19% of graph)",
+      "id": "audit_md_isolated_nodes"
     },
     {
       "label": "Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence)",
@@ -3518,9 +3457,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "audit_md_three_pillars",
       "community": 0,
-      "norm_label": "architectural pillars (plant lifecycle, watering intelligence, data persistence)"
+      "norm_label": "architectural pillars (plant lifecycle, watering intelligence, data persistence)",
+      "id": "audit_md_three_pillars"
     },
     {
       "label": "Knowledge Graph Statistics (267 nodes, 285 edges, 50 communities)",
@@ -3531,9 +3470,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "graph_report_md_statistics",
-      "community": 19,
-      "norm_label": "knowledge graph statistics (267 nodes, 285 edges, 50 communities)"
+      "community": 20,
+      "norm_label": "knowledge graph statistics (267 nodes, 285 edges, 50 communities)",
+      "id": "graph_report_md_statistics"
     },
     {
       "label": "God Nodes: TestPlants (18 edges), _create_plant (12), PlantCreate (6)",
@@ -3544,9 +3483,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "graph_report_md_god_nodes",
-      "community": 19,
-      "norm_label": "god nodes: testplants (18 edges), _create_plant (12), plantcreate (6)"
+      "community": 20,
+      "norm_label": "god nodes: testplants (18 edges), _create_plant (12), plantcreate (6)",
+      "id": "graph_report_md_god_nodes"
     },
     {
       "label": "Knowledge Graph Visualization (vis-network)",
@@ -3557,9 +3496,9 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "id": "graph_html_vis_network",
-      "community": 19,
-      "norm_label": "knowledge graph visualization (vis-network)"
+      "community": 20,
+      "norm_label": "knowledge graph visualization (vis-network)",
+      "id": "graph_html_vis_network"
     },
     {
       "label": "Warm Season: Lower Multiplier = More Frequent Watering",
@@ -3570,9 +3509,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_warm_season_watering_behavior",
       "community": 6,
-      "norm_label": "warm season: lower multiplier = more frequent watering"
+      "norm_label": "warm season: lower multiplier = more frequent watering",
+      "id": "index_html_warm_season_watering_behavior"
     },
     {
       "label": "Cold Season: Higher Multiplier = Less Frequent Watering",
@@ -3583,9 +3522,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_cold_season_watering_behavior",
       "community": 6,
-      "norm_label": "cold season: higher multiplier = less frequent watering"
+      "norm_label": "cold season: higher multiplier = less frequent watering",
+      "id": "index_html_cold_season_watering_behavior"
     },
     {
       "label": "Open-Meteo API Integration (free weather, no key)",
@@ -3596,9 +3535,231 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_openmeteo_api",
       "community": 6,
-      "norm_label": "open-meteo api integration (free weather, no key)"
+      "norm_label": "open-meteo api integration (free weather, no key)",
+      "id": "index_html_openmeteo_api"
+    },
+    {
+      "label": "e2e-smoke.mjs",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L1",
+      "id": "e2e_smoke_mjs",
+      "community": 24,
+      "norm_label": "e2e-smoke.mjs"
+    },
+    {
+      "label": "ok()",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L9",
+      "id": "e2e_smoke_ok",
+      "community": 24,
+      "norm_label": "ok()"
+    },
+    {
+      "label": "fail()",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L10",
+      "id": "e2e_smoke_fail",
+      "community": 24,
+      "norm_label": "fail()"
+    },
+    {
+      "label": "Content Security Policy meta tag \u2014 default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": "line 14",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "index_html_csp",
+      "community": 7,
+      "norm_label": "content security policy meta tag \u2014 default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com"
+    },
+    {
+      "label": "Planty E2E Security & Regression Smoke test suite \u2014 11 P0 tests via Playwright",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 1-171",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_e2e_test_suite",
+      "community": 7,
+      "norm_label": "planty e2e security & regression smoke test suite \u2014 11 p0 tests via playwright"
+    },
+    {
+      "label": "P0-1 XSS sanitization test \u2014 injects <img onerror> and <script> tags via plantName/plantLocation, asserts HTML entity escaping",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 23-40",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_xss_test",
+      "community": 7,
+      "norm_label": "p0-1 xss sanitization test \u2014 injects <img onerror> and <script> tags via plantname/plantlocation, asserts html entity escaping"
+    },
+    {
+      "label": "P0-2 IIFE encapsulation test \u2014 verifies 16 public functions on window, checks private internals are not leaked",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 42-52",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_iife_test",
+      "community": 7,
+      "norm_label": "p0-2 iife encapsulation test \u2014 verifies 16 public functions on window, checks private internals are not leaked"
+    },
+    {
+      "label": "P0-3 Import resilience test \u2014 injects corrupted localStorage data, reloads page, asserts app survives",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 54-65",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_import_resilience_test",
+      "community": 7,
+      "norm_label": "p0-3 import resilience test \u2014 injects corrupted localstorage data, reloads page, asserts app survives"
+    },
+    {
+      "label": "P0-4 esc() integrity test \u2014 adds plant with special chars (&), asserts correct textContent rendering",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 72-79",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_esc_integrity_test",
+      "community": 7,
+      "norm_label": "p0-4 esc() integrity test \u2014 adds plant with special chars (&), asserts correct textcontent rendering"
+    },
+    {
+      "label": "P0-5 Render debounce test \u2014 adds 3 plants rapidly, asserts all 3 cards rendered",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 81-92",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_render_debounce_test",
+      "community": 7,
+      "norm_label": "p0-5 render debounce test \u2014 adds 3 plants rapidly, asserts all 3 cards rendered"
+    },
+    {
+      "label": "P0-6 Tab navigation test \u2014 clicks all 4 tabs (schedule, memorial, settings, home), asserts active class",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 94-102",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_tab_nav_test",
+      "community": 7,
+      "norm_label": "p0-6 tab navigation test \u2014 clicks all 4 tabs (schedule, memorial, settings, home), asserts active class"
+    },
+    {
+      "label": "P0-7 Water flow test \u2014 waters a plant via onclick handler extraction, asserts success and cooldown activation",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 104-121",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_water_flow_test",
+      "community": 7,
+      "norm_label": "p0-7 water flow test \u2014 waters a plant via onclick handler extraction, asserts success and cooldown activation"
+    },
+    {
+      "label": "P0-8 Error boundary test \u2014 dispatches synthetic ErrorEvent, asserts app survives uncaugh error",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 123-130",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_error_boundary_test",
+      "community": 7,
+      "norm_label": "p0-8 error boundary test \u2014 dispatches synthetic errorevent, asserts app survives uncaugh error"
+    },
+    {
+      "label": "P0-9 Export test \u2014 verifies exportData on window, checks localStorage has plant data",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 132-143",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_export_test",
+      "community": 7,
+      "norm_label": "p0-9 export test \u2014 verifies exportdata on window, checks localstorage has plant data"
+    },
+    {
+      "label": "P0-10 ICS escape test \u2014 directly calls icsEscape(), asserts semicolon and comma escaping for iCalendar format",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 145-154",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_ics_escape_test",
+      "community": 7,
+      "norm_label": "p0-10 ics escape test \u2014 directly calls icsescape(), asserts semicolon and comma escaping for icalendar format"
+    },
+    {
+      "label": "P0-11 CSP test \u2014 queries meta[http-equiv=Content-Security-Policy], asserts default-src present",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 156-163",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_csp_test",
+      "community": 7,
+      "norm_label": "p0-11 csp test \u2014 queries meta[http-equiv=content-security-policy], asserts default-src present"
+    },
+    {
+      "label": "Playwright browser automation \u2014 headless Chromium via playwright.chromium.launch()",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 5,14-16",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_playwright",
+      "community": 7,
+      "norm_label": "playwright browser automation \u2014 headless chromium via playwright.chromium.launch()"
+    },
+    {
+      "label": "Pass/fail report tracking \u2014 tally object with passed, failed, errors arrays, exit code on failure",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 8-10,167-171",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "smoke_report_tracker",
+      "community": 7,
+      "norm_label": "pass/fail report tracking \u2014 tally object with passed, failed, errors arrays, exit code on failure"
     }
   ],
   "links": [
@@ -8814,66 +8975,199 @@
       "_tgt": "graph_html_vis_network",
       "source": "graph_report_md_statistics",
       "target": "graph_html_vis_network"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_src": "e2e_smoke_mjs",
+      "_tgt": "e2e_smoke_ok",
+      "source": "e2e_smoke_mjs",
+      "target": "e2e_smoke_ok",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "e2e_smoke_mjs",
+      "_tgt": "e2e_smoke_fail",
+      "source": "e2e_smoke_mjs",
+      "target": "e2e_smoke_fail",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 158-160",
+      "weight": 1.0,
+      "_src": "index_html_csp",
+      "_tgt": "smoke_csp_test",
+      "source": "index_html_csp",
+      "target": "smoke_csp_test"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 5,14",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_playwright",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_playwright"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "lines 8-10,167-171",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_report_tracker",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_report_tracker"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 24",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_xss_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_xss_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 43",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_iife_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_iife_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 55",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_import_resilience_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_import_resilience_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 73",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_esc_integrity_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_esc_integrity_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 82",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_render_debounce_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_render_debounce_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 95",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_tab_nav_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_tab_nav_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 105",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_water_flow_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_water_flow_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 124",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_error_boundary_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_error_boundary_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 133",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_export_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_export_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 146",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_ics_escape_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_ics_escape_test"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "line 157",
+      "weight": 1.0,
+      "_src": "smoke_e2e_test_suite",
+      "_tgt": "smoke_csp_test",
+      "source": "smoke_e2e_test_suite",
+      "target": "smoke_csp_test"
     }
   ],
-  "hyperedges": [
-    {
-      "id": "plant_lifecycle_management",
-      "label": "Plant Lifecycle Management",
-      "nodes": [
-        "index_html_state",
-        "index_html_death_learning",
-        "index_html_revival_system",
-        "index_html_duplicate_detection",
-        "index_html_addplant",
-        "index_html_createplant",
-        "index_html_confirmdeath",
-        "index_html_confirmrevival",
-        "index_html_rendermemorial"
-      ],
-      "relation": "participate_in",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "index.html"
-    },
-    {
-      "id": "watering_intelligence_feedback_loop",
-      "label": "Watering Intelligence Feedback Loop",
-      "nodes": [
-        "index_html_getadjustedinterval",
-        "index_html_getbaseinterval",
-        "index_html_getenvironmentmultiplier",
-        "index_html_getseasonalmultiplier",
-        "index_html_gettemperaturemultiplier",
-        "index_html_fetchweather",
-        "index_html_cooldown_enforcement",
-        "index_html_bottom_watering_education",
-        "index_html_weighted_moving_average",
-        "index_html_derived_state"
-      ],
-      "relation": "participate_in",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "index.html"
-    },
-    {
-      "id": "data_persistence_and_portability",
-      "label": "Data Persistence and Portability",
-      "nodes": [
-        "index_html_localstorage_persistence",
-        "index_html_state",
-        "index_html_save",
-        "index_html_exportdata",
-        "index_html_importdata",
-        "index_html_validateplant",
-        "index_html_normalizeplant",
-        "index_html_downloadics",
-        "index_html_import_validation"
-      ],
-      "relation": "participate_in",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "index.html"
-    }
-  ]
+  "hyperedges": []
 }
