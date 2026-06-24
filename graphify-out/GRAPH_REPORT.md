@@ -1,16 +1,16 @@
 # Graph Report - .  (2026-06-24)
 
 ## Corpus Check
-- 63 files · ~53,943 words
+- 61 files · ~54,701 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 372 nodes · 452 edges · 54 communities detected
+- 370 nodes · 452 edges · 52 communities detected
 - Extraction: 87% EXTRACTED · 13% INFERRED · 0% AMBIGUOUS · INFERRED: 61 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Vanilla JS Core Functions|Vanilla JS Core Functions]]
+- [[_COMMUNITY_Vanilla JS Core|Vanilla JS Core]]
 - [[_COMMUNITY_Backend Test Suite|Backend Test Suite]]
 - [[_COMMUNITY_Backend Data Models|Backend Data Models]]
 - [[_COMMUNITY_Backend Core & Health|Backend Core & Health]]
@@ -25,8 +25,8 @@
 - [[_COMMUNITY_Error Handling|Error Handling]]
 - [[_COMMUNITY_Weather Icons|Weather Icons]]
 - [[_COMMUNITY_Notification System|Notification System]]
-- [[_COMMUNITY_E2E Test Suite (React)|E2E Test Suite (React)]]
-- [[_COMMUNITY_Backend Documentation|Backend Documentation]]
+- [[_COMMUNITY_E2E Tests (React)|E2E Tests (React)]]
+- [[_COMMUNITY_Backend Docs|Backend Docs]]
 - [[_COMMUNITY_Modal System|Modal System]]
 - [[_COMMUNITY_Design System|Design System]]
 - [[_COMMUNITY_Graph Analysis|Graph Analysis]]
@@ -35,16 +35,16 @@
 - [[_COMMUNITY_Project Overview|Project Overview]]
 - [[_COMMUNITY_Tab Navigation|Tab Navigation]]
 - [[_COMMUNITY_Empty State|Empty State]]
-- [[_COMMUNITY_CountUp Animation|CountUp Animation]]
+- [[_COMMUNITY_CountUp|CountUp]]
 - [[_COMMUNITY_Season Banner|Season Banner]]
-- [[_COMMUNITY_Memorial Page|Memorial Page]]
-- [[_COMMUNITY_Diagnose Page|Diagnose Page]]
-- [[_COMMUNITY_API Documentation|API Documentation]]
-- [[_COMMUNITY_Death Cause Selection|Death Cause Selection]]
+- [[_COMMUNITY_Memorial|Memorial]]
+- [[_COMMUNITY_Diagnose|Diagnose]]
+- [[_COMMUNITY_API Docs|API Docs]]
+- [[_COMMUNITY_Death Cause|Death Cause]]
 - [[_COMMUNITY_Bottom Watering|Bottom Watering]]
-- [[_COMMUNITY_PostCSS Config|PostCSS Config]]
+- [[_COMMUNITY_PostCSS|PostCSS]]
 - [[_COMMUNITY_Vite Config|Vite Config]]
-- [[_COMMUNITY_Tailwind Config|Tailwind Config]]
+- [[_COMMUNITY_Tailwind|Tailwind]]
 - [[_COMMUNITY_Tests Init|Tests Init]]
 - [[_COMMUNITY_Routes Init|Routes Init]]
 - [[_COMMUNITY_Services Init|Services Init]]
@@ -53,17 +53,15 @@
 - [[_COMMUNITY_ICS Export|ICS Export]]
 - [[_COMMUNITY_Watering Cooldown|Watering Cooldown]]
 - [[_COMMUNITY_Watering Interval|Watering Interval]]
-- [[_COMMUNITY_Tab Bar Navigation|Tab Bar Navigation]]
+- [[_COMMUNITY_Tab Bar|Tab Bar]]
 - [[_COMMUNITY_PWA Meta|PWA Meta]]
 - [[_COMMUNITY_Agent Skills|Agent Skills]]
 - [[_COMMUNITY_Backend Architecture|Backend Architecture]]
-- [[_COMMUNITY_Production Deploy|Production Deploy]]
-- [[_COMMUNITY_Offline Fallback|Offline Fallback]]
-- [[_COMMUNITY_HashRouter Rationale|HashRouter Rationale]]
+- [[_COMMUNITY_Production|Production]]
+- [[_COMMUNITY_Offline|Offline]]
+- [[_COMMUNITY_HashRouter|HashRouter]]
 - [[_COMMUNITY_Tailwind Rationale|Tailwind Rationale]]
-- [[_COMMUNITY_Form Input Clearing|Form Input Clearing]]
-- [[_COMMUNITY_Isolated Nodes|Isolated Nodes]]
-- [[_COMMUNITY_E2E Smoke Tests (Vanilla JS)|E2E Smoke Tests (Vanilla JS)]]
+- [[_COMMUNITY_Form Clearing|Form Clearing]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `TestPlants` - 18 edges
@@ -91,7 +89,7 @@
 
 ## Communities
 
-### Community 0 - "Vanilla JS Core Functions"
+### Community 0 - "Vanilla JS Core"
 Cohesion: 0.06
 Nodes (61): Three Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence), Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence), Core Patterns (derived state, innerHTML rendering, debounced render, XSS, IIFE), Rationale: Derived state over stored state — never stale, Rationale: Hash-free routing — tab navigation, no URL state, Rationale: innerHTML over virtual DOM — simpler mental model, Key Functions Table (getAdjustedInterval, getBaseInterval, getDaysUntilNextWater, combineDeathLearning, render), Rationale: localStorage over backend DB — zero server costs (+53 more)
 
@@ -151,11 +149,11 @@ Nodes (0):
 Cohesion: 0.6
 Nodes (3): hasPermission(), scheduleReminders(), stopReminders()
 
-### Community 15 - "E2E Test Suite (React)"
+### Community 15 - "E2E Tests (React)"
 Cohesion: 0.4
 Nodes (3): Modal System (death/revival/duplicate/cooldown), showDeathModal(), showModal()
 
-### Community 16 - "Backend Documentation"
+### Community 16 - "Backend Docs"
 Cohesion: 0.5
 Nodes (0): 
 
@@ -191,7 +189,7 @@ Nodes (3): Project structure, Planty SPA — vanilla JS app entry, Planty v3 —
 Cohesion: 0.67
 Nodes (0): 
 
-### Community 25 - "CountUp Animation"
+### Community 25 - "CountUp"
 Cohesion: 1.0
 Nodes (0): 
 
@@ -199,19 +197,19 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 27 - "Memorial Page"
+### Community 27 - "Memorial"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 28 - "Diagnose Page"
+### Community 28 - "Diagnose"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 29 - "API Documentation"
+### Community 29 - "API Docs"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 30 - "Death Cause Selection"
+### Community 30 - "Death Cause"
 Cohesion: 1.0
 Nodes (2): Backend API overview — 11 endpoints, API endpoints — plants CRUD, watering, diagnosis, weather
 
@@ -219,7 +217,7 @@ Nodes (2): Backend API overview — 11 endpoints, API endpoints — plants CRUD,
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 32 - "PostCSS Config"
+### Community 32 - "PostCSS"
 Cohesion: 1.0
 Nodes (1): Bottom Watering Education
 
@@ -227,7 +225,7 @@ Nodes (1): Bottom Watering Education
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 34 - "Tailwind Config"
+### Community 34 - "Tailwind"
 Cohesion: 1.0
 Nodes (0): 
 
@@ -249,138 +247,126 @@ Nodes (0):
 
 ### Community 39 - "React Entry"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): ICS calendar export — RRULE-based watering schedule
 
 ### Community 40 - "ICS Export"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Bottom watering education
 
 ### Community 41 - "Watering Cooldown"
 Cohesion: 1.0
-Nodes (1): ICS calendar export — RRULE-based watering schedule
+Nodes (1): 24-hour watering cooldown enforcement
 
 ### Community 42 - "Watering Interval"
 Cohesion: 1.0
-Nodes (1): Bottom watering education
-
-### Community 43 - "Tab Bar Navigation"
-Cohesion: 1.0
-Nodes (1): 24-hour watering cooldown enforcement
-
-### Community 44 - "PWA Meta"
-Cohesion: 1.0
 Nodes (1): Four-tab SPA navigation — Home, Schedule, Memorial, Settings
 
-### Community 45 - "Agent Skills"
+### Community 43 - "Tab Bar"
 Cohesion: 1.0
 Nodes (1): PWA meta tags
 
-### Community 46 - "Backend Architecture"
+### Community 44 - "PWA Meta"
 Cohesion: 1.0
 Nodes (1): Agent skills — GitHub Issues triage workflow
 
-### Community 47 - "Production Deploy"
+### Community 45 - "Agent Skills"
 Cohesion: 1.0
 Nodes (1): Backend architecture — main, config, db, models, routes
 
-### Community 48 - "Offline Fallback"
+### Community 46 - "Backend Architecture"
 Cohesion: 1.0
 Nodes (1): Production deployment
 
-### Community 49 - "HashRouter Rationale"
+### Community 47 - "Production"
 Cohesion: 1.0
 Nodes (1): Offline fallback page — PWA network-loss UI
 
-### Community 50 - "Tailwind Rationale"
+### Community 48 - "Offline"
 Cohesion: 1.0
 Nodes (1): Rationale: HashRouter over BrowserRouter
 
-### Community 51 - "Form Input Clearing"
+### Community 49 - "HashRouter"
 Cohesion: 1.0
 Nodes (1): Rationale: Tailwind over CSS-in-JS
 
-### Community 52 - "Isolated Nodes"
+### Community 50 - "Tailwind Rationale"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 53 - "E2E Smoke Tests (Vanilla JS)"
+### Community 51 - "Form Clearing"
 Cohesion: 1.0
 Nodes (1): 51 Isolated Nodes (19% of graph)
 
 ## Knowledge Gaps
 - **78 isolated node(s):** `Database setup — PostgreSQL via SQLAlchemy with connection pooling.`, `Create tables if they don't exist.`, `Verify database connectivity. Returns True if healthy.`, `Get a database session (FastAPI dependency).`, `Application configuration — loaded from environment with sensible defaults.` (+73 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `CountUp Animation`** (2 nodes): `EmptyState()`, `EmptyState.jsx`
+- **Thin community `CountUp`** (2 nodes): `EmptyState()`, `EmptyState.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Season Banner`** (2 nodes): `CountUp()`, `CountUp.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Memorial Page`** (2 nodes): `SeasonBanner()`, `SeasonBanner.jsx`
+- **Thin community `Memorial`** (2 nodes): `SeasonBanner()`, `SeasonBanner.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Diagnose Page`** (2 nodes): `Memorial()`, `Memorial.jsx`
+- **Thin community `Diagnose`** (2 nodes): `Memorial()`, `Memorial.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `API Documentation`** (2 nodes): `Diagnose()`, `Diagnose.jsx`
+- **Thin community `API Docs`** (2 nodes): `Diagnose()`, `Diagnose.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Death Cause Selection`** (2 nodes): `Backend API overview — 11 endpoints`, `API endpoints — plants CRUD, watering, diagnosis, weather`
+- **Thin community `Death Cause`** (2 nodes): `Backend API overview — 11 endpoints`, `API endpoints — plants CRUD, watering, diagnosis, weather`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Bottom Watering`** (2 nodes): `selectCause()`, `updateCauseSelection()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `PostCSS Config`** (2 nodes): `Bottom Watering Education`, `toggleBottomWaterInfo()`
+- **Thin community `PostCSS`** (2 nodes): `Bottom Watering Education`, `toggleBottomWaterInfo()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Vite Config`** (1 nodes): `tailwind.config.js`
+- **Thin community `Vite Config`** (1 nodes): `vite.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Tailwind Config`** (1 nodes): `vite.config.js`
+- **Thin community `Tailwind`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Tests Init`** (1 nodes): `postcss.config.js`
+- **Thin community `Tests Init`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Routes Init`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Services Init`** (1 nodes): `__init__.py`
+- **Thin community `Services Init`** (1 nodes): `sw.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Service Worker`** (1 nodes): `__init__.py`
+- **Thin community `Service Worker`** (1 nodes): `main.jsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `React Entry`** (1 nodes): `sw.js`
+- **Thin community `React Entry`** (1 nodes): `ICS calendar export — RRULE-based watering schedule`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `ICS Export`** (1 nodes): `main.jsx`
+- **Thin community `ICS Export`** (1 nodes): `Bottom watering education`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Watering Cooldown`** (1 nodes): `ICS calendar export — RRULE-based watering schedule`
+- **Thin community `Watering Cooldown`** (1 nodes): `24-hour watering cooldown enforcement`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Watering Interval`** (1 nodes): `Bottom watering education`
+- **Thin community `Watering Interval`** (1 nodes): `Four-tab SPA navigation — Home, Schedule, Memorial, Settings`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Tab Bar Navigation`** (1 nodes): `24-hour watering cooldown enforcement`
+- **Thin community `Tab Bar`** (1 nodes): `PWA meta tags`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `PWA Meta`** (1 nodes): `Four-tab SPA navigation — Home, Schedule, Memorial, Settings`
+- **Thin community `PWA Meta`** (1 nodes): `Agent skills — GitHub Issues triage workflow`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Agent Skills`** (1 nodes): `PWA meta tags`
+- **Thin community `Agent Skills`** (1 nodes): `Backend architecture — main, config, db, models, routes`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Backend Architecture`** (1 nodes): `Agent skills — GitHub Issues triage workflow`
+- **Thin community `Backend Architecture`** (1 nodes): `Production deployment`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Production Deploy`** (1 nodes): `Backend architecture — main, config, db, models, routes`
+- **Thin community `Production`** (1 nodes): `Offline fallback page — PWA network-loss UI`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Offline Fallback`** (1 nodes): `Production deployment`
+- **Thin community `Offline`** (1 nodes): `Rationale: HashRouter over BrowserRouter`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `HashRouter Rationale`** (1 nodes): `Offline fallback page — PWA network-loss UI`
+- **Thin community `HashRouter`** (1 nodes): `Rationale: Tailwind over CSS-in-JS`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Tailwind Rationale`** (1 nodes): `Rationale: HashRouter over BrowserRouter`
+- **Thin community `Tailwind Rationale`** (1 nodes): `clearInputs()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Form Input Clearing`** (1 nodes): `Rationale: Tailwind over CSS-in-JS`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Isolated Nodes`** (1 nodes): `clearInputs()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `E2E Smoke Tests (Vanilla JS)`** (1 nodes): `51 Isolated Nodes (19% of graph)`
+- **Thin community `Form Clearing`** (1 nodes): `51 Isolated Nodes (19% of graph)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `HealthResponse` connect `Backend Data Models` to `Backend Core & Health`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
+  _High betweenness centrality (0.050) - this node is a cross-community bridge._
 - **Why does `setup_db()` connect `Backend Core & Health` to `Backend Test Suite`?**
   _High betweenness centrality (0.048) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `getAdjustedInterval()` (e.g. with `Environment Object (temperature, season, hemisphere, lat/lng)` and `Seasonal Watering Multiplier`) actually correct?**
   _`getAdjustedInterval()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Database setup — PostgreSQL via SQLAlchemy with connection pooling.`, `Create tables if they don't exist.`, `Verify database connectivity. Returns True if healthy.` to the rest of the system?**
   _78 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Vanilla JS Core Functions` be split into smaller, more focused modules?**
+- **Should `Vanilla JS Core` be split into smaller, more focused modules?**
   _Cohesion score 0.06 - nodes in this community are weakly interconnected._
 - **Should `Backend Test Suite` be split into smaller, more focused modules?**
   _Cohesion score 0.06 - nodes in this community are weakly interconnected._

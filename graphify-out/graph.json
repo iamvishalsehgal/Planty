@@ -4,15 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "tailwind.config.js",
-      "file_type": "code",
-      "source_file": "tailwind.config.js",
-      "source_location": "L1",
-      "community": 33,
-      "norm_label": "tailwind.config.js",
-      "id": "tailwind_config_js"
-    },
-    {
       "label": "e2e-full-test.mjs",
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
@@ -53,18 +44,9 @@
       "file_type": "code",
       "source_file": "vite.config.js",
       "source_location": "L1",
-      "community": 34,
+      "community": 33,
       "norm_label": "vite.config.js",
       "id": "vite_config_js"
-    },
-    {
-      "label": "postcss.config.js",
-      "file_type": "code",
-      "source_file": "postcss.config.js",
-      "source_location": "L1",
-      "community": 35,
-      "norm_label": "postcss.config.js",
-      "id": "postcss_config_js"
     },
     {
       "label": "db.py",
@@ -503,7 +485,7 @@
       "file_type": "code",
       "source_file": "backend/tests/__init__.py",
       "source_location": "L1",
-      "community": 36,
+      "community": 34,
       "norm_label": "__init__.py",
       "id": "backend_tests_init_py"
     },
@@ -1097,7 +1079,7 @@
       "file_type": "code",
       "source_file": "backend/routes/__init__.py",
       "source_location": "L1",
-      "community": 37,
+      "community": 35,
       "norm_label": "__init__.py",
       "id": "backend_routes_init_py"
     },
@@ -1178,7 +1160,7 @@
       "file_type": "code",
       "source_file": "backend/services/__init__.py",
       "source_location": "L1",
-      "community": 38,
+      "community": 36,
       "norm_label": "__init__.py",
       "id": "backend_services_init_py"
     },
@@ -1214,7 +1196,7 @@
       "file_type": "code",
       "source_file": "public/sw.js",
       "source_location": "L1",
-      "community": 39,
+      "community": 37,
       "norm_label": "sw.js",
       "id": "public_sw_js"
     },
@@ -1223,7 +1205,7 @@
       "file_type": "code",
       "source_file": "src/main.jsx",
       "source_location": "L1",
-      "community": 40,
+      "community": 38,
       "norm_label": "main.jsx",
       "id": "src_main_jsx"
     },
@@ -2183,7 +2165,7 @@
       "label": "ICS calendar export \u2014 RRULE-based watering schedule",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 41,
+      "community": 39,
       "norm_label": "ics calendar export \u2014 rrule-based watering schedule",
       "id": "index_html_ics_export"
     },
@@ -2191,7 +2173,7 @@
       "label": "Bottom watering education",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 42,
+      "community": 40,
       "norm_label": "bottom watering education",
       "id": "index_html_bottom_watering"
     },
@@ -2199,7 +2181,7 @@
       "label": "24-hour watering cooldown enforcement",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 43,
+      "community": 41,
       "norm_label": "24-hour watering cooldown enforcement",
       "id": "index_html_cooldown"
     },
@@ -2207,7 +2189,7 @@
       "label": "Four-tab SPA navigation \u2014 Home, Schedule, Memorial, Settings",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 44,
+      "community": 42,
       "norm_label": "four-tab spa navigation \u2014 home, schedule, memorial, settings",
       "id": "index_html_tab_navigation"
     },
@@ -2223,7 +2205,7 @@
       "label": "PWA meta tags",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 45,
+      "community": 43,
       "norm_label": "pwa meta tags",
       "id": "index_html_pwa_meta"
     },
@@ -2300,7 +2282,7 @@
       "label": "Agent skills \u2014 GitHub Issues triage workflow",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 46,
+      "community": 44,
       "norm_label": "agent skills \u2014 github issues triage workflow",
       "id": "claude_md_agent_skills"
     },
@@ -2324,7 +2306,7 @@
       "label": "Backend architecture \u2014 main, config, db, models, routes",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 47,
+      "community": 45,
       "norm_label": "backend architecture \u2014 main, config, db, models, routes",
       "id": "backend_readme_architecture"
     },
@@ -2332,7 +2314,7 @@
       "label": "Production deployment",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 48,
+      "community": 46,
       "norm_label": "production deployment",
       "id": "backend_readme_production"
     },
@@ -2348,7 +2330,7 @@
       "label": "Offline fallback page \u2014 PWA network-loss UI",
       "file_type": "code",
       "source_file": "public/offline.html",
-      "community": 49,
+      "community": 47,
       "norm_label": "offline fallback page \u2014 pwa network-loss ui",
       "id": "offline_html_pwa_fallback"
     },
@@ -2380,7 +2362,7 @@
       "label": "Rationale: HashRouter over BrowserRouter",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 50,
+      "community": 48,
       "norm_label": "rationale: hashrouter over browserrouter",
       "id": "claude_md_rationale_hashrouter"
     },
@@ -2388,7 +2370,7 @@
       "label": "Rationale: Tailwind over CSS-in-JS",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 51,
+      "community": 49,
       "norm_label": "rationale: tailwind over css-in-js",
       "id": "claude_md_rationale_tailwind"
     },
@@ -2755,7 +2737,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 52,
+      "community": 50,
       "norm_label": "clearinputs()",
       "id": "index_html_clearinputs"
     },
@@ -3444,7 +3426,7 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "community": 53,
+      "community": 51,
       "norm_label": "51 isolated nodes (19% of graph)",
       "id": "audit_md_isolated_nodes"
     },
@@ -3544,27 +3526,27 @@
       "file_type": "code",
       "source_file": "e2e-smoke.mjs",
       "source_location": "L1",
-      "id": "e2e_smoke_mjs",
       "community": 24,
-      "norm_label": "e2e-smoke.mjs"
+      "norm_label": "e2e-smoke.mjs",
+      "id": "e2e_smoke_mjs"
     },
     {
       "label": "ok()",
       "file_type": "code",
       "source_file": "e2e-smoke.mjs",
       "source_location": "L9",
-      "id": "e2e_smoke_ok",
       "community": 24,
-      "norm_label": "ok()"
+      "norm_label": "ok()",
+      "id": "e2e_smoke_ok"
     },
     {
       "label": "fail()",
       "file_type": "code",
       "source_file": "e2e-smoke.mjs",
       "source_location": "L10",
-      "id": "e2e_smoke_fail",
       "community": 24,
-      "norm_label": "fail()"
+      "norm_label": "fail()",
+      "id": "e2e_smoke_fail"
     },
     {
       "label": "Content Security Policy meta tag \u2014 default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com",
@@ -3575,9 +3557,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_html_csp",
       "community": 7,
-      "norm_label": "content security policy meta tag \u2014 default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com"
+      "norm_label": "content security policy meta tag \u2014 default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com",
+      "id": "index_html_csp"
     },
     {
       "label": "Planty E2E Security & Regression Smoke test suite \u2014 11 P0 tests via Playwright",
@@ -3588,9 +3570,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_e2e_test_suite",
       "community": 7,
-      "norm_label": "planty e2e security & regression smoke test suite \u2014 11 p0 tests via playwright"
+      "norm_label": "planty e2e security & regression smoke test suite \u2014 11 p0 tests via playwright",
+      "id": "smoke_e2e_test_suite"
     },
     {
       "label": "P0-1 XSS sanitization test \u2014 injects <img onerror> and <script> tags via plantName/plantLocation, asserts HTML entity escaping",
@@ -3601,9 +3583,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_xss_test",
       "community": 7,
-      "norm_label": "p0-1 xss sanitization test \u2014 injects <img onerror> and <script> tags via plantname/plantlocation, asserts html entity escaping"
+      "norm_label": "p0-1 xss sanitization test \u2014 injects <img onerror> and <script> tags via plantname/plantlocation, asserts html entity escaping",
+      "id": "smoke_xss_test"
     },
     {
       "label": "P0-2 IIFE encapsulation test \u2014 verifies 16 public functions on window, checks private internals are not leaked",
@@ -3614,9 +3596,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_iife_test",
       "community": 7,
-      "norm_label": "p0-2 iife encapsulation test \u2014 verifies 16 public functions on window, checks private internals are not leaked"
+      "norm_label": "p0-2 iife encapsulation test \u2014 verifies 16 public functions on window, checks private internals are not leaked",
+      "id": "smoke_iife_test"
     },
     {
       "label": "P0-3 Import resilience test \u2014 injects corrupted localStorage data, reloads page, asserts app survives",
@@ -3627,9 +3609,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_import_resilience_test",
       "community": 7,
-      "norm_label": "p0-3 import resilience test \u2014 injects corrupted localstorage data, reloads page, asserts app survives"
+      "norm_label": "p0-3 import resilience test \u2014 injects corrupted localstorage data, reloads page, asserts app survives",
+      "id": "smoke_import_resilience_test"
     },
     {
       "label": "P0-4 esc() integrity test \u2014 adds plant with special chars (&), asserts correct textContent rendering",
@@ -3640,9 +3622,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_esc_integrity_test",
       "community": 7,
-      "norm_label": "p0-4 esc() integrity test \u2014 adds plant with special chars (&), asserts correct textcontent rendering"
+      "norm_label": "p0-4 esc() integrity test \u2014 adds plant with special chars (&), asserts correct textcontent rendering",
+      "id": "smoke_esc_integrity_test"
     },
     {
       "label": "P0-5 Render debounce test \u2014 adds 3 plants rapidly, asserts all 3 cards rendered",
@@ -3653,9 +3635,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_render_debounce_test",
       "community": 7,
-      "norm_label": "p0-5 render debounce test \u2014 adds 3 plants rapidly, asserts all 3 cards rendered"
+      "norm_label": "p0-5 render debounce test \u2014 adds 3 plants rapidly, asserts all 3 cards rendered",
+      "id": "smoke_render_debounce_test"
     },
     {
       "label": "P0-6 Tab navigation test \u2014 clicks all 4 tabs (schedule, memorial, settings, home), asserts active class",
@@ -3666,9 +3648,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_tab_nav_test",
       "community": 7,
-      "norm_label": "p0-6 tab navigation test \u2014 clicks all 4 tabs (schedule, memorial, settings, home), asserts active class"
+      "norm_label": "p0-6 tab navigation test \u2014 clicks all 4 tabs (schedule, memorial, settings, home), asserts active class",
+      "id": "smoke_tab_nav_test"
     },
     {
       "label": "P0-7 Water flow test \u2014 waters a plant via onclick handler extraction, asserts success and cooldown activation",
@@ -3679,9 +3661,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_water_flow_test",
       "community": 7,
-      "norm_label": "p0-7 water flow test \u2014 waters a plant via onclick handler extraction, asserts success and cooldown activation"
+      "norm_label": "p0-7 water flow test \u2014 waters a plant via onclick handler extraction, asserts success and cooldown activation",
+      "id": "smoke_water_flow_test"
     },
     {
       "label": "P0-8 Error boundary test \u2014 dispatches synthetic ErrorEvent, asserts app survives uncaugh error",
@@ -3692,9 +3674,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_error_boundary_test",
       "community": 7,
-      "norm_label": "p0-8 error boundary test \u2014 dispatches synthetic errorevent, asserts app survives uncaugh error"
+      "norm_label": "p0-8 error boundary test \u2014 dispatches synthetic errorevent, asserts app survives uncaugh error",
+      "id": "smoke_error_boundary_test"
     },
     {
       "label": "P0-9 Export test \u2014 verifies exportData on window, checks localStorage has plant data",
@@ -3705,9 +3687,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_export_test",
       "community": 7,
-      "norm_label": "p0-9 export test \u2014 verifies exportdata on window, checks localstorage has plant data"
+      "norm_label": "p0-9 export test \u2014 verifies exportdata on window, checks localstorage has plant data",
+      "id": "smoke_export_test"
     },
     {
       "label": "P0-10 ICS escape test \u2014 directly calls icsEscape(), asserts semicolon and comma escaping for iCalendar format",
@@ -3718,9 +3700,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_ics_escape_test",
       "community": 7,
-      "norm_label": "p0-10 ics escape test \u2014 directly calls icsescape(), asserts semicolon and comma escaping for icalendar format"
+      "norm_label": "p0-10 ics escape test \u2014 directly calls icsescape(), asserts semicolon and comma escaping for icalendar format",
+      "id": "smoke_ics_escape_test"
     },
     {
       "label": "P0-11 CSP test \u2014 queries meta[http-equiv=Content-Security-Policy], asserts default-src present",
@@ -3731,9 +3713,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_csp_test",
       "community": 7,
-      "norm_label": "p0-11 csp test \u2014 queries meta[http-equiv=content-security-policy], asserts default-src present"
+      "norm_label": "p0-11 csp test \u2014 queries meta[http-equiv=content-security-policy], asserts default-src present",
+      "id": "smoke_csp_test"
     },
     {
       "label": "Playwright browser automation \u2014 headless Chromium via playwright.chromium.launch()",
@@ -3744,9 +3726,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_playwright",
       "community": 7,
-      "norm_label": "playwright browser automation \u2014 headless chromium via playwright.chromium.launch()"
+      "norm_label": "playwright browser automation \u2014 headless chromium via playwright.chromium.launch()",
+      "id": "smoke_playwright"
     },
     {
       "label": "Pass/fail report tracking \u2014 tally object with passed, failed, errors arrays, exit code on failure",
@@ -3757,9 +3739,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "smoke_report_tracker",
       "community": 7,
-      "norm_label": "pass/fail report tracking \u2014 tally object with passed, failed, errors arrays, exit code on failure"
+      "norm_label": "pass/fail report tracking \u2014 tally object with passed, failed, errors arrays, exit code on failure",
+      "id": "smoke_report_tracker"
     }
   ],
   "links": [
@@ -8984,9 +8966,9 @@
       "weight": 1.0,
       "_src": "e2e_smoke_mjs",
       "_tgt": "e2e_smoke_ok",
+      "confidence_score": 1.0,
       "source": "e2e_smoke_mjs",
-      "target": "e2e_smoke_ok",
-      "confidence_score": 1.0
+      "target": "e2e_smoke_ok"
     },
     {
       "relation": "contains",
@@ -8996,9 +8978,9 @@
       "weight": 1.0,
       "_src": "e2e_smoke_mjs",
       "_tgt": "e2e_smoke_fail",
+      "confidence_score": 1.0,
       "source": "e2e_smoke_mjs",
-      "target": "e2e_smoke_fail",
-      "confidence_score": 1.0
+      "target": "e2e_smoke_fail"
     },
     {
       "relation": "calls",
