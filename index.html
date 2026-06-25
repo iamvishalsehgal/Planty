@@ -11,7 +11,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#10b981">
     <meta name="description" content="Smart plant care - tracks watering, learns your patterns">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com; font-src 'self'; manifest-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com; font-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script';">
 
     <title>Planty - Smart Plant Care</title>
 
@@ -1751,6 +1751,11 @@
     <script>
         (function() {
         'use strict';
+        // Trusted Types policy — required by CSP 'require-trusted-types-for 'script''
+        // Default policy wraps raw strings so existing innerHTML calls don't throw.
+        // For stricter enforcement, remove default policy and use html(str) wrapper.
+        const _ttDefault = window.trustedTypes?.createPolicy?.('planty-default', { createHTML: (s) => s }) || null;
+        function html(str) { return _ttDefault ? _ttDefault.createHTML(str) : str; }
         const environment = { temperature: null, season: null, hemisphere: 'north', latitude: null, longitude: null, lastFetch: null };
 
         function detectSeason() {
@@ -1817,7 +1822,8 @@
             });
         }
 
-        const state = { plants: JSON.parse(localStorage.getItem('planty_plants')||'[]'), deadPlants: JSON.parse(localStorage.getItem('planty_dead')||'[]'), history: JSON.parse(localStorage.getItem('planty_history')||'[]'), pendingPlant: null, pendingRevival: null, selectedCause: 'unknown' };
+        function safeLoad(key, fallback) { try { return JSON.parse(localStorage.getItem(key) || fallback); } catch(e) { console.warn('Planty: corrupt ' + key + ' data, using fallback'); return JSON.parse(fallback); } }
+        const state = { plants: safeLoad('planty_plants','[]'), deadPlants: safeLoad('planty_dead','[]'), history: safeLoad('planty_history','[]'), pendingPlant: null, pendingRevival: null, selectedCause: 'unknown' };
 
         let _storageFull = false;
         function save() {

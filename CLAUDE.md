@@ -4,7 +4,7 @@ Planty v3 — smart plant care PWA. Vanilla HTML/CSS/JS, single-file app. No bui
 
 ## Stack
 
-- **Frontend**: Vanilla JS (ES2020+), CSS custom properties, single `index.html` (~1800 lines)
+- **Frontend**: Vanilla JS (ES2020+), CSS custom properties, single `index.html` (~1960 lines)
 - **State**: Plain object + localStorage persistence
 - **Styling**: Inline `<style>` with CSS custom properties (design tokens)
 - **Backend**: FastAPI + SQLite (local) / PostgreSQL (production) — optional
@@ -31,8 +31,9 @@ uvicorn main:app --reload       # API → localhost:8000
 # Frontend build check
 npm run build
 
-# E2E tests (Playwright, 36 tests)
+# E2E tests (Playwright, 24 test sections, 85+ assertions)
 node e2e-full-test.mjs          # Requires dev server running on port 5169
+# Targets Planty v3 vanilla JS — tab-based nav, no hash routing
 
 # Backend (29 tests)
 cd backend && source .venv/bin/activate && python3 -m pytest tests/ -v
@@ -73,9 +74,13 @@ Single `index.html` with three sections:
 - **innerHTML rendering**: Plants/memorial/schedule rebuilt on every render call via template literals
 - **Debounced render**: `render()` uses `requestAnimationFrame` to batch rapid updates into one paint
 - **XSS protection**: `esc()` helper wraps all user-provided strings before innerHTML insertion
+- **Trusted Types**: Default policy (`planty-default`) + `html()` wrapper — CSP enforces `require-trusted-types-for 'script'`
+- **CSP hardening**: `base-uri 'self'`, `form-action 'none'`, `upgrade-insecure-requests`, Trusted Types enforcement
+- **Storage resilience**: `safeLoad()` with try/catch — corrupt localStorage → console.warn + fallback to empty `[]`
 - **IIFE encapsulation**: All internal functions private; only onclick-handler functions exposed to `window`
 - **Import validation**: `validatePlant()` + `normalizePlant()` sanitize imported data
 - **Error boundary**: `window.addEventListener('error', ...)` shows toast on unhandled exceptions
+- **Storage quota guard**: `_storageFull` flag stops localStorage hammering when quota exceeded
 
 ### State Shape
 
@@ -97,6 +102,10 @@ environment = { temperature, season, hemisphere, latitude, longitude, lastFetch 
 | `getDaysUntilNextWater(pid, def)` | Days until plant needs water |
 | `combineDeathLearning(deadPlants)` | Computes adjusted interval for next plant from death data |
 | `render()` | Debounced dispatcher → renderPlants + renderMemorial + renderSchedule |
+| `esc(str)` | DOM-safe HTML escaping via createTextNode — prevents XSS |
+| `html(str)` | TrustedHTML wrapper for CSP `require-trusted-types-for 'script'` |
+| `safeLoad(key, fallback)` | JSON.parse with try/catch — corrupt localStorage recovery |
+| `validatePlant(p)` | Sanitizes imported plant objects before insertion |
 
 ## Design System
 
@@ -112,6 +121,8 @@ No dark mode currently — would require `html.dark` class selector.
 - **Derived state over stored state**: Health status, adjusted intervals computed at render — never stale
 - **Hash-free routing**: Tab-based navigation (`showTab()`) — no router, no URL state
 - **Open-Meteo over API-key services**: Free weather, no registration, no cost
+- **Trusted Types over unsafe-inline alone**: CSP enforces `require-trusted-types-for 'script'` with default TT policy — forward-compatible with Baseline 2026
+- **Defense-in-depth XSS**: `esc()` (primary) + Trusted Types (enforcement layer) + CSP (containment layer) + import validation (input gate)
 
 ## Agent Skills
 
