@@ -8,7 +8,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L1",
-      "community": 16,
+      "community": 12,
       "norm_label": "e2e-full-test.mjs",
       "id": "e2e_full_test_mjs"
     },
@@ -17,7 +17,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L18",
-      "community": 16,
+      "community": 12,
       "norm_label": "ok()",
       "id": "e2e_full_test_ok"
     },
@@ -26,7 +26,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L22",
-      "community": 16,
+      "community": 12,
       "norm_label": "fail()",
       "id": "e2e_full_test_fail"
     },
@@ -35,7 +35,7 @@
       "file_type": "code",
       "source_file": "e2e-full-test.mjs",
       "source_location": "L53",
-      "community": 16,
+      "community": 12,
       "norm_label": "preparecleanpage()",
       "id": "e2e_full_test_preparecleanpage"
     },
@@ -44,7 +44,7 @@
       "file_type": "code",
       "source_file": "vite.config.js",
       "source_location": "L1",
-      "community": 33,
+      "community": 20,
       "norm_label": "vite.config.js",
       "id": "vite_config_js"
     },
@@ -134,7 +134,7 @@
       "file_type": "code",
       "source_file": "backend/config.py",
       "source_location": "L1",
-      "community": 11,
+      "community": 8,
       "norm_label": "config.py",
       "id": "backend_config_py"
     },
@@ -143,7 +143,7 @@
       "file_type": "code",
       "source_file": "backend/config.py",
       "source_location": "L16",
-      "community": 11,
+      "community": 8,
       "norm_label": "_config",
       "id": "config_config"
     },
@@ -152,7 +152,7 @@
       "file_type": "code",
       "source_file": "backend/config.py",
       "source_location": "L19",
-      "community": 11,
+      "community": 8,
       "norm_label": ".__init__()",
       "id": "config_config_init"
     },
@@ -161,7 +161,7 @@
       "file_type": "code",
       "source_file": "backend/config.py",
       "source_location": "L22",
-      "community": 11,
+      "community": 8,
       "norm_label": ".__getattr__()",
       "id": "config_config_getattr"
     },
@@ -170,7 +170,7 @@
       "file_type": "rationale",
       "source_file": "backend/config.py",
       "source_location": "L1",
-      "community": 11,
+      "community": 8,
       "norm_label": "application configuration \u2014 loaded from environment with sensible defaults.",
       "id": "config_rationale_1"
     },
@@ -179,7 +179,7 @@
       "file_type": "rationale",
       "source_file": "backend/config.py",
       "source_location": "L17",
-      "community": 11,
+      "community": 8,
       "norm_label": "centralised config \u2014 reads env at init, supports overrides for tests.",
       "id": "config_rationale_17"
     },
@@ -188,7 +188,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "models.py",
       "id": "backend_models_py"
     },
@@ -197,7 +197,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L12",
-      "community": 2,
+      "community": 1,
       "norm_label": "plantcreate",
       "id": "models_plantcreate"
     },
@@ -206,7 +206,7 @@
       "file_type": "code",
       "source_file": "",
       "source_location": "",
-      "community": 2,
+      "community": 1,
       "norm_label": "basemodel",
       "id": "basemodel"
     },
@@ -215,7 +215,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L22",
-      "community": 2,
+      "community": 1,
       "norm_label": "strip_whitespace()",
       "id": "models_strip_whitespace"
     },
@@ -224,7 +224,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L26",
-      "community": 2,
+      "community": 1,
       "norm_label": "plantupdate",
       "id": "models_plantupdate"
     },
@@ -233,7 +233,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L35",
-      "community": 2,
+      "community": 1,
       "norm_label": "plantresponse",
       "id": "models_plantresponse"
     },
@@ -242,7 +242,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L51",
-      "community": 2,
+      "community": 1,
       "norm_label": "wateringcreate",
       "id": "models_wateringcreate"
     },
@@ -251,7 +251,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L57",
-      "community": 2,
+      "community": 1,
       "norm_label": "wateringresponse",
       "id": "models_wateringresponse"
     },
@@ -260,7 +260,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L68",
-      "community": 2,
+      "community": 1,
       "norm_label": "diagnosisrequest",
       "id": "models_diagnosisrequest"
     },
@@ -269,7 +269,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L74",
-      "community": 2,
+      "community": 1,
       "norm_label": "validate_base64()",
       "id": "models_validate_base64"
     },
@@ -278,7 +278,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L83",
-      "community": 2,
+      "community": 1,
       "norm_label": "diagnosisresponse",
       "id": "models_diagnosisresponse"
     },
@@ -287,7 +287,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L93",
-      "community": 2,
+      "community": 1,
       "norm_label": "weatherresponse",
       "id": "models_weatherresponse"
     },
@@ -296,7 +296,7 @@
       "file_type": "code",
       "source_file": "backend/models.py",
       "source_location": "L104",
-      "community": 2,
+      "community": 1,
       "norm_label": "healthresponse",
       "id": "models_healthresponse"
     },
@@ -305,7 +305,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "pydantic v2 models for planty api.",
       "id": "models_rationale_1"
     },
@@ -314,7 +314,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L13",
-      "community": 2,
+      "community": 1,
       "norm_label": "request to create a plant.",
       "id": "models_rationale_13"
     },
@@ -323,7 +323,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L27",
-      "community": 2,
+      "community": 1,
       "norm_label": "partial update for a plant.",
       "id": "models_rationale_27"
     },
@@ -332,7 +332,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L36",
-      "community": 2,
+      "community": 1,
       "norm_label": "plant as returned by the api.",
       "id": "models_rationale_36"
     },
@@ -341,7 +341,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L52",
-      "community": 2,
+      "community": 1,
       "norm_label": "log a watering event.",
       "id": "models_rationale_52"
     },
@@ -350,7 +350,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L58",
-      "community": 2,
+      "community": 1,
       "norm_label": "watering event as returned by the api.",
       "id": "models_rationale_58"
     },
@@ -359,7 +359,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L69",
-      "community": 2,
+      "community": 1,
       "norm_label": "request to diagnose a plant from a photo.",
       "id": "models_rationale_69"
     },
@@ -368,7 +368,7 @@
       "file_type": "rationale",
       "source_file": "backend/models.py",
       "source_location": "L94",
-      "community": 2,
+      "community": 1,
       "norm_label": "current weather relevant to plant care.",
       "id": "models_rationale_94"
     },
@@ -485,7 +485,7 @@
       "file_type": "code",
       "source_file": "backend/tests/__init__.py",
       "source_location": "L1",
-      "community": 34,
+      "community": 21,
       "norm_label": "__init__.py",
       "id": "backend_tests_init_py"
     },
@@ -494,7 +494,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L1",
-      "community": 1,
+      "community": 2,
       "norm_label": "test_routes.py",
       "id": "backend_tests_test_routes_py"
     },
@@ -512,7 +512,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L46",
-      "community": 1,
+      "community": 2,
       "norm_label": "_create_plant()",
       "id": "test_routes_create_plant"
     },
@@ -521,7 +521,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L58",
-      "community": 1,
+      "community": 2,
       "norm_label": "testhealth",
       "id": "test_routes_testhealth"
     },
@@ -530,7 +530,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L59",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_health_check()",
       "id": "test_routes_testhealth_test_health_check"
     },
@@ -539,7 +539,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L70",
-      "community": 1,
+      "community": 2,
       "norm_label": "testplants",
       "id": "test_routes_testplants"
     },
@@ -548,7 +548,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L72",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_create_plant()",
       "id": "test_routes_testplants_test_create_plant"
     },
@@ -557,7 +557,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L82",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_create_plant_with_photo()",
       "id": "test_routes_testplants_test_create_plant_with_photo"
     },
@@ -566,7 +566,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L87",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_list_plants()",
       "id": "test_routes_testplants_test_list_plants"
     },
@@ -575,7 +575,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L94",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_list_plants_empty()",
       "id": "test_routes_testplants_test_list_plants_empty"
     },
@@ -584,7 +584,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L99",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_plant()",
       "id": "test_routes_testplants_test_get_plant"
     },
@@ -593,7 +593,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L106",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_update_plant()",
       "id": "test_routes_testplants_test_update_plant"
     },
@@ -602,7 +602,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L118",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_delete_plant()",
       "id": "test_routes_testplants_test_delete_plant"
     },
@@ -611,7 +611,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L125",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_plant_404()",
       "id": "test_routes_testplants_test_get_plant_404"
     },
@@ -620,7 +620,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L128",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_update_plant_404()",
       "id": "test_routes_testplants_test_update_plant_404"
     },
@@ -629,7 +629,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L132",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_delete_plant_404()",
       "id": "test_routes_testplants_test_delete_plant_404"
     },
@@ -638,7 +638,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L135",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_water_nonexistent_plant()",
       "id": "test_routes_testplants_test_water_nonexistent_plant"
     },
@@ -647,7 +647,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L139",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_events_nonexistent_plant()",
       "id": "test_routes_testplants_test_get_events_nonexistent_plant"
     },
@@ -656,7 +656,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L146",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_validation_name_required()",
       "id": "test_routes_testplants_test_validation_name_required"
     },
@@ -665,7 +665,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L150",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_validation_empty_name()",
       "id": "test_routes_testplants_test_validation_empty_name"
     },
@@ -674,7 +674,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L156",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_validation_interval_too_low()",
       "id": "test_routes_testplants_test_validation_interval_too_low"
     },
@@ -683,7 +683,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L163",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_validation_interval_too_high()",
       "id": "test_routes_testplants_test_validation_interval_too_high"
     },
@@ -692,7 +692,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L170",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_validation_name_too_long()",
       "id": "test_routes_testplants_test_validation_name_too_long"
     },
@@ -701,7 +701,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L177",
-      "community": 1,
+      "community": 2,
       "norm_label": "testwatering",
       "id": "test_routes_testwatering"
     },
@@ -710,7 +710,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L178",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_water_plant()",
       "id": "test_routes_testwatering_test_water_plant"
     },
@@ -719,7 +719,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L193",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_water_plant_minimal_payload()",
       "id": "test_routes_testwatering_test_water_plant_minimal_payload"
     },
@@ -728,7 +728,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L199",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_watering_events()",
       "id": "test_routes_testwatering_test_get_watering_events"
     },
@@ -737,7 +737,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L208",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_watering_events_empty()",
       "id": "test_routes_testwatering_test_get_watering_events_empty"
     },
@@ -746,7 +746,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L215",
-      "community": 1,
+      "community": 2,
       "norm_label": "testdiagnosis",
       "id": "test_routes_testdiagnosis"
     },
@@ -755,7 +755,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L216",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_diagnose_plant()",
       "id": "test_routes_testdiagnosis_test_diagnose_plant"
     },
@@ -764,7 +764,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L228",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_diagnose_image_too_short()",
       "id": "test_routes_testdiagnosis_test_diagnose_image_too_short"
     },
@@ -773,7 +773,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L232",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_diagnose_strips_data_url()",
       "id": "test_routes_testdiagnosis_test_diagnose_strips_data_url"
     },
@@ -782,7 +782,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L240",
-      "community": 1,
+      "community": 2,
       "norm_label": "testweather",
       "id": "test_routes_testweather"
     },
@@ -791,7 +791,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L241",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_weather_default_coords()",
       "id": "test_routes_testweather_test_get_weather_default_coords"
     },
@@ -800,7 +800,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L250",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_get_weather_custom_coords()",
       "id": "test_routes_testweather_test_get_weather_custom_coords"
     },
@@ -809,7 +809,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L257",
-      "community": 1,
+      "community": 2,
       "norm_label": "testratelimit",
       "id": "test_routes_testratelimit"
     },
@@ -818,7 +818,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L258",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_rate_limit_applied()",
       "id": "test_routes_testratelimit_test_rate_limit_applied"
     },
@@ -827,7 +827,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L279",
-      "community": 1,
+      "community": 2,
       "norm_label": "testroot",
       "id": "test_routes_testroot"
     },
@@ -836,7 +836,7 @@
       "file_type": "code",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L280",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_root_endpoint()",
       "id": "test_routes_testroot_test_root_endpoint"
     },
@@ -845,7 +845,7 @@
       "file_type": "rationale",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L1",
-      "community": 1,
+      "community": 2,
       "norm_label": "tests for planty v2 api routes.",
       "id": "test_routes_rationale_1"
     },
@@ -863,7 +863,7 @@
       "file_type": "rationale",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L47",
-      "community": 1,
+      "community": 2,
       "norm_label": "helper: create a plant and return the json response.",
       "id": "test_routes_rationale_47"
     },
@@ -872,7 +872,7 @@
       "file_type": "rationale",
       "source_file": "backend/tests/test_routes.py",
       "source_location": "L259",
-      "community": 1,
+      "community": 2,
       "norm_label": "send rapid requests \u2014 at least one should be rate-limited.",
       "id": "test_routes_rationale_259"
     },
@@ -881,7 +881,7 @@
       "file_type": "code",
       "source_file": "backend/routes/weather_route.py",
       "source_location": "L1",
-      "community": 10,
+      "community": 7,
       "norm_label": "weather_route.py",
       "id": "backend_routes_weather_route_py"
     },
@@ -890,7 +890,7 @@
       "file_type": "code",
       "source_file": "backend/routes/weather_route.py",
       "source_location": "L16",
-      "community": 10,
+      "community": 7,
       "norm_label": "weather()",
       "id": "weather_route_weather"
     },
@@ -899,7 +899,7 @@
       "file_type": "rationale",
       "source_file": "backend/routes/weather_route.py",
       "source_location": "L20",
-      "community": 10,
+      "community": 7,
       "norm_label": "get current weather for plant care decisions.",
       "id": "weather_route_rationale_20"
     },
@@ -962,7 +962,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "plants.py",
       "id": "backend_routes_plants_py"
     },
@@ -971,7 +971,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L20",
-      "community": 2,
+      "community": 1,
       "norm_label": "_compute_health_status()",
       "id": "plants_compute_health_status"
     },
@@ -980,7 +980,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L35",
-      "community": 2,
+      "community": 1,
       "norm_label": "_row_to_plant()",
       "id": "plants_row_to_plant"
     },
@@ -989,7 +989,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L52",
-      "community": 2,
+      "community": 1,
       "norm_label": "list_plants()",
       "id": "plants_list_plants"
     },
@@ -998,7 +998,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L58",
-      "community": 2,
+      "community": 1,
       "norm_label": "get_plant()",
       "id": "plants_get_plant"
     },
@@ -1007,7 +1007,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L66",
-      "community": 2,
+      "community": 1,
       "norm_label": "create_plant()",
       "id": "plants_create_plant"
     },
@@ -1016,7 +1016,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L103",
-      "community": 2,
+      "community": 1,
       "norm_label": "update_plant()",
       "id": "plants_update_plant"
     },
@@ -1025,7 +1025,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L139",
-      "community": 2,
+      "community": 1,
       "norm_label": "delete_plant()",
       "id": "plants_delete_plant"
     },
@@ -1034,7 +1034,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L150",
-      "community": 2,
+      "community": 1,
       "norm_label": "water_plant()",
       "id": "plants_water_plant"
     },
@@ -1043,7 +1043,7 @@
       "file_type": "code",
       "source_file": "backend/routes/plants.py",
       "source_location": "L191",
-      "community": 2,
+      "community": 1,
       "norm_label": "get_watering_events()",
       "id": "plants_get_watering_events"
     },
@@ -1052,7 +1052,7 @@
       "file_type": "rationale",
       "source_file": "backend/routes/plants.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "plant crud + watering events.",
       "id": "plants_rationale_1"
     },
@@ -1061,7 +1061,7 @@
       "file_type": "rationale",
       "source_file": "backend/routes/plants.py",
       "source_location": "L21",
-      "community": 2,
+      "community": 1,
       "norm_label": "determine plant health status based on watering schedule.",
       "id": "plants_rationale_21"
     },
@@ -1070,7 +1070,7 @@
       "file_type": "rationale",
       "source_file": "backend/routes/plants.py",
       "source_location": "L36",
-      "community": 2,
+      "community": 1,
       "norm_label": "convert a db row to a plant dict.",
       "id": "plants_rationale_36"
     },
@@ -1079,7 +1079,7 @@
       "file_type": "code",
       "source_file": "backend/routes/__init__.py",
       "source_location": "L1",
-      "community": 35,
+      "community": 22,
       "norm_label": "__init__.py",
       "id": "backend_routes_init_py"
     },
@@ -1088,7 +1088,7 @@
       "file_type": "code",
       "source_file": "backend/routes/diagnosis.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "diagnosis.py",
       "id": "backend_routes_diagnosis_py"
     },
@@ -1097,7 +1097,7 @@
       "file_type": "code",
       "source_file": "backend/routes/diagnosis.py",
       "source_location": "L12",
-      "community": 2,
+      "community": 1,
       "norm_label": "diagnose()",
       "id": "diagnosis_diagnose"
     },
@@ -1106,7 +1106,7 @@
       "file_type": "rationale",
       "source_file": "backend/services/diagnosis.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "plant diagnosis service \u2014 rule-based for mvp, ready for ai upgrade.  uses heuris",
       "id": "diagnosis_rationale_1"
     },
@@ -1115,7 +1115,7 @@
       "file_type": "rationale",
       "source_file": "backend/routes/diagnosis.py",
       "source_location": "L13",
-      "community": 2,
+      "community": 1,
       "norm_label": "analyze a plant photo and return a diagnosis.",
       "id": "diagnosis_rationale_13"
     },
@@ -1124,7 +1124,7 @@
       "file_type": "code",
       "source_file": "backend/services/weather.py",
       "source_location": "L1",
-      "community": 10,
+      "community": 7,
       "norm_label": "weather.py",
       "id": "backend_services_weather_py"
     },
@@ -1133,7 +1133,7 @@
       "file_type": "code",
       "source_file": "backend/services/weather.py",
       "source_location": "L40",
-      "community": 10,
+      "community": 7,
       "norm_label": "get_weather()",
       "id": "weather_get_weather"
     },
@@ -1142,7 +1142,7 @@
       "file_type": "rationale",
       "source_file": "backend/services/weather.py",
       "source_location": "L1",
-      "community": 10,
+      "community": 7,
       "norm_label": "weather service \u2014 fetches from open-meteo (free, no api key).",
       "id": "weather_rationale_1"
     },
@@ -1151,7 +1151,7 @@
       "file_type": "rationale",
       "source_file": "backend/services/weather.py",
       "source_location": "L41",
-      "community": 10,
+      "community": 7,
       "norm_label": "fetch current weather from open-meteo.",
       "id": "weather_rationale_41"
     },
@@ -1160,7 +1160,7 @@
       "file_type": "code",
       "source_file": "backend/services/__init__.py",
       "source_location": "L1",
-      "community": 36,
+      "community": 23,
       "norm_label": "__init__.py",
       "id": "backend_services_init_py"
     },
@@ -1169,7 +1169,7 @@
       "file_type": "code",
       "source_file": "backend/services/diagnosis.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 1,
       "norm_label": "diagnosis.py",
       "id": "backend_services_diagnosis_py"
     },
@@ -1178,7 +1178,7 @@
       "file_type": "code",
       "source_file": "backend/services/diagnosis.py",
       "source_location": "L56",
-      "community": 2,
+      "community": 1,
       "norm_label": "diagnose_plant()",
       "id": "diagnosis_diagnose_plant"
     },
@@ -1187,7 +1187,7 @@
       "file_type": "rationale",
       "source_file": "backend/services/diagnosis.py",
       "source_location": "L57",
-      "community": 2,
+      "community": 1,
       "norm_label": "analyze plant photo and return diagnosis.      currently uses heuristic matching",
       "id": "diagnosis_rationale_57"
     },
@@ -1196,861 +1196,15 @@
       "file_type": "code",
       "source_file": "public/sw.js",
       "source_location": "L1",
-      "community": 37,
+      "community": 24,
       "norm_label": "sw.js",
       "id": "public_sw_js"
-    },
-    {
-      "label": "main.jsx",
-      "file_type": "code",
-      "source_file": "src/main.jsx",
-      "source_location": "L1",
-      "community": 38,
-      "norm_label": "main.jsx",
-      "id": "src_main_jsx"
-    },
-    {
-      "label": "App.jsx",
-      "file_type": "code",
-      "source_file": "src/App.jsx",
-      "source_location": "L1",
-      "community": 3,
-      "norm_label": "app.jsx",
-      "id": "src_app_jsx"
-    },
-    {
-      "label": "App()",
-      "file_type": "code",
-      "source_file": "src/App.jsx",
-      "source_location": "L11",
-      "community": 3,
-      "norm_label": "app()",
-      "id": "app_app"
-    },
-    {
-      "label": "settingsStore.js",
-      "file_type": "code",
-      "source_file": "src/stores/settingsStore.js",
-      "source_location": "L1",
-      "community": 21,
-      "norm_label": "settingsstore.js",
-      "id": "src_stores_settingsstore_js"
-    },
-    {
-      "label": "loadFromStorage()",
-      "file_type": "code",
-      "source_file": "src/stores/settingsStore.js",
-      "source_location": "L5",
-      "community": 21,
-      "norm_label": "loadfromstorage()",
-      "id": "settingsstore_loadfromstorage"
-    },
-    {
-      "label": "persistSettings()",
-      "file_type": "code",
-      "source_file": "src/stores/settingsStore.js",
-      "source_location": "L15",
-      "community": 21,
-      "norm_label": "persistsettings()",
-      "id": "settingsstore_persistsettings"
-    },
-    {
-      "label": "plantStore.js",
-      "file_type": "code",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "plantstore.js",
-      "id": "src_stores_plantstore_js"
-    },
-    {
-      "label": "persistPlants()",
-      "file_type": "code",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L10",
-      "community": 5,
-      "norm_label": "persistplants()",
-      "id": "plantstore_persistplants"
-    },
-    {
-      "label": "loadPlants()",
-      "file_type": "code",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L20",
-      "community": 5,
-      "norm_label": "loadplants()",
-      "id": "plantstore_loadplants"
-    },
-    {
-      "label": "computeNextWatering()",
-      "file_type": "code",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L36",
-      "community": 5,
-      "norm_label": "computenextwatering()",
-      "id": "plantstore_computenextwatering"
-    },
-    {
-      "label": "computeHealthStatus()",
-      "file_type": "code",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L42",
-      "community": 5,
-      "norm_label": "computehealthstatus()",
-      "id": "plantstore_computehealthstatus"
-    },
-    {
-      "label": "BreathRing.jsx",
-      "file_type": "code",
-      "source_file": "src/components/BreathRing.jsx",
-      "source_location": "L1",
-      "community": 22,
-      "norm_label": "breathring.jsx",
-      "id": "src_components_breathring_jsx"
-    },
-    {
-      "label": "BreathRing()",
-      "file_type": "code",
-      "source_file": "src/components/BreathRing.jsx",
-      "source_location": "L10",
-      "community": 22,
-      "norm_label": "breathring()",
-      "id": "breathring_breathring"
-    },
-    {
-      "label": "BreathRingSimple()",
-      "file_type": "code",
-      "source_file": "src/components/BreathRing.jsx",
-      "source_location": "L85",
-      "community": 22,
-      "norm_label": "breathringsimple()",
-      "id": "breathring_breathringsimple"
-    },
-    {
-      "label": "PlantCard.jsx",
-      "file_type": "code",
-      "source_file": "src/components/PlantCard.jsx",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "plantcard.jsx",
-      "id": "src_components_plantcard_jsx"
-    },
-    {
-      "label": "PlantCard()",
-      "file_type": "code",
-      "source_file": "src/components/PlantCard.jsx",
-      "source_location": "L13",
-      "community": 5,
-      "norm_label": "plantcard()",
-      "id": "plantcard_plantcard"
-    },
-    {
-      "label": "Layout.jsx",
-      "file_type": "code",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "layout.jsx",
-      "id": "src_components_layout_jsx"
-    },
-    {
-      "label": "toF()",
-      "file_type": "code",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L9",
-      "community": 4,
-      "norm_label": "tof()",
-      "id": "layout_tof"
-    },
-    {
-      "label": "getSeason()",
-      "file_type": "code",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L11",
-      "community": 4,
-      "norm_label": "getseason()",
-      "id": "layout_getseason"
-    },
-    {
-      "label": "getAdjustment()",
-      "file_type": "code",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L21",
-      "community": 4,
-      "norm_label": "getadjustment()",
-      "id": "layout_getadjustment"
-    },
-    {
-      "label": "Layout()",
-      "file_type": "code",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L40",
-      "community": 4,
-      "norm_label": "layout()",
-      "id": "layout_layout"
-    },
-    {
-      "label": "ErrorBoundary.jsx",
-      "file_type": "code",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L1",
-      "community": 12,
-      "norm_label": "errorboundary.jsx",
-      "id": "src_components_errorboundary_jsx"
-    },
-    {
-      "label": "ErrorBoundary",
-      "file_type": "code",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L3",
-      "community": 12,
-      "norm_label": "errorboundary",
-      "id": "errorboundary_errorboundary"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L4",
-      "community": 12,
-      "norm_label": ".constructor()",
-      "id": "errorboundary_errorboundary_constructor"
-    },
-    {
-      "label": ".getDerivedStateFromError()",
-      "file_type": "code",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L9",
-      "community": 12,
-      "norm_label": ".getderivedstatefromerror()",
-      "id": "errorboundary_errorboundary_getderivedstatefromerror"
-    },
-    {
-      "label": ".componentDidCatch()",
-      "file_type": "code",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L13",
-      "community": 12,
-      "norm_label": ".componentdidcatch()",
-      "id": "errorboundary_errorboundary_componentdidcatch"
-    },
-    {
-      "label": ".render()",
-      "file_type": "code",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L17",
-      "community": 12,
-      "norm_label": ".render()",
-      "id": "errorboundary_errorboundary_render"
-    },
-    {
-      "label": "WeatherIcon.jsx",
-      "file_type": "code",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L1",
-      "community": 13,
-      "norm_label": "weathericon.jsx",
-      "id": "src_components_weathericon_jsx"
-    },
-    {
-      "label": "SunIcon()",
-      "file_type": "code",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L1",
-      "community": 13,
-      "norm_label": "sunicon()",
-      "id": "weathericon_sunicon"
-    },
-    {
-      "label": "CloudIcon()",
-      "file_type": "code",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L17",
-      "community": 13,
-      "norm_label": "cloudicon()",
-      "id": "weathericon_cloudicon"
-    },
-    {
-      "label": "RainIcon()",
-      "file_type": "code",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L28",
-      "community": 13,
-      "norm_label": "rainicon()",
-      "id": "weathericon_rainicon"
-    },
-    {
-      "label": "WeatherIcon()",
-      "file_type": "code",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L41",
-      "community": 13,
-      "norm_label": "weathericon()",
-      "id": "weathericon_weathericon"
-    },
-    {
-      "label": "Skeleton.jsx",
-      "file_type": "code",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L1",
-      "community": 8,
-      "norm_label": "skeleton.jsx",
-      "id": "src_components_skeleton_jsx"
-    },
-    {
-      "label": "Skeleton()",
-      "file_type": "code",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L3",
-      "community": 8,
-      "norm_label": "skeleton()",
-      "id": "skeleton_skeleton"
-    },
-    {
-      "label": "PlantCardSkeleton()",
-      "file_type": "code",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L16",
-      "community": 8,
-      "norm_label": "plantcardskeleton()",
-      "id": "skeleton_plantcardskeleton"
-    },
-    {
-      "label": "DashboardSkeleton()",
-      "file_type": "code",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L29",
-      "community": 8,
-      "norm_label": "dashboardskeleton()",
-      "id": "skeleton_dashboardskeleton"
-    },
-    {
-      "label": "EmptyState.jsx",
-      "file_type": "code",
-      "source_file": "src/components/EmptyState.jsx",
-      "source_location": "L1",
-      "community": 25,
-      "norm_label": "emptystate.jsx",
-      "id": "src_components_emptystate_jsx"
-    },
-    {
-      "label": "EmptyState()",
-      "file_type": "code",
-      "source_file": "src/components/EmptyState.jsx",
-      "source_location": "L3",
-      "community": 25,
-      "norm_label": "emptystate()",
-      "id": "emptystate_emptystate"
-    },
-    {
-      "label": "Button.jsx",
-      "file_type": "code",
-      "source_file": "src/components/Button.jsx",
-      "source_location": "L1",
-      "community": 8,
-      "norm_label": "button.jsx",
-      "id": "src_components_button_jsx"
-    },
-    {
-      "label": "Button()",
-      "file_type": "code",
-      "source_file": "src/components/Button.jsx",
-      "source_location": "L16",
-      "community": 8,
-      "norm_label": "button()",
-      "id": "button_button"
-    },
-    {
-      "label": "CountUp.jsx",
-      "file_type": "code",
-      "source_file": "src/components/CountUp.jsx",
-      "source_location": "L1",
-      "community": 26,
-      "norm_label": "countup.jsx",
-      "id": "src_components_countup_jsx"
-    },
-    {
-      "label": "CountUp()",
-      "file_type": "code",
-      "source_file": "src/components/CountUp.jsx",
-      "source_location": "L3",
-      "community": 26,
-      "norm_label": "countup()",
-      "id": "countup_countup"
-    },
-    {
-      "label": "SeasonBanner.jsx",
-      "file_type": "code",
-      "source_file": "src/components/SeasonBanner.jsx",
-      "source_location": "L1",
-      "community": 27,
-      "norm_label": "seasonbanner.jsx",
-      "id": "src_components_seasonbanner_jsx"
-    },
-    {
-      "label": "SeasonBanner()",
-      "file_type": "code",
-      "source_file": "src/components/SeasonBanner.jsx",
-      "source_location": "L8",
-      "community": 27,
-      "norm_label": "seasonbanner()",
-      "id": "seasonbanner_seasonbanner"
-    },
-    {
-      "label": "GlassCard.jsx",
-      "file_type": "code",
-      "source_file": "src/components/GlassCard.jsx",
-      "source_location": "L1",
-      "community": 8,
-      "norm_label": "glasscard.jsx",
-      "id": "src_components_glasscard_jsx"
-    },
-    {
-      "label": "GlassCard()",
-      "file_type": "code",
-      "source_file": "src/components/GlassCard.jsx",
-      "source_location": "L9",
-      "community": 8,
-      "norm_label": "glasscard()",
-      "id": "glasscard_glasscard"
-    },
-    {
-      "label": "SpeciesBadge.jsx",
-      "file_type": "code",
-      "source_file": "src/components/SpeciesBadge.jsx",
-      "source_location": "L1",
-      "community": 8,
-      "norm_label": "speciesbadge.jsx",
-      "id": "src_components_speciesbadge_jsx"
-    },
-    {
-      "label": "SpeciesBadge()",
-      "file_type": "code",
-      "source_file": "src/components/SpeciesBadge.jsx",
-      "source_location": "L8",
-      "community": 8,
-      "norm_label": "speciesbadge()",
-      "id": "speciesbadge_speciesbadge"
-    },
-    {
-      "label": "useWeather.js",
-      "file_type": "code",
-      "source_file": "src/hooks/useWeather.js",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "useweather.js",
-      "id": "src_hooks_useweather_js"
-    },
-    {
-      "label": "useWeather()",
-      "file_type": "code",
-      "source_file": "src/hooks/useWeather.js",
-      "source_location": "L4",
-      "community": 4,
-      "norm_label": "useweather()",
-      "id": "useweather_useweather"
-    },
-    {
-      "label": "useWatering.js",
-      "file_type": "code",
-      "source_file": "src/hooks/useWatering.js",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "usewatering.js",
-      "id": "src_hooks_usewatering_js"
-    },
-    {
-      "label": "useWatering()",
-      "file_type": "code",
-      "source_file": "src/hooks/useWatering.js",
-      "source_location": "L5",
-      "community": 5,
-      "norm_label": "usewatering()",
-      "id": "usewatering_usewatering"
-    },
-    {
-      "label": "usePlants.js",
-      "file_type": "code",
-      "source_file": "src/hooks/usePlants.js",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "useplants.js",
-      "id": "src_hooks_useplants_js"
-    },
-    {
-      "label": "usePlants()",
-      "file_type": "code",
-      "source_file": "src/hooks/usePlants.js",
-      "source_location": "L4",
-      "community": 4,
-      "norm_label": "useplants()",
-      "id": "useplants_useplants"
-    },
-    {
-      "label": "weather.js",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L1",
-      "community": 9,
-      "norm_label": "weather.js",
-      "id": "src_lib_weather_js"
-    },
-    {
-      "label": "weatherCodeToCondition()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L7",
-      "community": 9,
-      "norm_label": "weathercodetocondition()",
-      "id": "weather_weathercodetocondition"
-    },
-    {
-      "label": "isRainyCode()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L18",
-      "community": 9,
-      "norm_label": "israinycode()",
-      "id": "weather_israinycode"
-    },
-    {
-      "label": "getWeather()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L24",
-      "community": 9,
-      "norm_label": "getweather()",
-      "id": "weather_getweather"
-    },
-    {
-      "label": "getCachedWeather()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L28",
-      "community": 9,
-      "norm_label": "getcachedweather()",
-      "id": "weather_getcachedweather"
-    },
-    {
-      "label": "cacheWeather()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L40",
-      "community": 9,
-      "norm_label": "cacheweather()",
-      "id": "weather_cacheweather"
-    },
-    {
-      "label": "getPosition()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L46",
-      "community": 9,
-      "norm_label": "getposition()",
-      "id": "weather_getposition"
-    },
-    {
-      "label": "fetchWeather()",
-      "file_type": "code",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L60",
-      "community": 9,
-      "norm_label": "fetchweather()",
-      "id": "weather_fetchweather"
-    },
-    {
-      "label": "date.js",
-      "file_type": "code",
-      "source_file": "src/lib/date.js",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "date.js",
-      "id": "src_lib_date_js"
-    },
-    {
-      "label": "adjustWateringInterval()",
-      "file_type": "code",
-      "source_file": "src/lib/date.js",
-      "source_location": "L7",
-      "community": 5,
-      "norm_label": "adjustwateringinterval()",
-      "id": "date_adjustwateringinterval"
-    },
-    {
-      "label": "daysUntil()",
-      "file_type": "code",
-      "source_file": "src/lib/date.js",
-      "source_location": "L27",
-      "community": 5,
-      "norm_label": "daysuntil()",
-      "id": "date_daysuntil"
-    },
-    {
-      "label": "formatDate()",
-      "file_type": "code",
-      "source_file": "src/lib/date.js",
-      "source_location": "L35",
-      "community": 5,
-      "norm_label": "formatdate()",
-      "id": "date_formatdate"
-    },
-    {
-      "label": "cn.js",
-      "file_type": "code",
-      "source_file": "src/lib/cn.js",
-      "source_location": "L1",
-      "community": 8,
-      "norm_label": "cn.js",
-      "id": "src_lib_cn_js"
-    },
-    {
-      "label": "cn()",
-      "file_type": "code",
-      "source_file": "src/lib/cn.js",
-      "source_location": "L2",
-      "community": 8,
-      "norm_label": "cn()",
-      "id": "cn_cn"
-    },
-    {
-      "label": "notifications.js",
-      "file_type": "code",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L1",
-      "community": 14,
-      "norm_label": "notifications.js",
-      "id": "src_lib_notifications_js"
-    },
-    {
-      "label": "requestPermission()",
-      "file_type": "code",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L5",
-      "community": 14,
-      "norm_label": "requestpermission()",
-      "id": "notifications_requestpermission"
-    },
-    {
-      "label": "hasPermission()",
-      "file_type": "code",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L12",
-      "community": 14,
-      "norm_label": "haspermission()",
-      "id": "notifications_haspermission"
-    },
-    {
-      "label": "scheduleReminders()",
-      "file_type": "code",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L16",
-      "community": 14,
-      "norm_label": "schedulereminders()",
-      "id": "notifications_schedulereminders"
-    },
-    {
-      "label": "stopReminders()",
-      "file_type": "code",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L45",
-      "community": 14,
-      "norm_label": "stopreminders()",
-      "id": "notifications_stopreminders"
-    },
-    {
-      "label": "Profile.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/Profile.jsx",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "profile.jsx",
-      "id": "src_pages_profile_jsx"
-    },
-    {
-      "label": "Profile()",
-      "file_type": "code",
-      "source_file": "src/pages/Profile.jsx",
-      "source_location": "L10",
-      "community": 4,
-      "norm_label": "profile()",
-      "id": "profile_profile"
-    },
-    {
-      "label": "StatBox()",
-      "file_type": "code",
-      "source_file": "src/pages/Profile.jsx",
-      "source_location": "L270",
-      "community": 4,
-      "norm_label": "statbox()",
-      "id": "profile_statbox"
-    },
-    {
-      "label": "PlantDetail.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L1",
-      "community": 5,
-      "norm_label": "plantdetail.jsx",
-      "id": "src_pages_plantdetail_jsx"
-    },
-    {
-      "label": "PlantDetail()",
-      "file_type": "code",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L12",
-      "community": 5,
-      "norm_label": "plantdetail()",
-      "id": "plantdetail_plantdetail"
-    },
-    {
-      "label": "StatBox()",
-      "file_type": "code",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L279",
-      "community": 5,
-      "norm_label": "statbox()",
-      "id": "plantdetail_statbox"
-    },
-    {
-      "label": "CareNeedCard()",
-      "file_type": "code",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L288",
-      "community": 5,
-      "norm_label": "careneedcard()",
-      "id": "plantdetail_careneedcard"
-    },
-    {
-      "label": "QuickActionButton()",
-      "file_type": "code",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L309",
-      "community": 5,
-      "norm_label": "quickactionbutton()",
-      "id": "plantdetail_quickactionbutton"
-    },
-    {
-      "label": "Memorial.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/Memorial.jsx",
-      "source_location": "L1",
-      "community": 28,
-      "norm_label": "memorial.jsx",
-      "id": "src_pages_memorial_jsx"
-    },
-    {
-      "label": "Memorial()",
-      "file_type": "code",
-      "source_file": "src/pages/Memorial.jsx",
-      "source_location": "L5",
-      "community": 28,
-      "norm_label": "memorial()",
-      "id": "memorial_memorial"
-    },
-    {
-      "label": "Calendar.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/Calendar.jsx",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "calendar.jsx",
-      "id": "src_pages_calendar_jsx"
-    },
-    {
-      "label": "getCalendarDays()",
-      "file_type": "code",
-      "source_file": "src/pages/Calendar.jsx",
-      "source_location": "L15",
-      "community": 4,
-      "norm_label": "getcalendardays()",
-      "id": "calendar_getcalendardays"
-    },
-    {
-      "label": "Calendar()",
-      "file_type": "code",
-      "source_file": "src/pages/Calendar.jsx",
-      "source_location": "L61",
-      "community": 4,
-      "norm_label": "calendar()",
-      "id": "calendar_calendar"
-    },
-    {
-      "label": "Diagnose.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/Diagnose.jsx",
-      "source_location": "L1",
-      "community": 29,
-      "norm_label": "diagnose.jsx",
-      "id": "src_pages_diagnose_jsx"
-    },
-    {
-      "label": "Diagnose()",
-      "file_type": "code",
-      "source_file": "src/pages/Diagnose.jsx",
-      "source_location": "L22",
-      "community": 29,
-      "norm_label": "diagnose()",
-      "id": "diagnose_diagnose"
-    },
-    {
-      "label": "Dashboard.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "dashboard.jsx",
-      "id": "src_pages_dashboard_jsx"
-    },
-    {
-      "label": "getGreetingSubtitle()",
-      "file_type": "code",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L16",
-      "community": 4,
-      "norm_label": "getgreetingsubtitle()",
-      "id": "dashboard_getgreetingsubtitle"
-    },
-    {
-      "label": "toF()",
-      "file_type": "code",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L23",
-      "community": 4,
-      "norm_label": "tof()",
-      "id": "dashboard_tof"
-    },
-    {
-      "label": "Dashboard()",
-      "file_type": "code",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L58",
-      "community": 4,
-      "norm_label": "dashboard()",
-      "id": "dashboard_dashboard"
-    },
-    {
-      "label": "AddPlant.jsx",
-      "file_type": "code",
-      "source_file": "src/pages/AddPlant.jsx",
-      "source_location": "L1",
-      "community": 4,
-      "norm_label": "addplant.jsx",
-      "id": "src_pages_addplant_jsx"
-    },
-    {
-      "label": "AddPlant()",
-      "file_type": "code",
-      "source_file": "src/pages/AddPlant.jsx",
-      "source_location": "L17",
-      "community": 4,
-      "norm_label": "addplant()",
-      "id": "addplant_addplant"
     },
     {
       "label": "Planty SPA \u2014 vanilla JS app entry",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 23,
+      "community": 16,
       "norm_label": "planty spa \u2014 vanilla js app entry",
       "id": "index_html_planty_app"
     },
@@ -2058,7 +1212,7 @@
       "label": "Environment Object (temperature, season, hemisphere, lat/lng)",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 6,
+      "community": 4,
       "norm_label": "environment object (temperature, season, hemisphere, lat/lng)",
       "source_location": "line 1691",
       "source_url": null,
@@ -2071,7 +1225,7 @@
       "label": "fetchWeather()",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 6,
+      "community": 4,
       "norm_label": "fetchweather()",
       "source_location": "line 1712",
       "source_url": null,
@@ -2084,7 +1238,7 @@
       "label": "Seasonal Watering Multiplier",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 6,
+      "community": 4,
       "norm_label": "seasonal watering multiplier",
       "source_location": "line 1699",
       "source_url": null,
@@ -2097,7 +1251,7 @@
       "label": "Plant state management \u2014 plants, deadPlants, history",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 0,
+      "community": 6,
       "norm_label": "plant state management \u2014 plants, deadplants, history",
       "id": "index_html_plant_state"
     },
@@ -2105,7 +1259,7 @@
       "label": "localStorage Persistence Layer",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 0,
+      "community": 6,
       "norm_label": "localstorage persistence layer",
       "source_location": "line 1757",
       "source_url": null,
@@ -2118,7 +1272,7 @@
       "label": "Adaptive watering \u2014 base interval adjusted by environment",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 6,
+      "community": 4,
       "norm_label": "adaptive watering \u2014 base interval adjusted by environment",
       "id": "index_html_adaptive_watering"
     },
@@ -2165,7 +1319,7 @@
       "label": "ICS calendar export \u2014 RRULE-based watering schedule",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 39,
+      "community": 25,
       "norm_label": "ics calendar export \u2014 rrule-based watering schedule",
       "id": "index_html_ics_export"
     },
@@ -2173,7 +1327,7 @@
       "label": "Bottom watering education",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 40,
+      "community": 26,
       "norm_label": "bottom watering education",
       "id": "index_html_bottom_watering"
     },
@@ -2181,7 +1335,7 @@
       "label": "24-hour watering cooldown enforcement",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 41,
+      "community": 27,
       "norm_label": "24-hour watering cooldown enforcement",
       "id": "index_html_cooldown"
     },
@@ -2189,7 +1343,7 @@
       "label": "Four-tab SPA navigation \u2014 Home, Schedule, Memorial, Settings",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 42,
+      "community": 28,
       "norm_label": "four-tab spa navigation \u2014 home, schedule, memorial, settings",
       "id": "index_html_tab_navigation"
     },
@@ -2197,7 +1351,7 @@
       "label": "Glass-morphism UI",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 17,
+      "community": 14,
       "norm_label": "glass-morphism ui",
       "id": "index_html_glassmorphism_ui"
     },
@@ -2205,7 +1359,7 @@
       "label": "PWA meta tags",
       "file_type": "code",
       "source_file": "index.html",
-      "community": 43,
+      "community": 29,
       "norm_label": "pwa meta tags",
       "id": "index_html_pwa_meta"
     },
@@ -2213,7 +1367,7 @@
       "label": "Planty v3 \u2014 smart plant care web app overview",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 23,
+      "community": 16,
       "norm_label": "planty v3 \u2014 smart plant care web app overview",
       "id": "readme_md_project_overview"
     },
@@ -2221,7 +1375,7 @@
       "label": "Tech stack \u2014 React 19, Vite 6, Tailwind, Zustand, FastAPI",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 19,
+      "community": 13,
       "norm_label": "tech stack \u2014 react 19, vite 6, tailwind, zustand, fastapi",
       "id": "readme_md_tech_stack"
     },
@@ -2229,7 +1383,7 @@
       "label": "API endpoints \u2014 plants CRUD, watering, diagnosis, weather",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 30,
+      "community": 17,
       "norm_label": "api endpoints \u2014 plants crud, watering, diagnosis, weather",
       "id": "readme_md_api_endpoints"
     },
@@ -2237,7 +1391,7 @@
       "label": "Zero server costs \u2014 static frontend + free weather API",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 0,
+      "community": 6,
       "norm_label": "zero server costs \u2014 static frontend + free weather api",
       "id": "readme_md_zero_server_costs"
     },
@@ -2245,7 +1399,7 @@
       "label": "Offline-first \u2014 localStorage + import/export backup",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 0,
+      "community": 6,
       "norm_label": "offline-first \u2014 localstorage + import/export backup",
       "id": "readme_md_offline_first"
     },
@@ -2253,7 +1407,7 @@
       "label": "Architecture decisions",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 18,
+      "community": 6,
       "norm_label": "architecture decisions",
       "id": "claude_md_architecture_decisions"
     },
@@ -2261,7 +1415,7 @@
       "label": "Design System \u2014 Nature Palette (CSS Custom Properties)",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 17,
+      "community": 14,
       "norm_label": "design system \u2014 nature palette (css custom properties)",
       "source_location": "line 103",
       "source_url": null,
@@ -2274,7 +1428,7 @@
       "label": "Project structure",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 23,
+      "community": 16,
       "norm_label": "project structure",
       "id": "claude_md_project_structure"
     },
@@ -2282,7 +1436,7 @@
       "label": "Agent skills \u2014 GitHub Issues triage workflow",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 44,
+      "community": 30,
       "norm_label": "agent skills \u2014 github issues triage workflow",
       "id": "claude_md_agent_skills"
     },
@@ -2290,7 +1444,7 @@
       "label": "FastAPI server \u2014 SQLite dev / PostgreSQL production",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 19,
+      "community": 13,
       "norm_label": "fastapi server \u2014 sqlite dev / postgresql production",
       "id": "backend_readme_fastapi"
     },
@@ -2298,7 +1452,7 @@
       "label": "Backend API overview \u2014 11 endpoints",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 30,
+      "community": 17,
       "norm_label": "backend api overview \u2014 11 endpoints",
       "id": "backend_readme_api_overview"
     },
@@ -2306,7 +1460,7 @@
       "label": "Backend architecture \u2014 main, config, db, models, routes",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 45,
+      "community": 31,
       "norm_label": "backend architecture \u2014 main, config, db, models, routes",
       "id": "backend_readme_architecture"
     },
@@ -2314,7 +1468,7 @@
       "label": "Production deployment",
       "file_type": "document",
       "source_file": "backend/README.md",
-      "community": 46,
+      "community": 32,
       "norm_label": "production deployment",
       "id": "backend_readme_production"
     },
@@ -2322,7 +1476,7 @@
       "label": "Python dependencies",
       "file_type": "code",
       "source_file": "backend/requirements.txt",
-      "community": 19,
+      "community": 13,
       "norm_label": "python dependencies",
       "id": "backend_requirements_deps"
     },
@@ -2330,7 +1484,7 @@
       "label": "Offline fallback page \u2014 PWA network-loss UI",
       "file_type": "code",
       "source_file": "public/offline.html",
-      "community": 47,
+      "community": 33,
       "norm_label": "offline fallback page \u2014 pwa network-loss ui",
       "id": "offline_html_pwa_fallback"
     },
@@ -2338,7 +1492,7 @@
       "label": "Rationale: localStorage chosen for zero server costs",
       "file_type": "document",
       "source_file": "index.html",
-      "community": 18,
+      "community": 6,
       "norm_label": "rationale: localstorage chosen for zero server costs",
       "id": "index_html_rationale_localstorage"
     },
@@ -2346,7 +1500,7 @@
       "label": "Rationale: localStorage over backend DB",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 18,
+      "community": 6,
       "norm_label": "rationale: localstorage over backend db",
       "id": "claude_md_rationale_localstorage"
     },
@@ -2354,7 +1508,7 @@
       "label": "Rationale: Zustand over Redux",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 18,
+      "community": 6,
       "norm_label": "rationale: zustand over redux",
       "id": "claude_md_rationale_zustand"
     },
@@ -2362,7 +1516,7 @@
       "label": "Rationale: HashRouter over BrowserRouter",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 48,
+      "community": 34,
       "norm_label": "rationale: hashrouter over browserrouter",
       "id": "claude_md_rationale_hashrouter"
     },
@@ -2370,7 +1524,7 @@
       "label": "Rationale: Tailwind over CSS-in-JS",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 49,
+      "community": 35,
       "norm_label": "rationale: tailwind over css-in-js",
       "id": "claude_md_rationale_tailwind"
     },
@@ -2378,7 +1532,7 @@
       "label": "Rationale: SQLite over PostgreSQL (dev)",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "community": 19,
+      "community": 13,
       "norm_label": "rationale: sqlite over postgresql (dev)",
       "id": "claude_md_rationale_sqlite"
     },
@@ -2386,7 +1540,7 @@
       "label": "Adaptive watering feature",
       "file_type": "document",
       "source_file": "README.md",
-      "community": 6,
+      "community": 4,
       "norm_label": "adaptive watering feature",
       "id": "readme_md_adaptive_watering_feature"
     },
@@ -2399,7 +1553,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "detectseason()",
       "id": "index_html_detectseason"
     },
@@ -2412,7 +1566,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "getseasonalmultiplier()",
       "id": "index_html_getseasonalmultiplier"
     },
@@ -2425,7 +1579,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "gettemperaturemultiplier()",
       "id": "index_html_gettemperaturemultiplier"
     },
@@ -2438,7 +1592,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "getenvironmentmultiplier()",
       "id": "index_html_getenvironmentmultiplier"
     },
@@ -2451,7 +1605,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "saveenvironment()",
       "id": "index_html_saveenvironment"
     },
@@ -2464,7 +1618,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "loadenvironment()",
       "id": "index_html_loadenvironment"
     },
@@ -2477,7 +1631,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "updateweatherdisplay()",
       "id": "index_html_updateweatherdisplay"
     },
@@ -2737,7 +1891,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 50,
+      "community": 36,
       "norm_label": "clearinputs()",
       "id": "index_html_clearinputs"
     },
@@ -2763,7 +1917,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 11,
       "norm_label": "showcooldownmodal()",
       "id": "index_html_showcooldownmodal"
     },
@@ -2776,7 +1930,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 11,
       "norm_label": "showdeathmodal()",
       "id": "index_html_showdeathmodal"
     },
@@ -2789,7 +1943,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 31,
+      "community": 18,
       "norm_label": "selectcause()",
       "id": "index_html_selectcause"
     },
@@ -2802,7 +1956,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 31,
+      "community": 18,
       "norm_label": "updatecauseselection()",
       "id": "index_html_updatecauseselection"
     },
@@ -2971,7 +2125,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 6,
       "norm_label": "clearalldata()",
       "id": "index_html_clearalldata"
     },
@@ -2997,7 +2151,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 11,
       "norm_label": "showmodal()",
       "id": "index_html_showmodal"
     },
@@ -3010,7 +2164,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 11,
       "norm_label": "closemodal()",
       "id": "index_html_closemodal"
     },
@@ -3036,7 +2190,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 32,
+      "community": 19,
       "norm_label": "togglebottomwaterinfo()",
       "id": "index_html_togglebottomwaterinfo"
     },
@@ -3101,7 +2255,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 17,
+      "community": 14,
       "norm_label": "css custom properties (design tokens)",
       "id": "index_html_css_custom_properties"
     },
@@ -3114,7 +2268,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 17,
+      "community": 14,
       "norm_label": "glass-morphism card design",
       "id": "index_html_glassmorphism_cards"
     },
@@ -3140,7 +2294,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 6,
       "norm_label": "pwa meta tags",
       "id": "index_html_pwa_meta_tags"
     },
@@ -3166,7 +2320,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 32,
+      "community": 19,
       "norm_label": "bottom watering education",
       "id": "index_html_bottom_watering_education"
     },
@@ -3179,7 +2333,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "temperature watering multiplier",
       "id": "index_html_temperature_multiplier"
     },
@@ -3270,7 +2424,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 11,
       "norm_label": "modal system (death/revival/duplicate/cooldown)",
       "id": "index_html_modal_system"
     },
@@ -3296,7 +2450,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 6,
       "norm_label": "rationale: localstorage over backend db \u2014 zero server costs",
       "id": "claude_md_localstorage_decision"
     },
@@ -3348,7 +2502,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "rationale: open-meteo over api-key services \u2014 free, no registration",
       "id": "claude_md_open_meteo_decision"
     },
@@ -3400,7 +2554,7 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 15,
       "norm_label": "edge density 1.07 (target 1.5+) \u2014 codebase more colocated than connected",
       "id": "audit_md_edge_density"
     },
@@ -3426,7 +2580,7 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "community": 51,
+      "community": 37,
       "norm_label": "51 isolated nodes (19% of graph)",
       "id": "audit_md_isolated_nodes"
     },
@@ -3452,7 +2606,7 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 15,
       "norm_label": "knowledge graph statistics (267 nodes, 285 edges, 50 communities)",
       "id": "graph_report_md_statistics"
     },
@@ -3465,7 +2619,7 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 15,
       "norm_label": "god nodes: testplants (18 edges), _create_plant (12), plantcreate (6)",
       "id": "graph_report_md_god_nodes"
     },
@@ -3478,7 +2632,7 @@
       "captured_at": "2026-06-24",
       "author": null,
       "contributor": null,
-      "community": 20,
+      "community": 15,
       "norm_label": "knowledge graph visualization (vis-network)",
       "id": "graph_html_vis_network"
     },
@@ -3491,7 +2645,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "warm season: lower multiplier = more frequent watering",
       "id": "index_html_warm_season_watering_behavior"
     },
@@ -3504,7 +2658,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "cold season: higher multiplier = less frequent watering",
       "id": "index_html_cold_season_watering_behavior"
     },
@@ -3517,7 +2671,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "open-meteo api integration (free weather, no key)",
       "id": "index_html_openmeteo_api"
     },
@@ -3526,7 +2680,7 @@
       "file_type": "code",
       "source_file": "e2e-smoke.mjs",
       "source_location": "L1",
-      "community": 24,
+      "community": 9,
       "norm_label": "e2e-smoke.mjs",
       "id": "e2e_smoke_mjs"
     },
@@ -3534,8 +2688,8 @@
       "label": "ok()",
       "file_type": "code",
       "source_file": "e2e-smoke.mjs",
-      "source_location": "L9",
-      "community": 24,
+      "source_location": "L12",
+      "community": 9,
       "norm_label": "ok()",
       "id": "e2e_smoke_ok"
     },
@@ -3543,8 +2697,8 @@
       "label": "fail()",
       "file_type": "code",
       "source_file": "e2e-smoke.mjs",
-      "source_location": "L10",
-      "community": 24,
+      "source_location": "L13",
+      "community": 9,
       "norm_label": "fail()",
       "id": "e2e_smoke_fail"
     },
@@ -3557,7 +2711,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "content security policy meta tag \u2014 default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com",
       "id": "index_html_csp"
     },
@@ -3570,7 +2724,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "planty e2e security & regression smoke test suite \u2014 11 p0 tests via playwright",
       "id": "smoke_e2e_test_suite"
     },
@@ -3583,7 +2737,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-1 xss sanitization test \u2014 injects <img onerror> and <script> tags via plantname/plantlocation, asserts html entity escaping",
       "id": "smoke_xss_test"
     },
@@ -3596,7 +2750,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-2 iife encapsulation test \u2014 verifies 16 public functions on window, checks private internals are not leaked",
       "id": "smoke_iife_test"
     },
@@ -3609,7 +2763,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-3 import resilience test \u2014 injects corrupted localstorage data, reloads page, asserts app survives",
       "id": "smoke_import_resilience_test"
     },
@@ -3622,7 +2776,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-4 esc() integrity test \u2014 adds plant with special chars (&), asserts correct textcontent rendering",
       "id": "smoke_esc_integrity_test"
     },
@@ -3635,7 +2789,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-5 render debounce test \u2014 adds 3 plants rapidly, asserts all 3 cards rendered",
       "id": "smoke_render_debounce_test"
     },
@@ -3648,7 +2802,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-6 tab navigation test \u2014 clicks all 4 tabs (schedule, memorial, settings, home), asserts active class",
       "id": "smoke_tab_nav_test"
     },
@@ -3661,7 +2815,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-7 water flow test \u2014 waters a plant via onclick handler extraction, asserts success and cooldown activation",
       "id": "smoke_water_flow_test"
     },
@@ -3674,7 +2828,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-8 error boundary test \u2014 dispatches synthetic errorevent, asserts app survives uncaugh error",
       "id": "smoke_error_boundary_test"
     },
@@ -3687,7 +2841,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-9 export test \u2014 verifies exportdata on window, checks localstorage has plant data",
       "id": "smoke_export_test"
     },
@@ -3700,7 +2854,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-10 ics escape test \u2014 directly calls icsescape(), asserts semicolon and comma escaping for icalendar format",
       "id": "smoke_ics_escape_test"
     },
@@ -3713,7 +2867,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "p0-11 csp test \u2014 queries meta[http-equiv=content-security-policy], asserts default-src present",
       "id": "smoke_csp_test"
     },
@@ -3726,7 +2880,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "playwright browser automation \u2014 headless chromium via playwright.chromium.launch()",
       "id": "smoke_playwright"
     },
@@ -3739,9 +2893,102 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 5,
       "norm_label": "pass/fail report tracking \u2014 tally object with passed, failed, errors arrays, exit code on failure",
       "id": "smoke_report_tracker"
+    },
+    {
+      "label": "gotoHome()",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L18",
+      "id": "e2e_smoke_gotohome",
+      "community": 9,
+      "norm_label": "gotohome()"
+    },
+    {
+      "label": "addPlant()",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L23",
+      "id": "e2e_smoke_addplant",
+      "community": 9,
+      "norm_label": "addplant()"
+    },
+    {
+      "label": "reloadClean()",
+      "file_type": "code",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L30",
+      "id": "e2e_smoke_reloadclean",
+      "community": 9,
+      "norm_label": "reloadclean()"
+    },
+    {
+      "label": "Storage Warning Banner",
+      "type": "html_element",
+      "description": "Fixed-position #storageWarning div (line 1742) containing warning icon, text message ('Storage full \u2014 New plants won't be saved...'), and close button. Initially hidden via style=\"display:none\". Positioned above bottom nav at z-index 90.",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": null,
+      "id": "index_html_storage_warning_banner",
+      "community": 10,
+      "norm_label": "storage warning banner"
+    },
+    {
+      "label": ".storage-warning CSS",
+      "type": "css_rule",
+      "description": "Complete CSS rule set (lines 922-972) for .storage-warning and child selectors: .storage-warning-icon, .storage-warning-text, .storage-warning-close, .storage-warning-close:hover. Fixed bottom positioning, amber warning colors (#fef3c7 bg, #92400e text), border radius 16px, slide-in animation.",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": null,
+      "id": "index_html_css_storage_warning",
+      "community": 10,
+      "norm_label": ".storage-warning css"
+    },
+    {
+      "label": "_storageFull Flag",
+      "type": "js_variable",
+      "description": "Module-scoped boolean (line 1822, let _storageFull = false) that tracks localStorage quota exhaustion. Acts as circuit-breaker: when true, save() returns early to stop hammering a full store.",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": null,
+      "id": "index_html_storagefull_flag",
+      "community": 10,
+      "norm_label": "_storagefull flag"
+    },
+    {
+      "label": "save() Storage Quota Handler",
+      "type": "js_logic",
+      "description": "Storage quota handling inside save() (lines 1823-1834): early-return guard checks _storageFull flag; try/catch wraps localStorage.setItem calls; catch block sets _storageFull=true, shows #storageWarning banner, logs error to console.",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": null,
+      "id": "index_html_save_storage_handler",
+      "community": 10,
+      "norm_label": "save() storage quota handler"
+    },
+    {
+      "label": "dismissStorageWarning()",
+      "type": "js_function",
+      "description": "Public function (lines 1835-1838) that hides the #storageWarning banner (sets display:none) and resets _storageFull=false to allow retry after user frees space. Exposed on window object (line 1957).",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": null,
+      "id": "index_html_dismissstoragewarning",
+      "community": 10,
+      "norm_label": "dismissstoragewarning()"
+    },
+    {
+      "label": "Storage Quota Warning Feature",
+      "type": "feature",
+      "description": "Complete localStorage quota-exhaustion feature: detects QuotaExceededError in save(), shows amber warning banner, gates writes via _storageFull flag, allows manual dismiss to retry. Prevents silent data loss when localStorage is full.",
+      "file_type": "code",
+      "source_file": "index.html",
+      "source_location": null,
+      "id": "index_html_storage_quota_feature",
+      "community": 10,
+      "norm_label": "storage quota warning feature"
     }
   ],
   "links": [
@@ -4728,18 +3975,6 @@
       "confidence_score": 1.0,
       "source": "main_securityheadersmiddleware",
       "target": "main_securityheadersmiddleware_call"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/main.py",
-      "source_location": "L134",
-      "weight": 1.0,
-      "_src": "main_securityheadersmiddleware_call",
-      "_tgt": "app_app",
-      "source": "main_securityheadersmiddleware_call",
-      "target": "app_app"
     },
     {
       "relation": "calls",
@@ -5796,1134 +5031,6 @@
       "confidence_score": 1.0,
       "source": "diagnosis_diagnose_plant",
       "target": "diagnosis_rationale_57"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/App.jsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_src": "src_app_jsx",
-      "_tgt": "app_app",
-      "confidence_score": 1.0,
-      "source": "src_app_jsx",
-      "target": "app_app"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/settingsStore.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_src": "src_stores_settingsstore_js",
-      "_tgt": "settingsstore_loadfromstorage",
-      "confidence_score": 1.0,
-      "source": "src_stores_settingsstore_js",
-      "target": "settingsstore_loadfromstorage"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/settingsStore.js",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_src": "src_stores_settingsstore_js",
-      "_tgt": "settingsstore_persistsettings",
-      "confidence_score": 1.0,
-      "source": "src_stores_settingsstore_js",
-      "target": "settingsstore_persistsettings"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/settingsStore.js",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_src": "settingsstore_loadfromstorage",
-      "_tgt": "settingsstore_persistsettings",
-      "confidence_score": 1.0,
-      "source": "settingsstore_loadfromstorage",
-      "target": "settingsstore_persistsettings"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_src": "src_stores_plantstore_js",
-      "_tgt": "plantstore_persistplants",
-      "confidence_score": 1.0,
-      "source": "src_stores_plantstore_js",
-      "target": "plantstore_persistplants"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_src": "src_stores_plantstore_js",
-      "_tgt": "plantstore_loadplants",
-      "confidence_score": 1.0,
-      "source": "src_stores_plantstore_js",
-      "target": "plantstore_loadplants"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L36",
-      "weight": 1.0,
-      "_src": "src_stores_plantstore_js",
-      "_tgt": "plantstore_computenextwatering",
-      "confidence_score": 1.0,
-      "source": "src_stores_plantstore_js",
-      "target": "plantstore_computenextwatering"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L42",
-      "weight": 1.0,
-      "_src": "src_stores_plantstore_js",
-      "_tgt": "plantstore_computehealthstatus",
-      "confidence_score": 1.0,
-      "source": "src_stores_plantstore_js",
-      "target": "plantstore_computehealthstatus"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/stores/plantStore.js",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_src": "plantstore_computehealthstatus",
-      "_tgt": "date_daysuntil",
-      "source": "plantstore_computehealthstatus",
-      "target": "date_daysuntil"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BreathRing.jsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_src": "src_components_breathring_jsx",
-      "_tgt": "breathring_breathring",
-      "confidence_score": 1.0,
-      "source": "src_components_breathring_jsx",
-      "target": "breathring_breathring"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/BreathRing.jsx",
-      "source_location": "L85",
-      "weight": 1.0,
-      "_src": "src_components_breathring_jsx",
-      "_tgt": "breathring_breathringsimple",
-      "confidence_score": 1.0,
-      "source": "src_components_breathring_jsx",
-      "target": "breathring_breathringsimple"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/PlantCard.jsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_src": "src_components_plantcard_jsx",
-      "_tgt": "plantcard_plantcard",
-      "confidence_score": 1.0,
-      "source": "src_components_plantcard_jsx",
-      "target": "plantcard_plantcard"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/components/PlantCard.jsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "plantcard_plantcard",
-      "_tgt": "date_daysuntil",
-      "source": "plantcard_plantcard",
-      "target": "date_daysuntil"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_src": "src_components_layout_jsx",
-      "_tgt": "layout_tof",
-      "confidence_score": 1.0,
-      "source": "src_components_layout_jsx",
-      "target": "layout_tof"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_src": "src_components_layout_jsx",
-      "_tgt": "layout_getseason",
-      "confidence_score": 1.0,
-      "source": "src_components_layout_jsx",
-      "target": "layout_getseason"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_src": "src_components_layout_jsx",
-      "_tgt": "layout_getadjustment",
-      "confidence_score": 1.0,
-      "source": "src_components_layout_jsx",
-      "target": "layout_getadjustment"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_src": "src_components_layout_jsx",
-      "_tgt": "layout_layout",
-      "confidence_score": 1.0,
-      "source": "src_components_layout_jsx",
-      "target": "layout_layout"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L113",
-      "weight": 1.0,
-      "_src": "layout_tof",
-      "_tgt": "layout_layout",
-      "confidence_score": 1.0,
-      "source": "layout_tof",
-      "target": "layout_layout"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L122",
-      "weight": 1.0,
-      "_src": "layout_getseason",
-      "_tgt": "layout_layout",
-      "confidence_score": 1.0,
-      "source": "layout_getseason",
-      "target": "layout_layout"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L122",
-      "weight": 1.0,
-      "_src": "layout_getadjustment",
-      "_tgt": "layout_layout",
-      "confidence_score": 1.0,
-      "source": "layout_getadjustment",
-      "target": "layout_layout"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/components/Layout.jsx",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_src": "layout_layout",
-      "_tgt": "useweather_useweather",
-      "source": "layout_layout",
-      "target": "useweather_useweather"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_src": "src_components_errorboundary_jsx",
-      "_tgt": "errorboundary_errorboundary",
-      "confidence_score": 1.0,
-      "source": "src_components_errorboundary_jsx",
-      "target": "errorboundary_errorboundary"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_src": "errorboundary_errorboundary",
-      "_tgt": "errorboundary_errorboundary_constructor",
-      "confidence_score": 1.0,
-      "source": "errorboundary_errorboundary",
-      "target": "errorboundary_errorboundary_constructor"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_src": "errorboundary_errorboundary",
-      "_tgt": "errorboundary_errorboundary_getderivedstatefromerror",
-      "confidence_score": 1.0,
-      "source": "errorboundary_errorboundary",
-      "target": "errorboundary_errorboundary_getderivedstatefromerror"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_src": "errorboundary_errorboundary",
-      "_tgt": "errorboundary_errorboundary_componentdidcatch",
-      "confidence_score": 1.0,
-      "source": "errorboundary_errorboundary",
-      "target": "errorboundary_errorboundary_componentdidcatch"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ErrorBoundary.jsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_src": "errorboundary_errorboundary",
-      "_tgt": "errorboundary_errorboundary_render",
-      "confidence_score": 1.0,
-      "source": "errorboundary_errorboundary",
-      "target": "errorboundary_errorboundary_render"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_src": "src_components_weathericon_jsx",
-      "_tgt": "weathericon_sunicon",
-      "confidence_score": 1.0,
-      "source": "src_components_weathericon_jsx",
-      "target": "weathericon_sunicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_src": "src_components_weathericon_jsx",
-      "_tgt": "weathericon_cloudicon",
-      "confidence_score": 1.0,
-      "source": "src_components_weathericon_jsx",
-      "target": "weathericon_cloudicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_src": "src_components_weathericon_jsx",
-      "_tgt": "weathericon_rainicon",
-      "confidence_score": 1.0,
-      "source": "src_components_weathericon_jsx",
-      "target": "weathericon_rainicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/WeatherIcon.jsx",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_src": "src_components_weathericon_jsx",
-      "_tgt": "weathericon_weathericon",
-      "confidence_score": 1.0,
-      "source": "src_components_weathericon_jsx",
-      "target": "weathericon_weathericon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_src": "src_components_skeleton_jsx",
-      "_tgt": "skeleton_skeleton",
-      "confidence_score": 1.0,
-      "source": "src_components_skeleton_jsx",
-      "target": "skeleton_skeleton"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "src_components_skeleton_jsx",
-      "_tgt": "skeleton_plantcardskeleton",
-      "confidence_score": 1.0,
-      "source": "src_components_skeleton_jsx",
-      "target": "skeleton_plantcardskeleton"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "_src": "src_components_skeleton_jsx",
-      "_tgt": "skeleton_dashboardskeleton",
-      "confidence_score": 1.0,
-      "source": "src_components_skeleton_jsx",
-      "target": "skeleton_dashboardskeleton"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/components/Skeleton.jsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_src": "skeleton_skeleton",
-      "_tgt": "cn_cn",
-      "source": "skeleton_skeleton",
-      "target": "cn_cn"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/EmptyState.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_src": "src_components_emptystate_jsx",
-      "_tgt": "emptystate_emptystate",
-      "confidence_score": 1.0,
-      "source": "src_components_emptystate_jsx",
-      "target": "emptystate_emptystate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/Button.jsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "src_components_button_jsx",
-      "_tgt": "button_button",
-      "confidence_score": 1.0,
-      "source": "src_components_button_jsx",
-      "target": "button_button"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/components/Button.jsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_src": "button_button",
-      "_tgt": "cn_cn",
-      "source": "button_button",
-      "target": "cn_cn"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/CountUp.jsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_src": "src_components_countup_jsx",
-      "_tgt": "countup_countup",
-      "confidence_score": 1.0,
-      "source": "src_components_countup_jsx",
-      "target": "countup_countup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/SeasonBanner.jsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_src": "src_components_seasonbanner_jsx",
-      "_tgt": "seasonbanner_seasonbanner",
-      "confidence_score": 1.0,
-      "source": "src_components_seasonbanner_jsx",
-      "target": "seasonbanner_seasonbanner"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/GlassCard.jsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_src": "src_components_glasscard_jsx",
-      "_tgt": "glasscard_glasscard",
-      "confidence_score": 1.0,
-      "source": "src_components_glasscard_jsx",
-      "target": "glasscard_glasscard"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/components/GlassCard.jsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "glasscard_glasscard",
-      "_tgt": "cn_cn",
-      "source": "glasscard_glasscard",
-      "target": "cn_cn"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/SpeciesBadge.jsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_src": "src_components_speciesbadge_jsx",
-      "_tgt": "speciesbadge_speciesbadge",
-      "confidence_score": 1.0,
-      "source": "src_components_speciesbadge_jsx",
-      "target": "speciesbadge_speciesbadge"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/components/SpeciesBadge.jsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_src": "speciesbadge_speciesbadge",
-      "_tgt": "cn_cn",
-      "source": "speciesbadge_speciesbadge",
-      "target": "cn_cn"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/useWeather.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_src": "src_hooks_useweather_js",
-      "_tgt": "useweather_useweather",
-      "confidence_score": 1.0,
-      "source": "src_hooks_useweather_js",
-      "target": "useweather_useweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L61",
-      "weight": 1.0,
-      "_src": "useweather_useweather",
-      "_tgt": "dashboard_dashboard",
-      "source": "useweather_useweather",
-      "target": "dashboard_dashboard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/useWatering.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_src": "src_hooks_usewatering_js",
-      "_tgt": "usewatering_usewatering",
-      "confidence_score": 1.0,
-      "source": "src_hooks_usewatering_js",
-      "target": "usewatering_usewatering"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/hooks/useWatering.js",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_src": "usewatering_usewatering",
-      "_tgt": "date_daysuntil",
-      "source": "usewatering_usewatering",
-      "target": "date_daysuntil"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "usewatering_usewatering",
-      "_tgt": "plantdetail_plantdetail",
-      "source": "usewatering_usewatering",
-      "target": "plantdetail_plantdetail"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/hooks/usePlants.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_src": "src_hooks_useplants_js",
-      "_tgt": "useplants_useplants",
-      "confidence_score": 1.0,
-      "source": "src_hooks_useplants_js",
-      "target": "useplants_useplants"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/Profile.jsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_src": "useplants_useplants",
-      "_tgt": "profile_profile",
-      "source": "useplants_useplants",
-      "target": "profile_profile"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_src": "useplants_useplants",
-      "_tgt": "plantdetail_plantdetail",
-      "source": "useplants_useplants",
-      "target": "plantdetail_plantdetail"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/Calendar.jsx",
-      "source_location": "L63",
-      "weight": 1.0,
-      "_src": "useplants_useplants",
-      "_tgt": "calendar_calendar",
-      "source": "useplants_useplants",
-      "target": "calendar_calendar"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L60",
-      "weight": 1.0,
-      "_src": "useplants_useplants",
-      "_tgt": "dashboard_dashboard",
-      "source": "useplants_useplants",
-      "target": "dashboard_dashboard"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/AddPlant.jsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_src": "useplants_useplants",
-      "_tgt": "addplant_addplant",
-      "source": "useplants_useplants",
-      "target": "addplant_addplant"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_weathercodetocondition",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_weathercodetocondition"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_israinycode",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_israinycode"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_getweather",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_getweather"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_getcachedweather",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_getcachedweather"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_cacheweather",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_cacheweather"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L46",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_getposition",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_getposition"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L60",
-      "weight": 1.0,
-      "_src": "src_lib_weather_js",
-      "_tgt": "weather_fetchweather",
-      "confidence_score": 1.0,
-      "source": "src_lib_weather_js",
-      "target": "weather_fetchweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L78",
-      "weight": 1.0,
-      "_src": "weather_weathercodetocondition",
-      "_tgt": "weather_fetchweather",
-      "confidence_score": 1.0,
-      "source": "weather_weathercodetocondition",
-      "target": "weather_fetchweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L79",
-      "weight": 1.0,
-      "_src": "weather_israinycode",
-      "_tgt": "weather_fetchweather",
-      "confidence_score": 1.0,
-      "source": "weather_israinycode",
-      "target": "weather_fetchweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_src": "weather_getweather",
-      "_tgt": "weather_getcachedweather",
-      "confidence_score": 1.0,
-      "source": "weather_getweather",
-      "target": "weather_getcachedweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L62",
-      "weight": 1.0,
-      "_src": "weather_getcachedweather",
-      "_tgt": "weather_fetchweather",
-      "confidence_score": 1.0,
-      "source": "weather_getcachedweather",
-      "target": "weather_fetchweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L82",
-      "weight": 1.0,
-      "_src": "weather_cacheweather",
-      "_tgt": "weather_fetchweather",
-      "confidence_score": 1.0,
-      "source": "weather_cacheweather",
-      "target": "weather_fetchweather"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/weather.js",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_src": "weather_getposition",
-      "_tgt": "weather_fetchweather",
-      "confidence_score": 1.0,
-      "source": "weather_getposition",
-      "target": "weather_fetchweather"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/date.js",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_src": "src_lib_date_js",
-      "_tgt": "date_adjustwateringinterval",
-      "confidence_score": 1.0,
-      "source": "src_lib_date_js",
-      "target": "date_adjustwateringinterval"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/date.js",
-      "source_location": "L27",
-      "weight": 1.0,
-      "_src": "src_lib_date_js",
-      "_tgt": "date_daysuntil",
-      "confidence_score": 1.0,
-      "source": "src_lib_date_js",
-      "target": "date_daysuntil"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/date.js",
-      "source_location": "L35",
-      "weight": 1.0,
-      "_src": "src_lib_date_js",
-      "_tgt": "date_formatdate",
-      "confidence_score": 1.0,
-      "source": "src_lib_date_js",
-      "target": "date_formatdate"
-    },
-    {
-      "relation": "calls",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L263",
-      "weight": 1.0,
-      "_src": "date_formatdate",
-      "_tgt": "plantdetail_plantdetail",
-      "source": "date_formatdate",
-      "target": "plantdetail_plantdetail"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/cn.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_src": "src_lib_cn_js",
-      "_tgt": "cn_cn",
-      "confidence_score": 1.0,
-      "source": "src_lib_cn_js",
-      "target": "cn_cn"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_src": "src_lib_notifications_js",
-      "_tgt": "notifications_requestpermission",
-      "confidence_score": 1.0,
-      "source": "src_lib_notifications_js",
-      "target": "notifications_requestpermission"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L12",
-      "weight": 1.0,
-      "_src": "src_lib_notifications_js",
-      "_tgt": "notifications_haspermission",
-      "confidence_score": 1.0,
-      "source": "src_lib_notifications_js",
-      "target": "notifications_haspermission"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "src_lib_notifications_js",
-      "_tgt": "notifications_schedulereminders",
-      "confidence_score": 1.0,
-      "source": "src_lib_notifications_js",
-      "target": "notifications_schedulereminders"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L45",
-      "weight": 1.0,
-      "_src": "src_lib_notifications_js",
-      "_tgt": "notifications_stopreminders",
-      "confidence_score": 1.0,
-      "source": "src_lib_notifications_js",
-      "target": "notifications_stopreminders"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_src": "notifications_haspermission",
-      "_tgt": "notifications_schedulereminders",
-      "confidence_score": 1.0,
-      "source": "notifications_haspermission",
-      "target": "notifications_schedulereminders"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/notifications.js",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_src": "notifications_schedulereminders",
-      "_tgt": "notifications_stopreminders",
-      "confidence_score": 1.0,
-      "source": "notifications_schedulereminders",
-      "target": "notifications_stopreminders"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Profile.jsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_src": "src_pages_profile_jsx",
-      "_tgt": "profile_profile",
-      "confidence_score": 1.0,
-      "source": "src_pages_profile_jsx",
-      "target": "profile_profile"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Profile.jsx",
-      "source_location": "L270",
-      "weight": 1.0,
-      "_src": "src_pages_profile_jsx",
-      "_tgt": "profile_statbox",
-      "confidence_score": 1.0,
-      "source": "src_pages_profile_jsx",
-      "target": "profile_statbox"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "_src": "src_pages_plantdetail_jsx",
-      "_tgt": "plantdetail_plantdetail",
-      "confidence_score": 1.0,
-      "source": "src_pages_plantdetail_jsx",
-      "target": "plantdetail_plantdetail"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L279",
-      "weight": 1.0,
-      "_src": "src_pages_plantdetail_jsx",
-      "_tgt": "plantdetail_statbox",
-      "confidence_score": 1.0,
-      "source": "src_pages_plantdetail_jsx",
-      "target": "plantdetail_statbox"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L288",
-      "weight": 1.0,
-      "_src": "src_pages_plantdetail_jsx",
-      "_tgt": "plantdetail_careneedcard",
-      "confidence_score": 1.0,
-      "source": "src_pages_plantdetail_jsx",
-      "target": "plantdetail_careneedcard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/PlantDetail.jsx",
-      "source_location": "L309",
-      "weight": 1.0,
-      "_src": "src_pages_plantdetail_jsx",
-      "_tgt": "plantdetail_quickactionbutton",
-      "confidence_score": 1.0,
-      "source": "src_pages_plantdetail_jsx",
-      "target": "plantdetail_quickactionbutton"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Memorial.jsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_src": "src_pages_memorial_jsx",
-      "_tgt": "memorial_memorial",
-      "confidence_score": 1.0,
-      "source": "src_pages_memorial_jsx",
-      "target": "memorial_memorial"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Calendar.jsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "_src": "src_pages_calendar_jsx",
-      "_tgt": "calendar_getcalendardays",
-      "confidence_score": 1.0,
-      "source": "src_pages_calendar_jsx",
-      "target": "calendar_getcalendardays"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Calendar.jsx",
-      "source_location": "L61",
-      "weight": 1.0,
-      "_src": "src_pages_calendar_jsx",
-      "_tgt": "calendar_calendar",
-      "confidence_score": 1.0,
-      "source": "src_pages_calendar_jsx",
-      "target": "calendar_calendar"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Diagnose.jsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_src": "src_pages_diagnose_jsx",
-      "_tgt": "diagnose_diagnose",
-      "confidence_score": 1.0,
-      "source": "src_pages_diagnose_jsx",
-      "target": "diagnose_diagnose"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_src": "src_pages_dashboard_jsx",
-      "_tgt": "dashboard_getgreetingsubtitle",
-      "confidence_score": 1.0,
-      "source": "src_pages_dashboard_jsx",
-      "target": "dashboard_getgreetingsubtitle"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_src": "src_pages_dashboard_jsx",
-      "_tgt": "dashboard_tof",
-      "confidence_score": 1.0,
-      "source": "src_pages_dashboard_jsx",
-      "target": "dashboard_tof"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L58",
-      "weight": 1.0,
-      "_src": "src_pages_dashboard_jsx",
-      "_tgt": "dashboard_dashboard",
-      "confidence_score": 1.0,
-      "source": "src_pages_dashboard_jsx",
-      "target": "dashboard_dashboard"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L121",
-      "weight": 1.0,
-      "_src": "dashboard_getgreetingsubtitle",
-      "_tgt": "dashboard_dashboard",
-      "confidence_score": 1.0,
-      "source": "dashboard_getgreetingsubtitle",
-      "target": "dashboard_dashboard"
-    },
-    {
-      "relation": "calls",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Dashboard.jsx",
-      "source_location": "L131",
-      "weight": 1.0,
-      "_src": "dashboard_tof",
-      "_tgt": "dashboard_dashboard",
-      "confidence_score": 1.0,
-      "source": "dashboard_tof",
-      "target": "dashboard_dashboard"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/AddPlant.jsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_src": "src_pages_addplant_jsx",
-      "_tgt": "addplant_addplant",
-      "confidence_score": 1.0,
-      "source": "src_pages_addplant_jsx",
-      "target": "addplant_addplant"
     },
     {
       "relation": "references",
@@ -8962,7 +7069,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e2e-smoke.mjs",
-      "source_location": "L9",
+      "source_location": "L12",
       "weight": 1.0,
       "_src": "e2e_smoke_mjs",
       "_tgt": "e2e_smoke_ok",
@@ -8974,13 +7081,49 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "e2e-smoke.mjs",
-      "source_location": "L10",
+      "source_location": "L13",
       "weight": 1.0,
       "_src": "e2e_smoke_mjs",
       "_tgt": "e2e_smoke_fail",
       "confidence_score": 1.0,
       "source": "e2e_smoke_mjs",
       "target": "e2e_smoke_fail"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_src": "e2e_smoke_mjs",
+      "_tgt": "e2e_smoke_gotohome",
+      "source": "e2e_smoke_mjs",
+      "target": "e2e_smoke_gotohome",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_src": "e2e_smoke_mjs",
+      "_tgt": "e2e_smoke_addplant",
+      "source": "e2e_smoke_mjs",
+      "target": "e2e_smoke_addplant",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e-smoke.mjs",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_src": "e2e_smoke_mjs",
+      "_tgt": "e2e_smoke_reloadclean",
+      "source": "e2e_smoke_mjs",
+      "target": "e2e_smoke_reloadclean",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -9149,6 +7292,126 @@
       "_tgt": "smoke_csp_test",
       "source": "smoke_e2e_test_suite",
       "target": "smoke_csp_test"
+    },
+    {
+      "label": "styled_by",
+      "relation": "styled_by",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storage_warning_banner",
+      "_tgt": "index_html_css_storage_warning",
+      "source": "index_html_storage_warning_banner",
+      "target": "index_html_css_storage_warning"
+    },
+    {
+      "label": "shows_on_quota_error",
+      "relation": "shows_on_quota_error",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storage_warning_banner",
+      "_tgt": "index_html_save_storage_handler",
+      "source": "index_html_storage_warning_banner",
+      "target": "index_html_save_storage_handler"
+    },
+    {
+      "label": "invokes_on_close_click",
+      "relation": "invokes_on_close_click",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storage_warning_banner",
+      "_tgt": "index_html_dismissstoragewarning",
+      "source": "index_html_storage_warning_banner",
+      "target": "index_html_dismissstoragewarning"
+    },
+    {
+      "label": "includes",
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storage_warning_banner",
+      "_tgt": "index_html_storage_quota_feature",
+      "source": "index_html_storage_warning_banner",
+      "target": "index_html_storage_quota_feature"
+    },
+    {
+      "label": "includes",
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_css_storage_warning",
+      "_tgt": "index_html_storage_quota_feature",
+      "source": "index_html_css_storage_warning",
+      "target": "index_html_storage_quota_feature"
+    },
+    {
+      "label": "gates_early_return",
+      "relation": "gates_early_return",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storagefull_flag",
+      "_tgt": "index_html_save_storage_handler",
+      "source": "index_html_storagefull_flag",
+      "target": "index_html_save_storage_handler"
+    },
+    {
+      "label": "resets_to_false",
+      "relation": "resets_to_false",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storagefull_flag",
+      "_tgt": "index_html_dismissstoragewarning",
+      "source": "index_html_storagefull_flag",
+      "target": "index_html_dismissstoragewarning"
+    },
+    {
+      "label": "includes",
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_storagefull_flag",
+      "_tgt": "index_html_storage_quota_feature",
+      "source": "index_html_storagefull_flag",
+      "target": "index_html_storage_quota_feature"
+    },
+    {
+      "label": "includes",
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_save_storage_handler",
+      "_tgt": "index_html_storage_quota_feature",
+      "source": "index_html_save_storage_handler",
+      "target": "index_html_storage_quota_feature"
+    },
+    {
+      "label": "includes",
+      "relation": "includes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "index.html",
+      "weight": 1.0,
+      "_src": "index_html_dismissstoragewarning",
+      "_tgt": "index_html_storage_quota_feature",
+      "source": "index_html_dismissstoragewarning",
+      "target": "index_html_storage_quota_feature"
     }
   ],
   "hyperedges": []
