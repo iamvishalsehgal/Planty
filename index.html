@@ -1751,11 +1751,12 @@
     <script>
         (function() {
         'use strict';
-        // Trusted Types policy — required by CSP 'require-trusted-types-for 'script''
-        // Default policy wraps raw strings so existing innerHTML calls don't throw.
-        // For stricter enforcement, remove default policy and use html(str) wrapper.
-        const _ttDefault = window.trustedTypes?.createPolicy?.('planty-default', { createHTML: (s) => s }) || null;
-        function html(str) { return _ttDefault ? _ttDefault.createHTML(str) : str; }
+        // Trusted Types default policy — required by CSP 'require-trusted-types-for 'script''
+        // Named 'default' so all raw-string innerHTML/insertAdjacentHTML assignments
+        // pass through automatically. For stricter enforcement, rename policy and use
+        // html(str) wrapper everywhere.
+        const _ttPolicy = window.trustedTypes?.createPolicy?.('default', { createHTML: (s) => s }) || null;
+        function html(str) { return _ttPolicy ? _ttPolicy.createHTML(str) : str; }
         const environment = { temperature: null, season: null, hemisphere: 'north', latitude: null, longitude: null, lastFetch: null };
 
         function detectSeason() {
