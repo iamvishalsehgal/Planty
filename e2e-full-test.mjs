@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ─── Config ───
-const BASE = "http://localhost:5169/Planty"; // vite base: /Planty/
+const BASE = "http://localhost:5169/Planty/"; // vite base: /Planty/ — trailing slash required
 const TIMEOUT = 5000;
 
 // ─── Report state ───
