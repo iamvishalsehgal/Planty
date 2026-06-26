@@ -36,13 +36,13 @@ class _Config:
         "LOG_LEVEL": os.getenv("PLANTY_LOG_LEVEL", "INFO"),
         "RATE_LIMIT_REQ_PER_SEC": int(os.getenv("PLANTY_RATE_LIMIT", "10")),
         "HEALTH_RECOMPUTE_MINUTES": int(os.getenv("PLANTY_HEALTH_INTERVAL", "5")),
-        "CORS_ORIGINS": os.getenv("PLANTY_CORS_ORIGINS", "*").split(","),
+        "CORS_ORIGINS": os.getenv(
+            "PLANTY_CORS_ORIGINS",
+            "http://localhost:5173,http://localhost:5169,https://iamvishalsehgal.github.io",
+        ).split(","),
         "WEATHER_DEFAULT_LAT": float(os.getenv("PLANTY_WEATHER_LAT", "52.3676")),
         "WEATHER_DEFAULT_LON": float(os.getenv("PLANTY_WEATHER_LON", "4.9041")),
     }
-
-
-config = _Config()
 
 
 config = _Config()
