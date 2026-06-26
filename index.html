@@ -1793,7 +1793,7 @@
         }
 
         function saveEnvironment() { localStorage.setItem('planty_env', JSON.stringify(environment)); }
-        function loadEnvironment() { const s=localStorage.getItem('planty_env'); if(s) Object.assign(environment, JSON.parse(s)); environment.season=detectSeason(); }
+        function loadEnvironment() { const s=localStorage.getItem('planty_env'); if(s){try{Object.assign(environment, JSON.parse(s))}catch(e){console.warn('Planty: corrupt planty_env, using defaults')}} environment.season=detectSeason(); }
 
         function updateWeatherDisplay() {
             const c=document.getElementById('headerWeather'); if(!c) return;

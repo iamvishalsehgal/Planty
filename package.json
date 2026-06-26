@@ -7,10 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "start:backend": "cd backend && uvicorn main:app --reload --port 8000"
   },
   "devDependencies": {
+    "jsdom": "^29.1.1",
     "playwright": "^1.61.0",
-    "vite": "^6.3.5"
+    "vite": "^6.3.5",
+    "vitest": "^4.1.9"
   }
 }
