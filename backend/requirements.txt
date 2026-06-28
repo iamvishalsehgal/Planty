@@ -4,6 +4,6 @@ sqlalchemy==2.0.51
 pydantic==2.13.4
 httpx==0.28.1
 python-dotenv==1.2.2
-apscheduler==3.11.2
+apscheduler==3.11.3
 # PostgreSQL (production only — uncomment for Render deploy)
 # psycopg2-binary==2.9.9
