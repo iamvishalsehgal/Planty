@@ -1,5 +1,5 @@
 // Planty service worker — precache shell + stale-while-revalidate
-const CACHE = "planty-v3.0.1";
+const CACHE = "planty-v3.0.2";
 const PRECACHE_URLS = ["/", "/index.html", "/offline.html"];
 
 // Precache core app shell assets on install
