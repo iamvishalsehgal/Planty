@@ -1,6 +1,6 @@
 // Planty service worker — precache shell + stale-while-revalidate
 const CACHE = "planty-v3.0.2";
-const PRECACHE_URLS = ["/", "/index.html", "/offline.html"];
+const PRECACHE_URLS = ["/Planty/", "/Planty/index.html", "/Planty/offline.html"];
 
 // Precache core app shell assets on install
 self.addEventListener("install", (e) => {
@@ -38,7 +38,7 @@ self.addEventListener("fetch", (e) => {
       .catch(() => {
         // If navigation request fails (offline, not cached), serve fallback
         if (e.request.mode === "navigate") {
-          return cache.match("/offline.html");
+          return cache.match("/Planty/offline.html");
         }
         throw new Error("offline");
       })

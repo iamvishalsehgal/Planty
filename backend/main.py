@@ -19,6 +19,7 @@ from routes.plants import router as plants_router
 from routes.diagnosis import router as diagnosis_router
 from routes.health import router as health_router
 from routes.weather_route import router as weather_router
+from routes.domain import router as domain_router
 
 # ── Logging ──
 logging.basicConfig(
@@ -180,6 +181,7 @@ app.include_router(plants_router)
 app.include_router(diagnosis_router)
 app.include_router(health_router)
 app.include_router(weather_router)
+app.include_router(domain_router)
 
 
 @app.get("/")

@@ -42,6 +42,8 @@ class _Config:
         ).split(","),
         "WEATHER_DEFAULT_LAT": float(os.getenv("PLANTY_WEATHER_LAT", "52.3676")),
         "WEATHER_DEFAULT_LON": float(os.getenv("PLANTY_WEATHER_LON", "4.9041")),
+        "DIGITALPLAT_API_KEY": os.getenv("DIGITALPLAT_API_KEY", ""),
+        "PLANTY_DOMAIN": os.getenv("PLANTY_DOMAIN", "planty.qzz.io"),
     }
 
 

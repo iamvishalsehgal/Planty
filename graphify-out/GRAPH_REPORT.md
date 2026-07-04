@@ -1,291 +1,347 @@
-# Graph Report - .  (2026-06-25)
+# Graph Report - /Users/iamvishalsehgal/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/GIT/Planty  (2026-06-26)
 
 ## Corpus Check
-- Corpus is ~45,109 words - fits in a single context window. You may not need a graph.
+- 21 files · ~46,258 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 285 nodes · 370 edges · 38 communities detected
-- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 44 edges (avg confidence: 0.66)
+- 185 nodes · 193 edges · 45 communities detected
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 34 edges (avg confidence: 0.6)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Three Architectural Pillars (P  Architectural Pillars (Plant l|Three Architectural Pillars (P / Architectural Pillars (Plant l]]
-- [[_COMMUNITY_models.py  diagnosis.py|models.py / diagnosis.py]]
-- [[_COMMUNITY_test_routes.py  _create_plant()|test_routes.py / _create_plant()]]
-- [[_COMMUNITY_db.py  main.py|db.py / main.py]]
-- [[_COMMUNITY_Rationale Open-Meteo over API  Adaptive watering — base inter|Rationale: Open-Meteo over API / Adaptive watering — base inter]]
-- [[_COMMUNITY_Content Security Policy meta t  P0-11 CSP test — queries meta|Content Security Policy meta t / P0-11 CSP test — queries meta[]]
-- [[_COMMUNITY_Architecture decisions  Rationale localStorage over b|Architecture decisions / Rationale: localStorage over b]]
-- [[_COMMUNITY_weather_route.py  weather.py|weather_route.py / weather.py]]
-- [[_COMMUNITY_config.py  _Config|config.py / _Config]]
-- [[_COMMUNITY_addPlant()  fail()|addPlant() / fail()]]
-- [[_COMMUNITY_.storage-warning CSS  dismissStorageWarning()|.storage-warning CSS / dismissStorageWarning()]]
-- [[_COMMUNITY_closeModal()  Modal System (deathrevivaldu|closeModal() / Modal System (death/revival/du]]
-- [[_COMMUNITY_fail()  e2e-full-test.mjs|fail() / e2e-full-test.mjs]]
-- [[_COMMUNITY_FastAPI server — SQLite dev    Python dependencies|FastAPI server — SQLite dev /  / Python dependencies]]
-- [[_COMMUNITY_Design System — Nature Palette  CSS Custom Properties (Design|Design System — Nature Palette / CSS Custom Properties (Design ]]
-- [[_COMMUNITY_Edge Density 1.07 (target 1.5+  Knowledge Graph Visualization|Edge Density 1.07 (target 1.5+ / Knowledge Graph Visualization ]]
-- [[_COMMUNITY_Project structure  Planty SPA — vanilla JS app en|Project structure / Planty SPA — vanilla JS app en]]
-- [[_COMMUNITY_Backend API overview — 11 endp  API endpoints — plants CRUD, w|Backend API overview — 11 endp / API endpoints — plants CRUD, w]]
-- [[_COMMUNITY_selectCause()  updateCauseSelection()|selectCause() / updateCauseSelection()]]
-- [[_COMMUNITY_Bottom Watering Education  toggleBottomWaterInfo()|Bottom Watering Education / toggleBottomWaterInfo()]]
-- [[_COMMUNITY_vite.config.js|vite.config.js]]
-- [[_COMMUNITY___init__.py|__init__.py]]
-- [[_COMMUNITY___init__.py|__init__.py]]
-- [[_COMMUNITY___init__.py|__init__.py]]
-- [[_COMMUNITY_sw.js|sw.js]]
-- [[_COMMUNITY_ICS calendar export — RRULE-ba|ICS calendar export — RRULE-ba]]
-- [[_COMMUNITY_Bottom watering education|Bottom watering education]]
-- [[_COMMUNITY_24-hour watering cooldown enfo|24-hour watering cooldown enfo]]
-- [[_COMMUNITY_Four-tab SPA navigation — Home|Four-tab SPA navigation — Home]]
-- [[_COMMUNITY_PWA meta tags|PWA meta tags]]
-- [[_COMMUNITY_Agent skills — GitHub Issues t|Agent skills — GitHub Issues t]]
-- [[_COMMUNITY_Backend architecture — main, c|Backend architecture — main, c]]
-- [[_COMMUNITY_Production deployment|Production deployment]]
-- [[_COMMUNITY_Offline fallback page — PWA ne|Offline fallback page — PWA ne]]
-- [[_COMMUNITY_Rationale HashRouter over Bro|Rationale: HashRouter over Bro]]
-- [[_COMMUNITY_Rationale Tailwind over CSS-i|Rationale: Tailwind over CSS-i]]
-- [[_COMMUNITY_clearInputs()|clearInputs()]]
-- [[_COMMUNITY_51 Isolated Nodes (19% of grap|51 Isolated Nodes (19% of grap]]
+- [[_COMMUNITY_Community 0|Community 0]]
+- [[_COMMUNITY_Community 1|Community 1]]
+- [[_COMMUNITY_Community 2|Community 2]]
+- [[_COMMUNITY_Community 3|Community 3]]
+- [[_COMMUNITY_Community 4|Community 4]]
+- [[_COMMUNITY_Community 5|Community 5]]
+- [[_COMMUNITY_Community 6|Community 6]]
+- [[_COMMUNITY_Community 7|Community 7]]
+- [[_COMMUNITY_Community 8|Community 8]]
+- [[_COMMUNITY_Community 9|Community 9]]
+- [[_COMMUNITY_Community 10|Community 10]]
+- [[_COMMUNITY_Community 11|Community 11]]
+- [[_COMMUNITY_Community 12|Community 12]]
+- [[_COMMUNITY_Community 13|Community 13]]
+- [[_COMMUNITY_Community 14|Community 14]]
+- [[_COMMUNITY_Community 15|Community 15]]
+- [[_COMMUNITY_Community 16|Community 16]]
+- [[_COMMUNITY_Community 17|Community 17]]
+- [[_COMMUNITY_Community 18|Community 18]]
+- [[_COMMUNITY_Community 19|Community 19]]
+- [[_COMMUNITY_Community 20|Community 20]]
+- [[_COMMUNITY_Community 21|Community 21]]
+- [[_COMMUNITY_Community 22|Community 22]]
+- [[_COMMUNITY_Community 23|Community 23]]
+- [[_COMMUNITY_Community 24|Community 24]]
+- [[_COMMUNITY_Community 25|Community 25]]
+- [[_COMMUNITY_Community 26|Community 26]]
+- [[_COMMUNITY_Community 27|Community 27]]
+- [[_COMMUNITY_Community 28|Community 28]]
+- [[_COMMUNITY_Community 29|Community 29]]
+- [[_COMMUNITY_Community 30|Community 30]]
+- [[_COMMUNITY_Community 31|Community 31]]
+- [[_COMMUNITY_Community 32|Community 32]]
+- [[_COMMUNITY_Community 33|Community 33]]
+- [[_COMMUNITY_Community 34|Community 34]]
+- [[_COMMUNITY_Community 35|Community 35]]
+- [[_COMMUNITY_Community 36|Community 36]]
+- [[_COMMUNITY_Community 37|Community 37]]
+- [[_COMMUNITY_Community 38|Community 38]]
+- [[_COMMUNITY_Community 39|Community 39]]
+- [[_COMMUNITY_Community 40|Community 40]]
+- [[_COMMUNITY_Community 41|Community 41]]
+- [[_COMMUNITY_Community 42|Community 42]]
+- [[_COMMUNITY_Community 43|Community 43]]
+- [[_COMMUNITY_Community 44|Community 44]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `TestPlants` - 18 edges
-2. `State Object (plants, deadPlants, history)` - 14 edges
-3. `getAdjustedInterval()` - 13 edges
-4. `Planty E2E Security & Regression Smoke test suite — 11 P0 tests via Playwright` - 13 edges
-5. `_create_plant()` - 12 edges
-6. `render() - debounced dispatcher` - 11 edges
-7. `localStorage Persistence Layer` - 10 edges
-8. `renderPlants() - innerHTML card list` - 10 edges
-9. `fetchWeather()` - 9 edges
-10. `Public API (window.* exposure)` - 9 edges
+2. `_create_plant()` - 12 edges
+3. `PlantCreate` - 6 edges
+4. `PlantUpdate` - 6 edges
+5. `PlantResponse` - 6 edges
+6. `WateringCreate` - 6 edges
+7. `WateringResponse` - 6 edges
+8. `_row_to_plant()` - 6 edges
+9. `Plant CRUD + watering events.` - 6 edges
+10. `Determine plant health status based on watering schedule.` - 6 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `localStorage Persistence Layer` --semantically_similar_to--> `Offline-first — localStorage + import/export backup`  [INFERRED] [semantically similar]
-  index.html → README.md
-- `Adaptive watering — base interval adjusted by environment` --semantically_similar_to--> `Adaptive watering feature`  [INFERRED] [semantically similar]
-  index.html → README.md
 - `Rationale: localStorage chosen for zero server costs` --semantically_similar_to--> `Rationale: localStorage over backend DB`  [INFERRED] [semantically similar]
   index.html → CLAUDE.md
-- `localStorage Persistence Layer` --rationale_for--> `Zero server costs — static frontend + free weather API`  [INFERRED]
-  index.html → README.md
-- `Content Security Policy meta tag — default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com` --calls--> `P0-11 CSP test — queries meta[http-equiv=Content-Security-Policy], asserts default-src present`  [EXTRACTED]
-  index.html → e2e-smoke.mjs
+- `init_db()` --calls--> `lifespan()`  [INFERRED]
+  backend/db.py → /Users/iamvishalsehgal/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/GIT/Planty/backend/main.py
+- `check_db_health()` --calls--> `lifespan()`  [INFERRED]
+  backend/db.py → /Users/iamvishalsehgal/Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/GIT/Planty/backend/main.py
+- `HealthResponse` --uses--> `Health check endpoint with request counting and DB status.`  [INFERRED]
+  backend/models.py → backend/routes/health.py
+- `HealthResponse` --uses--> `Called by middleware to track request volume.`  [INFERRED]
+  backend/models.py → backend/routes/health.py
 
 ## Communities
 
-### Community 0 - "Three Architectural Pillars (P / Architectural Pillars (Plant l"
-Cohesion: 0.07
-Nodes (55): Three Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence), Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence), Core Patterns (derived state, innerHTML rendering, debounced render, XSS, IIFE), Rationale: Derived state over stored state — never stale, Rationale: Hash-free routing — tab navigation, no URL state, Rationale: innerHTML over virtual DOM — simpler mental model, Key Functions Table (getAdjustedInterval, getBaseInterval, getDaysUntilNextWater, combineDeathLearning, render), State Shape (plants[], deadPlants[], history[]) (+47 more)
+### Community 0 - "Community 0"
+Cohesion: 0.11
+Nodes (27): BaseModel, DiagnosisRequest, DiagnosisResponse, HealthResponse, PlantCreate, PlantResponse, PlantUpdate, Pydantic v2 models for Planty API. (+19 more)
 
-### Community 1 - "models.py / diagnosis.py"
-Cohesion: 0.09
-Nodes (32): BaseModel, diagnose(), diagnose_plant(), Plant diagnosis service — rule-based for MVP, ready for AI upgrade.  Uses heuris, Analyze a plant photo and return a diagnosis., Analyze plant photo and return diagnosis.      Currently uses heuristic matching, DiagnosisRequest, DiagnosisResponse (+24 more)
+### Community 1 - "Community 1"
+Cohesion: 0.11
+Nodes (4): _create_plant(), Helper: create a plant and return the JSON response., TestPlants, TestWatering
 
-### Community 2 - "test_routes.py / _create_plant()"
-Cohesion: 0.06
-Nodes (11): _create_plant(), Tests for Planty v2 API routes., Send rapid requests — at least one should be rate-limited., Helper: create a plant and return the JSON response., TestDiagnosis, TestHealth, TestPlants, TestRateLimit (+3 more)
+### Community 2 - "Community 2"
+Cohesion: 0.12
+Nodes (7): Tests for Planty v2 API routes., Send rapid requests — at least one should be rate-limited., TestDiagnosis, TestHealth, TestRateLimit, TestRoot, TestWeather
 
-### Community 3 - "db.py / main.py"
-Cohesion: 0.07
-Nodes (21): check_db_health(), get_db(), init_db(), Database setup — PostgreSQL via SQLAlchemy with connection pooling., Create tables if they don't exist., Verify database connectivity. Returns True if healthy., Get a database session (FastAPI dependency)., health_check() (+13 more)
+### Community 3 - "Community 3"
+Cohesion: 0.14
+Nodes (13): check_db_health(), get_db(), init_db(), Database setup — PostgreSQL via SQLAlchemy with connection pooling., Create tables if they don't exist., Verify database connectivity. Returns True if healthy., Get a database session (FastAPI dependency)., health_check() (+5 more)
 
-### Community 4 - "Rationale: Open-Meteo over API / Adaptive watering — base inter"
-Cohesion: 0.17
-Nodes (16): Rationale: Open-Meteo over API-key services — free, no registration, Adaptive watering — base interval adjusted by environment, Cold Season: Higher Multiplier = Less Frequent Watering, detectSeason(), Environment Object (temperature, season, hemisphere, lat/lng), fetchWeather(), getEnvironmentMultiplier(), getSeasonalMultiplier() (+8 more)
+### Community 4 - "Community 4"
+Cohesion: 0.14
+Nodes (8): increment_request_count(), Health check endpoint with request counting and DB status., Called by middleware to track request volume., process_request(), Planty v2 — FastAPI backend for smart plant care., Update health_status for all plants based on current time., recompute_health_statuses(), SecurityHeadersMiddleware
 
-### Community 5 - "Content Security Policy meta t / P0-11 CSP test — queries meta["
-Cohesion: 0.13
-Nodes (14): Content Security Policy meta tag — default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://api.open-meteo.com, P0-11 CSP test — queries meta[http-equiv=Content-Security-Policy], asserts default-src present, Planty E2E Security & Regression Smoke test suite — 11 P0 tests via Playwright, P0-8 Error boundary test — dispatches synthetic ErrorEvent, asserts app survives uncaugh error, P0-4 esc() integrity test — adds plant with special chars (&), asserts correct textContent rendering, P0-9 Export test — verifies exportData on window, checks localStorage has plant data, P0-10 ICS escape test — directly calls icsEscape(), asserts semicolon and comma escaping for iCalendar format, P0-2 IIFE encapsulation test — verifies 16 public functions on window, checks private internals are not leaked (+6 more)
-
-### Community 6 - "Architecture decisions / Rationale: localStorage over b"
-Cohesion: 0.18
-Nodes (10): Architecture decisions, Rationale: localStorage over backend DB — zero server costs, Rationale: localStorage over backend DB, Rationale: Zustand over Redux, localStorage Persistence Layer, Plant state management — plants, deadPlants, history, PWA Meta Tags, Rationale: localStorage chosen for zero server costs (+2 more)
-
-### Community 7 - "weather_route.py / weather.py"
+### Community 5 - "Community 5"
 Cohesion: 0.29
 Nodes (5): get_weather(), Weather service — fetches from Open-Meteo (free, no API key)., Fetch current weather from Open-Meteo., Get current weather for plant care decisions., weather()
 
-### Community 8 - "config.py / _Config"
+### Community 6 - "Community 6"
+Cohesion: 0.33
+Nodes (5): diagnose(), diagnose_plant(), Plant diagnosis service — rule-based for MVP, ready for AI upgrade.  Uses heuris, Analyze a plant photo and return a diagnosis., Analyze plant photo and return diagnosis.      Currently uses heuristic matching
+
+### Community 7 - "Community 7"
+Cohesion: 0.33
+Nodes (0): 
+
+### Community 8 - "Community 8"
+Cohesion: 0.4
+Nodes (2): getPlantEmoji(), normalizePlant()
+
+### Community 9 - "Community 9"
 Cohesion: 0.33
 Nodes (3): _Config, Application configuration — loaded from environment with sensible defaults., Centralised config — reads env at init, supports overrides for tests.
 
-### Community 9 - "addPlant() / fail()"
-Cohesion: 0.33
-Nodes (0): 
-
-### Community 10 - ".storage-warning CSS / dismissStorageWarning()"
-Cohesion: 0.67
-Nodes (6): .storage-warning CSS, dismissStorageWarning(), save() Storage Quota Handler, Storage Quota Warning Feature, Storage Warning Banner, _storageFull Flag
-
-### Community 11 - "closeModal() / Modal System (death/revival/du"
+### Community 10 - "Community 10"
 Cohesion: 0.4
-Nodes (3): Modal System (death/revival/duplicate/cooldown), showDeathModal(), showModal()
-
-### Community 12 - "fail() / e2e-full-test.mjs"
-Cohesion: 0.5
 Nodes (0): 
 
-### Community 13 - "FastAPI server — SQLite dev /  / Python dependencies"
+### Community 11 - "Community 11"
 Cohesion: 0.5
-Nodes (4): FastAPI server — SQLite dev / PostgreSQL production, Python dependencies, Rationale: SQLite over PostgreSQL (dev), Tech stack — React 19, Vite 6, Tailwind, Zustand, FastAPI
+Nodes (4): Architecture decisions, Rationale: localStorage over backend DB, Rationale: Zustand over Redux, Rationale: localStorage chosen for zero server costs
 
-### Community 14 - "Design System — Nature Palette / CSS Custom Properties (Design "
-Cohesion: 0.5
-Nodes (4): Design System — Nature Palette (CSS Custom Properties), CSS Custom Properties (Design Tokens), Glass-Morphism Card Design, Glass-morphism UI
+### Community 12 - "Community 12"
+Cohesion: 1.0
+Nodes (2): esc(), escapeHtml()
 
-### Community 15 - "Edge Density 1.07 (target 1.5+ / Knowledge Graph Visualization "
-Cohesion: 0.5
-Nodes (4): Edge Density 1.07 (target 1.5+) — codebase more colocated than connected, Knowledge Graph Visualization (vis-network), God Nodes: TestPlants (18 edges), _create_plant (12), PlantCreate (6), Knowledge Graph Statistics (267 nodes, 285 edges, 50 communities)
-
-### Community 16 - "Project structure / Planty SPA — vanilla JS app en"
+### Community 13 - "Community 13"
 Cohesion: 0.67
-Nodes (3): Project structure, Planty SPA — vanilla JS app entry, Planty v3 — smart plant care web app overview
+Nodes (3): Edge Density 1.07 (target 1.5+) — codebase more colocated than connected, God Nodes: TestPlants (18 edges), _create_plant (12), PlantCreate (6), Knowledge Graph Statistics (267 nodes, 285 edges, 50 communities)
 
-### Community 17 - "Backend API overview — 11 endp / API endpoints — plants CRUD, w"
+### Community 14 - "Community 14"
 Cohesion: 1.0
 Nodes (2): Backend API overview — 11 endpoints, API endpoints — plants CRUD, watering, diagnosis, weather
 
-### Community 18 - "selectCause() / updateCauseSelection()"
+### Community 15 - "Community 15"
+Cohesion: 1.0
+Nodes (2): Project structure, Planty v3 — smart plant care web app overview
+
+### Community 16 - "Community 16"
+Cohesion: 1.0
+Nodes (2): FastAPI server — SQLite dev / PostgreSQL production, Rationale: SQLite over PostgreSQL (dev)
+
+### Community 17 - "Community 17"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 19 - "Bottom Watering Education / toggleBottomWaterInfo()"
-Cohesion: 1.0
-Nodes (1): Bottom Watering Education
-
-### Community 20 - "vite.config.js"
+### Community 18 - "Community 18"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 21 - "__init__.py"
+### Community 19 - "Community 19"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 22 - "__init__.py"
+### Community 20 - "Community 20"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 23 - "__init__.py"
+### Community 21 - "Community 21"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 24 - "sw.js"
+### Community 22 - "Community 22"
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 25 - "ICS calendar export — RRULE-ba"
+### Community 23 - "Community 23"
 Cohesion: 1.0
-Nodes (1): ICS calendar export — RRULE-based watering schedule
+Nodes (1): Tech stack — React 19, Vite 6, Tailwind, Zustand, FastAPI
 
-### Community 26 - "Bottom watering education"
+### Community 24 - "Community 24"
 Cohesion: 1.0
-Nodes (1): Bottom watering education
+Nodes (1): Zero server costs — static frontend + free weather API
 
-### Community 27 - "24-hour watering cooldown enfo"
+### Community 25 - "Community 25"
 Cohesion: 1.0
-Nodes (1): 24-hour watering cooldown enforcement
+Nodes (1): Offline-first — localStorage + import/export backup
 
-### Community 28 - "Four-tab SPA navigation — Home"
+### Community 26 - "Community 26"
 Cohesion: 1.0
-Nodes (1): Four-tab SPA navigation — Home, Schedule, Memorial, Settings
+Nodes (1): Design System — Nature Palette (CSS Custom Properties)
 
-### Community 29 - "PWA meta tags"
-Cohesion: 1.0
-Nodes (1): PWA meta tags
-
-### Community 30 - "Agent skills — GitHub Issues t"
+### Community 27 - "Community 27"
 Cohesion: 1.0
 Nodes (1): Agent skills — GitHub Issues triage workflow
 
-### Community 31 - "Backend architecture — main, c"
+### Community 28 - "Community 28"
 Cohesion: 1.0
 Nodes (1): Backend architecture — main, config, db, models, routes
 
-### Community 32 - "Production deployment"
+### Community 29 - "Community 29"
 Cohesion: 1.0
 Nodes (1): Production deployment
 
-### Community 33 - "Offline fallback page — PWA ne"
-Cohesion: 1.0
-Nodes (1): Offline fallback page — PWA network-loss UI
-
-### Community 34 - "Rationale: HashRouter over Bro"
+### Community 30 - "Community 30"
 Cohesion: 1.0
 Nodes (1): Rationale: HashRouter over BrowserRouter
 
-### Community 35 - "Rationale: Tailwind over CSS-i"
+### Community 31 - "Community 31"
 Cohesion: 1.0
 Nodes (1): Rationale: Tailwind over CSS-in-JS
 
-### Community 36 - "clearInputs()"
+### Community 32 - "Community 32"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Adaptive watering feature
 
-### Community 37 - "51 Isolated Nodes (19% of grap"
+### Community 33 - "Community 33"
+Cohesion: 1.0
+Nodes (1): Rationale: Vanilla JS over React — zero deps, 77KB, instant load
+
+### Community 34 - "Community 34"
+Cohesion: 1.0
+Nodes (1): Rationale: localStorage over backend DB — zero server costs
+
+### Community 35 - "Community 35"
+Cohesion: 1.0
+Nodes (1): Rationale: innerHTML over virtual DOM — simpler mental model
+
+### Community 36 - "Community 36"
+Cohesion: 1.0
+Nodes (1): Rationale: Derived state over stored state — never stale
+
+### Community 37 - "Community 37"
+Cohesion: 1.0
+Nodes (1): Rationale: Hash-free routing — tab navigation, no URL state
+
+### Community 38 - "Community 38"
+Cohesion: 1.0
+Nodes (1): Rationale: Open-Meteo over API-key services — free, no registration
+
+### Community 39 - "Community 39"
+Cohesion: 1.0
+Nodes (1): State Shape (plants[], deadPlants[], history[])
+
+### Community 40 - "Community 40"
+Cohesion: 1.0
+Nodes (1): Core Patterns (derived state, innerHTML rendering, debounced render, XSS, IIFE)
+
+### Community 41 - "Community 41"
+Cohesion: 1.0
+Nodes (1): Key Functions Table (getAdjustedInterval, getBaseInterval, getDaysUntilNextWater, combineDeathLearning, render)
+
+### Community 42 - "Community 42"
+Cohesion: 1.0
+Nodes (1): Three Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence)
+
+### Community 43 - "Community 43"
 Cohesion: 1.0
 Nodes (1): 51 Isolated Nodes (19% of graph)
 
+### Community 44 - "Community 44"
+Cohesion: 1.0
+Nodes (1): Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence)
+
 ## Knowledge Gaps
-- **78 isolated node(s):** `Database setup — PostgreSQL via SQLAlchemy with connection pooling.`, `Create tables if they don't exist.`, `Verify database connectivity. Returns True if healthy.`, `Get a database session (FastAPI dependency).`, `Application configuration — loaded from environment with sensible defaults.` (+73 more)
+- **56 isolated node(s):** `Database setup — PostgreSQL via SQLAlchemy with connection pooling.`, `Create tables if they don't exist.`, `Verify database connectivity. Returns True if healthy.`, `Get a database session (FastAPI dependency).`, `Application configuration — loaded from environment with sensible defaults.` (+51 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Backend API overview — 11 endp / API endpoints — plants CRUD, w`** (2 nodes): `Backend API overview — 11 endpoints`, `API endpoints — plants CRUD, watering, diagnosis, weather`
+- **Thin community `Community 14`** (2 nodes): `Backend API overview — 11 endpoints`, `API endpoints — plants CRUD, watering, diagnosis, weather`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `selectCause() / updateCauseSelection()`** (2 nodes): `selectCause()`, `updateCauseSelection()`
+- **Thin community `Community 15`** (2 nodes): `Project structure`, `Planty v3 — smart plant care web app overview`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Bottom Watering Education / toggleBottomWaterInfo()`** (2 nodes): `Bottom Watering Education`, `toggleBottomWaterInfo()`
+- **Thin community `Community 16`** (2 nodes): `FastAPI server — SQLite dev / PostgreSQL production`, `Rationale: SQLite over PostgreSQL (dev)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `vite.config.js`** (1 nodes): `vite.config.js`
+- **Thin community `Community 17`** (1 nodes): `vite.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `__init__.py`** (1 nodes): `__init__.py`
+- **Thin community `Community 18`** (1 nodes): `vitest.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `__init__.py`** (1 nodes): `__init__.py`
+- **Thin community `Community 19`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `__init__.py`** (1 nodes): `__init__.py`
+- **Thin community `Community 20`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `sw.js`** (1 nodes): `sw.js`
+- **Thin community `Community 21`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `ICS calendar export — RRULE-ba`** (1 nodes): `ICS calendar export — RRULE-based watering schedule`
+- **Thin community `Community 22`** (1 nodes): `sw.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Bottom watering education`** (1 nodes): `Bottom watering education`
+- **Thin community `Community 23`** (1 nodes): `Tech stack — React 19, Vite 6, Tailwind, Zustand, FastAPI`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `24-hour watering cooldown enfo`** (1 nodes): `24-hour watering cooldown enforcement`
+- **Thin community `Community 24`** (1 nodes): `Zero server costs — static frontend + free weather API`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Four-tab SPA navigation — Home`** (1 nodes): `Four-tab SPA navigation — Home, Schedule, Memorial, Settings`
+- **Thin community `Community 25`** (1 nodes): `Offline-first — localStorage + import/export backup`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `PWA meta tags`** (1 nodes): `PWA meta tags`
+- **Thin community `Community 26`** (1 nodes): `Design System — Nature Palette (CSS Custom Properties)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Agent skills — GitHub Issues t`** (1 nodes): `Agent skills — GitHub Issues triage workflow`
+- **Thin community `Community 27`** (1 nodes): `Agent skills — GitHub Issues triage workflow`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Backend architecture — main, c`** (1 nodes): `Backend architecture — main, config, db, models, routes`
+- **Thin community `Community 28`** (1 nodes): `Backend architecture — main, config, db, models, routes`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Production deployment`** (1 nodes): `Production deployment`
+- **Thin community `Community 29`** (1 nodes): `Production deployment`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Offline fallback page — PWA ne`** (1 nodes): `Offline fallback page — PWA network-loss UI`
+- **Thin community `Community 30`** (1 nodes): `Rationale: HashRouter over BrowserRouter`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Rationale: HashRouter over Bro`** (1 nodes): `Rationale: HashRouter over BrowserRouter`
+- **Thin community `Community 31`** (1 nodes): `Rationale: Tailwind over CSS-in-JS`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Rationale: Tailwind over CSS-i`** (1 nodes): `Rationale: Tailwind over CSS-in-JS`
+- **Thin community `Community 32`** (1 nodes): `Adaptive watering feature`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `clearInputs()`** (1 nodes): `clearInputs()`
+- **Thin community `Community 33`** (1 nodes): `Rationale: Vanilla JS over React — zero deps, 77KB, instant load`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `51 Isolated Nodes (19% of grap`** (1 nodes): `51 Isolated Nodes (19% of graph)`
+- **Thin community `Community 34`** (1 nodes): `Rationale: localStorage over backend DB — zero server costs`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 35`** (1 nodes): `Rationale: innerHTML over virtual DOM — simpler mental model`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 36`** (1 nodes): `Rationale: Derived state over stored state — never stale`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 37`** (1 nodes): `Rationale: Hash-free routing — tab navigation, no URL state`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 38`** (1 nodes): `Rationale: Open-Meteo over API-key services — free, no registration`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 39`** (1 nodes): `State Shape (plants[], deadPlants[], history[])`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 40`** (1 nodes): `Core Patterns (derived state, innerHTML rendering, debounced render, XSS, IIFE)`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 41`** (1 nodes): `Key Functions Table (getAdjustedInterval, getBaseInterval, getDaysUntilNextWater, combineDeathLearning, render)`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 42`** (1 nodes): `Three Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence)`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 43`** (1 nodes): `51 Isolated Nodes (19% of graph)`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 44`** (1 nodes): `Architectural Pillars (Plant lifecycle, Watering intelligence, Data persistence)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `HealthResponse` connect `models.py / diagnosis.py` to `db.py / main.py`?**
-  _High betweenness centrality (0.082) - this node is a cross-community bridge._
-- **Why does `setup_db()` connect `db.py / main.py` to `test_routes.py / _create_plant()`?**
-  _High betweenness centrality (0.079) - this node is a cross-community bridge._
-- **Are the 3 inferred relationships involving `getAdjustedInterval()` (e.g. with `Environment Object (temperature, season, hemisphere, lat/lng)` and `Seasonal Watering Multiplier`) actually correct?**
-  _`getAdjustedInterval()` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `HealthResponse` connect `Community 0` to `Community 3`, `Community 4`?**
+  _High betweenness centrality (0.196) - this node is a cross-community bridge._
+- **Why does `setup_db()` connect `Community 3` to `Community 2`?**
+  _High betweenness centrality (0.190) - this node is a cross-community bridge._
+- **Are the 3 inferred relationships involving `PlantCreate` (e.g. with `Plant CRUD + watering events.` and `Determine plant health status based on watering schedule.`) actually correct?**
+  _`PlantCreate` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 3 inferred relationships involving `PlantUpdate` (e.g. with `Plant CRUD + watering events.` and `Determine plant health status based on watering schedule.`) actually correct?**
+  _`PlantUpdate` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Database setup — PostgreSQL via SQLAlchemy with connection pooling.`, `Create tables if they don't exist.`, `Verify database connectivity. Returns True if healthy.` to the rest of the system?**
-  _78 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Three Architectural Pillars (P / Architectural Pillars (Plant l` be split into smaller, more focused modules?**
-  _Cohesion score 0.07 - nodes in this community are weakly interconnected._
-- **Should `models.py / diagnosis.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.09 - nodes in this community are weakly interconnected._
-- **Should `test_routes.py / _create_plant()` be split into smaller, more focused modules?**
-  _Cohesion score 0.06 - nodes in this community are weakly interconnected._
+  _56 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.11 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.11 - nodes in this community are weakly interconnected._
